@@ -12,7 +12,7 @@ gulp.task('watch', function() {
 
 //gulp tasks
 gulp.task('less', function() {
-	return gulp.src('source/styles/*.less')
+	return gulp.src('source/styles/index.less')
 		.pipe(less())
 		.pipe(concatCss('styles.css'))
 		.pipe(gulp.dest('source/styles/'));
