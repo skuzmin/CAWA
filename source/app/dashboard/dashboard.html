@@ -1,2 +1,6 @@
 <h1>DASHBOARD PAGE WELCOME!</h1>
-<img ng-src="/images/horse.png" />
+<div class="row" ng-repeat="item in vm.testData track by $index">
+	<div class="col-md-2"></div>
+	<div class="col-md-8">{{::item.title}}</div>
+	<div class="col-md-2"></div>
+</div>

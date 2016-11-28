@@ -14,7 +14,12 @@
 				url: '/',
 				templateUrl: 'app/dashboard/dashboard.html',
 				controller: 'DashboardController',
-				controllerAs: 'vm'
+				controllerAs: 'vm',
+				resolve: {
+		            data: function(DashboardService) {
+		                return DashboardService.getTestData();
+		            }
+		        }
 			});
 	}
 

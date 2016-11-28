@@ -6,7 +6,12 @@
 		.module('app.dashboard')
 		.controller('DashboardController', DashboardController);
 
-		function DashboardController() {
+		DashboardController.$inject = ['data', 'DashboardService'];
+
+		function DashboardController(data, DashboardService) {
 			var vm = this;
+
+			vm.testData = data;
+
 		}
 })();
