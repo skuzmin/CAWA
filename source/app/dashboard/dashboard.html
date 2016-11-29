@@ -1,6 +1,20 @@
 <h1>DASHBOARD PAGE WELCOME!</h1>
-<div class="row" ng-repeat="item in vm.testData track by $index">
-	<div class="col-md-2"></div>
-	<div class="col-md-8">{{::item.title}}</div>
-	<div class="col-md-2"></div>
+<div class="col-md-2"></div>
+<div class="col-md-8">
+    <div gridstack class="grid-stack grid1" options="vm.options" >
+        <div gridstack-item ng-repeat="item in vm.testData track by $index" class="grid-stack-item" gs-item-x="0" gs-item-y="$index"
+             gs-item-width="12" gs-item-height="1" gs-item-autopos="0">
+                <div class="grid-stack-item-content">
+                    <a class="btn btn-primary" ng-click="vm.removeWidget(item)" href="">remove</a>
+                    <h4>{{::item.title}}</h4>
+                    <div>{{::item.content}}</div>
+                </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-2"></div>
+<div class="container-fluid">
+    <div>
+        <a class="btn btn-primary" ng-click="addWidget()" href="#">Add Widget</a>
+    </div>
 </div>

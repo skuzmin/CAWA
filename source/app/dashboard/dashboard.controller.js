@@ -13,5 +13,17 @@
 
 			vm.testData = data;
 
-		}
+			vm.removeWidget = removeWidget;
+
+			function removeWidget(w) {
+                var index = vm.testData.indexOf(w);
+                vm.testData.splice(index, 1);
+            };
+
+            vm.options = {
+                cellHeight: 200,
+                verticalMargin: 10
+            };
+
+ 		}
 })();

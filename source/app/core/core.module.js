@@ -2,6 +2,6 @@
 	'use strict';
 
 	angular
-		.module('app.core', ['ui.router', 'ngResource']);
+		.module('app.core', ['ui.router', 'ngResource', 'gridstack-angular']);
 
 })();

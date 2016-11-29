@@ -16,6 +16,7 @@
     "angular": "^1.5.9",
     "bootstrap": "^3.3.7",
     "angular-ui-router": "^0.3.2",
-    "angular-resource": "^1.5.9"
+    "angular-resource": "^1.5.9",
+    "gridstack-angular": "^0.5.0"
   }
 }
