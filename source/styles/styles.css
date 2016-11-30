@@ -11,3 +11,8 @@
   text-align: center;
   background-color: #732145;
 }
+
+.grid-stack > .grid-stack-item {
+  min-width: 100%;
+  max-width: 100%;
+}

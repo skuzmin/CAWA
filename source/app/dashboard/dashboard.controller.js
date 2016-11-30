@@ -17,26 +17,20 @@
 			vm.sort = sort;
             vm.gridStack = {};
 
-			setPosition();
-
 			function removeWidget(w) {
                 var index = vm.testData.indexOf(w);
                 vm.testData.splice(index, 1);
             };
 
             function sort() {
-            	vm.testData = _.sortBy(vm.testData, 'id');
-            	setPosition();
-            }
-
-            function setPosition() {
-            	_.forEach(vm.testData, function(item, i) {
-            		item.position = i;
+            	var items = $('.grid-stack-item');
+            	_.forEach(items, function(item) {
+            		vm.gridStack.move(item, 0, Math.floor((Math.random() * 10)));
             	});
             }
 
             vm.options = {
-                cellHeight: 200,
+                cellHeight: 100,
                 verticalMargin: 10
             };
 
