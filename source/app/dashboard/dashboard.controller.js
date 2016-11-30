@@ -24,8 +24,16 @@
 
             function sort() {
             	var items = $('.grid-stack-item');
-            	_.forEach(items, function(item) {
-            		vm.gridStack.move(item, 0, Math.floor((Math.random() * 10)));
+            	DashboardService.getTestData2().then(function(result) {
+            		var index;
+            		_.forEach(items, function(item) {
+	            		index = result.findIndex(function(data) {
+							return data.id === Number(item.getAttribute('id'));
+	            		});
+	            		console.log(index);
+	            		vm.gridStack.move(item, 0, index);
+	            	});
+	            	//vm.testData = result;
             	});
             }
 
