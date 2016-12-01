@@ -32,9 +32,7 @@
 	            		});
 	            		console.log(index);
 	            		vm.gridStack.move(item, 0, index);
-	            	});
-	            	//vm.testData = result;
-            	});
+	            	});            	});
             }
 
             vm.options = {
