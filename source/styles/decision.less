@@ -1,0 +1,30 @@
+.dicision {
+	.top-panel {
+		min-height: 40px;
+		background-color: @light-grey;
+
+	}
+	.custom-grid {
+	    background: @gridstack-background;
+	}
+	.grid-stack-item-content {
+	    color: @white-text;
+	    text-align: center;
+	    background-color: @gridstack-item;
+	}
+
+	.grid-stack {
+		& > .grid-stack-item {
+			min-width: 100%;
+			max-width: 100%;
+			& > .ui-resizable-se {
+				transform: none;
+				-webkit-transform: none;
+			    -moz-transform: none;
+			    -ms-transform: none;
+			    -o-transform: none;
+			    cursor: ns-resize;
+			}
+		}
+	}
+}

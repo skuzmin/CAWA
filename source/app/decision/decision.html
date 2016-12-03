@@ -1,21 +1,23 @@
-<h1>DASHBOARD PAGE WELCOME!</h1>
-<div class="col-md-2"></div>
-<div class="col-md-8">
-    <gridstack-wrapper 
-    	init-list="vm.testData" 
-    	update-list="vm.updateList" 
-    	element=".grid-stack-item" 
-    	cell-height="100" 
-    	vertical-margin="10">
-    </gridstack-wrapper>
-</div>
-<div class="col-md-2">
-    <div ng-repeat="item in vm.testData track by $index">
-        {{item.title}}
+<div class="dicision">
+    <div class="row top-panel">
+        <div class="col-md-3">
+            <h4>
+                NAME OF DECISION
+            </h4>
+        </div>
+        <div class="col-md-6"></div>
+        <div class="col-md-3">
+            <input class="search-input" type="text"/>
+        </div>
     </div>
-</div>
-<div class="container-fluid">
-    <div>
-        <a class="btn btn-primary" ng-click="vm.sort()" href="">Get'n'Sort</a>
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <gridstack-wrapper init-list="vm.testData" update-list="vm.updateList" element=".grid-stack-item" cell-height="100" vertical-margin="10">
+            </gridstack-wrapper>
+        </div>
+        <div class="col-md-3">
+            <a class="btn btn-primary" ng-click="vm.sort()" href="">Get'n'Sort</a>
+        </div>
     </div>
 </div>

@@ -16,11 +16,15 @@
 		<link href="/styles/styles.css" rel="stylesheet">
 	</head>	
 	<body>
-		<div class="container" ui-view ></div>
+		<app-header></app-header>
+		<div class="container-fluid" ui-view ></div>
+		<app-footer></app-footer>
 	</body>
 
 	<script src="/app/components/components.module.js"></script>
 	<script src="/app/components/gridstack-wrapper.component.js"></script>
+	<script src="/app/components/app-header.component.js"></script>
+	<script src="/app/components/app-footer.component.js"></script>
 
 	<script src="/app/core/core.module.js"></script>
 	<script src="/app/core/core.route.js"></script>
