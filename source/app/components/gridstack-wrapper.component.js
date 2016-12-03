@@ -10,7 +10,9 @@
             bindings: {
                 initList: '=',
                 updateList: '<',
-                element: '@'
+                element: '@',
+                cellHeight: '=',
+                verticalMargin: '='
             },
             controller: 'GridstackMovementController',
             controllerAs: 'vm'
@@ -26,8 +28,8 @@
 
         vm.gridStack = {};
         vm.options = {
-            cellHeight: 100,
-            verticalMargin: 10
+            cellHeight: vm.cellHeight,
+            verticalMargin: vm.verticalMargin
         };
 
         vm.$onChanges = onChanges;
@@ -38,7 +40,9 @@
                 index = vm.updateList.findIndex(function(data) {
                     return data.id === Number(item.getAttribute('id'));
                 });
-                vm.gridStack.move(item, 0, index);
+                if(index !== -1) {
+                    vm.gridStack.move(item, 0, index);
+                }
             });
         }
 

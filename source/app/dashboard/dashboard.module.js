@@ -1,8 +1,8 @@
 (function() {
 
-	'use strict';
+    'use strict';
 
-	angular
-		.module('app.dashboard', ['app.core']);
+    angular
+        .module('app.dashboard', ['app.core']);
 
 })();
