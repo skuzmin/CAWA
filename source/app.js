@@ -5,7 +5,7 @@
 		'app.core',
 		'app.components',
 		'app.login',
-		'app.dashboard'
+		'app.decision'
 	]);
 
 })();
