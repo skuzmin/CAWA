@@ -1,9 +1,18 @@
-.btn {
-  color: green;
+.search-input {
+  margin-top: 5px;
+  padding-left: 25px;
+  height: 30px;
 }
 
-.search-input {
-  float: right;
+.search-input-icon {
+  position: absolute;
+  height: 30px;
+  width: 30px;
+  left: 15px;
+  top: 5px;
+  line-height: 30px;
+  padding: 0px;
+  padding-left: 7px;
 }
 
 .app-header {
