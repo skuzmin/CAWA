@@ -12,15 +12,29 @@
         </div>
     </div>
     <div class="row main-panel">
-        <div class="col-md-3">
-            <gridstack-wrapper init-list="vm.testData" update-list="vm.updateList" element=".grid-stack-item" cell-height="100" vertical-margin="10">
+        <div class="col-md-3 grid-stack-criteria">
+            <div class="criteria-header">
+                <div class="col-md-6">
+                    <h4>Criteria</h4>
+                </div>
+                <div class="col-md-6">
+                    <a href="" class="add-createria-btn"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Add criterion</a>
+                </div>
+            </div>
+            <gridstack-wrapper init-list="vm.testData" update-list="vm.updateList" element="criteria-item" cell-height="60" vertical-margin="10" grid-class="criteria-grid" template="criteria">
             </gridstack-wrapper>
         </div>
         <app-divider axis="x"></app-divider>
-        <div class="col-md-6">
-            <gridstack-wrapper init-list="vm.testData" update-list="vm.updateList" element=".grid-stack-item" cell-height="100" vertical-margin="10">
+        <div class="col-md-6 grid-stack-decision">
+            <div class="criteria-header">
+                <div class="col-md-12">
+                    <h4>Decision Filter</h4>
+                </div>
+            </div>
+            <gridstack-wrapper init-list="vm.testData" update-list="vm.updateList" element="decision-item" cell-height="100" vertical-margin="10" grid-class="custom-grid" template="decision">
             </gridstack-wrapper>
         </div>
+        <app-divider axis="x" side="right"></app-divider>
         <div class="col-md-2">
             <a class="btn btn-primary" ng-click="vm.sort()" href="">Get'n'Sort</a>
         </div>

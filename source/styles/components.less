@@ -25,9 +25,29 @@
     width: 8px;
     height: 100vh;
     position: static !important;
-    background-color: @divider;
+    background-color: @gray;
     float: left;
     left: 25%;
     z-index: 111;
     cursor: col-resize;
+}
+
+.grid-stack-item-content {
+    color: @default-text;
+    text-align: center;
+}
+
+.grid-stack {
+	& > .grid-stack-item {
+		min-width: 100%;
+		max-width: 100%;
+		& > .ui-resizable-se {
+			transform: none;
+			-webkit-transform: none;
+		    -moz-transform: none;
+		    -ms-transform: none;
+		    -o-transform: none;
+		    cursor: ns-resize;
+		}
+	}
 }

@@ -12,7 +12,8 @@
                 updateList: '<',
                 element: '@',
                 cellHeight: '=',
-                verticalMargin: '='
+                verticalMargin: '=',
+                template: '@'
             },
             controller: 'GridstackMovementController',
             controllerAs: 'vm'
@@ -24,9 +25,14 @@
         var
             vm = this,
             gridItems = [],
-            index;
+            index,
+            content = {
+                criteria: 'app/components/criteria-partial.html',
+                decision: 'app/components/decision-partial.html'
+            };
 
         vm.gridStack = {};
+        vm.innerTemplate = content[vm.template]; 
         vm.options = {
             cellHeight: vm.cellHeight,
             verticalMargin: vm.verticalMargin
@@ -35,7 +41,7 @@
         vm.$onChanges = onChanges;
 
         function onChanges() {
-        	gridItems = $(vm.element);
+        	gridItems = $('.' + vm.element);
             _.forEach(gridItems, function(item) {
                 index = vm.updateList.findIndex(function(data) {
                     return data.id === Number(item.getAttribute('id'));

@@ -1,9 +1,8 @@
-<div gridstack gridstack-handler="vm.gridStack" class="grid-stack custom-grid grid-stack-animate" options="vm.options" >
-    <div gridstack-item ng-repeat="item in vm.initList track by $index" class="grid-stack-item" gs-item-x="0" gs-item-y="item.position" id="{{item.id}}"
+<div gridstack gridstack-handler="vm.gridStack" class="grid-stack grid-stack-animate" options="vm.options">
+    <div gridstack-item ng-repeat="item in vm.initList track by $index" class="grid-stack-item {{vm.element}}" gs-item-x="0" gs-item-y="item.position" id="{{item.id}}"
          gs-item-width="12" gs-item-height="1" gs-item-autopos="1">
         <div class="grid-stack-item-content">
-            <h4>{{item.title}}</h4>
-            <div>{{item.content}}</div>
+            <ng-include src="vm.innerTemplate"></ng-include>
         </div>
     </div>
 </div>
