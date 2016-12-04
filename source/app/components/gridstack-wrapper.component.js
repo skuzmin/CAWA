@@ -47,7 +47,7 @@
         }
 
         $timeout(function() {
-            vm.gridStack.set_animation(true);
+            vm.gridStack.setAnimation(true);
         }, 0);
     }
 })();

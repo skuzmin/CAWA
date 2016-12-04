@@ -25,9 +25,28 @@
   text-align: right;
 }
 
+.divider {
+  width: 8px;
+  height: 100vh;
+  position: static !important;
+  background-color: #808080;
+  float: left;
+  left: 25%;
+  z-index: 111;
+  cursor: col-resize;
+}
+
 .dicision .top-panel {
   min-height: 40px;
   background-color: rgba(128, 128, 128, 0.2);
+}
+
+.dicision .main-panel {
+  position: relative;
+}
+
+.dicision .main-panel > div {
+  padding: 0;
 }
 
 .dicision .custom-grid {
