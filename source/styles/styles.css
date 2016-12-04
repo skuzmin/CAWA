@@ -25,6 +25,13 @@
   text-align: right;
 }
 
+.app-footer {
+  min-height: 60px;
+  background-color: #1d365d;
+  color: #fff;
+  padding: 10px;
+}
+
 .divider {
   width: 8px;
   height: 100vh;
@@ -71,4 +78,8 @@
   -ms-transform: none;
   -o-transform: none;
   cursor: ns-resize;
+}
+
+.content {
+  min-height: calc(100vh - 120px);
 }

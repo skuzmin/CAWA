@@ -1,3 +1,4 @@
+/* Required jQuery(full) and jQueryUI */
 (function() {
 
     'use strict';
