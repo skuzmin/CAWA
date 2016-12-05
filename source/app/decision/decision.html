@@ -1,23 +1,23 @@
-<div class="dicision">
+<div class="dicision" >
     <div class="row top-panel">
-        <div class="col-md-3">
+        <div class="col-md-3 col-sm-3">
             <h4>
                 NAME OF DECISION
             </h4>
         </div>
-        <div class="col-md-6"></div>
-        <div class="col-md-3">
+        <div class="col-md-6 col-sm-6"></div>
+        <div class="col-md-3 col-sm-3">
             <input class="form-control search-input" type="text"/>
             <span class="glyphicon glyphicon-search search-input-icon"></span>
         </div>
     </div>
     <div class="row main-panel">
-        <div class="col-md-3 grid-stack-criteria app-divider-wrapper js-full-height">
+        <div class="col-md-3 col-sm-3 grid-stack-criteria app-divider-wrapper js-full-height">
             <div class="criteria-header">
-                <div class="col-md-6">
+                <div class="col-md-6 col-sm-6">
                     <h4>Criteria</h4>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 col-sm-6">
                     <a href="" class="add-createria-btn"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Add criterion</a>
                 </div>
             </div>
@@ -25,9 +25,9 @@
             </gridstack-wrapper>
         </div>
         <app-divider axis="x" class="js-full-height"></app-divider>
-        <div class="col-md-6 grid-stack-decision app-divider-wrapper js-full-height">
-            <div class="criteria-header">
-                <div class="col-md-12">
+        <div element-ready main="main-panel" element-to-update="js-full-height" elements-to-calculate="vm.elements" class="col-md-6 col-sm-6 grid-stack-decision app-divider-wrapper js-full-height">
+            <div class="decisions-header">
+                <div class="col-md-12 col-sm-12">
                     <h4>Decision Filter</h4>
                 </div>
             </div>
@@ -35,7 +35,12 @@
             </gridstack-wrapper>
         </div>
         <app-divider axis="x" side="right" class="js-full-height"></app-divider>
-        <div class="col-md-3 js-full-height">
+        <div class="col-md-3 col-sm-3 js-full-height">
+            <div class="filters-header">
+                <div class="col-md-12 col-sm-12">
+                    <h4>Filters</h4>
+                </div>
+            </div>
             <a class="btn btn-primary" ng-click="vm.sort()" href="">Get'n'Sort</a>
         </div>
     </div>
