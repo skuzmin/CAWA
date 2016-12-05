@@ -26,11 +26,13 @@
 
 .divider {
     width: 8px;
-    height: 100vh;
-    position: static !important;
+    margin: 0;
+    height: 100%;
+    position: relative !important;
     background-color: @gray;
     float: left;
-    left: 25%;
+    top: 0 !important;
+    left: auto !important;
     z-index: 111;
     cursor: col-resize;
 }

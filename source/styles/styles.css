@@ -52,11 +52,13 @@
 
 .divider {
   width: 8px;
-  height: 100vh;
-  position: static !important;
+  margin: 0;
+  height: 100%;
+  position: relative !important;
   background-color: #808080;
   float: left;
-  left: 25%;
+  top: 0 !important;
+  left: auto !important;
   z-index: 111;
   cursor: col-resize;
 }
@@ -94,13 +96,19 @@
   padding: 0;
 }
 
+.dicision .main-panel > div.app-divider-wrapper {
+  margin-right: -8px;
+  padding-right: 8px;
+}
+
 .dicision .main-panel .criteria-header {
+  background-color: #fff;
   border-bottom: 1px solid #808080;
   height: 40px;
   margin-bottom: 10px;
 }
 
-.dicision .grid-stack-decision .grid-stack {
+.dicision .grid-stack-decision {
   background-color: rgba(128, 128, 128, 0.2);
 }
 

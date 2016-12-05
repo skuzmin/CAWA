@@ -12,7 +12,7 @@
         </div>
     </div>
     <div class="row main-panel">
-        <div class="col-md-3 grid-stack-criteria">
+        <div class="col-md-3 grid-stack-criteria app-divider-wrapper js-full-height">
             <div class="criteria-header">
                 <div class="col-md-6">
                     <h4>Criteria</h4>
@@ -24,8 +24,8 @@
             <gridstack-wrapper init-list="vm.testData" update-list="vm.updateList" element="criteria-item" cell-height="60" vertical-margin="10" grid-class="criteria-grid" template="criteria">
             </gridstack-wrapper>
         </div>
-        <app-divider axis="x"></app-divider>
-        <div class="col-md-6 grid-stack-decision">
+        <app-divider axis="x" class="js-full-height"></app-divider>
+        <div class="col-md-6 grid-stack-decision app-divider-wrapper js-full-height">
             <div class="criteria-header">
                 <div class="col-md-12">
                     <h4>Decision Filter</h4>
@@ -34,8 +34,8 @@
             <gridstack-wrapper init-list="vm.testData" update-list="vm.updateList" element="decision-item" cell-height="100" vertical-margin="10" grid-class="custom-grid" template="decision">
             </gridstack-wrapper>
         </div>
-        <app-divider axis="x" side="right"></app-divider>
-        <div class="col-md-3">
+        <app-divider axis="x" side="right" class="js-full-height"></app-divider>
+        <div class="col-md-3 js-full-height">
             <a class="btn btn-primary" ng-click="vm.sort()" href="">Get'n'Sort</a>
         </div>
     </div>
