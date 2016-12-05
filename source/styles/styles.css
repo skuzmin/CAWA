@@ -25,7 +25,10 @@
   min-height: 60px;
   background-color: #1d365d;
   color: #fff;
-  padding: 10px;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .app-header .header-menu-btn {
@@ -108,8 +111,9 @@
 }
 
 .dicision .grid-stack-criteria .criteria-item .grid-stack-item-content {
-  border: 1px solid #808080;
+  border: 1px solid #c0c0c0;
   border-radius: 3px;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .content {

@@ -17,7 +17,7 @@
 			    	side: '@'
 			    },
 			    link: link
-        	}
+        	};
 
         	return directive;
 
