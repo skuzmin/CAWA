@@ -12,7 +12,7 @@
             scope: {
             	main: '@', //main block 
             	elementToUpdate: '@', //element(s) where need update height
-            	elementsToCalculate: '=' //elements (array), what need to calculate height
+            	elementsToCalculate: '=' //elements (array), what need subtract to calculate height
             },
             link: link
         };

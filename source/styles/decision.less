@@ -1,47 +1,75 @@
 .dicision {
-
-	.top-panel {
-		min-height: 40px;
-		background-color: @bg-dark;
-		border-bottom: 1px solid @dark;
-	}
-	.main-panel {
-		position: relative;
-		& > div {
-			padding: 0;
-			&.app-divider-wrapper {
-				margin-right: -8px;
-				padding-right: 8px;
-			}
-		}
-		.criteria-header, .filters-header, .decisions-header {
-			background-color: @bg-light;
-			border-bottom: 1px solid @dark;
-			height: 40px;
-			margin-bottom: 10px;
-		}
-		.grid-stack-decision {
-			background-color: @bg-dark;
-			padding-bottom: 10px;
-			.grid-stack {
-				
-				.decision-item {
-					.grid-stack-item-content {
-						border: 1px solid @dark;
-						border-radius: 3px;
-						background-color: @white-text;
-					}
-				}
-			}
-		}
-	}
-	.grid-stack-criteria {
-		.criteria-item, {
-			.grid-stack-item-content {
-				border: 1px solid @criteria-items;
-				border-radius: 3px;
-				box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-			}
-		}
-	}
+    .top-panel {
+        min-height: 40px;
+        background-color: @bg-dark;
+        border-bottom: 1px solid @dark;
+    }
+    .main-panel {
+        position: relative;
+        & > div {
+            padding: 0;
+            &.app-divider-wrapper {
+                margin-right: -8px;
+                padding-right: 8px;
+            }
+        }
+        .criteria-header,
+        .char-header,
+        .decisions-header {
+            background-color: @bg-light;
+            border-bottom: 1px solid @dark;
+            height: 40px;
+            margin-bottom: 10px;
+        }
+        .grid-stack-decision {
+            background-color: @bg-dark;
+            padding-bottom: 10px;
+            .decisions-header {
+                .decision-filter {
+                    list-style: none;
+                    li {
+                    	color: @default-text;
+                        display: inline-block;
+                        float: left;
+                        padding: 5px;
+                        border: 1px solid @criteria-items;
+                        border-right: none;
+                        margin: 4px 0;
+                        cursor: pointer;
+                        &:last-child {
+                        	border-right: 1px solid @criteria-items;
+                        }
+                        &:hover {
+                        	background-color: @basic;
+                        	color: @white-text;
+                        }
+                        &.active {
+                        	background-color: @basic-active;
+                        	color: @white-text;
+                        }
+                    }
+                }
+            }
+            .grid-stack {
+                .decision-item {
+                    .grid-stack-item-content {
+                        border: 1px solid @criteria-items;
+                        border-radius: 3px;
+                        background-color: @white-text;
+                        box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+                    }
+                }
+            }
+        }
+    }
+    .grid-stack-criteria {
+        .criteria-item,
+        {
+            .grid-stack-item-content {
+                border: 1px solid @criteria-items;
+                border-radius: 3px;
+                box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            }
+        }
+    }
 }

@@ -1,4 +1,5 @@
 <div class="dicision" >
+    <!--Top panel with search  -->
     <div class="row top-panel">
         <div class="col-md-3 col-sm-3">
             <h4>
@@ -11,7 +12,9 @@
             <span class="glyphicon glyphicon-search search-input-icon"></span>
         </div>
     </div>
+    <!-- Main stuff -->
     <div class="row main-panel">
+        <!-- CRITERIA SECTION -->
         <div class="col-md-3 col-sm-3 grid-stack-criteria app-divider-wrapper js-full-height">
             <div class="criteria-header">
                 <div class="col-md-6 col-sm-6">
@@ -21,26 +24,46 @@
                     <a href="" class="add-createria-btn"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Add criterion</a>
                 </div>
             </div>
-            <gridstack-wrapper init-list="vm.testData" update-list="vm.updateList" element="criteria-item" cell-height="60" vertical-margin="10" grid-class="criteria-grid" template="criteria">
-            </gridstack-wrapper>
+            <uib-accordion>
+                <div uib-accordion-group class="panel-default" heading="Criteria group {{$index + 1}}" ng-repeat="group in vm.testCriteriaGroup track by $index">
+                    <gridstack-wrapper init-list="vm.testData" update-list="vm.updateList" element="criteria-item" cell-height="60" vertical-margin="10" grid-class="criteria-grid" template="criteria">
+                    </gridstack-wrapper>
+                </div>
+            </uib-accordion>
         </div>
+        <!-- Left Divider -->
         <app-divider axis="x" class="js-full-height"></app-divider>
+        <!-- DECISION SECTION -->
         <div element-ready main="main-panel" element-to-update="js-full-height" elements-to-calculate="vm.elements" class="col-md-6 col-sm-6 grid-stack-decision app-divider-wrapper js-full-height">
             <div class="decisions-header">
-                <div class="col-md-12 col-sm-12">
+                <div class="col-md-3 col-sm-6">
                     <h4>Decision Filter</h4>
+                </div>
+                <div class="col-md-9 col-sm-6">
+                    <decision-filter callback="vm.testClick()" filters="vm.testCriteriaGroup"></decision-filter>
                 </div>
             </div>
             <gridstack-wrapper init-list="vm.testData" update-list="vm.updateList" element="decision-item" cell-height="100" vertical-margin="10" grid-class="custom-grid" template="decision">
             </gridstack-wrapper>
         </div>
+        <!-- Right divider -->
         <app-divider axis="x" side="right" class="js-full-height"></app-divider>
+        <!-- CHARACTERISTIC SECTION -->
         <div class="col-md-3 col-sm-3 js-full-height">
-            <div class="filters-header">
-                <div class="col-md-12 col-sm-12">
-                    <h4>Filters</h4>
+            <div class="char-header">
+                <div class="col-md-6 col-sm-6">
+                    <h4>Characteristics</h4>
+                </div>
+                <div class="col-md-6 col-sm-6">
+                    <a href="" class="add-createria-btn"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Add characteristic</a>
                 </div>
             </div>
+            <uib-accordion>
+                <div uib-accordion-group class="panel-default" heading="Criteria group {{$index + 1}}" ng-repeat="group in vm.testCriteriaGroup track by $index">
+                    <input type="checkbox"/>
+                    <label>Filter {{$index + 1}}</label>
+                </div>
+            </uib-accordion>
             <a class="btn btn-primary" ng-click="vm.sort()" href="">Get'n'Sort</a>
         </div>
     </div>
