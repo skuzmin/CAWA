@@ -7,7 +7,7 @@ var express = require('express'),
     bower = '/bower_components',
     images = '/source/app/images',
   	port = 8000,
-  	host = 'localhost';
+  	host = '0.0.0.0';
   	
   app.use('/', express.static(path.join(__dirname, target)));
   app.use('/bower_components', express.static(path.join(__dirname, bower)));

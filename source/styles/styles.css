@@ -87,6 +87,11 @@
   border-bottom: 1px solid #808080;
 }
 
+.dicision .scroll-wrapper {
+  overflow-y: scroll;
+  height: calc(100vh - 244px);
+}
+
 .dicision .main-panel {
   position: relative;
 }
