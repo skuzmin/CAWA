@@ -5,29 +5,51 @@
         border-bottom: 1px solid @dark;
     }
     .scroll-wrapper {
-        overflow-y: scroll;
-        height: calc(~"100vh - 244px");
+        overflow-y: auto;
+        padding-bottom: 10px;
+        position: absolute;
+        left: 0;
+        top: 50px;
+        bottom: 0;
+        z-index: 1;
+        right: 8px;
+    }
+    .scroll-wrapper-header {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        z-index: 2;
+        background-color: @bg-light;
+        border-bottom: 1px solid @dark;
+        height: 40px;
+        margin-bottom: 10px;
     }
     .main-panel {
         position: relative;
+        height: calc(~"100vh - 160px");
+        .divider {
+            height: 100%;
+        }
         & > div {
             padding: 0;
+            position: relative;
+            height: 100%;
             &.app-divider-wrapper {
                 margin-right: -8px;
                 padding-right: 8px;
             }
         }
-        .criteria-header,
-        .char-header,
-        .decisions-header {
-            background-color: @bg-light;
-            border-bottom: 1px solid @dark;
-            height: 40px;
-            margin-bottom: 10px;
-        }
+        // .criteria-header,
+        // .char-header,
+        // .decisions-header {
+        //     background-color: @bg-light;
+        //     border-bottom: 1px solid @dark;
+        //     height: 40px;
+        //     margin-bottom: 10px;
+        // }
         .grid-stack-decision {
             background-color: @bg-dark;
-            padding-bottom: 10px;
             .decisions-header {
                 .decision-filter {
                     list-style: none;

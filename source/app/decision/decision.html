@@ -15,8 +15,8 @@
     <!-- Main stuff -->
     <div class="row main-panel">
         <!-- CRITERIA SECTION -->
-        <div class="col-md-3 col-sm-3 grid-stack-criteria app-divider-wrapper js-full-height">
-            <div class="criteria-header">
+        <div class="col-md-3 col-sm-3 grid-stack-criteria app-divider-wrapper ">
+            <div class="criteria-header scroll-wrapper-header">
                 <div class="col-md-6 col-sm-6">
                     <h4>Criteria</h4>
                 </div>
@@ -34,10 +34,10 @@
             </div>
         </div>
         <!-- Left Divider -->
-        <app-divider axis="x" class="js-full-height"></app-divider>
+        <app-divider axis="x"></app-divider>
         <!-- DECISION SECTION -->
-        <div element-ready main="main-panel" element-to-update="js-full-height" elements-to-calculate="vm.elements" class="col-md-6 col-sm-6 grid-stack-decision app-divider-wrapper js-full-height">
-            <div class="decisions-header">
+        <div class="col-md-6 col-sm-6 grid-stack-decision app-divider-wrapper ">
+            <div class="decisions-header scroll-wrapper-header">
                 <div class="col-md-3 col-sm-6">
                     <h4>Decision Filter</h4>
                 </div>
@@ -51,10 +51,10 @@
             </div>
         </div>
         <!-- Right divider -->
-        <app-divider axis="x" side="right" class="js-full-height"></app-divider>
+        <app-divider axis="x" side="right"></app-divider>
         <!-- CHARACTERISTIC SECTION -->
-        <div class="col-md-3 col-sm-3 js-full-height">
-            <div class="char-header">
+        <div class="col-md-3 col-sm-3 ">
+            <div class="char-header scroll-wrapper-header">
                 <div class="col-md-6 col-sm-6">
                     <h4>Characteristics</h4>
                 </div>
@@ -69,8 +69,8 @@
                         <label>Filter {{$index + 1}}</label>
                     </div>
                 </uib-accordion>
+                <a class="btn btn-primary" ng-click="vm.sort()" href="">Get'n'Sort</a>
             </div>
-            <a class="btn btn-primary" ng-click="vm.sort()" href="">Get'n'Sort</a>
         </div>
     </div>
 </div>
