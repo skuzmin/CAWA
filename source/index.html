@@ -2,21 +2,14 @@
 <html ng-app="app">
 	<head>
 		<title>Title of the document</title>
-		<!-- Scripts -->
-		<script src="../bower_components/jquery/dist/jquery.min.js"></script>
-		<script src="../bower_components/jquery-ui/jquery-ui.js"></script>
-		<!-- <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script> -->
-		<script src="../bower_components/angular/angular.js"></script>
-		<script src="../bower_components/angular-animate/angular-animate.js"></script>
-		<script src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-		<script src="../bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-		<script src="app.js"></script>
-		<!-- Styles -->
-		<link href="../bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
-		<link href="../bower_components/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet">
-		<link rel="stylesheet" href="../bower_components/gridstack/dist/gridstack.css"/>
-		<link rel="stylesheet" href="../bower_components/gridstack/dist/gridstack-extra.css"/>
-		<link href="/styles/styles.css" rel="stylesheet">
+		<!-- bower:css -->
+		<link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css" />
+		<link rel="stylesheet" href="../bower_components/gridstack/dist/gridstack.css" />
+		<!-- endbower -->
+  		
+  		<!-- inject:css -->
+  		<link rel="stylesheet" href="/styles/styles.css">
+  		<!-- endinject -->
 	</head>	
 	<body>
 		<app-header></app-header>
@@ -24,29 +17,38 @@
 		<app-footer></app-footer>
 	</body>
 
-	<script src="/app/components/components.module.js"></script>
-	<script src="/app/components/gridstack-wrapper.component.js"></script>
-	<script src="/app/components/app-header.component.js"></script>
-	<script src="/app/components/app-footer.component.js"></script>
-	<script src="/app/components/app-divider.directive.js"></script>
-	<script src="/app/components/element-ready.directive.js"></script>
-	<script src="/app/components/decision-filter.directive.js"></script>
-
-	<script src="/app/core/core.module.js"></script>
-	<script src="/app/core/core.route.js"></script>
-
-	<script src="/app/login/login.module.js"></script>
-	<script src="/app/login/login.route.js"></script>
-	<script src="/app/login/login.controller.js"></script>
-	
-	<script src="/app/decision/decision.module.js"></script>
-	<script src="/app/decision/decision.route.js"></script>
-	<script src="/app/decision/decision.controller.js"></script>
-	<script src="/app/decision/decision.service.js"></script>
-
-	<!-- vendor -->
+	<!-- bower:js -->
+	<script src="../bower_components/jquery/dist/jquery.js"></script>
+	<script src="../bower_components/jquery-ui/jquery-ui.js"></script>
+	<script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+	<script src="../bower_components/lodash/lodash.js"></script>
+	<script src="../bower_components/angular/angular.js"></script>
+	<script src="../bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 	<script src="../bower_components/angular-resource/angular-resource.js"></script>
-    <script src="../bower_components/lodash/dist/lodash.min.js"></script>
-    <script src="../bower_components/gridstack/dist/gridstack.js"></script>
-    <script src="../bower_components/gridstack-angular/dist/gridstack-angular.js"></script>
+	<script src="../bower_components/gridstack/dist/gridstack.js"></script>
+	<script src="../bower_components/gridstack-angular/dist/gridstack-angular.min.js"></script>
+	<script src="../bower_components/angular-animate/angular-animate.js"></script>
+	<script src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+	<!-- endbower -->
+
+	<!-- inject:js -->
+	<script src="/app/app.js"></script>
+	<script src="/app/components/components.module.js"></script>
+	<script src="/app/core/core.module.js"></script>
+	<script src="/app/decision/decision.module.js"></script>
+	<script src="/app/login/login.module.js"></script>
+	<script src="/app/components/app-divider.directive.js"></script>
+	<script src="/app/components/app-footer.component.js"></script>
+	<script src="/app/components/app-header.component.js"></script>
+	<script src="/app/components/decision-filter.directive.js"></script>
+	<script src="/app/components/element-ready.directive.js"></script>
+	<script src="/app/components/gridstack-wrapper.component.js"></script>
+	<script src="/app/core/core.route.js"></script>
+	<script src="/app/decision/decision.controller.js"></script>
+	<script src="/app/decision/decision.route.js"></script>
+	<script src="/app/decision/decision.service.js"></script>
+	<script src="/app/login/login.controller.js"></script>
+	<script src="/app/login/login.route.js"></script>
+	<!-- endinject -->
+
 </html>
