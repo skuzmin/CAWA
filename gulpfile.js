@@ -1,18 +1,20 @@
 var gulp = require('gulp'),
     jshint = require('gulp-jshint'),
     less = require('gulp-less'),
-    concatCss = require('gulp-concat-css'),
+    gconcat = require('gulp-concat'),
     plumber = require('gulp-plumber'),
     autoprefixer = require('gulp-autoprefixer'),
     util = require('gulp-util'),
     rename = require('gulp-rename'),
+    uglify = require('gulp-uglify'),
+    minifyHtml = require('gulp-minify-html'),
+    csso = require('gulp-csso'),
+    filter = require('gulp-filter'),
+    gulpIf = require('gulp-if'),
+    useref = require('gulp-useref'),
+    templateCache = require('gulp-angular-templatecache'),
+    argv = require('yargs').argv,
     inject = require('gulp-inject');
-
-// watchers
-gulp.task('watch', function() {
-    gulp.watch('source/app/**/*.js', ['jshint']);
-    gulp.watch('source/styles/*.less', ['less']);
-});
 
 // tasks
 gulp.task('less', function() {
@@ -25,7 +27,8 @@ gulp.task('less', function() {
             }
         }))
         .pipe(less())
-        .pipe(concatCss('styles.css'))
+        .pipe(autoprefixer({ browsers: ['last 2 versions'] }))
+        .pipe(gconcat('styles.css'))
         .pipe(gulp.dest('source/styles/'));
 });
 
@@ -43,7 +46,7 @@ gulp.task('jshint', function() {
 });
 
 
-gulp.task('inject', function() {
+gulp.task('inject', ['jshint', 'less'], function() {
     var
         wiredep = require('wiredep').stream,
         jsSources = ['source/app/app.js', 'source/app/**/*.module.js', 'source/app/**/*.js'],
@@ -59,11 +62,23 @@ gulp.task('inject', function() {
         .pipe(gulp.dest('source'));
 });
 
-// commands
+gulp.task('templates', function() {
+    log('Gathering templates');
+
+    return gulp.src('source/app/**/*.html')
+        .pipe(minifyHtml())
+        .pipe(templateCache())
+        .pipe(gulp.dest('temp'));
+});
+
+
+gulp.task('watch', function() {
+    gulp.watch('source/app/**/*.js', ['jshint']);
+    gulp.watch('source/styles/*.less', ['less']);
+});
+
 gulp.task('default', ['inject']);
 
-//TODO add dev build
-//TODO add prod build
 
 //=============Functions==============
 
