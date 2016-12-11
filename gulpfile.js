@@ -3,8 +3,8 @@ var gulp = require('gulp'),
     less = require('gulp-less'),
     gconcat = require('gulp-concat'),
     plumber = require('gulp-plumber'),
-    autoprefixer = require('gulp-autoprefixer'),
     util = require('gulp-util'),
+    rev = require('gulp-rev'),
     rename = require('gulp-rename'),
     uglify = require('gulp-uglify'),
     minifyHtml = require('gulp-minify-html'),
@@ -12,12 +12,28 @@ var gulp = require('gulp'),
     gulpIf = require('gulp-if'),
     templateCache = require('gulp-angular-templatecache'),
     argv = require('yargs').argv,
+    del = require('del'),
     inject = require('gulp-inject');
+
+//=======config
+
+var config = {
+    mainLessFile: 'source/styles/index.less',
+    stylesLocation: 'source/styles/',
+    allJsFiles: 'source/app/**/*.js',
+    allLessFiles: 'source/styles/*.less',
+    allCssFiles: 'source/styles/*.css',
+    allHtmlFiles: 'source/app/**/*.html',
+    allJsOrdered: ['source/app/app.js', 'source/app/**/*.module.js', 'source/app/**/*.js'],
+    index: 'source/app/index.tpl.html',
+    release: 'public/release',
+    temp: 'temp'
+};
 
 //======= dev tasks
 gulp.task('less', function() {
     log('Compiling LESS');
-    return gulp.src('source/styles/index.less')
+    return gulp.src(config.mainLessFile)
         .pipe(plumber({
             errorHandler: function(err) {
                 console.log(err);
@@ -26,12 +42,12 @@ gulp.task('less', function() {
         }))
         .pipe(less())
         .pipe(gconcat('styles.css'))
-        .pipe(gulp.dest('source/styles/'));
+        .pipe(gulp.dest(config.stylesLocation));
 });
 
 gulp.task('jshint', function() {
     log('Checking JS');
-    return gulp.src('source/app/**/*.js')
+    return gulp.src(config.allJsFiles)
         .pipe(plumber({
             errorHandler: function(err) {
                 console.log(err);
@@ -46,13 +62,13 @@ gulp.task('jshint', function() {
 gulp.task('inject', ['jshint', 'less'], function() {
     var
         wiredep = require('wiredep').stream,
-        jsSources = ['source/app/app.js', 'source/app/**/*.module.js', 'source/app/**/*.js'],
-        cssSources = ['source/styles/*.css'],
+        jsSources = config.allJsOrdered,
+        cssSources = config.allCssFiles,
         sources = [].concat(jsSources, cssSources);
 
     log('Injecting files');
 
-    return gulp.src('source/app/index.tpl.html')
+    return gulp.src(config.index)
         .pipe(wiredep({ ignorePath: '../' }))
         .pipe(inject(gulp.src(sources), { ignorePath: '/source' }))
         .pipe(rename('index.html'))
@@ -60,68 +76,81 @@ gulp.task('inject', ['jshint', 'less'], function() {
 });
 
 //======= build tasks
+gulp.task('clean', function() {
+    log('Cleaning...');
+    return del([config.temp, config.allCssFiles, config.release]);
+});
+
 gulp.task('templates', function() {
     log('Gathering templates');
 
-    return gulp.src(['source/app/**/*.html', '!source/app/index.tpl.html'])
+    return gulp.src([config.allHtmlFiles, '!' + config.index])
         .pipe(minifyHtml())
         .pipe(templateCache({ module: 'app.core', root: 'app/' }))
-        .pipe(gulp.dest('temp'));
+        .pipe(gulp.dest(config.temp));
 });
 
 gulp.task('styles', ['less'], function() {
-    return gulp.src('source/styles/styles.css')
+    return gulp.src(config.allCssFiles)
         .pipe(gulpIf(argv.prod, csso()))
-        .pipe(gulp.dest('temp'));
+        .pipe(rev())
+        .pipe(gulp.dest(config.temp));
 });
 
 gulp.task('vendor-styles', function() {
-	log('Creating vendor Styles');
+    log('Creating vendor Styles');
     var wiredep = require('wiredep');
     return gulp.src(wiredep().css)
         .pipe(gconcat('vendor.css'))
+        .pipe(rev())
         .pipe(gulpIf(argv.prod, csso()))
-        .pipe(gulp.dest('temp'));
+        .pipe(gulp.dest(config.temp));
 });
 
 gulp.task('js', ['jshint', 'templates'], function() {
-	log('Creating app.js');
-    var jsSources = ['source/app/app.js', 'source/app/**/*.module.js', 'source/app/**/*.js', 'temp/templates.js'];
+    log('Creating app.js');
+    var jsSources = [].concat(config.allJsOrdered, config.temp + '/templates.js');
     return gulp.src(jsSources)
         .pipe(gconcat('app.js'))
+        .pipe(rev())
         .pipe(gulpIf(argv.prod, uglify()))
-        .pipe(gulp.dest('temp'));
+        .pipe(gulp.dest(config.temp));
 });
 
 gulp.task('vendor-js', function() {
-	log('Creating vendor JS');
+    log('Creating vendor JS');
     var wiredep = require('wiredep');
     return gulp.src(wiredep().js)
         .pipe(gconcat('vendor.js'))
+        .pipe(rev())
         .pipe(gulpIf(argv.prod, uglify()))
-        .pipe(gulp.dest('temp'));
+        .pipe(gulp.dest(config.temp));
 });
 
 //======= commands
-gulp.task('build', ['styles', 'vendor-styles', 'js', 'vendor-js'], function() {
-    var
-        styles = gulp.src(['temp/vendor.css', 'temp/styles.css']),
-        js = gulp.src(['temp/vendor.js', 'temp/app.js']);
 
-    return gulp.src('source/app/index.tpl.html')
-        .pipe(inject(styles.pipe(gulp.dest('public/dev/styles')), { ignorePath: '/public/dev', removeTags: true, addRootSlash: false }))
-        .pipe(inject(js.pipe(gulp.dest('public/dev/js')), { ignorePath: '/public/dev', removeTags: true, addRootSlash: false }))
+// create build ( default : dev, --prod key for production (minification + uglify))
+gulp.task('build', ['clean', 'styles', 'vendor-styles', 'js', 'vendor-js'], function() {
+    var
+        styles = gulp.src([config.temp + '/vendor-*.css', config.temp + '/styles-*.css']),
+        js = gulp.src([config.temp + '/vendor-*.js', config.temp + '/app-*.js']);
+
+    return gulp.src(config.index)
+        .pipe(inject(styles.pipe(gulp.dest(config.release + '/styles')), { ignorePath: config.release, addRootSlash: false }))
+        .pipe(inject(js.pipe(gulp.dest(config.release + '/js')), { ignorePath: config.release, addRootSlash: false }))
         .pipe(rename('index.html'))
         .pipe(gulpIf(argv.prod, minifyHtml()))
-        .pipe(gulp.dest('public/dev'));
+        .pipe(gulp.dest(config.release));
 });
 
+// compiling and injecting files and watching changes (no optimization)
 gulp.task('watch', ['inject'], function() {
-	log('WATCHING...');
-    gulp.watch('source/app/**/*.js', ['jshint']);
-    gulp.watch('source/styles/*.less', ['less']);
+    log('WATCHING...');
+    gulp.watch(config.allJsFiles, ['jshint']);
+    gulp.watch(config.allLessFiles, ['less']);
 });
 
+// default task, to avoid typing gulp watch :)
 gulp.task('default', ['watch']);
 
 

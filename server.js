@@ -6,7 +6,7 @@ var express = require('express'),
     target = '/source',
     bower = '/bower_components',
     images = '/source/app/images',
-    build = '/public/dev'
+    build = '/public/release'
     port = 8000,
     host = '0.0.0.0';
 
