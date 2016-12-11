@@ -6,11 +6,12 @@
 		.module('app.decision')
 		.controller('DecisionController', DecisionController);
 
-		DecisionController.$inject = ['data', 'DecisionService', '$scope'];
+		DecisionController.$inject = ['data', 'DecisionService'];
 
-		function DecisionController(data, DecisionService, $scope) {
+		function DecisionController(data, DecisionService) {
 			var vm = this;
 
+			console.log('Decision controller');
 			
 			vm.testData = data;
 			vm.testCriteriaGroup = [1,2,3];

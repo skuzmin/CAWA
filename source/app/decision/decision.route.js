@@ -16,11 +16,15 @@
                 controller: 'DecisionController',
                 controllerAs: 'vm',
                 resolve: {
-                    data: function(DecisionService) {
-                        return DecisionService.getTestData();
-                    }
+                    data: DecisionControllerResolver
                 }
             });
+    }
+
+    DecisionControllerResolver.$inject = ['DecisionService'];
+
+    function DecisionControllerResolver(DecisionService) {
+        return DecisionService.getTestData();
     }
 
 })();

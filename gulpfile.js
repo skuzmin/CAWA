@@ -9,14 +9,12 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     minifyHtml = require('gulp-minify-html'),
     csso = require('gulp-csso'),
-    filter = require('gulp-filter'),
     gulpIf = require('gulp-if'),
-    useref = require('gulp-useref'),
     templateCache = require('gulp-angular-templatecache'),
     argv = require('yargs').argv,
     inject = require('gulp-inject');
 
-// tasks
+//======= dev tasks
 gulp.task('less', function() {
     log('Compiling LESS');
     return gulp.src('source/styles/index.less')
@@ -27,7 +25,6 @@ gulp.task('less', function() {
             }
         }))
         .pipe(less())
-        .pipe(autoprefixer({ browsers: ['last 2 versions'] }))
         .pipe(gconcat('styles.css'))
         .pipe(gulp.dest('source/styles/'));
 });
@@ -62,22 +59,70 @@ gulp.task('inject', ['jshint', 'less'], function() {
         .pipe(gulp.dest('source'));
 });
 
+//======= build tasks
 gulp.task('templates', function() {
     log('Gathering templates');
 
-    return gulp.src('source/app/**/*.html')
+    return gulp.src(['source/app/**/*.html', '!source/app/index.tpl.html'])
         .pipe(minifyHtml())
-        .pipe(templateCache())
+        .pipe(templateCache({ module: 'app.core', root: 'app/' }))
         .pipe(gulp.dest('temp'));
 });
 
+gulp.task('styles', ['less'], function() {
+    return gulp.src('source/styles/styles.css')
+        .pipe(gulpIf(argv.prod, csso()))
+        .pipe(gulp.dest('temp'));
+});
 
-gulp.task('watch', function() {
+gulp.task('vendor-styles', function() {
+	log('Creating vendor Styles');
+    var wiredep = require('wiredep');
+    return gulp.src(wiredep().css)
+        .pipe(gconcat('vendor.css'))
+        .pipe(gulpIf(argv.prod, csso()))
+        .pipe(gulp.dest('temp'));
+});
+
+gulp.task('js', ['jshint', 'templates'], function() {
+	log('Creating app.js');
+    var jsSources = ['source/app/app.js', 'source/app/**/*.module.js', 'source/app/**/*.js', 'temp/templates.js'];
+    return gulp.src(jsSources)
+        .pipe(gconcat('app.js'))
+        .pipe(gulpIf(argv.prod, uglify()))
+        .pipe(gulp.dest('temp'));
+});
+
+gulp.task('vendor-js', function() {
+	log('Creating vendor JS');
+    var wiredep = require('wiredep');
+    return gulp.src(wiredep().js)
+        .pipe(gconcat('vendor.js'))
+        .pipe(gulpIf(argv.prod, uglify()))
+        .pipe(gulp.dest('temp'));
+});
+
+//======= commands
+gulp.task('build', ['styles', 'vendor-styles', 'js', 'vendor-js'], function() {
+    var
+        styles = gulp.src(['temp/vendor.css', 'temp/styles.css']),
+        js = gulp.src(['temp/vendor.js', 'temp/app.js']);
+
+    return gulp.src('source/app/index.tpl.html')
+        .pipe(inject(styles.pipe(gulp.dest('public/dev/styles')), { ignorePath: '/public/dev', removeTags: true, addRootSlash: false }))
+        .pipe(inject(js.pipe(gulp.dest('public/dev/js')), { ignorePath: '/public/dev', removeTags: true, addRootSlash: false }))
+        .pipe(rename('index.html'))
+        .pipe(gulpIf(argv.prod, minifyHtml()))
+        .pipe(gulp.dest('public/dev'));
+});
+
+gulp.task('watch', ['inject'], function() {
+	log('WATCHING...');
     gulp.watch('source/app/**/*.js', ['jshint']);
     gulp.watch('source/styles/*.less', ['less']);
 });
 
-gulp.task('default', ['inject']);
+gulp.task('default', ['watch']);
 
 
 //=============Functions==============
