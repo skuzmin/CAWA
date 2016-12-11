@@ -9,6 +9,7 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     minifyHtml = require('gulp-minify-html'),
     csso = require('gulp-csso'),
+    imagemin = require('gulp-imagemin'),
     gulpIf = require('gulp-if'),
     templateCache = require('gulp-angular-templatecache'),
     argv = require('yargs').argv,
@@ -24,9 +25,11 @@ var config = {
     allLessFiles: 'source/styles/*.less',
     allCssFiles: 'source/styles/*.css',
     allHtmlFiles: 'source/app/**/*.html',
+    bootstrapFonts: 'bower_components/bootstrap/fonts',
     allJsOrdered: ['source/app/app.js', 'source/app/**/*.module.js', 'source/app/**/*.js'],
     index: 'source/app/index.tpl.html',
-    release: 'public/release',
+    images: 'source/images',
+    release: 'release',
     temp: 'temp'
 };
 
@@ -76,14 +79,21 @@ gulp.task('inject', ['jshint', 'less'], function() {
 });
 
 //======= build tasks
-gulp.task('clean', function() {
-    log('Cleaning...');
-    return del([config.temp, config.allCssFiles, config.release]);
+gulp.task('fonts', function() {
+	log('Copying fonts');
+	return gulp.src(config.bootstrapFonts + '/*')
+		.pipe(gulp.dest(config.release + '/fonts'));
+});
+
+gulp.task('images', function() {
+	log('Optimzating images');
+	return gulp.src(config.images + '/*')
+		.pipe(imagemin())
+		.pipe(gulp.dest(config.release + '/images'));
 });
 
 gulp.task('templates', function() {
     log('Gathering templates');
-
     return gulp.src([config.allHtmlFiles, '!' + config.index])
         .pipe(minifyHtml())
         .pipe(templateCache({ module: 'app.core', root: 'app/' }))
@@ -130,10 +140,16 @@ gulp.task('vendor-js', function() {
 //======= commands
 
 // create build ( default : dev, --prod key for production (minification + uglify))
-gulp.task('build', ['clean', 'styles', 'vendor-styles', 'js', 'vendor-js'], function() {
+gulp.task('build', ['styles', 'vendor-styles', 'js', 'vendor-js', 'images', 'fonts'], function() {
     var
         styles = gulp.src([config.temp + '/vendor-*.css', config.temp + '/styles-*.css']),
-        js = gulp.src([config.temp + '/vendor-*.js', config.temp + '/app-*.js']);
+        js = gulp.src([config.temp + '/vendor-*.js', config.temp + '/app-*.js']),
+        msg = '======= DEV BUILD FINISHED! =======';
+
+    if(argv.prod) {
+    	msg = '======= PROD BUILD FINISHED! =======';
+    }
+    util.log(util.colors.green(msg));
 
     return gulp.src(config.index)
         .pipe(inject(styles.pipe(gulp.dest(config.release + '/styles')), { ignorePath: config.release, addRootSlash: false }))
@@ -141,6 +157,13 @@ gulp.task('build', ['clean', 'styles', 'vendor-styles', 'js', 'vendor-js'], func
         .pipe(rename('index.html'))
         .pipe(gulpIf(argv.prod, minifyHtml()))
         .pipe(gulp.dest(config.release));
+});
+
+// remove all generated files (css, minified/uglified js, temp and release folders)
+gulp.task('clean', function(done) {
+    log('Cleaning...');
+    del([config.temp, config.allCssFiles, config.release]);
+    return done();
 });
 
 // compiling and injecting files and watching changes (no optimization)
