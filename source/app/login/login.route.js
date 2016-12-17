@@ -10,10 +10,8 @@
 	function configuration($stateProvider) {
 		$stateProvider
 			.state('login', {
-				url: '/login',
-				templateUrl: 'app/login/login.html',
-				controller: 'LoginController',
-				controllerAs: 'vm'
+				url: '/login?test&access_token',
+				controller: 'LoginController'
 			});
 	}
 

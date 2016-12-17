@@ -2,6 +2,12 @@
 	'use strict';
 
 	angular
-		.module('app.core', ['ui.router', 'ngResource', 'gridstack-angular', 'ui.bootstrap', 'ngAnimate']);
+		.module('app.core', ['ui.router',
+							 'ngResource',
+							 'gridstack-angular',
+							 'ui.bootstrap', 
+							 'ngAnimate', 
+							 'ngStorage',
+							 'angular-jwt']);
 
 })();

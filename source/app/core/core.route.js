@@ -6,9 +6,9 @@
 		.module('app.core')
 		.config(configuration);
 
-	configuration.$inject = ['$stateProvider'];
+	configuration.$inject = ['$stateProvider', '$urlRouterProvider'];
 
-	function configuration($stateProvider) {
+	function configuration($stateProvider, $urlRouterProvider) {
 
 
 		$stateProvider
@@ -16,6 +16,8 @@
 				url: '/404',
 				templateUrl: 'app/core/404.html'
 			});
+
+		//$urlRouterProvider.otherwise('/404');
 	}
 
 })();
