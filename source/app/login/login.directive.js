@@ -5,9 +5,9 @@
     angular
         .module('app.login')
         .controller('LoginController', LoginController)
-        .directive('appLoginBtn', appLoginBtn);
+        .directive('appLogin', appLogin);
 
-    function appLoginBtn() {
+    function appLogin() {
         var directive = {
             restrict: 'E',
             replace: 'true',
