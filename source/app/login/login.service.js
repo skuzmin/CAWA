@@ -6,9 +6,9 @@
         .module('app.login')
         .factory('LoginService', LoginService);
 
-    LoginService.$inject = ['jwtHelper', '$localStorage', '$window', 'Settings', '$location'];
+    LoginService.$inject = ['jwtHelper', '$localStorage', '$window', 'Settings', '$location', '$sce'];
 
-    function LoginService(jwtHelper, $localStorage, $window, Settings, $location) {
+    function LoginService(jwtHelper, $localStorage, $window, Settings, $location, $sce) {
     	var
     		user = {},
     		isLogged = false;
@@ -22,7 +22,8 @@
         	logout: logout,
         	login: login,
         	getToken: getToken,
-        	checkLogin: checkLogin
+        	checkLogin: checkLogin,
+            getLogoutUrl: getLogoutUrl
         };
 
         return service;
@@ -72,6 +73,10 @@
 
         function setLoginStatus(status) {
         	isLogged = status;
+        }
+
+        function getLogoutUrl() {
+            return $sce.trustAsResourceUrl(Settings.getEndpointUrl() + 'logout');
         }
 
         //TODO add check request

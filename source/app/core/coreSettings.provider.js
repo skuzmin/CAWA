@@ -9,7 +9,7 @@
 		function Settings() {
 			var 
 				config = {},
-				configFilePath = '/app/app.config';
+				configFilePath = 'app.config';
 
 			this.$get = getConfig;
 

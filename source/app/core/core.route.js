@@ -1,23 +1,28 @@
-(function () {
-	
-	'use strict';
+(function() {
 
-	angular
-		.module('app.core')
-		.config(configuration);
+    'use strict';
 
-	configuration.$inject = ['$stateProvider', '$urlRouterProvider'];
+    angular
+        .module('app.core')
+        .config(configuration);
 
-	function configuration($stateProvider, $urlRouterProvider) {
+    configuration.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider'];
+
+    function configuration($stateProvider, $urlRouterProvider, $locationProvider) {
 
 
-		$stateProvider
-			.state('404', {
-				url: '/404',
-				templateUrl: 'app/core/404.html'
-			});
+        $stateProvider
+            .state('404', {
+                url: '/404',
+                templateUrl: 'app/core/404.html'
+            });
 
-		//$urlRouterProvider.otherwise('/404');
-	}
+        //$urlRouterProvider.otherwise('/404');
+
+        // $locationProvider.html5Mode({
+        //     enabled: true,
+        //     requireBase: false
+        // });
+    }
 
 })();

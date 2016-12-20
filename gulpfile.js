@@ -29,6 +29,7 @@ var config = {
     allJsOrdered: ['source/app/app.js', 'source/app/**/*.module.js', 'source/app/**/*.js'],
     index: 'source/app/index.tpl.html',
     images: 'source/images',
+    configFile: 'source/app.config',
     release: 'release',
     temp: 'temp'
 };
@@ -83,6 +84,12 @@ gulp.task('fonts', function() {
 	log('Copying fonts');
 	return gulp.src(config.bootstrapFonts + '/*')
 		.pipe(gulp.dest(config.release + '/fonts'));
+});
+
+gulp.task('configFile', function() {
+    log('Copying config file');
+    return gulp.src(config.configFile)
+        .pipe(gulp.dest(config.release));
 });
 
 gulp.task('images', function() {
@@ -140,7 +147,7 @@ gulp.task('vendor-js', function() {
 //======= commands
 
 // create build ( default : dev, --prod key for production (minification + uglify))
-gulp.task('build', ['styles', 'vendor-styles', 'js', 'vendor-js', 'images', 'fonts'], function() {
+gulp.task('build', ['styles', 'vendor-styles', 'js', 'vendor-js', 'images', 'fonts', 'configFile'], function() {
     var
         styles = gulp.src([config.temp + '/vendor-*.css', config.temp + '/styles-*.css']),
         js = gulp.src([config.temp + '/vendor-*.js', config.temp + '/app-*.js']),

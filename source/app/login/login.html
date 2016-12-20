@@ -4,5 +4,7 @@
 		<span>{{vm.user.user_name}}</span>
 	</div>
 	<a ng-if="!vm.loginService.getLoginStatus()" href="" class="btn btn-default" ng-click="vm.loginService.login()">Login</a>
-	<a ng-if="vm.loginService.getLoginStatus()" href="" class="btn btn-default" ng-click="vm.loginService.logout()">Logout</a>
+	<form ng-if="vm.loginService.getLoginStatus()" name="logoutForm" action="{{vm.loginService.getLogoutUrl()}}" method="POST" ng-submit="vm.loginService.logout()" novalidate>
+		<button class="btn btn-default" type="submit">Logout</button>
+	</form>
 </div>
