@@ -28,6 +28,13 @@
         vm.loginService.checkLogin();
         vm.user = vm.loginService.getUser();
 
+        vm.logout = logout;
+
+        function logout() {
+            vm.loginService.logout();
+            $('form').submit();
+        }
+
         $scope.$watch(vm.loginService.getToken, function(newVal, oldVal) {
             if (newVal && oldVal !== newVal) {
                vm.loginService.setLoginStatus(true);
