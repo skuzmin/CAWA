@@ -40,14 +40,6 @@
                 padding-right: 8px;
             }
         }
-        // .criteria-header,
-        // .char-header,
-        // .decisions-header {
-        //     background-color: @bg-light;
-        //     border-bottom: 1px solid @dark;
-        //     height: 40px;
-        //     margin-bottom: 10px;
-        // }
         .grid-stack-decision {
             background-color: @bg-dark;
             .decisions-header {
@@ -87,14 +79,22 @@
                 }
             }
         }
-    }
-    .grid-stack-criteria {
-        .criteria-item,
-        {
-            .grid-stack-item-content {
-                border: 1px solid @criteria-items;
-                border-radius: 3px;
-                box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        .criteria-section {
+            .criteria-panel {
+                .panel-body {
+                    padding: 15px 25px;
+                }
+                .criteria-item {
+                    cursor: pointer;
+                    border: 1px solid @criteria-items;
+                    border-radius: 3px;
+                    background-color: @white-text;
+                    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+                    margin-bottom: 10px;
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+                }
             }
         }
     }

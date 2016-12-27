@@ -15,7 +15,7 @@
     <!-- Main stuff -->
     <div class="row main-panel">
         <!-- CRITERIA SECTION -->
-        <div class="col-md-3 col-sm-3 grid-stack-criteria app-divider-wrapper ">
+        <div class="col-md-3 col-sm-3 criteria-section app-divider-wrapper">
             <div class="criteria-header scroll-wrapper-header">
                 <div class="col-md-6 col-sm-6">
                     <h4>Criteria</h4>
@@ -26,9 +26,20 @@
             </div>
             <div class="scroll-wrapper">
                 <uib-accordion>
-                    <div uib-accordion-group class="panel-default" heading="Criteria group {{$index + 1}}" ng-repeat="group in vm.testCriteriaGroup track by $index">
-                        <gridstack-wrapper init-list="vm.testData" update-list="vm.updateList" element="criteria-item" cell-height="60" vertical-margin="10" grid-class="criteria-grid" template="criteria">
-                        </gridstack-wrapper>
+                    <div uib-accordion-group class="panel-default criteria-panel" heading="Criteria group {{$index + 1}}" ng-repeat="group in vm.testCriteriaGroup track by $index">
+                        <div class="row criteria-item" ng-repeat="criteria in vm.testData track by $index">
+                            <div class="col-md-6">{{criteria.title}}</div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">ICON 1</div>
+                                    <div class="col-md-4">ICON 2</div>
+                                    <div class="col-md-4">ICON 3</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">STARS</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </uib-accordion>
             </div>
