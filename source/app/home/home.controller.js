@@ -13,5 +13,10 @@
 
 			console.log('Home controller');
 			
+			vm.search = search;
+
+			function search() {
+				vm.showTrigger = true;
+			}
  		}
 })();

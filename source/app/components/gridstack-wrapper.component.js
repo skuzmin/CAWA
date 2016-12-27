@@ -27,7 +27,7 @@
             gridItems = [],
             index,
             content = {
-                criteria: 'app/components/criteria-partial.html',
+                criteria: 'app/components/criteria-partial.html', //deprecated
                 decision: 'app/components/decision-partial.html'
             };
 
