@@ -6,9 +6,9 @@
         .module('app.core')
         .config(configuration);
 
-    configuration.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider'];
+    configuration.$inject = ['$stateProvider', '$urlRouterProvider'];
 
-    function configuration($stateProvider, $urlRouterProvider, $locationProvider) {
+    function configuration($stateProvider, $urlRouterProvider) {
 
 
         $stateProvider
@@ -17,12 +17,7 @@
                 templateUrl: 'app/core/404.html'
             });
 
-        //$urlRouterProvider.otherwise('/404');
-
-        // $locationProvider.html5Mode({
-        //     enabled: true,
-        //     requireBase: false
-        // });
+        $urlRouterProvider.otherwise('/404');
     }
 
 })();

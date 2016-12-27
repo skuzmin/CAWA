@@ -11,7 +11,7 @@
     function configuration($stateProvider) {
         $stateProvider
             .state('decision', {
-                url: '/',
+                url: '/decisions/:id',
                 templateUrl: 'app/decision/decision.html',
                 controller: 'DecisionController',
                 controllerAs: 'vm',
