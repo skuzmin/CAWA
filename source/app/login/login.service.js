@@ -38,7 +38,7 @@
         	//TODO extract to config or constants
         	var 
         		loginUrl = 'oauth/authorize?response_type=token&client_id=decisionwanted_client_id&redirect_uri=',
-        		returnUrl = $location.absUrl() + 'login';
+        		returnUrl = $location.absUrl().split('#')[0] + '#/login';
 
             $window.open(Settings.getEndpointUrl() +
             			 loginUrl + 
