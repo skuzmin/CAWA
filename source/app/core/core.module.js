@@ -8,11 +8,6 @@
 							 'ui.bootstrap', 
 							 'ngAnimate', 
 							 'ngStorage',
-							 'angular-jwt'])
-		.config(configuration);
-
-		configuration.$inject = ['SettingsProvider'];
-
-		function configuration(SettingsProvider) {}
+							 'angular-jwt']);
 
 })();

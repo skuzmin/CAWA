@@ -6,30 +6,29 @@
 		.module('app.decision')
 		.controller('DecisionController', DecisionController);
 
-		DecisionController.$inject = ['data', 'DecisionService', '$stateParams'];
+		DecisionController.$inject = ['data', '$timeout'];
 
-		function DecisionController(data, DecisionService, $stateParams) {
+		function DecisionController(data, $timeout) {
 			var vm = this;
 
 			console.log('Decision controller');
 			
 			vm.testData = data;
-			vm.testCriteriaGroup = [1,2,3];
-			vm.elements = ['app-header', 'app-footer', 'top-panel'];	
-			vm.decisionId = $stateParams.id;
-
-
-			vm.sort = sort;
+			vm.testCriteriaGroup = [1,2,3];	
+			
 			vm.testClick = testClick;
+			vm.test = true;
+
+			init();
 
 			function testClick() {
 				console.log('It"s test');
 			}
 
-            function sort() {
-            	DecisionService.getTestData2().then(function(result) {
-            		vm.updateList = result;
-            	});
-            }
+			function init() {
+				$timeout(function() {
+					vm.test = false;
+				}, 0);
+			}
  		}
 })();

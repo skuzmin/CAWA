@@ -44,7 +44,7 @@
         	gridItems = $('.' + vm.element);
             _.forEach(gridItems, function(item) {
                 index = vm.updateList.findIndex(function(data) {
-                    return data.id === Number(item.getAttribute('id'));
+                    return data.decisionId === Number(item.getAttribute('id'));
                 });
                 if(index !== -1) {
                     vm.gridStack.move(item, 0, index);

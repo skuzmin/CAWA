@@ -6,25 +6,22 @@
 		.module('app.decision')
 		.factory('DecisionService', DecisionService);
 
-		DecisionService.$inject = ['$resource'];
+		DecisionService.$inject = ['$resource', 'Settings'];
 
-		function DecisionService($resource) {
-			var decision = $resource('/app/decision/decision.JSON');
-			var decision2 = $resource('/app/decision/new.JSON');
+		function DecisionService($resource, Settings) {
+			var decisions = $resource(Settings.endpointUrl + 'decisions/:id/decisions', {id: '@id'},
+				{
+					searchDecisionById: {method: 'POST', isArray: true} 
+				});
 
 			var service = {
-				getTestData: getTestData,
-				getTestData2: getTestData2
+				searchDecision: searchDecision
 			};
 
 			return service;
 
-			function getTestData() {
-				return decision.query().$promise;
-			}
-
-			function getTestData2() {
-				return decision2.query().$promise;
+			function searchDecision(id) {
+				return decisions.searchDecisionById({id: id}, {}).$promise;
 			}
 		}
 })();

@@ -21,10 +21,10 @@
             });
     }
 
-    DecisionControllerResolver.$inject = ['DecisionService'];
+    DecisionControllerResolver.$inject = ['DecisionService', '$stateParams'];
 
-    function DecisionControllerResolver(DecisionService) {
-        return DecisionService.getTestData();
+    function DecisionControllerResolver(DecisionService, $stateParams) {
+        return DecisionService.searchDecision($stateParams.id);
     }
 
 })();
