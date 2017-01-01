@@ -57,8 +57,8 @@
                 </div>
             </div>
             <div class="scroll-wrapper">
-                <h1 ng-show="vm.test">LOADING...</h1>
-                <gridstack-wrapper init-list="vm.testData" update-list="vm.updateList" element="decision-item" cell-height="100" vertical-margin="10" grid-class="custom-grid" template="decision">
+                <h1 ng-show="vm.decisionSectionSpinner">LOADING...</h1>
+                <gridstack-wrapper init-list="vm.decisionsList" update-list="vm.updateDecisionList" element="decision-item" cell-height="100" vertical-margin="10" grid-class="custom-grid" template="decision">
                 </gridstack-wrapper>
             </div>
         </div>

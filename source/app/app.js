@@ -13,7 +13,7 @@
     	dataType: "json",
         url: 'app.config'
     }).done(function(result) {
-    	angular.module('app').constant('Settings', {
+    	angular.module('app').constant('Config', {
     		authUrl: result.authUrl,
     		endpointUrl: result.endpointUrl
     	});

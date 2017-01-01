@@ -12,8 +12,7 @@
 
 		init();
 
-		function init() {
-			console.log('Login controller');
+		function init() {		
 			if($stateParams.token) {
 				var token = $window.location.href.split('access_token=')[1];
 				LoginService.saveToken(token);

@@ -6,29 +6,33 @@
 		.module('app.decision')
 		.controller('DecisionController', DecisionController);
 
-		DecisionController.$inject = ['data', '$timeout'];
+		DecisionController.$inject = ['DecisionService', '$stateParams'];
 
-		function DecisionController(data, $timeout) {
+		function DecisionController(DecisionService, $stateParams) {
 			var vm = this;
 
 			console.log('Decision controller');
 			
-			vm.testData = data;
+			vm.decisionsList = [];
+			vm.decisionSectionSpinner = true;
+
+			//TEST DATA
 			vm.testCriteriaGroup = [1,2,3];	
-			
 			vm.testClick = testClick;
-			vm.test = true;
-
-			init();
-
+			
 			function testClick() {
 				console.log('It"s test');
 			}
+			// ---------------------------
+
+			init();
 
 			function init() {
-				$timeout(function() {
-					vm.test = false;
-				}, 0);
+				DecisionService.searchDecision($stateParams.id).then(function(result) {
+					vm.decisionsList = result;
+				}).finally(function() {
+					vm.decisionSectionSpinner = false;
+				});
 			}
  		}
 })();

@@ -6,10 +6,10 @@
 		.module('app.decision')
 		.factory('DecisionService', DecisionService);
 
-		DecisionService.$inject = ['$resource', 'Settings'];
+		DecisionService.$inject = ['$resource', 'Config'];
 
-		function DecisionService($resource, Settings) {
-			var decisions = $resource(Settings.endpointUrl + 'decisions/:id/decisions', {id: '@id'},
+		function DecisionService($resource, Config) {
+			var decisions = $resource(Config.endpointUrl + 'decisions/:id/decisions', {id: '@id'},
 				{
 					searchDecisionById: {method: 'POST', isArray: true} 
 				});

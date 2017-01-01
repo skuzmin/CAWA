@@ -6,9 +6,9 @@
         .module('app.login')
         .factory('LoginService', LoginService);
 
-    LoginService.$inject = ['jwtHelper', '$localStorage', '$window', 'Settings', '$location', '$sce'];
+    LoginService.$inject = ['jwtHelper', '$localStorage', '$window', 'Config', '$location', '$sce'];
 
-    function LoginService(jwtHelper, $localStorage, $window, Settings, $location, $sce) {
+    function LoginService(jwtHelper, $localStorage, $window, Config, $location, $sce) {
     	var
     		user = {},
     		isLogged = false;
@@ -40,7 +40,7 @@
         		loginUrl = 'oauth/authorize?response_type=token&client_id=decisionwanted_client_id&redirect_uri=',
         		returnUrl = $location.absUrl().split('#')[0] + '#/login';
 
-            $window.open(Settings.authUrl +
+            $window.open(Config.authUrl +
             			 loginUrl + 
             			 encodeURIComponent(returnUrl), 
             			 '_blank', 
@@ -76,7 +76,7 @@
         }
 
         function getLogoutUrl() {
-            return $sce.trustAsResourceUrl(Settings.authUrl + 'logout');
+            return $sce.trustAsResourceUrl(Config.authUrl + 'logout');
         }
 
         //TODO add check request
