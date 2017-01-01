@@ -16,7 +16,6 @@
     <div class="row main-panel">
         <!-- CRITERIA SECTION -->
         <div class="col-md-3 col-sm-3 criteria-section app-divider-wrapper">
-        <div>PEWPEW</div>
             <div class="criteria-header scroll-wrapper-header">
                 <div class="col-md-6 col-sm-6">
                     <h4>Criteria</h4>
@@ -26,6 +25,7 @@
                 </div>
             </div>
             <div class="scroll-wrapper">
+                <uib-accordion>
                     <div uib-accordion-group class="panel-default criteria-panel" heading="Criteria group {{$index + 1}}" ng-repeat="group in vm.testCriteriaGroup track by $index">
                         <div class="row criteria-item" ng-repeat="criteria in vm.testData track by $index">
                             <div class="col-md-6">{{criteria.title}}</div>
@@ -47,7 +47,7 @@
         <!-- Left Divider -->
         <app-divider axis="x"></app-divider>
         <!-- DECISION SECTION -->
-        <div class="col-md-6 col-sm-6 grid-stack-decision app-divider-wrapper">
+        <div class="col-md-6 col-sm-6 grid-stack-decision app-divider-wrapper ">
             <div class="decisions-header scroll-wrapper-header">
                 <div class="col-md-3 col-sm-6">
                     <h4>Decision Filter</h4>
@@ -57,7 +57,7 @@
                 </div>
             </div>
             <div class="scroll-wrapper">
-            <h1 ng-show="vm.test">LOADING...</h1>
+                <h1 ng-show="vm.test">LOADING...</h1>
                 <gridstack-wrapper init-list="vm.testData" update-list="vm.updateList" element="decision-item" cell-height="100" vertical-margin="10" grid-class="custom-grid" template="decision">
                 </gridstack-wrapper>
             </div>
