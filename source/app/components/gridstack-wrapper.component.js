@@ -34,7 +34,10 @@
         vm.innerTemplate = content[vm.template]; 
         vm.options = {
             cellHeight: vm.cellHeight,
-            verticalMargin: vm.verticalMargin
+            verticalMargin: vm.verticalMargin,
+            draggable: {
+                handle: '.panel-drag-handler',
+            }
         };
 
         vm.$onChanges = onChanges;

@@ -11,11 +11,13 @@
 		function DecisionController(DecisionService, $stateParams) {
 			var 
 				vm = this,
-				decisionId = $stateParams.id;
+				decisionId = $stateParams.id,
+				generalCriteria = 0;
 
 			console.log('Decision controller');
 			
 			vm.decisionsList = [];
+			vm.decision = {};
 			vm.pageSpinners = {
 				decisions: true,
 				criterias: true
@@ -25,7 +27,7 @@
 				name: 'General',
 				criterias: []
 			}];
-			vm.decision = {};
+
 
 			//TEST DATA
 			vm.testCriteriaGroup = [1,2,3];	
@@ -35,6 +37,7 @@
 				console.log('It"s test');
 			}
 			// ---------------------------
+
 
 			init();
 
@@ -64,12 +67,13 @@
 								}
 							});
 						} else {
-							vm.criteriaGroups[0].criterias.push(criteria);
+							vm.criteriaGroups[generalCriteria].criterias.push(criteria);
 						}
 					});
 					console.log(vm.criteriaGroups);
 				}).finally(function() {
 					vm.pageSpinners.criterias = false;
+					vm.criteriaGroups[generalCriteria].isOpen = true;
 				});
 			}
  		}

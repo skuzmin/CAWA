@@ -1,12 +1,12 @@
 <div class="dicision" >
     <!--Top panel with search  -->
     <div class="row top-panel">
-        <div class="col-md-3 col-sm-3">
+        <div class="col-md-6 col-sm-6">
             <h4>
                 {{vm.decision.name}}
             </h4>
         </div>
-        <div class="col-md-6 col-sm-6"></div>
+        <div class="col-md-3 col-sm-3"></div>
         <div class="col-md-3 col-sm-3">
             <input class="form-control search-input" type="text"/>
             <span class="glyphicon glyphicon-search search-input-icon"></span>
@@ -18,7 +18,7 @@
         <div class="col-md-3 col-sm-3 criteria-section app-divider-wrapper">
             <div class="criteria-header scroll-wrapper-header">
                 <div class="col-md-6 col-sm-6">
-                    <h4>Criteria</h4>
+                    <h4>Criterias</h4>
                 </div>
                 <div class="col-md-6 col-sm-6">
                     <a href="" class="add-createria-btn"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Add criterion</a>
@@ -26,8 +26,12 @@
             </div>
             <div class="scroll-wrapper">
                 <h1 ng-show="vm.pageSpinners.criterias">LOADING...</h1>
-                <uib-accordion>
-                    <div uib-accordion-group class="panel-default criteria-panel" heading="{{group.name}}" ng-repeat="group in vm.criteriaGroups track by $index">
+                <uib-accordion close-others="false">
+                    <div uib-accordion-group class="panel-default criteria-panel" ng-repeat="group in vm.criteriaGroups track by $index" is-open="group.isOpen">
+                    <uib-accordion-heading>
+                        {{group.name}}
+                        <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': group.isOpen, 'glyphicon-chevron-right': !group.isOpen}"></i>
+                    </uib-accordion-heading>
                         <div class="row criteria-item" ng-repeat="criteria in group.criterias track by $index">
                             <div class="col-md-6">{{criteria.name}}</div>
                             <div class="col-md-6">
