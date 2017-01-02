@@ -17,14 +17,18 @@
 					searchDecisionById: {method: 'POST', isArray: true} 
 				}),
 
-				decisionInfos = $resource(decisionUrl),
-				decisionCriteriasGroups = $resource(decisionUrl + '/criteria/groups'),
-				decisionCriterias = $resource(decisionUrl + '/criteria');
+				decisionInfo = $resource(decisionUrl),
+				criteriasGroups = $resource(decisionUrl + '/criteria/groups'),
+				criterias = $resource(decisionUrl + '/criteria'),
+				characteristictsGroups = $resource(decisionUrl + '/characteristics/groups'),
+				characteristicts = $resource(decisionUrl + '/characteristics');
 
 			var service = {
 				searchDecision: searchDecision,
-				getDecisionCriteriasById: getDecisionCriteriasById,
-				getDecisionCriteriaGroupsById: getDecisionCriteriaGroupsById,
+				getCriteriasById: getCriteriasById,
+				getCriteriaGroupsById: getCriteriaGroupsById,
+				getCharacteristictsById: getCharacteristictsById,
+				getCharacteristictGroupsById: getCharacteristictGroupsById,
 				getDecisionInfo: getDecisionInfo
 			};
 
@@ -34,16 +38,24 @@
 				return decisions.searchDecisionById({id: id}, {}).$promise;
 			}
 
-			function getDecisionCriteriasById(id) {
-				return decisionCriterias.query({id: id}).$promise;
+			function getCriteriasById(id) {
+				return criterias.query({id: id}).$promise;
 			}
 
-			function getDecisionCriteriaGroupsById(id) {
-				return decisionCriteriasGroups.query({id: id}).$promise;
+			function getCriteriaGroupsById(id) {
+				return criteriasGroups.query({id: id}).$promise;
+			}
+
+			function getCharacteristictsById(id) {
+				return characteristicts.query({id: id}).$promise;
+			}
+
+			function getCharacteristictGroupsById(id) {
+				return characteristictsGroups.query({id: id}).$promise;
 			}
 
 			function getDecisionInfo(id) {
-				return decisionInfos.get({id: id}).$promise;
+				return decisionInfo.get({id: id}).$promise;
 			}
 		}
 })();

@@ -1,80 +1,96 @@
 (function() {
 
-	'user strict';
+    'user strict';
 
-	angular
-		.module('app.decision')
-		.controller('DecisionController', DecisionController);
+    angular
+        .module('app.decision')
+        .controller('DecisionController', DecisionController);
 
-		DecisionController.$inject = ['DecisionService', '$stateParams'];
+    DecisionController.$inject = ['DecisionService', '$stateParams'];
 
-		function DecisionController(DecisionService, $stateParams) {
-			var 
-				vm = this,
-				decisionId = $stateParams.id,
-				generalCriteria = 0;
+    function DecisionController(DecisionService, $stateParams) {
+        var
+            vm = this,
+            decisionId = $stateParams.id,
+            generalAccordion = 0;
 
-			console.log('Decision controller');
-			
-			vm.decisionsList = [];
-			vm.decision = {};
-			vm.pageSpinners = {
-				decisions: true,
-				criterias: true
-				//characteristics: true
-			};
-			vm.criteriaGroups = [{
-				name: 'General',
-				criterias: []
-			}];
+        console.log('Decision controller');
+
+        vm.decisionsList = [];
+        vm.decision = {};
+        vm.pageSpinners = {
+            decisions: true,
+            criterias: true,
+            characteristics: true
+        };
+        vm.criteriaGroups = [{
+            name: 'General',
+            criterias: []
+        }];
+        vm.characteristicGroups = [{
+            name: 'General',
+            characteristics: []
+        }];
+
+        //TEST DATA
+        vm.testCriteriaGroup = [1, 2, 3];
+        vm.testClick = testClick;
+
+        function testClick() {
+            console.log('It"s test');
+        }
+        // ---------------------------
 
 
-			//TEST DATA
-			vm.testCriteriaGroup = [1,2,3];	
-			vm.testClick = testClick;
+        init();
 
-			function testClick() {
-				console.log('It"s test');
-			}
-			// ---------------------------
+        function prepareDataToDisplay(data, groups, type, typeId) {
+            _.forEach(data, function(item) {
+                if (item[typeId]) {
+                    _.forEach(groups, function(group) {
+                        if (!group[type]) {
+                            group[type] = [];
+                        }
+                        if (group[typeId] === item[typeId]) {
+                            group[type].push(item);
+                        }
+                    });
+                } else {
+                    groups[generalAccordion][type].push(item);
+                }
+            });
+        }
 
+        function init() {
+            DecisionService.getDecisionInfo(decisionId).then(function(result) {
+                vm.decision = result;
+            });
 
-			init();
+            DecisionService.searchDecision(decisionId).then(function(result) {
+                vm.decisionsList = result;
+            }).finally(function() {
+                vm.pageSpinners.decisions = false;
+            });
 
-			function init() {
-				DecisionService.getDecisionInfo(decisionId).then(function(result) {
-					vm.decision = result;
-				});
+            DecisionService.getCriteriaGroupsById(decisionId).then(function(result) {
+                vm.criteriaGroups = vm.criteriaGroups.concat(result);
+                return DecisionService.getCriteriasById(decisionId);
+            }).then(function(result) {
+            	prepareDataToDisplay(result, vm.criteriaGroups, 'criterias', 'criterionGroupId');
+            }).finally(function() {
+                vm.pageSpinners.criterias = false;
+                vm.criteriaGroups[generalAccordion].isOpen = true;
+            });
 
-				DecisionService.searchDecision(decisionId).then(function(result) {
-					vm.decisionsList = result;
-				}).finally(function() {
-					vm.pageSpinners.decisions = false;
-				});
-
-				DecisionService.getDecisionCriteriaGroupsById(decisionId).then(function(result) {
-					vm.criteriaGroups = vm.criteriaGroups.concat(result);
-					return DecisionService.getDecisionCriteriasById(decisionId);
-				}).then(function(result) {
-					_.forEach(result, function(criteria) {
-						if(criteria.criterionGroupId) {
-							_.forEach(vm.criteriaGroups, function(group) {
-								if(!group.criterias) {
-									group.criterias = [];
-								}
-								if(group.criterionGroupId === criteria.criterionGroupId) {
-									group.criterias.push(criteria);
-								}
-							});
-						} else {
-							vm.criteriaGroups[generalCriteria].criterias.push(criteria);
-						}
-					});
-					console.log(vm.criteriaGroups);
-				}).finally(function() {
-					vm.pageSpinners.criterias = false;
-					vm.criteriaGroups[generalCriteria].isOpen = true;
-				});
-			}
- 		}
+            DecisionService.getCharacteristictGroupsById(decisionId).then(function(result) {
+                vm.characteristicGroups = vm.characteristicGroups.concat(result);
+                return DecisionService.getCharacteristictsById(decisionId);
+            }).then(function(result) {
+            	prepareDataToDisplay(result, vm.characteristicGroups, 'characteristics', 'characteristicGroupId');
+            }).finally(function() {
+                vm.pageSpinners.characteristics = false;
+                vm.characteristicGroups[generalAccordion].isOpen = true;
+            });
+        }
+    }
 })();
