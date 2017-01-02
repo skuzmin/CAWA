@@ -3,7 +3,7 @@
     <div class="row top-panel">
         <div class="col-md-3 col-sm-3">
             <h4>
-                NAME OF DECISION
+                {{vm.decision.name}}
             </h4>
         </div>
         <div class="col-md-6 col-sm-6"></div>
@@ -25,10 +25,11 @@
                 </div>
             </div>
             <div class="scroll-wrapper">
+                <h1 ng-show="vm.pageSpinners.criterias">LOADING...</h1>
                 <uib-accordion>
-                    <div uib-accordion-group class="panel-default criteria-panel" heading="Criteria group {{$index + 1}}" ng-repeat="group in vm.testCriteriaGroup track by $index">
-                        <div class="row criteria-item" ng-repeat="criteria in vm.testData track by $index">
-                            <div class="col-md-6">{{criteria.title}}</div>
+                    <div uib-accordion-group class="panel-default criteria-panel" heading="{{group.name}}" ng-repeat="group in vm.criteriaGroups track by $index">
+                        <div class="row criteria-item" ng-repeat="criteria in group.criterias track by $index">
+                            <div class="col-md-6">{{criteria.name}}</div>
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col-md-4">ICON 1</div>
@@ -50,14 +51,14 @@
         <div class="col-md-6 col-sm-6 grid-stack-decision app-divider-wrapper ">
             <div class="decisions-header scroll-wrapper-header">
                 <div class="col-md-3 col-sm-6">
-                    <h4>Decision Filter</h4>
+                    <h4>Decisions</h4>
                 </div>
                 <div class="col-md-9 col-sm-6">
                     <decision-filter callback="vm.testClick()" filters="vm.testCriteriaGroup"></decision-filter>
                 </div>
             </div>
             <div class="scroll-wrapper">
-                <h1 ng-show="vm.decisionSectionSpinner">LOADING...</h1>
+                <h1 ng-show="vm.pageSpinners.decisions">LOADING...</h1>
                 <gridstack-wrapper init-list="vm.decisionsList" update-list="vm.updateDecisionList" element="decision-item" cell-height="100" vertical-margin="10" grid-class="custom-grid" template="decision">
                 </gridstack-wrapper>
             </div>

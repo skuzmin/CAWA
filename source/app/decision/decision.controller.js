@@ -9,17 +9,28 @@
 		DecisionController.$inject = ['DecisionService', '$stateParams'];
 
 		function DecisionController(DecisionService, $stateParams) {
-			var vm = this;
+			var 
+				vm = this,
+				decisionId = $stateParams.id;
 
 			console.log('Decision controller');
 			
 			vm.decisionsList = [];
-			vm.decisionSectionSpinner = true;
+			vm.pageSpinners = {
+				decisions: true,
+				criterias: true
+				//characteristics: true
+			};
+			vm.criteriaGroups = [{
+				name: 'General',
+				criterias: []
+			}];
+			vm.decision = {};
 
 			//TEST DATA
 			vm.testCriteriaGroup = [1,2,3];	
 			vm.testClick = testClick;
-			
+
 			function testClick() {
 				console.log('It"s test');
 			}
@@ -28,10 +39,37 @@
 			init();
 
 			function init() {
-				DecisionService.searchDecision($stateParams.id).then(function(result) {
+				DecisionService.getDecisionInfo(decisionId).then(function(result) {
+					vm.decision = result;
+				});
+
+				DecisionService.searchDecision(decisionId).then(function(result) {
 					vm.decisionsList = result;
 				}).finally(function() {
-					vm.decisionSectionSpinner = false;
+					vm.pageSpinners.decisions = false;
+				});
+
+				DecisionService.getDecisionCriteriaGroupsById(decisionId).then(function(result) {
+					vm.criteriaGroups = vm.criteriaGroups.concat(result);
+					return DecisionService.getDecisionCriteriasById(decisionId);
+				}).then(function(result) {
+					_.forEach(result, function(criteria) {
+						if(criteria.criterionGroupId) {
+							_.forEach(vm.criteriaGroups, function(group) {
+								if(!group.criterias) {
+									group.criterias = [];
+								}
+								if(group.criterionGroupId === criteria.criterionGroupId) {
+									group.criterias.push(criteria);
+								}
+							});
+						} else {
+							vm.criteriaGroups[0].criterias.push(criteria);
+						}
+					});
+					console.log(vm.criteriaGroups);
+				}).finally(function() {
+					vm.pageSpinners.criterias = false;
 				});
 			}
  		}
