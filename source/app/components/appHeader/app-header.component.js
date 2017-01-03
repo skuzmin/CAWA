@@ -5,7 +5,7 @@
     angular
         .module('app.components')
         .component('appHeader', {
-            templateUrl: 'app/components/app-header.html'
+            templateUrl: 'app/components/appHeader/app-header.html'
         });
 
 })();

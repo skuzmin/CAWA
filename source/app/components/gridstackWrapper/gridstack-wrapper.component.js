@@ -6,7 +6,7 @@
         .module('app.components')
         .controller('GridstackMovementController', GridstackMovementController)
         .component('gridstackWrapper', {
-            templateUrl: 'app/components/gridstack-wrapper.html',
+            templateUrl: 'app/components/gridstackWrapper/gridstack-wrapper.html',
             bindings: {
                 initList: '=',
                 updateList: '<',
@@ -27,7 +27,7 @@
             gridItems = [],
             index,
             content = {
-                decision: 'app/components/decision-partial.html'
+                decision: 'app/components/gridstackWrapper/decision-partial.html'
             };
 
         vm.gridStack = {};

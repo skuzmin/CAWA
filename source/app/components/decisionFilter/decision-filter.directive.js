@@ -10,7 +10,7 @@
         var directive = {
             restrict: 'E',
             replace: 'true',
-            templateUrl: 'app/components/decision-filter.html',
+            templateUrl: 'app/components/decisionFilter/decision-filter.html',
             scope: {
                 callback: '&',
                 filters: '='

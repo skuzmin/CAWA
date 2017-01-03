@@ -10,7 +10,6 @@
 
     function configuration($stateProvider, $urlRouterProvider) {
 
-
         $stateProvider
             .state('404', {
                 url: '/404',

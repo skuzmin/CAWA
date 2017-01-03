@@ -6,7 +6,7 @@
         .module('app.components')
         .controller('DecisionCharacteristicsController', DecisionCharacteristicsController)
         .component('decisionCharacteristics', {
-            templateUrl: 'app/components/decision-characteristics.html',
+            templateUrl: 'app/components/decisionCharacteristics/decision-characteristics.html',
             bindings: {
                 characteristicGroups: '='
             },
@@ -23,9 +23,9 @@
             controls = {
                 CHECKBOX: '',
                 SLIDER: '',
-                SELECT: 'app/components/decision-characteristics-select-partial.html',
+                SELECT: 'app/components/decisionCharacteristics/decision-characteristics-select-partial.html',
                 RADIOGROUP: '',
-                YEARPICKER: 'app/components/decision-characteristics-yearpicker-partial.html'
+                YEARPICKER: 'app/components/decisionCharacteristics/decision-characteristics-yearpicker-partial.html'
             };
 
         vm.characteristicsFilter = {};
