@@ -54,11 +54,14 @@
         <!-- DECISION SECTION -->
         <div class="col-md-6 col-sm-6 grid-stack-decision app-divider-wrapper ">
             <div class="decisions-header scroll-wrapper-header">
-                <div class="col-md-3 col-sm-6">
+                <div class="col-md-3 col-sm-3">
                     <h4>Decisions</h4>
                 </div>
-                <div class="col-md-9 col-sm-6">
+                <div class="col-md-6 col-sm-6">
                     <decision-filter callback="vm.testClick()" filters="vm.testCriteriaGroup"></decision-filter>
+                </div>
+                <div class="col-md-3 col-sm-3">
+                    <a href="" class="add-createria-btn"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Add decision</a>
                 </div>
             </div>
             <div class="scroll-wrapper">
@@ -81,20 +84,7 @@
             </div>
             <div class="scroll-wrapper">
                 <h1 ng-show="vm.pageSpinners.characteristics">LOADING...</h1>
-                <uib-accordion close-others="false">
-                    <div uib-accordion-group class="panel-default" ng-repeat="group in vm.characteristicGroups track by $index" is-open="group.isOpen">
-                    <uib-accordion-heading>
-                        {{group.name}}
-                        <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': group.isOpen, 'glyphicon-chevron-right': !group.isOpen}"></i>
-                    </uib-accordion-heading>
-                        <div class="row criteria-item" ng-repeat="characteristic in group.characteristics track by $index">
-                            <div class="col-md-6">{{characteristic.name}}</div>
-                            <div class="col-md-6">
-                                {{characteristic.visualMode}} | {{characteristic.valueType}}
-                            </div>
-                        </div>
-                    </div>
-                </uib-accordion>
+                <decision-characteristics characteristic-groups="vm.characteristicGroups"></decision-characteristics>
             </div>
         </div>
     </div>

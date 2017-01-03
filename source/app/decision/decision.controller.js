@@ -18,14 +18,14 @@
         console.log('Decision controller');
 
         vm.decisionsList = [];
+        vm.criteriaGroups = [];
+        vm.characteristicGroups = [];
         vm.decision = decisionBasicInfo || {};
         vm.pageSpinners = {
             decisions: true,
             criteria: true,
             characteristics: true
         };
-        vm.criteriaGroups = [];
-        vm.characteristicGroups = [];
 
         //TEST DATA
         vm.testCriteriaGroup = [1, 2, 3];

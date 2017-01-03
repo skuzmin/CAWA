@@ -1,0 +1,16 @@
+<div class="decision-characteristics">
+    <uib-accordion close-others="false">
+        <div uib-accordion-group class="panel-default" ng-repeat="group in vm.characteristicGroups track by $index" is-open="group.isOpen">
+            <uib-accordion-heading>
+                {{group.name}}
+                <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': group.isOpen, 'glyphicon-chevron-right': !group.isOpen}"></i>
+            </uib-accordion-heading>
+            <div class="row criteria-item" ng-repeat="characteristic in group.characteristics track by $index">
+                <div class="col-md-6">{{characteristic.name}}</div>
+                <div class="col-md-6">
+                    <ng-include src="vm.getControl(characteristic)"></ng-include>
+                </div>
+            </div>
+        </div>
+    </uib-accordion>
+</div>

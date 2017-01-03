@@ -1,0 +1,11 @@
+ <div class="input-group decision-yearpicker">
+	 <input type="text" class="form-control" 
+	 	uib-datepicker-popup="yyyy"
+	 	is-open="characteristic.isOpen"
+	 	ng-model="characteristic.filterValue" 
+	 	datepicker-mode="year" 
+	 	datepicker-options="{minMode: 'year'}"/>
+	 <span class="input-group-btn">
+		<button type="button" class="btn btn-default" ng-click="characteristic.isOpen = true"><i class="glyphicon glyphicon-calendar"></i></button>
+	</span>
+</div>
