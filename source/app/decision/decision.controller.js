@@ -6,31 +6,25 @@
         .module('app.decision')
         .controller('DecisionController', DecisionController);
 
-    DecisionController.$inject = ['DecisionService', '$stateParams'];
+    DecisionController.$inject = ['decisionBasicInfo', 'DecisionService', '$stateParams'];
 
-    function DecisionController(DecisionService, $stateParams) {
+    function DecisionController(decisionBasicInfo, DecisionService, $stateParams) {
         var
             vm = this,
             decisionId = $stateParams.id,
-            generalAccordion = 0;
+            defaultAccordion = 0;
 
         console.log('Decision controller');
 
         vm.decisionsList = [];
-        vm.decision = {};
+        vm.decision = decisionBasicInfo || {};
         vm.pageSpinners = {
             decisions: true,
-            criterias: true,
+            criteria: true,
             characteristics: true
         };
-        vm.criteriaGroups = [{
-            name: 'General',
-            criterias: []
-        }];
-        vm.characteristicGroups = [{
-            name: 'General',
-            characteristics: []
-        }];
+        vm.criteriaGroups = [];
+        vm.characteristicGroups = [];
 
         //TEST DATA
         vm.testCriteriaGroup = [1, 2, 3];
@@ -44,28 +38,7 @@
 
         init();
 
-        function prepareDataToDisplay(data, groups, type, typeId) {
-            _.forEach(data, function(item) {
-                if (item[typeId]) {
-                    _.forEach(groups, function(group) {
-                        if (!group[type]) {
-                            group[type] = [];
-                        }
-                        if (group[typeId] === item[typeId]) {
-                            group[type].push(item);
-                        }
-                    });
-                } else {
-                    groups[generalAccordion][type].push(item);
-                }
-            });
-        }
-
         function init() {
-            DecisionService.getDecisionInfo(decisionId).then(function(result) {
-                vm.decision = result;
-            });
-
             DecisionService.searchDecision(decisionId).then(function(result) {
                 vm.decisionsList = result;
             }).finally(function() {
@@ -73,23 +46,21 @@
             });
 
             DecisionService.getCriteriaGroupsById(decisionId).then(function(result) {
-                vm.criteriaGroups = vm.criteriaGroups.concat(result);
-                return DecisionService.getCriteriasById(decisionId);
-            }).then(function(result) {
-            	prepareDataToDisplay(result, vm.criteriaGroups, 'criterias', 'criterionGroupId');
+                vm.criteriaGroups = result;
             }).finally(function() {
-                vm.pageSpinners.criterias = false;
-                vm.criteriaGroups[generalAccordion].isOpen = true;
+            	if(vm.criteriaGroups.length > 0) {
+            		vm.criteriaGroups[defaultAccordion].isOpen = true;
+            	}
+                vm.pageSpinners.criteria = false;
             });
 
-            DecisionService.getCharacteristictGroupsById(decisionId).then(function(result) {
-                vm.characteristicGroups = vm.characteristicGroups.concat(result);
-                return DecisionService.getCharacteristictsById(decisionId);
-            }).then(function(result) {
-            	prepareDataToDisplay(result, vm.characteristicGroups, 'characteristics', 'characteristicGroupId');
+            DecisionService.getCharacteristictsGroupsById(decisionId).then(function(result) {
+                vm.characteristicGroups = result;
             }).finally(function() {
+            	if(vm.characteristicGroups.length > 0) {
+            		vm.characteristicGroups[defaultAccordion].isOpen = true;
+            	}
                 vm.pageSpinners.characteristics = false;
-                vm.characteristicGroups[generalAccordion].isOpen = true;
             });
         }
     }

@@ -15,7 +15,16 @@
                 templateUrl: 'app/decision/decision.html',
                 controller: 'DecisionController',
                 controllerAs: 'vm',
+                resolve: {
+                    decisionBasicInfo: DecisionResolver
+                }
             });
+    }
+
+    DecisionResolver.$inject = ['DecisionService', '$stateParams'];
+
+    function DecisionResolver(DecisionService, $stateParams) {
+        return DecisionService.getDecisionInfo($stateParams.id);
     }
 
 })();

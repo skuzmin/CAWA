@@ -19,16 +19,12 @@
 
 				decisionInfo = $resource(decisionUrl),
 				criteriasGroups = $resource(decisionUrl + '/criteria/groups'),
-				criterias = $resource(decisionUrl + '/criteria'),
-				characteristictsGroups = $resource(decisionUrl + '/characteristics/groups'),
-				characteristicts = $resource(decisionUrl + '/characteristics');
+				characteristictsGroups = $resource(decisionUrl + '/characteristics/groups');
 
 			var service = {
 				searchDecision: searchDecision,
-				getCriteriasById: getCriteriasById,
 				getCriteriaGroupsById: getCriteriaGroupsById,
-				getCharacteristictsById: getCharacteristictsById,
-				getCharacteristictGroupsById: getCharacteristictGroupsById,
+				getCharacteristictsGroupsById: getCharacteristictsGroupsById,
 				getDecisionInfo: getDecisionInfo
 			};
 
@@ -38,19 +34,11 @@
 				return decisions.searchDecisionById({id: id}, {}).$promise;
 			}
 
-			function getCriteriasById(id) {
-				return criterias.query({id: id}).$promise;
-			}
-
 			function getCriteriaGroupsById(id) {
 				return criteriasGroups.query({id: id}).$promise;
 			}
 
-			function getCharacteristictsById(id) {
-				return characteristicts.query({id: id}).$promise;
-			}
-
-			function getCharacteristictGroupsById(id) {
+			function getCharacteristictsGroupsById(id) {
 				return characteristictsGroups.query({id: id}).$promise;
 			}
 
