@@ -102,7 +102,7 @@ gulp.task('images', function() {
 gulp.task('templates', function() {
     log('Gathering templates');
     return gulp.src([config.allHtmlFiles, '!' + config.index])
-        .pipe(minifyHtml())
+        .pipe(minifyHtml({empty: true}))
         .pipe(templateCache({ module: 'app.core', root: 'app/' }))
         .pipe(gulp.dest(config.temp));
 });
