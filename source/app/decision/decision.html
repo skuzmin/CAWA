@@ -6,7 +6,19 @@
                 {{vm.decision.name}}
             </h4>
         </div>
-        <div class="col-md-3 col-sm-3"></div>
+        <div class="col-md-3 col-sm-3">
+            <div class="row form-group" ng-show="vm.parentDecisions">
+                <label class="col-md-2 col-sm-2 control-label">Parents:</label>
+                <div class="col-md-4 col-sm-4">                    
+                    <select ng-model="vm.parentId" ng-options="parent for parent in vm.parentDecisions">
+                        <option value="" selected>Select parentId</option>
+                    </select>
+                </div>
+                <div class="col-md-6 col-sm-6">
+                    <a href="" class="btn btn-default" ui-sref="decision({id: vm.parentId})" ng-disabled="!vm.parentId">Go</a>
+                </div>
+            </div>
+        </div>
         <div class="col-md-3 col-sm-3">
             <input class="form-control search-input" type="text"/>
             <span class="glyphicon glyphicon-search search-input-icon"></span>

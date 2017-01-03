@@ -49,10 +49,12 @@
         }
 
         function init() {
+            if(!_.isEmpty(vm.decision.parentDecisionIds)) {
+                vm.parentDecisions = vm.decision.parentDecisionIds;
+            }
+
             DecisionService.searchDecision(decisionId).then(function(result) {
-                if(result.length > defaultDecisionCount) {
-                	asyncLoading(result);
-                }
+                asyncLoading(result);
             }).finally(function() {
                 vm.pageSpinners.decisions = false;
             });
