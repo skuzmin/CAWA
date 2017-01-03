@@ -6,12 +6,13 @@
         .module('app.decision')
         .controller('DecisionController', DecisionController);
 
-    DecisionController.$inject = ['decisionBasicInfo', 'DecisionService', '$stateParams'];
+    DecisionController.$inject = ['decisionBasicInfo', 'DecisionService', '$stateParams', '$timeout'];
 
-    function DecisionController(decisionBasicInfo, DecisionService, $stateParams) {
+    function DecisionController(decisionBasicInfo, DecisionService, $stateParams, $timeout) {
         var
             vm = this,
             decisionId = $stateParams.id,
+            defaultDecisionCount = 5,
             defaultAccordion = 0;
 
         console.log('Decision controller');
@@ -38,9 +39,20 @@
 
         init();
 
+        function asyncLoading(result) {
+        	$timeout(function() {
+        		vm.decisionsList = vm.decisionsList.concat(result.splice(0, defaultDecisionCount));
+        		if(result.length > 0) {
+        			asyncLoading(result);
+        		}
+        	}, 100);
+        }
+
         function init() {
             DecisionService.searchDecision(decisionId).then(function(result) {
-                vm.decisionsList = result;
+                if(result.length > defaultDecisionCount) {
+                	asyncLoading(result);
+                }
             }).finally(function() {
                 vm.pageSpinners.decisions = false;
             });
