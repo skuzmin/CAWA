@@ -38,27 +38,7 @@
             </div>
             <div class="scroll-wrapper">
                 <h1 ng-show="vm.pageSpinners.criteria">LOADING...</h1>
-                <uib-accordion close-others="false">
-                    <div uib-accordion-group class="panel-default criteria-panel" ng-repeat="group in vm.criteriaGroups track by $index" is-open="group.isOpen">
-                    <uib-accordion-heading>
-                        {{group.name}}
-                        <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': group.isOpen, 'glyphicon-chevron-right': !group.isOpen}"></i>
-                    </uib-accordion-heading>
-                        <div class="row criteria-item" ng-repeat="criteria in group.criteria track by $index">
-                            <div class="col-md-6">{{criteria.name}}</div>
-                            <div class="col-md-6">
-                                <div class="row">
-                                    <div class="col-md-4">ICON 1</div>
-                                    <div class="col-md-4">ICON 2</div>
-                                    <div class="col-md-4">ICON 3</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">STARS</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </uib-accordion>
+                <decision-criteria criteria-groups="vm.criteriaGroups"></decision-criteria>
             </div>
         </div>
         <!-- Left Divider -->

@@ -1,0 +1,50 @@
+<div class="criteria-coefficient-popup">
+	<div class="row">
+		<div class="col-md-12 col-sm-12">
+			<div class="row">
+				<div class="col-md-10 col-sm-10">
+					<h4>Criterion Factor of Importance</h4>
+				</div>
+				<div class="col-md-2 col-sm-2">
+					<a href="" ng-click="vm.close()">X</a>
+				</div>			
+			</div>
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+				<h3 class="coefficient-title">Choose Criterion Factor of Importance</h3>
+				</div>
+			</div>
+			<form class="form-horizontal" name="criteriaCoefficientForm" ng-submit="vm.apply()">
+				<div class="row form-group">
+					<div class="col-md-9 col-sm-9">
+						<label class="control-label">Criterion name:</label>
+					</div>
+					<div class="col-md-3 col-sm-3">
+						{{vm.criteria.name}}
+					</div>
+				</div>
+				<div class="row form-group">
+					<div class="col-md-9 col-sm-9">
+						<label class="control-label">Factor of Importance:</label>
+					</div>
+					<div class="col-md-3 col-sm-3">
+						<select class="form-control" ng-model="vm.criteria.coefficient" ng-options="coefficient as coefficient.name for coefficient in vm.coefficientList track by coefficient.value"></select>
+					</div>
+				</div>
+				<div class="row form-group">
+					<div class="col-md-9 col-sm-9">
+						<label>Custom (value must be greater than 0 and less than 1000):</label>
+					</div>
+					<div class="col-md-3 col-sm-3">
+						<input class="form-control" type="number" min="0" max="1000" ng-model="vm.criteria.customValue" ng-required="!vm.criteria.coefficient.value" ng-disabled="vm.criteria.coefficient.value"/>
+					</div>
+				</div>
+				<div class="row form-group">
+					<div class="col-md-offset-9 col-sm-offset-9 col-md-3 col-sm-3">
+						<button class="btn btn-default" type="submit">Apply</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

@@ -15,9 +15,9 @@
         });
 
 
-    DecisionCharacteristicsController.$inject = ['$compile', '$rootScope'];
+    DecisionCharacteristicsController.$inject = [];
 
-    function DecisionCharacteristicsController($compile, $rootScope) {
+    function DecisionCharacteristicsController() {
         var
             vm = this,
             controls = {

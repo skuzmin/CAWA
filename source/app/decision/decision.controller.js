@@ -45,7 +45,7 @@
         		if(result.length > 0) {
         			asyncLoading(result);
         		}
-        	}, 100);
+        	}, 0);
         }
 
         function init() {
@@ -62,18 +62,18 @@
             DecisionService.getCriteriaGroupsById(decisionId).then(function(result) {
                 vm.criteriaGroups = result;
             }).finally(function() {
-            	if(vm.criteriaGroups.length > 0) {
-            		vm.criteriaGroups[defaultAccordion].isOpen = true;
-            	}
                 vm.pageSpinners.criteria = false;
+                if(vm.criteriaGroups.length > 0) {
+                    vm.criteriaGroups[defaultAccordion].isOpen = true;
+                }
             });
 
             DecisionService.getCharacteristictsGroupsById(decisionId).then(function(result) {
                 vm.characteristicGroups = result;
             }).finally(function() {
-            	if(vm.characteristicGroups.length > 0) {
-            		vm.characteristicGroups[defaultAccordion].isOpen = true;
-            	}
+                if(vm.characteristicGroups.length > 0) {
+                    vm.characteristicGroups[defaultAccordion].isOpen = true;
+                }
                 vm.pageSpinners.characteristics = false;
             });
         }
