@@ -103,11 +103,17 @@
 		height: 2px;
 		margin-top: 1px;
 		border: 1px solid @coefficientDefault; 
+		&.lower {
+			border-color: @coefficientLower;
+		}
 		&.low {
 			border-color: @coefficientLow;
 		}
 		&.normal {
 			border-color: @coefficientNormal;
+		}
+		&.high {
+			border-color: @coefficientHigh;
 		}
 		&.important {
 			border-color: @coefficientImportant;
@@ -117,9 +123,6 @@
 		}
 		&.critical {
 			border-color: @coefficientCritical;
-		}
-		&.custom {
-			border-color: @coefficientCustom;
 		}
 	}
 }

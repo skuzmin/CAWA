@@ -45,7 +45,6 @@
                 vm.coefficient = DecisionCriteriaConstant.coefficientDefault;
             }
             vm.coefficientList = angular.copy(DecisionCriteriaConstant.coefficientList);
-            vm.coefficientList.pop();
         }
 
         function doCheck() {
