@@ -1,4 +1,7 @@
-<div class="criteria-coefficient-popup">
+<div class="criteria-coefficient-popup" drag-resize-handler>
+	<div class="row">
+		<div class="col-md-12 col-sm-12 modal-drag-handler"></div>
+	</div>
 	<div class="row">
 		<div class="col-md-12 col-sm-12">
 			<div class="row">
@@ -6,7 +9,7 @@
 					<h4>Criterion Factor of Importance</h4>
 				</div>
 				<div class="col-md-2 col-sm-2">
-					<a href="" ng-click="vm.close()">X</a>
+				<h3><a href="" ng-click="vm.close()">X</a></h3>
 				</div>			
 			</div>
 			<div class="row">
@@ -16,23 +19,23 @@
 			</div>
 			<form class="form-horizontal" name="criteriaCoefficientForm" ng-submit="vm.apply()">
 				<div class="row form-group">
-					<div class="col-md-9 col-sm-9">
+					<div class="col-md-6 col-sm-6">
 						<label class="control-label">Criterion name:</label>
 					</div>
-					<div class="col-md-3 col-sm-3">
+					<div class="col-md-6 col-sm-6">
 						{{vm.criteria.name}}
 					</div>
 				</div>
 				<div class="row form-group">
-					<div class="col-md-9 col-sm-9">
+					<div class="col-md-6 col-sm-6">
 						<label class="control-label">Factor of Importance:</label>
 					</div>
-					<div class="col-md-3 col-sm-3">
+					<div class="col-md-6 col-sm-6">
 						<select class="form-control" ng-model="vm.criteria.coefficient" ng-options="coefficient as coefficient.name for coefficient in vm.coefficientList track by coefficient.value"></select>
 					</div>
 				</div>
 				<div class="row form-group">
-					<div class="col-md-offset-9 col-sm-offset-9 col-md-3 col-sm-3">
+					<div class="col-md-offset-6 col-sm-offset-6 col-md-6 col-sm-6">
 						<button class="btn btn-default" type="submit">Apply</button>
 					</div>
 				</div>

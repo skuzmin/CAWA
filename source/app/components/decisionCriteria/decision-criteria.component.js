@@ -27,6 +27,7 @@
                 templateUrl: 'app/components/decisionCriteria/criteria-coefficient-popup.html',
                 controller: 'CriteriaCoefficientPopupController',
                 controllerAs: 'vm',
+                backdrop: 'static',
                 resolve: {
                     criteria: function() {
                         return criteria;

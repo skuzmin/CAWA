@@ -133,3 +133,21 @@
 		border-bottom: 1px solid @dark;
 	}
 }
+
+.modal-dialog {
+	margin: 30vh auto;
+	.modal-drag-handler {
+		background: @dark;
+		height: 20px;
+		&:hover {
+			cursor: grab;
+			cursor: -moz-grab;
+    		cursor: -webkit-grab;
+		}
+		&:active {
+			cursor: grabbing;
+			cursor: -moz-grabbing;
+    		cursor: -webkit-grabbing;
+		}
+	}
+}

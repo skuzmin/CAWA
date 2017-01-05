@@ -1,29 +1,37 @@
 {
-  "name": "cawa",
-  "description": "",
-  "main": "index.html",
-  "license": "ISC",
-  "homepage": "https://github.com/skuzmin/CAWA",
-  "private": true,
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ],
-  "dependencies": {
-    "jquery": "^3.1.1",
-    "jquery-ui": "^1.12.1",
-    "bootstrap": "3.3.4",
-    "lodash": "^4.17.2",
-    "angular": "^1.5.9",
-    "angular-ui-router": "^0.3.2",
-    "angular-resource": "^1.5.9",
-    "gridstack-angular": "^0.5.0",
-    "angular-animate": "^1.5.9",
-    "angular-bootstrap": "^2.3.0",
-    "ngstorage": "^0.3.11",
-    "angular-jwt": "^0.1.8"
-  }
+    "name": "cawa",
+    "description": "",
+    "main": "index.html",
+    "license": "ISC",
+    "homepage": "https://github.com/skuzmin/CAWA",
+    "private": true,
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ],
+    "dependencies": {
+        "jquery": "^3.1.1",
+        "jquery-ui": "^1.12.1",
+        "bootstrap": "3.3.4",
+        "lodash": "^4.17.2",
+        "angular": "^1.5.9",
+        "angular-ui-router": "^0.3.2",
+        "angular-resource": "^1.5.9",
+        "gridstack-angular": "^0.5.0",
+        "angular-animate": "^1.5.9",
+        "angular-bootstrap": "^2.3.0",
+        "ngstorage": "^0.3.11",
+        "angular-jwt": "^0.1.8"
+    },
+    "overrides": {
+        "jquery-ui": {
+            "main": [
+                "jquery-ui.js",
+                "themes/base/jquery-ui.min.css"
+            ]
+        }
+    }
 }
