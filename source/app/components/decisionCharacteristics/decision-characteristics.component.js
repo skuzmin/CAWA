@@ -8,15 +8,15 @@
         .component('decisionCharacteristics', {
             templateUrl: 'app/components/decisionCharacteristics/decision-characteristics.html',
             bindings: {
-                decisionId: '='
+                characteristicGroups: '='
             },
             controller: 'DecisionCharacteristicsController',
             controllerAs: 'vm'
         });
 
-    DecisionCharacteristicsController.$inject = ['DecisionService'];
+    DecisionCharacteristicsController.$inject = [];
 
-    function DecisionCharacteristicsController(DecisionService) {
+    function DecisionCharacteristicsController() {
         var
             vm = this,
             controls = {
@@ -27,27 +27,13 @@
                 YEARPICKER: 'app/components/decisionCharacteristics/decision-characteristics-yearpicker-partial.html'
             };
 
-        vm.characteristicsFilter = {};
         vm.characteristicGroups = [];
+        vm.sorterList = [];
 
         vm.getControl = getControl;
 
-        init();
-
         function getControl(characteristic) {
             return controls[characteristic.visualMode];
-        }
-
-        function init() {
-            vm.characteristicsSpinner = true;
-            DecisionService.getCharacteristictsGroupsById(vm.decisionId).then(function(result) {
-                vm.characteristicGroups = result;
-            }).finally(function() {
-                if (vm.characteristicGroups.length > 0) {
-                    vm.characteristicGroups[0].isOpen = true;
-                }
-                vm.characteristicsSpinner = false;
-            });
-        }
+        }        
     }
 })();

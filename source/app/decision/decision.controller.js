@@ -19,12 +19,14 @@
         vm.decisionsList = [];
         vm.decision = decisionBasicInfo || {};
 
+        vm.characteristicGroups= [];
+        vm.sorterList = [];
+
         //TEST DATA
-        vm.testCriteriaGroup = [1, 2, 3];
         vm.testClick = testClick;
 
-        function testClick() {
-            console.log('It"s test');
+        function testClick(sorter) {
+            console.log('It"s test id: ', sorter);
         }
         // ---------------------------
 
@@ -39,6 +41,20 @@
             }, 0);
         }
 
+        function prepareCharacteristicsToDisplay(data) {
+            vm.characteristicGroups = data;
+            _.forEach(vm.characteristicGroups, function(group) {
+                _.forEachRight(group.characteristics, function(characteristic, index) {
+                    if(characteristic.sortable) {
+                        vm.sorterList.push(characteristic);
+                    }
+                    if(!characteristic.filterable) {
+                        group.characteristics.splice(index, 1);
+                    }
+                });
+            });
+        }
+
         function init() {
             if (!_.isEmpty(vm.decision.parentDecisionIds)) {
                 vm.parentDecisions = vm.decision.parentDecisionIds;
@@ -48,6 +64,14 @@
                 asyncLoading(result);
             }).finally(function() {
                 vm.decisionsSpinner = false;
+            });
+
+            DecisionService.getCharacteristictsGroupsById(vm.decisionId).then(function(result) {
+                prepareCharacteristicsToDisplay(result);
+            }).finally(function() {
+                if (vm.characteristicGroups.length > 0) {
+                    vm.characteristicGroups[0].isOpen = true;
+                }
             });
 
         }

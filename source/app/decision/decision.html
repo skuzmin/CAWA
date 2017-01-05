@@ -39,7 +39,7 @@
                     <h4>Decisions</h4>
                 </div>
                 <div class="col-md-6 col-sm-6">
-                    <decision-sorter callback="vm.testClick()" sorters="vm.testCriteriaGroup"></decision-sorter>
+                    <decision-sorter ng-if="vm.sorterList.length > 0" callback="vm.testClick(sorter)" sorters="vm.sorterList"></decision-sorter>
                 </div>
                 <div class="col-md-3 col-sm-3">
                     <a href="" class="add-createria-btn"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Add decision</a>
@@ -55,7 +55,7 @@
         <app-divider axis="x" side="right"></app-divider>
         <!-- CHARACTERISTIC SECTION -->
         <div class="col-md-3 col-sm-3 ">
-            <decision-characteristics decision-id="vm.decisionId"></decision-characteristics>
+            <decision-characteristics characteristic-groups="vm.characteristicGroups"></decision-characteristics>
         </div>
     </div>
 </div>
