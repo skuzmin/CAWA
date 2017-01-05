@@ -4,16 +4,16 @@
 
     angular
         .module('app.components')
-        .directive('decisionFilter', decisionFilter);
+        .directive('decisionSorter', decisionSorter);
 
-    function decisionFilter() {
+    function decisionSorter() {
         var directive = {
             restrict: 'E',
             replace: 'true',
-            templateUrl: 'app/components/decisionFilter/decision-filter.html',
+            templateUrl: 'app/components/decisionSorter/decision-sorter.html',
             scope: {
                 callback: '&',
-                filters: '='
+                sorters: '='
             },
             link: link
         };

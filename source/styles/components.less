@@ -1,27 +1,27 @@
 .app-header {
-	min-height: 60px;
-	background-color: @header-background;
-	color: @white-text;
-	padding-right: 15px;
-	padding-left: 15px;
-	margin-right: auto;
-	margin-left: auto;
-	.header-menu-btn {
-		text-align: left;
-	}
-	.header-text {
-		text-align: center;
-	}
-	.header-login {
-		text-align: right;
-	}
+    min-height: 60px;
+    background-color: @header-background;
+    color: @white-text;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    .header-menu-btn {
+        text-align: left;
+    }
+    .header-text {
+        text-align: center;
+    }
+    .header-login {
+        text-align: right;
+    }
 }
 
 .app-footer {
-	min-height: 60px;
-	background-color: @header-background;
-	color: @white-text;
-	padding: 10px;
+    min-height: 60px;
+    background-color: @header-background;
+    color: @white-text;
+    padding: 10px;
 }
 
 .divider {
@@ -32,7 +32,7 @@
     float: left;
     top: 0;
     // override style
-    left: auto !important; 
+    left: auto !important;
     z-index: 111;
     cursor: ew-resize;
 }
@@ -43,111 +43,132 @@
 }
 
 .grid-stack {
-	& > .grid-stack-item {
-		min-width: 100%;
-		max-width: 100%;
-		& > .ui-resizable-se {
-			transform: none;
-			-webkit-transform: none;
-		    -moz-transform: none;
-		    -ms-transform: none;
-		    -o-transform: none;
-		    cursor: ns-resize;
-		}
-		&:hover {
-			.panel-drag-handler { 
-				display: block;
-			}
-		}
-		.panel-drag-handler {
-			cursor: move;
-			z-index: 100;
-			position: absolute;
-			right: 0;
-			top: 0;
-			display: none;
-			&:after {
-				font-family: 'Glyphicons Halflings';
-			    content: "\e068";
-			    color: @basic-active;
-			    text-shadow: 1px 1px 2px @bg-dark;
-			    display: inline-block;
-			    font-size: 18px;
-			    line-height: 25px;
-			    width: 25px;
-			    height: 25px;
-			    top: 0;
-			    right: 0;
-			    position: absolute;
-			    background: @bg-dark;
-			}
-		}
-	}
+    & > .grid-stack-item {
+        min-width: 100%;
+        max-width: 100%;
+        & > .ui-resizable-se {
+            transform: none;
+            -webkit-transform: none;
+            -moz-transform: none;
+            -ms-transform: none;
+            -o-transform: none;
+            cursor: ns-resize;
+        }
+        &:hover {
+            .panel-drag-handler {
+                display: block;
+            }
+        }
+        .panel-drag-handler {
+            cursor: move;
+            z-index: 100;
+            position: absolute;
+            right: 0;
+            top: 0;
+            display: none;
+            &:after {
+                font-family: 'Glyphicons Halflings';
+                content: "\e068";
+                color: @basic-active;
+                text-shadow: 1px 1px 2px @bg-dark;
+                display: inline-block;
+                font-size: 18px;
+                line-height: 25px;
+                width: 25px;
+                height: 25px;
+                top: 0;
+                right: 0;
+                position: absolute;
+                background: @bg-dark;
+            }
+        }
+    }
 }
 
-.decision-filter {
-	.active {
-		pointer-events: none;
-	}
+.decision-sorter {
+    list-style: none;
+    li {
+        color: @default-text;
+        display: inline-block;
+        float: left;
+        padding: 5px;
+        border: 1px solid @criteria-items;
+        border-right: none;
+        margin: 4px 0;
+        cursor: pointer;
+        &:last-child {
+            border-right: 1px solid @criteria-items;
+        }
+        &:hover {
+            background-color: @basic;
+            color: @white-text;
+        }
+        &.active {
+            background-color: @basic-active;
+            color: @white-text;
+            pointer-events: none;
+        }
+    }
 }
 
 .decision-characteristics {
-	.decision-select, .decision-yearpicker {
-		width: 150px;
-	}
+    .decision-select,
+    .decision-yearpicker {
+        width: 150px;
+    }
 }
 
 .criteria-coefficient-indicator {
-	.criteria-coefficient-item {
-		width: 15px;
-		height: 2px;
-		margin-top: 1px;
-		border: 1px solid @coefficientDefault; 
-		&.lower {
-			border-color: @coefficientLower;
-		}
-		&.low {
-			border-color: @coefficientLow;
-		}
-		&.normal {
-			border-color: @coefficientNormal;
-		}
-		&.high {
-			border-color: @coefficientHigh;
-		}
-		&.important {
-			border-color: @coefficientImportant;
-		}
-		&.significant {
-			border-color: @coefficientSignificant;
-		}
-		&.critical {
-			border-color: @coefficientCritical;
-		}
-	}
+    .criteria-coefficient-item {
+        width: 15px;
+        height: 2px;
+        margin-top: 1px;
+        border: 1px solid @coefficientDefault;
+        &.lower {
+            border-color: @coefficientLower;
+        }
+        &.low {
+            border-color: @coefficientLow;
+        }
+        &.normal {
+            border-color: @coefficientNormal;
+        }
+        &.high {
+            border-color: @coefficientHigh;
+        }
+        &.important {
+            border-color: @coefficientImportant;
+        }
+        &.significant {
+            border-color: @coefficientSignificant;
+        }
+        &.critical {
+            border-color: @coefficientCritical;
+        }
+    }
 }
 
 .criteria-coefficient-popup {
-	padding: 0 30px 30px;
-	.coefficient-title {
-		border-bottom: 1px solid @dark;
-	}
+    padding: 0 30px 30px;
+    .coefficient-title {
+        border-bottom: 1px solid @dark;
+    }
 }
 
 .modal-dialog {
-	margin: 30vh auto;
-	.modal-drag-handler {
-		background: @dark;
-		height: 20px;
-		&:hover {
-			cursor: grab;
-			cursor: -moz-grab;
-    		cursor: -webkit-grab;
-		}
-		&:active {
-			cursor: grabbing;
-			cursor: -moz-grabbing;
-    		cursor: -webkit-grabbing;
-		}
-	}
+    margin: 30vh auto;
+    .modal-drag-handler {
+        background: @dark;
+        height: 20px;
+        &:hover {
+            cursor: grab;
+            cursor: -moz-grab;
+            cursor: -webkit-grab;
+        }
+        &:active {
+            cursor: grabbing;
+            cursor: -moz-grabbing;
+            cursor: -webkit-grabbing;
+        }
+    }
 }
