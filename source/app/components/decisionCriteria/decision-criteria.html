@@ -1,27 +1,38 @@
 <div class="decision-criteria">
-    <uib-accordion close-others="false">
-        <div uib-accordion-group class="panel-default criteria-panel" ng-repeat="group in vm.criteriaGroups track by $index" is-open="group.isOpen">
-            <uib-accordion-heading>
-                {{group.name}}
-                <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': group.isOpen, 'glyphicon-chevron-right': !group.isOpen}"></i>
-            </uib-accordion-heading>
-            <div class="row criteria-item" ng-repeat="criteria in group.criteria track by $index">
-                <div class="col-md-6">{{criteria.name}}</div>
-                <div class="col-md-6">
-                    <div class="row">
-                        <div class="col-md-4">ICON1</div>
-                        <div class="col-md-4">ICON2</div>
-                        <div class="col-md-4">
-                            <button class="btn btn-default" ng-click="vm.editCriteriaCoefficient(criteria)">
-                                <criteria-coefficient-indicator coefficient="criteria.coefficient"></criteria-coefficient-indicator>
-                            </button>
+    <div class="criteria-header scroll-wrapper-header">
+        <div class="col-md-6 col-sm-6">
+            <h4>Criteria</h4>
+        </div>
+        <div class="col-md-6 col-sm-6">
+            <a href="" class="add-createria-btn"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Add criterion</a>
+        </div>
+    </div>
+    <div class="scroll-wrapper">
+        <h1 ng-show="vm.criteriaSpinner">LOADING...</h1>
+        <uib-accordion close-others="false">
+            <div uib-accordion-group class="panel-default criteria-panel" ng-repeat="group in vm.criteriaGroups track by $index" is-open="group.isOpen">
+                <uib-accordion-heading>
+                    {{group.name}}
+                    <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': group.isOpen, 'glyphicon-chevron-right': !group.isOpen}"></i>
+                </uib-accordion-heading>
+                <div class="row criteria-item" ng-repeat="criteria in group.criteria track by $index">
+                    <div class="col-md-6">{{criteria.name}}</div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-4">ICON1</div>
+                            <div class="col-md-4">ICON2</div>
+                            <div class="col-md-4">
+                                <button class="btn btn-default" ng-click="vm.editCriteriaCoefficient(criteria)">
+                                    <criteria-coefficient-indicator coefficient="criteria.coefficient"></criteria-coefficient-indicator>
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">STARS</div>
+                        <div class="row">
+                            <div class="col-md-12">STARS</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </uib-accordion>
+        </uib-accordion>
+    </div>
 </div>

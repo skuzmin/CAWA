@@ -28,18 +28,7 @@
     <div class="row main-panel">
         <!-- CRITERIA SECTION -->
         <div class="col-md-3 col-sm-3 criteria-section app-divider-wrapper">
-            <div class="criteria-header scroll-wrapper-header">
-                <div class="col-md-6 col-sm-6">
-                    <h4>Criteria</h4>
-                </div>
-                <div class="col-md-6 col-sm-6">
-                    <a href="" class="add-createria-btn"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Add criterion</a>
-                </div>
-            </div>
-            <div class="scroll-wrapper">
-                <h1 ng-show="vm.pageSpinners.criteria">LOADING...</h1>
-                <decision-criteria criteria-groups="vm.criteriaGroups"></decision-criteria>
-            </div>
+            <decision-criteria decision-id="vm.decisionId"></decision-criteria>
         </div>
         <!-- Left Divider -->
         <app-divider axis="x"></app-divider>
@@ -57,7 +46,7 @@
                 </div>
             </div>
             <div class="scroll-wrapper">
-                <h1 ng-show="vm.pageSpinners.decisions">LOADING...</h1>
+                <h1 ng-show="vm.decisionsSpinner">LOADING...</h1>
                 <gridstack-wrapper init-list="vm.decisionsList" update-list="vm.updateDecisionList" element="decision-item" cell-height="100" vertical-margin="10" grid-class="custom-grid" template="decision">
                 </gridstack-wrapper>
             </div>
@@ -66,18 +55,7 @@
         <app-divider axis="x" side="right"></app-divider>
         <!-- CHARACTERISTIC SECTION -->
         <div class="col-md-3 col-sm-3 ">
-            <div class="char-header scroll-wrapper-header">
-                <div class="col-md-6 col-sm-6">
-                    <h4>Characteristics</h4>
-                </div>
-                <div class="col-md-6 col-sm-6">
-                    <a href="" class="add-createria-btn"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Add characteristic</a>
-                </div>
-            </div>
-            <div class="scroll-wrapper">
-                <h1 ng-show="vm.pageSpinners.characteristics">LOADING...</h1>
-                <decision-characteristics characteristic-groups="vm.characteristicGroups"></decision-characteristics>
-            </div>
+            <decision-characteristics decision-id="vm.decisionId"></decision-characteristics>
         </div>
     </div>
 </div>

@@ -11,21 +11,13 @@
     function DecisionController(decisionBasicInfo, DecisionService, $stateParams, $timeout) {
         var
             vm = this,
-            decisionId = $stateParams.id,
-            defaultDecisionCount = 5,
-            defaultAccordion = 0;
+            defaultDecisionCount = 5;
 
         console.log('Decision controller');
 
+        vm.decisionId = $stateParams.id;
         vm.decisionsList = [];
-        vm.criteriaGroups = [];
-        vm.characteristicGroups = [];
         vm.decision = decisionBasicInfo || {};
-        vm.pageSpinners = {
-            decisions: true,
-            criteria: true,
-            characteristics: true
-        };
 
         //TEST DATA
         vm.testCriteriaGroup = [1, 2, 3];
@@ -36,46 +28,28 @@
         }
         // ---------------------------
 
-
         init();
 
         function asyncLoading(result) {
-        	$timeout(function() {
-        		vm.decisionsList = vm.decisionsList.concat(result.splice(0, defaultDecisionCount));
-        		if(result.length > 0) {
-        			asyncLoading(result);
-        		}
-        	}, 0);
+            $timeout(function() {
+                vm.decisionsList = vm.decisionsList.concat(result.splice(0, defaultDecisionCount));
+                if (result.length > 0) {
+                    asyncLoading(result);
+                }
+            }, 0);
         }
 
         function init() {
-            if(!_.isEmpty(vm.decision.parentDecisionIds)) {
+            if (!_.isEmpty(vm.decision.parentDecisionIds)) {
                 vm.parentDecisions = vm.decision.parentDecisionIds;
             }
-
-            DecisionService.searchDecision(decisionId).then(function(result) {
+            vm.decisionsSpinner = true;
+            DecisionService.searchDecision(vm.decisionId).then(function(result) {
                 asyncLoading(result);
             }).finally(function() {
-                vm.pageSpinners.decisions = false;
+                vm.decisionsSpinner = false;
             });
 
-            DecisionService.getCriteriaGroupsById(decisionId).then(function(result) {
-                vm.criteriaGroups = result;
-            }).finally(function() {
-                vm.pageSpinners.criteria = false;
-                if(vm.criteriaGroups.length > 0) {
-                    vm.criteriaGroups[defaultAccordion].isOpen = true;
-                }
-            });
-
-            DecisionService.getCharacteristictsGroupsById(decisionId).then(function(result) {
-                vm.characteristicGroups = result;
-            }).finally(function() {
-                if(vm.characteristicGroups.length > 0) {
-                    vm.characteristicGroups[defaultAccordion].isOpen = true;
-                }
-                vm.pageSpinners.characteristics = false;
-            });
         }
     }
 })();

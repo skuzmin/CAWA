@@ -8,16 +8,15 @@
         .component('decisionCharacteristics', {
             templateUrl: 'app/components/decisionCharacteristics/decision-characteristics.html',
             bindings: {
-                characteristicGroups: '='
+                decisionId: '='
             },
             controller: 'DecisionCharacteristicsController',
             controllerAs: 'vm'
         });
 
+    DecisionCharacteristicsController.$inject = ['DecisionService'];
 
-    DecisionCharacteristicsController.$inject = [];
-
-    function DecisionCharacteristicsController() {
+    function DecisionCharacteristicsController(DecisionService) {
         var
             vm = this,
             controls = {
@@ -29,11 +28,26 @@
             };
 
         vm.characteristicsFilter = {};
+        vm.characteristicGroups = [];
 
         vm.getControl = getControl;
 
+        init();
+
         function getControl(characteristic) {
-        	return controls[characteristic.visualMode];
+            return controls[characteristic.visualMode];
+        }
+
+        function init() {
+            vm.characteristicsSpinner = true;
+            DecisionService.getCharacteristictsGroupsById(vm.decisionId).then(function(result) {
+                vm.characteristicGroups = result;
+            }).finally(function() {
+                if (vm.characteristicGroups.length > 0) {
+                    vm.characteristicGroups[0].isOpen = true;
+                }
+                vm.characteristicsSpinner = false;
+            });
         }
     }
 })();
