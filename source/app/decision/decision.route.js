@@ -29,14 +29,14 @@
 
     function DecisionResolver(DecisionService, $stateParams, $state, $rootScope) {
         return DecisionService.getDecisionInfo($stateParams.id).then(function(result) {
-            // var stateListener = $rootScope.$on('$stateChangeSuccess',
-            //     function(event, toState, toParams, fromState, fromParams) {
-            //         if (toParams.slug !== result.nameSlug) {
-            //             $stateParams.slug = result.nameSlug;
-            //             $state.go('decision', $stateParams, {notify: false});
-            //         }
-            //         stateListener();
-            //     });
+            var stateListener = $rootScope.$on('$stateChangeSuccess',
+                function(event, toState, toParams, fromState, fromParams) {
+                    if (toParams.slug !== result.nameSlug) {
+                        $stateParams.slug = result.nameSlug;
+                        $state.go('decision', $stateParams, {notify: false});
+                    }
+                    stateListener();
+                });
             return result;
         }).catch(function() {
             $state.go('404');
