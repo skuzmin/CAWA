@@ -22,7 +22,6 @@
                     handle: '.modal-drag-handler'
                 });
                 $('.modal-content').resizable({
-                    alsoResize: '.modal-dialog',
                     minHeight: elem.outerHeight(),
                     minWidth: elem.outerWidth(),
                     maxHeight: elem.outerHeight() + resizableMaxValue,
