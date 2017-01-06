@@ -14,18 +14,26 @@
             controllerAs: 'vm'
         });
 
-    DecisionCriteriaController.$inject = ['$uibModal', 'DecisionService'];
+    DecisionCriteriaController.$inject = ['$uibModal', 'DecisionService', '$rootScope'];
 
-    function DecisionCriteriaController($uibModal, DecisionService) {
+    function DecisionCriteriaController($uibModal, DecisionService, $rootScope) {
         var vm = this;
 
         vm.criteriaGroups = [];
 
         vm.editCriteriaCoefficient = editCriteriaCoefficient;
+        vm.selectCriterion = selectCriterion; 
 
         init();
 
-        function editCriteriaCoefficient(criteria) {
+        function selectCriterion(criterion) {
+            criterion.isSelected = !criterion.isSelected;
+            $rootScope.$broadcast('selectCriterion', criterion);
+        }
+
+        function editCriteriaCoefficient(event, criteria) {
+            event.preventDefault();
+            event.stopPropagation();
             var modalInstance = $uibModal.open({
                 templateUrl: 'app/components/decisionCriteria/criteria-coefficient-popup.html',
                 controller: 'CriteriaCoefficientPopupController',

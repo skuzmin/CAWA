@@ -13,15 +13,16 @@
                 element: '@',
                 cellHeight: '=',
                 verticalMargin: '=',
-                template: '@'
+                template: '@',
+                callback: '&'
             },
             controller: 'GridstackMovementController',
             controllerAs: 'vm'
         });
 
-    GridstackMovementController.$inject = ['$timeout'];
+    GridstackMovementController.$inject = ['$timeout', '$state'];
 
-    function GridstackMovementController($timeout) {
+    function GridstackMovementController($timeout, $state) {
         var
             vm = this,
             gridItems = [],
@@ -40,7 +41,25 @@
             }
         };
 
+        vm.selectDecision = selectDecision;
+        vm.stopEvent = stopEvent;
         vm.$onChanges = onChanges;
+        vm.goToDecision = goToDecision;
+
+        function goToDecision(event, decisionId) {
+            stopEvent(event);
+            $state.go('decision', {id: decisionId});
+        }
+
+        function stopEvent(event) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
+
+        function selectDecision(d) {
+            d.isSelected = !d.isSelected;
+            vm.callback({decision: d});
+        }
 
         function onChanges() {
         	gridItems = $('.' + vm.element);

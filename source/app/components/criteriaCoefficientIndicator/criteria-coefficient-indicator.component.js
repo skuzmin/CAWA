@@ -20,7 +20,6 @@
     function CriteriaCoefficientIndicatorController(DecisionCriteriaConstant) {
         var vm = this;
 
-        vm.setCoefficientIndicator = setCoefficientIndicator;
         vm.$doCheck = doCheck;
 
         init();

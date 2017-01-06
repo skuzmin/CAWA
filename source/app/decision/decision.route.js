@@ -11,7 +11,7 @@
     function configuration($stateProvider) {
         $stateProvider
             .state('decision', {
-                url: '/decision/:id/{slug}/{criteria}',
+                url: '/decisions/:id/{slug}/{criteria}',
                 templateUrl: 'app/decision/decision.html',
                 controller: 'DecisionController',
                 controllerAs: 'vm',
@@ -40,12 +40,13 @@
                         criteria = '/' + toParams.criteria;
                     }
                     //two behaviors for changing URL
-                    if(fromState.name && toState.name !== fromState.name) {
-                        $location.path('/decision/' + toParams.id + '/' + result.nameSlug + criteria);
+                    if((fromState.name && toState.name !== fromState.name) || 
+                        (fromState.name && toState.name === fromState.name && toParams.id !== fromParams.id)) {
+                        $location.path('/decisions/' + toParams.id + '/' + result.nameSlug + criteria);
                     } else {
-                        $location.path('/decision/' + toParams.id + '/' + result.nameSlug + criteria).replace();
+                        $location.path('/decisions/' + toParams.id + '/' + result.nameSlug + criteria).replace();
                     }
-                    //remove event listener
+                    //unsubscribe event listener
                     stateListener();
                 });
             return result;

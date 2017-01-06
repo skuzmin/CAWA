@@ -31,8 +31,13 @@
         vm.sorterList = [];
 
         vm.getControl = getControl;
+        vm.selectCharacteristic = selectCharacteristic;
 
         init();
+
+        function selectCharacteristic(characteristic) {
+            $rootScope.$broadcast('selectCharacteristic', characteristic);
+        }
 
         function getControl(characteristic) {
             return controls[characteristic.visualMode];
@@ -52,10 +57,6 @@
             });
             $rootScope.$broadcast('initSorter', vm.sorterList);
         }
-
-        $rootScope.$on('selectSorter', function(event, data) {
-            console.log(data);
-        });
 
         function init() {
             vm.characteristicSpinner = true;

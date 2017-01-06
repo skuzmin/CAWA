@@ -1,8 +1,8 @@
 <div class="row">
-	<div class="panel-drag-handler"></div>
+	<div class="panel-drag-handler" ng-click="vm.stopEvent($event)"></div>
 	<div class="col-md-12">
 		<div class="row">
-			<div class="col-md-12"><h4><a href="" ui-sref="decision({id: item.decisionId})">{{item.name}}</a></h4></div>
+			<div class="col-md-12"><h4><a href="" ng-click="vm.goToDecision($event, item.decisionId)">{{item.name}}</a></h4></div>
 		</div>
 		<div class="row">
 			<div class="col-md-2">IMG</div>
