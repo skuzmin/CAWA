@@ -36,6 +36,14 @@
             }, 0);
         }
 
+        function prepareDaraToDisplay(data) {
+            _.forEach(data, function(item) {
+                if(!item.value) {
+                    item.value = 'Not set';
+                }
+            });
+        }
+
         $rootScope.$on('selectSorter', function(event, data) {
             console.log(data);
             //BACKEND CALL...
@@ -47,6 +55,15 @@
         $rootScope.$on('selectCharacteristic', function(event, data) {
             console.log(data);
             //BACKEND CALL...
+        });
+        $rootScope.$on('getDetailedCharacteristics', function(event, data) {
+            data.detailsSpinner = true;
+            DecisionService.getdecisionCharacteristics(vm.decisionId, data.decisionId).then(function(result) {
+                prepareDaraToDisplay(result);
+                data.characteristics = result;
+            }).finally(function() {
+                data.detailsSpinner = false;
+            });
         });
 
         function init() {

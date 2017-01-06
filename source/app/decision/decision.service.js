@@ -18,6 +18,7 @@
 				}),
 
 				decisionInfo = $resource(decisionUrl),
+				decisionCharacteristics = $resource(decisionUrl + '/decisions/:childId/characteristics', {id: '@id', childId: '@childId'}, {}),
 				criteriasGroups = $resource(decisionUrl + '/criteria/groups'),
 				characteristictsGroups = $resource(decisionUrl + '/characteristics/groups');
 
@@ -25,7 +26,8 @@
 				searchDecision: searchDecision,
 				getCriteriaGroupsById: getCriteriaGroupsById,
 				getCharacteristictsGroupsById: getCharacteristictsGroupsById,
-				getDecisionInfo: getDecisionInfo
+				getDecisionInfo: getDecisionInfo,
+				getdecisionCharacteristics: getdecisionCharacteristics
 			};
 
 			return service;
@@ -44,6 +46,10 @@
 
 			function getDecisionInfo(id) {
 				return decisionInfo.get({id: id}).$promise;
+			}
+
+			function getdecisionCharacteristics(id, childId) {
+				return decisionCharacteristics.query({id: id, childId: childId}).$promise;
 			}
 		}
 })();

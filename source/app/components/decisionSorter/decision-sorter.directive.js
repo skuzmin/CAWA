@@ -22,15 +22,19 @@
                 scope.sorters = data;
                 elem.ready(function() {
                     // default sorter value
-                    //elem.children().first().addClass('active');
+                    //elem.children().first().addClass('selected');
                     elem.children().on('click', function() {
-                        elem.children().removeClass('active');
-                        $(this).addClass('active');
+                        var wasSelected = $(this).hasClass('selected');
+                        elem.children().removeClass('selected');
+                        if(!wasSelected) {
+                            $(this).addClass('selected');
+                        }
                     });
                 });
             });
 
             scope.selectSorter = function(sorter) {
+                sorter.isSelected = !sorter.isSelected;
                 scope.$emit('selectSorter', sorter);
             };
         }

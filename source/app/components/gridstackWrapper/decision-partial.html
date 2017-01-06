@@ -1,12 +1,27 @@
 <div class="row">
-	<div class="panel-drag-handler" ng-click="vm.stopEvent($event)"></div>
-	<div class="col-md-12">
-		<div class="row">
-			<div class="col-md-12"><h4><a href="" ng-click="vm.goToDecision($event, item.decisionId)">{{item.name}}</a></h4></div>
-		</div>
-		<div class="row">
-			<div class="col-md-2">IMG</div>
-			<div class="col-md-10"></div>
-		</div>		
-	</div>
+    <div class="panel-drag-handler" ng-click="vm.stopEvent($event)"></div>
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12">
+                <h4><a href="" ng-click="vm.goToDecision($event, item.decisionId)">{{item.name}}</a></h4></div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">IMG</div>
+            <div class="col-md-10"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-12" ng-show="item.detailsSpinner">LOADING...</div>
+                </div>
+                <div ng-show="item.characteristics">
+                	<h4>Characteristics</h4>
+                	<div class="row" ng-repeat="characteristic in item.characteristics track by $index">
+                    <div class="col-md-6">{{characteristic.name}}:</div>
+                    <div class="col-md-6">{{characteristic.value}}</div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

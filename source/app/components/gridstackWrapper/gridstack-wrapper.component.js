@@ -20,9 +20,9 @@
             controllerAs: 'vm'
         });
 
-    GridstackMovementController.$inject = ['$timeout', '$state'];
+    GridstackMovementController.$inject = ['$timeout', '$state', '$rootScope'];
 
-    function GridstackMovementController($timeout, $state) {
+    function GridstackMovementController($timeout, $state, $rootScope) {
         var
             vm = this,
             gridItems = [],
@@ -45,6 +45,14 @@
         vm.stopEvent = stopEvent;
         vm.$onChanges = onChanges;
         vm.goToDecision = goToDecision;
+        vm.getDetails = getDetails;
+
+        function getDetails(event, decision) {
+            stopEvent(event);
+            if(!decision.characteristics) {
+                $rootScope.$broadcast('getDetailedCharacteristics', decision);
+            }
+        }
 
         function goToDecision(event, decisionId) {
             stopEvent(event);
