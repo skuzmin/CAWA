@@ -35,7 +35,10 @@
                     //Always set correct slug from server
                     $stateParams.slug = result.nameSlug;
                     //set criteria ( addtional user parameters)
-                    var criteria = toParams.criteria ? '/' + toParams.criteria : '';
+                    var criteria = '';
+                    if(toParams.criteria && (!fromParams.id || toParams.id === fromParams.id)) {
+                        criteria = '/' + toParams.criteria;
+                    }
                     //two behaviors for changing URL
                     if(fromState.name && toState.name !== fromState.name) {
                         $location.path('/decision/' + toParams.id + '/' + result.nameSlug + criteria);
