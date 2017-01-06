@@ -25,16 +25,24 @@
             });
     }
 
-    DecisionResolver.$inject = ['DecisionService', '$stateParams', '$state', '$rootScope'];
+    DecisionResolver.$inject = ['DecisionService', '$stateParams', '$state', '$rootScope', '$location'];
 
-    function DecisionResolver(DecisionService, $stateParams, $state, $rootScope) {
+    function DecisionResolver(DecisionService, $stateParams, $state, $rootScope, $location) {
         return DecisionService.getDecisionInfo($stateParams.id).then(function(result) {
             var stateListener = $rootScope.$on('$stateChangeSuccess',
                 function(event, toState, toParams, fromState, fromParams) {
-                    if (toParams.slug !== result.nameSlug) {
-                        $stateParams.slug = result.nameSlug;
-                        $state.go('decision', $stateParams, {notify: false});
+                    //SLUG for Decision page
+                    //Always set correct slug from server
+                    $stateParams.slug = result.nameSlug;
+                    //set criteria ( addtional user parameters)
+                    var criteria = toParams.criteria ? '/' + toParams.criteria : '';
+                    //two behaviors for changing URL
+                    if(fromState.name && toState.name !== fromState.name) {
+                        $location.path('/decision/' + toParams.id + '/' + result.nameSlug + criteria);
+                    } else {
+                        $location.path('/decision/' + toParams.id + '/' + result.nameSlug + criteria).replace();
                     }
+                    //remove event listener
                     stateListener();
                 });
             return result;

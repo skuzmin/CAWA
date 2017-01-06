@@ -32,7 +32,7 @@
 
             scope.selectSorter = function(sorter) {
                 scope.$emit('selectSorter', sorter);
-            }
+            };
         }
     }
 
