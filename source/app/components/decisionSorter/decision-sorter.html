@@ -1,5 +1,5 @@
 <ul class="decision-sorter">
-    <li ng-repeat="sorter in sorters track by $index" ng-click="sortByCriteria(sorter)">
+    <li ng-repeat="sorter in sorters track by $index" ng-click="selectSorter(sorter)">
         <span>{{sorter.name}}</span>
     </li>
 </ul>

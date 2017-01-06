@@ -19,17 +19,6 @@
         vm.decisionsList = [];
         vm.decision = decisionBasicInfo || {};
 
-        vm.characteristicGroups= [];
-        vm.sorterList = [];
-
-        //TEST DATA
-        vm.testClick = testClick;
-
-        function testClick(sorter) {
-            console.log('It"s test id: ', sorter);
-        }
-        // ---------------------------
-
         init();
 
         function asyncLoading(result) {
@@ -39,20 +28,6 @@
                     asyncLoading(result);
                 }
             }, 0);
-        }
-
-        function prepareCharacteristicsToDisplay(data) {
-            vm.characteristicGroups = data;
-            _.forEach(vm.characteristicGroups, function(group) {
-                _.forEachRight(group.characteristics, function(characteristic, index) {
-                    if(characteristic.sortable) {
-                        vm.sorterList.push(characteristic);
-                    }
-                    if(!characteristic.filterable) {
-                        group.characteristics.splice(index, 1);
-                    }
-                });
-            });
         }
 
         function init() {
@@ -66,13 +41,6 @@
                 vm.decisionsSpinner = false;
             });
 
-            DecisionService.getCharacteristictsGroupsById(vm.decisionId).then(function(result) {
-                prepareCharacteristicsToDisplay(result);
-            }).finally(function() {
-                if (vm.characteristicGroups.length > 0) {
-                    vm.characteristicGroups[0].isOpen = true;
-                }
-            });
 
         }
     }
