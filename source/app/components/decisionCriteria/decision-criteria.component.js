@@ -14,9 +14,9 @@
             controllerAs: 'vm'
         });
 
-    DecisionCriteriaController.$inject = ['$uibModal', 'DecisionService', '$rootScope'];
+    DecisionCriteriaController.$inject = ['$uibModal', 'DecisionDataService', 'DecisionNotificationService'];
 
-    function DecisionCriteriaController($uibModal, DecisionService, $rootScope) {
+    function DecisionCriteriaController($uibModal, DecisionDataService, DecisionNotificationService) {
         var vm = this;
 
         vm.criteriaGroups = [];
@@ -28,7 +28,7 @@
 
         function selectCriterion(criterion) {
             criterion.isSelected = !criterion.isSelected;
-            $rootScope.$broadcast('selectCriterion', criterion);
+            DecisionNotificationService.notifySelectCriterion(criterion);
         }
 
         function editCriteriaCoefficient(event, criteria) {
@@ -55,7 +55,7 @@
 
         function init() {
             vm.criteriaSpinner = true;
-            DecisionService.getCriteriaGroupsById(vm.decisionId).then(function(result) {
+            DecisionDataService.getCriteriaGroupsById(vm.decisionId).then(function(result) {
                 vm.criteriaGroups = result;
             }).finally(function() {
                 vm.criteriaSpinner = false;

@@ -25,10 +25,10 @@
             });
     }
 
-    DecisionResolver.$inject = ['DecisionService', '$stateParams', '$state', '$rootScope', '$location'];
+    DecisionResolver.$inject = ['DecisionDataService', '$stateParams', '$state', '$rootScope', '$location'];
 
-    function DecisionResolver(DecisionService, $stateParams, $state, $rootScope, $location) {
-        return DecisionService.getDecisionInfo($stateParams.id).then(function(result) {
+    function DecisionResolver(DecisionDataService, $stateParams, $state, $rootScope, $location) {
+        return DecisionDataService.getDecisionInfo($stateParams.id).then(function(result) {
             var stateListener = $rootScope.$on('$stateChangeSuccess',
                 function(event, toState, toParams, fromState, fromParams) {
                     //SLUG for Decision page

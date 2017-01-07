@@ -185,27 +185,19 @@
     }
 }
 
-.criteria-coefficient-popup {
-    padding: 0 30px 30px;
-    .coefficient-title {
-        border-bottom: 1px solid @dark;
-    }
-}
-
 .modal-dialog {
     margin: 30vh auto;
-    .modal-drag-handler {
-        background: @dark;
-        height: 20px;
-        &:hover {
-            cursor: grab;
-            cursor: -moz-grab;
-            cursor: -webkit-grab;
+    .criteria-coefficient-popup {
+        padding: 0 30px 30px;
+        .coefficient-title {
+            border-bottom: 1px solid @dark;
         }
-        &:active {
-            cursor: grabbing;
-            cursor: -moz-grabbing;
-            cursor: -webkit-grabbing;
+        .modal-drag-handler {
+            background: @dark;
+            height: 20px;
+            &:hover {
+                cursor: move;
+            }
         }
     }
 }

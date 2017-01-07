@@ -14,9 +14,9 @@
             controllerAs: 'vm'
         });
 
-    DecisionCharacteristicsController.$inject = ['DecisionService', '$rootScope'];
+    DecisionCharacteristicsController.$inject = ['DecisionDataService', 'DecisionNotificationService'];
 
-    function DecisionCharacteristicsController(DecisionService, $rootScope) {
+    function DecisionCharacteristicsController(DecisionDataService, DecisionNotificationService) {
         var
             vm = this,
             controls = {
@@ -36,7 +36,7 @@
         init();
 
         function selectCharacteristic(characteristic) {
-            $rootScope.$broadcast('selectCharacteristic', characteristic);
+            DecisionNotificationService.notifySelectCharacteristic(characteristic);
         }
 
         function getControl(characteristic) {
@@ -55,12 +55,12 @@
                     }
                 });
             });
-            $rootScope.$broadcast('initSorter', vm.sorterList);
+            DecisionNotificationService.notifyInitSorter(vm.sorterList);
         }
 
         function init() {
             vm.characteristicSpinner = true;
-            DecisionService.getCharacteristictsGroupsById(vm.decisionId).then(function(result) {
+            DecisionDataService.getCharacteristictsGroupsById(vm.decisionId).then(function(result) {
                 prepareCharacteristicsToDisplay(result);
             }).finally(function() {
                 if (vm.characteristicGroups.length > 0) {

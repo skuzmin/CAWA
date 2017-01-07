@@ -20,9 +20,9 @@
             controllerAs: 'vm'
         });
 
-    GridstackMovementController.$inject = ['$timeout', '$state', '$rootScope'];
+    GridstackMovementController.$inject = ['$timeout', '$state', 'DecisionNotificationService'];
 
-    function GridstackMovementController($timeout, $state, $rootScope) {
+    function GridstackMovementController($timeout, $state, DecisionNotificationService) {
         var
             vm = this,
             gridItems = [],
@@ -50,7 +50,7 @@
         function getDetails(event, decision) {
             stopEvent(event);
             if(!decision.characteristics) {
-                $rootScope.$broadcast('getDetailedCharacteristics', decision);
+                DecisionNotificationService.notifyGetDetailedCharacteristics(decision);
             }
         }
 

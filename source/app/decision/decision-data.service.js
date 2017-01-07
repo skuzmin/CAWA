@@ -4,11 +4,11 @@
 
 	angular
 		.module('app.decision')
-		.factory('DecisionService', DecisionService);
+		.factory('DecisionDataService', DecisionDataService);
 
-		DecisionService.$inject = ['$resource', 'Config'];
+		DecisionDataService.$inject = ['$resource', 'Config'];
 
-		function DecisionService($resource, Config) {
+		function DecisionDataService($resource, Config) {
 			var 
 				decisionUrl = Config.endpointUrl + 'decisions/:id',
 

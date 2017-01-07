@@ -18,7 +18,7 @@
         return directive;
 
         function link(scope, elem, attrs) {
-            scope.$on('initSorter', function(event, data) {
+            var sorterListener = scope.$on('initSorter', function(event, data) {
                 scope.sorters = data;
                 elem.ready(function() {
                     // default sorter value
@@ -26,11 +26,12 @@
                     elem.children().on('click', function() {
                         var wasSelected = $(this).hasClass('selected');
                         elem.children().removeClass('selected');
-                        if(!wasSelected) {
+                        if (!wasSelected) {
                             $(this).addClass('selected');
                         }
                     });
                 });
+                sorterListener();
             });
 
             scope.selectSorter = function(sorter) {
