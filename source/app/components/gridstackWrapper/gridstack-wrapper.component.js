@@ -75,9 +75,19 @@
             event.preventDefault();
         }
 
-        function selectDecision(d) {
-            d.isSelected = !d.isSelected;
-            vm.callback({ decision: d });
+        function selectDecision(currentDecision) {
+            var prevDecision = _.find(vm.initList, function(decision) {
+                return decision.isSelected;
+            });
+            if (!prevDecision) {
+                currentDecision.isSelected = true;
+            } else if (prevDecision.decisionId === currentDecision.decisionId) {
+                currentDecision.isSelected = false;
+            } else {
+                prevDecision.isSelected = false;
+                currentDecision.isSelected = true;
+            }
+            vm.callback({ decision: currentDecision });
         }
 
         function onChanges() {

@@ -31,7 +31,9 @@
                         }
                     });
                 });
-                sorterListener();
+                scope.$on('$destroy', function() {
+                    sorterListener();
+                });
             });
 
             scope.selectSorter = function(sorter) {
