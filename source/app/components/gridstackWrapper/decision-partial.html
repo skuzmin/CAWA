@@ -3,13 +3,13 @@
     <div class="col-md-12">
         <div class="row">
             <div class="col-md-12">
-                <h4><a href="" ng-click="vm.goToDecision($event, item.decisionId)">{{item.name}}</a></h4></div>
+                <h4><a href="" ng-mousedown="vm.stopEvent($event)" ng-click="vm.goToDecision($event, item.decisionId)">{{item.name}}</a></h4></div>
         </div>
         <div class="row">
             <div class="col-md-2">IMG</div>
             <div class="col-md-10"></div>
         </div>
-        <div class="row">
+        <div class="row decision-detailed-chars">
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-12" ng-show="item.detailsSpinner">LOADING...</div>
@@ -18,7 +18,10 @@
                 	<h4>Characteristics</h4>
                 	<div class="row" ng-repeat="characteristic in item.characteristics track by $index">
                     <div class="col-md-6">{{characteristic.name}}:</div>
-                    <div class="col-md-6">{{characteristic.value}}</div>
+                    <div class="col-md-6">
+                    	<span ng-show="characteristic.value">{{characteristic.value}}</span>
+                    	<span ng-show="!characteristic.value" class="not-set">Not set</span>
+                    </div>
                 </div>
                 </div>
             </div>
