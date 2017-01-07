@@ -61,6 +61,14 @@
         function init() {
             vm.characteristicSpinner = true;
             DecisionDataService.getCharacteristictsGroupsById(vm.decisionId).then(function(result) {
+                var temp;
+                var characteristicGroupNames = _.map(result, function(group) {
+                    return {
+                        characteristicGroupId: group.characteristicGroupId,
+                        name: group.name
+                    };
+                });
+                DecisionNotificationService.notifyCharacteristicsGroups(characteristicGroupNames);
                 prepareCharacteristicsToDisplay(result);
             }).finally(function() {
                 if (vm.characteristicGroups.length > 0) {

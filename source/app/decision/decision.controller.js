@@ -18,6 +18,7 @@
         vm.decisionId = $stateParams.id;
         vm.decisionsList = [];
         vm.decision = decisionBasicInfo || {};
+        
         vm.selectDecision = selectDecision;
 
         init();
@@ -65,7 +66,14 @@
             DecisionNotificationService.subscribeGetDetailedCharacteristics(function(event, data) {
                 data.detailsSpinner = true;
                 DecisionDataService.getdecisionCharacteristics(vm.decisionId, data.decisionId).then(function(result) {
-                    data.characteristics = result;
+                    var obj = {};
+                    _.forEach(result, function(item) {
+                        if(!obj[item.characteristicGroupId]) {
+                            obj[item.characteristicGroupId] = [];
+                        }
+                        obj[item.characteristicGroupId].push(item);
+                    });
+                    data.characteristics = obj;
                 }).finally(function() {
                     data.detailsSpinner = false;
                 });

@@ -15,14 +15,19 @@
                     <div class="col-md-12" ng-show="item.detailsSpinner">LOADING...</div>
                 </div>
                 <div ng-show="item.characteristics">
-                	<h4>Characteristics</h4>
-                	<div class="row" ng-repeat="characteristic in item.characteristics track by $index">
-                    <div class="col-md-6">{{characteristic.name}}:</div>
-                    <div class="col-md-6">
-                    	<span ng-show="characteristic.value">{{characteristic.value}}</span>
-                    	<span ng-show="!characteristic.value" class="not-set">Not set</span>
+                    <h4>Characteristics</h4>
+                    <div class="row" ng-repeat="(key, value) in item.characteristics track by key">
+                        <div class="col-md-12 chars-group-name">
+                            <label>{{vm.getGroupNameById(key)}}</label>
+                        </div>
+                        <div class="row" ng-repeat="characteristic in value track by $index">
+                            <div class="col-md-6">{{characteristic.name}}:</div>
+                            <div class="col-md-6">
+                                <span ng-show="characteristic.value">{{characteristic.value}}</span>
+                                <span ng-show="!characteristic.value" class="not-set">Not set</span>
+                            </div>
+                        </div>
                     </div>
-                </div>
                 </div>
             </div>
         </div>

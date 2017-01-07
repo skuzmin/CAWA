@@ -29,10 +29,11 @@
             index,
             content = {
                 decision: 'app/components/gridstackWrapper/decision-partial.html'
-            };
+            },
+            characteristicGroupNames = [];
 
         vm.gridStack = {};
-        vm.innerTemplate = content[vm.template]; 
+        vm.innerTemplate = content[vm.template];
         vm.options = {
             cellHeight: vm.cellHeight,
             verticalMargin: vm.verticalMargin,
@@ -46,17 +47,27 @@
         vm.$onChanges = onChanges;
         vm.goToDecision = goToDecision;
         vm.getDetails = getDetails;
+        vm.getGroupNameById = getGroupNameById;
+
+        init();
+
+        function getGroupNameById(id) {
+            var group = _.find(characteristicGroupNames, function(group) {
+                return group.characteristicGroupId.toString() === id;
+            });
+            return group ? group.name : 'Group';
+        }
 
         function getDetails(event, decision) {
             stopEvent(event);
-            if(!decision.characteristics) {
+            if (!decision.characteristics) {
                 DecisionNotificationService.notifyGetDetailedCharacteristics(decision);
             }
         }
 
         function goToDecision(event, decisionId) {
             stopEvent(event);
-            $state.go('decision', {id: decisionId});
+            $state.go('decision', { id: decisionId });
         }
 
         function stopEvent(event) {
@@ -66,23 +77,31 @@
 
         function selectDecision(d) {
             d.isSelected = !d.isSelected;
-            vm.callback({decision: d});
+            vm.callback({ decision: d });
         }
 
         function onChanges() {
-        	gridItems = $('.' + vm.element);
+            gridItems = $('.' + vm.element);
             _.forEach(gridItems, function(item) {
                 index = vm.updateList.findIndex(function(data) {
                     return data.decisionId === Number(item.getAttribute('id'));
                 });
-                if(index !== -1) {
+                if (index !== -1) {
                     vm.gridStack.move(item, 0, index);
                 }
             });
         }
 
-        $timeout(function() {
-            vm.gridStack.setAnimation(true);
-        }, 0);
+        function init() {
+            DecisionNotificationService.subscribeCharacteristicsGroups(function(event, data) {
+                characteristicGroupNames = data;
+            });
+
+            $timeout(function() {
+                vm.gridStack.setAnimation(true);
+            }, 0);
+        }
+
+
     }
 })();
