@@ -27,7 +27,7 @@
 				getCriteriaGroupsById: getCriteriaGroupsById,
 				getCharacteristictsGroupsById: getCharacteristictsGroupsById,
 				getDecisionInfo: getDecisionInfo,
-				getdecisionCharacteristics: getdecisionCharacteristics
+				getDecisionCharacteristics: getDecisionCharacteristics
 			};
 
 			return service;
@@ -48,7 +48,7 @@
 				return decisionInfo.get({id: id}).$promise;
 			}
 
-			function getdecisionCharacteristics(id, childId) {
+			function getDecisionCharacteristics(id, childId) {
 				return decisionCharacteristics.query({id: id, childId: childId}).$promise;
 			}
 		}

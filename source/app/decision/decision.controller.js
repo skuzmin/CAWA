@@ -11,14 +11,14 @@
     function DecisionController(decisionBasicInfo, DecisionDataService, $stateParams, $timeout, DecisionNotificationService) {
         var
             vm = this,
-            defaultDecisionCount = 5;
+            defaultDecisionCount = 10;
 
         console.log('Decision controller');
 
         vm.decisionId = $stateParams.id;
         vm.decisionsList = [];
         vm.decision = decisionBasicInfo || {};
-        
+
         vm.selectDecision = selectDecision;
 
         init();
@@ -34,12 +34,19 @@
                 if (result.length > 0) {
                     asyncLoading(result);
                 }
-            }, 0);
+            }, 300);
         }
 
-        DecisionNotificationService.subscribeSelectSorter(function(event, data) {
-            console.log(data);
-        });
+        function prepareDataToDisplay(characteristics) {
+            var modifiedCharacteristics = {};
+            _.forEach(characteristics, function(item) {
+                if (!modifiedCharacteristics[item.characteristicGroupId]) {
+                    modifiedCharacteristics[item.characteristicGroupId] = [];
+                }
+                modifiedCharacteristics[item.characteristicGroupId].push(item);
+            });
+            return modifiedCharacteristics;
+        }
 
         function init() {
             //Check if main decision
@@ -65,15 +72,8 @@
             });
             DecisionNotificationService.subscribeGetDetailedCharacteristics(function(event, data) {
                 data.detailsSpinner = true;
-                DecisionDataService.getdecisionCharacteristics(vm.decisionId, data.decisionId).then(function(result) {
-                    var obj = {};
-                    _.forEach(result, function(item) {
-                        if(!obj[item.characteristicGroupId]) {
-                            obj[item.characteristicGroupId] = [];
-                        }
-                        obj[item.characteristicGroupId].push(item);
-                    });
-                    data.characteristics = obj;
+                DecisionDataService.getDecisionCharacteristics(vm.decisionId, data.decisionId).then(function(result) {
+                    data.characteristics = prepareDataToDisplay(result);
                 }).finally(function() {
                     data.detailsSpinner = false;
                 });

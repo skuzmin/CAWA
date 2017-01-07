@@ -1,7 +1,7 @@
 <div gridstack gridstack-handler="vm.gridStack" class="grid-stack grid-stack-animate" options="vm.options">
     <div gridstack-item ng-repeat="item in vm.initList track by $index" class="grid-stack-item {{vm.element}}" gs-item-x="0" gs-item-y="item.position" id="{{item.decisionId}}" 
-         gs-item-width="12" gs-item-height="1" gs-item-autopos="1" ng-mousedown="vm.getDetails($event, item)">
-        <div class="grid-stack-item-content" ng-class="{'selected' : item.isSelected}" ng-click="vm.selectDecision(item)">
+         gs-item-width="12" gs-item-height="1" gs-item-autopos="1" >
+        <div class="grid-stack-item-content" ng-class="{'selected' : item.isSelected}" ng-mouseup="vm.selectDecision(item)" ng-mousedown="vm.getDetails($event, item)">
             <ng-include src="vm.innerTemplate"></ng-include>
         </div>
     </div>
