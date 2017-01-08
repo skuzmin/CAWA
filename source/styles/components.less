@@ -53,6 +53,7 @@
             -ms-transform: none;
             -o-transform: none;
             cursor: ns-resize;
+            right: 20px;
         }
         &:hover {
             .panel-drag-handler {
@@ -63,7 +64,7 @@
             cursor: move;
             z-index: 100;
             position: absolute;
-            right: 0;
+            left: 5px;
             top: 0;
             display: none;
             &:after {
@@ -77,8 +78,9 @@
                 width: 25px;
                 height: 25px;
                 top: 0;
-                right: 0;
+                left: 5px;
                 position: absolute;
+                text-align: center;
                 background: @bg-dark;
             }
         }

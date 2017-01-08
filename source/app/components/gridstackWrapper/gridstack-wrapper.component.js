@@ -43,7 +43,6 @@
         };
 
         vm.selectDecision = selectDecision;
-        vm.stopEvent = stopEvent;
         vm.$onChanges = onChanges;
         vm.goToDecision = goToDecision;
         vm.getDetails = getDetails;
@@ -58,21 +57,16 @@
             return group ? group.name : 'Group';
         }
 
-        function getDetails(event, decision) {
-            stopEvent(event);
-            if (!decision.characteristics) {
+        function getDetails(decision) {
+            if (!decision.characteristics && !decision.detailsSpinner) {
                 DecisionNotificationService.notifyGetDetailedCharacteristics(decision);
             }
         }
 
         function goToDecision(event, decisionId) {
-            stopEvent(event);
-            $state.go('decision', { id: decisionId });
-        }
-
-        function stopEvent(event) {
             event.stopPropagation();
             event.preventDefault();
+            $state.go('decision', { id: decisionId });
         }
 
         function selectDecision(currentDecision) {
