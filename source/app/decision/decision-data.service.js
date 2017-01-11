@@ -32,8 +32,8 @@
 
 			return service;
 
-			function searchDecision(id) {
-				return decisions.searchDecisionById({id: id}, {}).$promise;
+			function searchDecision(id, data) {
+				return decisions.searchDecisionById({id: id}, data).$promise;
 			}
 
 			function getCriteriaGroupsById(id) {

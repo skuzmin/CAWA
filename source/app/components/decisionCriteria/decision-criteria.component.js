@@ -17,18 +17,46 @@
     DecisionCriteriaController.$inject = ['$uibModal', 'DecisionDataService', 'DecisionNotificationService'];
 
     function DecisionCriteriaController($uibModal, DecisionDataService, DecisionNotificationService) {
-        var vm = this;
+        var
+            vm = this,
+            selectedCriteria = {
+                sortCriteriaIds: [],
+                sortCriteriaCoefficients: {}
+            };
 
         vm.criteriaGroups = [];
 
         vm.editCriteriaCoefficient = editCriteriaCoefficient;
-        vm.selectCriterion = selectCriterion; 
+        vm.selectCriterion = selectCriterion;
 
         init();
 
-        function selectCriterion(criterion) {
-            criterion.isSelected = !criterion.isSelected;
-            DecisionNotificationService.notifySelectCriterion(criterion);
+        function selectCriterion(criterion, coefCall) {
+            if(coefCall && !criterion.isSelected) {
+                return;
+            }
+            if(!coefCall) {
+                criterion.isSelected = !criterion.isSelected;
+            }
+            formDataForSearchRequest(criterion, coefCall);
+            DecisionDataService.searchDecision(vm.decisionId, selectedCriteria).then(function(result) {
+                DecisionNotificationService.notifySelectCriterion(result);
+            });
+        }
+
+
+        //TODO refactor
+        function formDataForSearchRequest(criterion, coefCall) {
+            var position = selectedCriteria.sortCriteriaIds.indexOf(criterion.criterionId);
+            if(position !== -1 && coefCall) {
+                selectedCriteria.sortCriteriaCoefficients[criterion.criterionId] = criterion.coefficient.value;
+            } else if (position === -1) {
+                selectedCriteria.sortCriteriaIds.push(criterion.criterionId);
+                selectedCriteria.sortCriteriaCoefficients[criterion.criterionId] = criterion.coefficient.value;
+            } else {
+                selectedCriteria.sortCriteriaIds.splice(position, 1);
+                delete selectedCriteria.sortCriteriaCoefficients[criterion.criterionId];
+            }
         }
 
         function editCriteriaCoefficient(event, criteria) {
@@ -50,6 +78,7 @@
                 var groupIndex = _.findIndex(vm.criteriaGroups, { criterionGroupId: result.criterionGroupId });
                 var criteriaIndex = _.findIndex(vm.criteriaGroups[groupIndex].criteria, { criterionId: result.criterionId });
                 vm.criteriaGroups[groupIndex].criteria[criteriaIndex] = result;
+                selectCriterion(result, true);
             });
         }
 

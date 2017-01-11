@@ -32,6 +32,7 @@
             },
             characteristicGroupNames = [];
 
+        vm.showPercentage = false;
         vm.gridStack = {};
         vm.innerTemplate = content[vm.template];
         vm.options = {
@@ -84,6 +85,7 @@
             vm.callback({ decision: currentDecision });
         }
 
+        //TODO refactor
         function onChanges() {
             gridItems = $('.' + vm.element);
             _.forEach(gridItems, function(item) {
@@ -94,6 +96,26 @@
                     vm.gridStack.move(item, 0, index);
                 }
             });
+            var newItem;
+            _.forEach(vm.initList, function(initItem) {
+                newItem = _.find(vm.updateList, function(updateItem) {
+                    return updateItem.decisionId === initItem.decisionId;
+                });
+                if (newItem, initItem) {
+                    setDecisionMatchPercent(newItem, initItem);
+                }
+            });
+        }
+
+        //TODO refactor
+        function setDecisionMatchPercent(newItem, initItem) {
+            var percent = parseFloat(newItem.criteriaCompliancePercentage);
+            if (_.isNaN(percent)) {
+                percent = 0;
+            } else if (!_.isInteger(percent)) {
+                percent = percent.toFixed(2);
+            }
+            initItem.criteriaCompliancePercentage = percent + '%';
         }
 
         function init() {

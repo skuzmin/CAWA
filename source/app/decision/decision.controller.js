@@ -17,6 +17,7 @@
 
         vm.decisionId = $stateParams.id;
         vm.decisionsList = [];
+        vm.updateDecisionList = [];
         vm.decision = decisionBasicInfo || {};
 
         vm.selectDecision = selectDecision;
@@ -55,7 +56,7 @@
             }
             //Get data for decision panel (main)
             vm.decisionsSpinner = true;
-            DecisionDataService.searchDecision(vm.decisionId).then(function(result) {
+            DecisionDataService.searchDecision(vm.decisionId, {}).then(function(result) {
                 asyncLoading(result);
             }).finally(function() {
                 vm.decisionsSpinner = false;
@@ -64,11 +65,11 @@
             DecisionNotificationService.subscribeSelectSorter(function(event, data) {
                 console.log(data);
             });
-            DecisionNotificationService.subscribeSelectCriterion(function(event, data) {
-                console.log(data);
-            });
             DecisionNotificationService.subscribeSelectCharacteristic(function(event, data) {
                 console.log(data);
+            });
+            DecisionNotificationService.subscribeSelectCriterion(function(event, data) {
+                vm.updateDecisionList = data;
             });
             DecisionNotificationService.subscribeGetDetailedCharacteristics(function(event, data) {
                 data.detailsSpinner = true;
