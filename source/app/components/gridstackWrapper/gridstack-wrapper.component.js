@@ -85,8 +85,8 @@
             vm.callback({ decision: currentDecision });
         }
 
-        //TODO refactor
         function onChanges() {
+            //Move elements(decisions) in main column (animation)
             gridItems = $('.' + vm.element);
             _.forEach(gridItems, function(item) {
                 index = vm.updateList.findIndex(function(data) {
@@ -96,18 +96,22 @@
                     vm.gridStack.move(item, 0, index);
                 }
             });
+            //Set decions percent(% criterion match)
             var newItem;
             _.forEach(vm.initList, function(initItem) {
                 newItem = _.find(vm.updateList, function(updateItem) {
                     return updateItem.decisionId === initItem.decisionId;
                 });
-                if (newItem, initItem) {
+                if (newItem) {
                     setDecisionMatchPercent(newItem, initItem);
                 }
             });
+            //Show percent
+            vm.showPercentage = _.find(vm.updateList, function(item) {
+                return item.criteriaCompliancePercentage !== null;
+            });
         }
 
-        //TODO refactor
         function setDecisionMatchPercent(newItem, initItem) {
             var percent = parseFloat(newItem.criteriaCompliancePercentage);
             if (_.isNaN(percent)) {

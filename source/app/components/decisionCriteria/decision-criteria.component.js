@@ -32,10 +32,10 @@
         init();
 
         function selectCriterion(criterion, coefCall) {
-            if(coefCall && !criterion.isSelected) {
+            if (coefCall && !criterion.isSelected) {
                 return;
             }
-            if(!coefCall) {
+            if (!coefCall) {
                 criterion.isSelected = !criterion.isSelected;
             }
             formDataForSearchRequest(criterion, coefCall);
@@ -44,14 +44,12 @@
             });
         }
 
-
-        //TODO refactor
         function formDataForSearchRequest(criterion, coefCall) {
             var position = selectedCriteria.sortCriteriaIds.indexOf(criterion.criterionId);
-            if(position !== -1 && coefCall) {
-                selectedCriteria.sortCriteriaCoefficients[criterion.criterionId] = criterion.coefficient.value;
-            } else if (position === -1) {
+            if (position === -1) {
                 selectedCriteria.sortCriteriaIds.push(criterion.criterionId);
+                selectedCriteria.sortCriteriaCoefficients[criterion.criterionId] = criterion.coefficient.value;
+            } else if (coefCall) {
                 selectedCriteria.sortCriteriaCoefficients[criterion.criterionId] = criterion.coefficient.value;
             } else {
                 selectedCriteria.sortCriteriaIds.splice(position, 1);

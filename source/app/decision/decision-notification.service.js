@@ -29,9 +29,10 @@
 
         //Basic
         function subscribe(event, callback) {
-            if (!listeners[event]) {
-                listeners[event] = $rootScope.$on(event, callback);
+            if (listeners[event]) {
+                listeners[event]();
             }
+            listeners[event] = $rootScope.$on(event, callback);
         }
 
         function broadcast(event, data) {
