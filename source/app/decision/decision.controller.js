@@ -3,15 +3,15 @@
     'user strict';
 
     angular
-        .module('app.decision')
-        .controller('DecisionController', DecisionController);
+    .module('app.decision')
+    .controller('DecisionController', DecisionController);
 
     DecisionController.$inject = ['decisionBasicInfo', 'DecisionDataService', '$stateParams', '$timeout', 'DecisionNotificationService'];
 
     function DecisionController(decisionBasicInfo, DecisionDataService, $stateParams, $timeout, DecisionNotificationService) {
         var
-            vm = this,
-            defaultDecisionCount = 10;
+        vm = this,
+        defaultDecisionCount = 10;
 
         console.log('Decision controller');
 
@@ -58,6 +58,7 @@
             vm.decisionsSpinner = true;
             DecisionDataService.searchDecision(vm.decisionId, {}).then(function(result) {
                 asyncLoading(result);
+                DecisionNotificationService.notifyInitSorter({ list: [{name:'Сreate Date'}, {name: 'Update Date'}, {name: 'Name'}], type: 'thirdLevelSort' });
             }).finally(function() {
                 vm.decisionsSpinner = false;
             });

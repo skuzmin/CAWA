@@ -11,7 +11,9 @@
             restrict: 'E',
             replace: 'true',
             templateUrl: 'app/components/decisionSorter/decision-sorter.html',
-            scope: {},
+            scope: {
+                sortType: '@'
+            },
             link: link
         };
 
@@ -19,7 +21,10 @@
 
         function link(scope, elem, attrs) {
             var sorterListener = scope.$on('initSorter', function(event, data) {
-                scope.sorters = data;
+                if(scope.sortType !== data.type) {
+                    return;
+                }
+                scope.sorters = data.list;
                 elem.ready(function() {
                     // default sorter value
                     //elem.children().first().addClass('selected');
