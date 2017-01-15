@@ -58,7 +58,8 @@
             vm.decisionsSpinner = true;
             DecisionDataService.searchDecision(vm.decisionId, {}).then(function(result) {
                 asyncLoading(result);
-                DecisionNotificationService.notifyInitSorter({ list: [{name:'Сreate Date'}, {name: 'Update Date'}, {name: 'Name'}], type: 'thirdLevelSort' });
+                DecisionNotificationService.notifyInitSorter({ list: [{name:'Weight'}], type: 'firstLevelSort' });
+                DecisionNotificationService.notifyInitSorter({ list: [{name:'Create Date'}, {name: 'Update Date'}, {name: 'Name'}], type: 'thirdLevelSort' });
             }).finally(function() {
                 vm.decisionsSpinner = false;
             });
