@@ -14,7 +14,7 @@
 
 				decisions = $resource(decisionUrl + '/decisions', {id: '@id'},
 				{
-					searchDecisionById: {method: 'POST', isArray: true} 
+					searchDecisionById: {method: 'POST', isArray: false} 
 				}),
 
 				decisionInfo = $resource(decisionUrl),

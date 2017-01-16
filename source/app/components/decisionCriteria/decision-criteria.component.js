@@ -40,7 +40,7 @@
             }
             formDataForSearchRequest(criterion, coefCall);
             DecisionDataService.searchDecision(vm.decisionId, selectedCriteria).then(function(result) {
-                DecisionNotificationService.notifySelectCriterion(result);
+                DecisionNotificationService.notifySelectCriterion(result.decisions);
             });
         }
 

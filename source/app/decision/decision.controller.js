@@ -57,7 +57,7 @@
             //Get data for decision panel (main)
             vm.decisionsSpinner = true;
             DecisionDataService.searchDecision(vm.decisionId, {}).then(function(result) {
-                asyncLoading(result);
+                asyncLoading(result.decisions);
                 DecisionNotificationService.notifyInitSorter({ list: [{name:'Weight'}], type: 'firstLevelSort' });
                 DecisionNotificationService.notifyInitSorter({ list: [{name:'Create Date'}, {name: 'Update Date'}, {name: 'Name'}], type: 'thirdLevelSort' });
             }).finally(function() {
