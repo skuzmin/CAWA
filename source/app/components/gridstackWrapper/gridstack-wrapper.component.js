@@ -96,6 +96,7 @@
                     vm.gridStack.move(item, 0, index);
                 }
             });
+            vm.initList = vm.updateList;
             //Set decions percent(% criterion match)
             var newItem;
             _.forEach(vm.initList, function(initItem) {

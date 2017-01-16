@@ -21,7 +21,9 @@
             vm = this,
             selectedCriteria = {
                 sortCriteriaIds: [],
-                sortCriteriaCoefficients: {}
+                sortCriteriaCoefficients: {},
+                pageNumber: 0, 
+                pageSize: 10
             };
 
         vm.criteriaGroups = [];

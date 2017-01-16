@@ -19,8 +19,10 @@
         vm.decisionsList = [];
         vm.updateDecisionList = [];
         vm.decision = decisionBasicInfo || {};
+        vm.totalDecisions = 0;
 
         vm.selectDecision = selectDecision;
+        vm.changePage = changePage;
 
         init();
 
@@ -35,7 +37,16 @@
                 if (result.length > 0) {
                     asyncLoading(result);
                 }
-            }, 300);
+            }, 0);
+        }
+
+        function changePage(page) {
+            DecisionDataService.searchDecision(vm.decisionId, {pageNumber: page - 1, pageSize: 10}).then(function(result) {
+                vm.decisionsList = result.decisions;
+                vm.totalDecisions = result.totalDecisions;
+            }).finally(function() {
+                vm.decisionsSpinner = false;
+            });
         }
 
         function prepareDataToDisplay(characteristics) {
@@ -56,8 +67,9 @@
             }
             //Get data for decision panel (main)
             vm.decisionsSpinner = true;
-            DecisionDataService.searchDecision(vm.decisionId, {}).then(function(result) {
+            DecisionDataService.searchDecision(vm.decisionId, {pageNumber: 0, pageSize: 10}).then(function(result) {
                 asyncLoading(result.decisions);
+                vm.totalDecisions = result.totalDecisions;
                 DecisionNotificationService.notifyInitSorter({ list: [{name:'Weight'}], type: 'firstLevelSort' });
                 DecisionNotificationService.notifyInitSorter({ list: [{name:'Create Date'}, {name: 'Update Date'}, {name: 'Name'}], type: 'thirdLevelSort' });
             }).finally(function() {
