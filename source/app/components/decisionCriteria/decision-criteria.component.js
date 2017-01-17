@@ -14,17 +14,10 @@
             controllerAs: 'vm'
         });
 
-    DecisionCriteriaController.$inject = ['$uibModal', 'DecisionDataService', 'DecisionNotificationService'];
+    DecisionCriteriaController.$inject = ['$uibModal', 'DecisionDataService', 'DecisionNotificationService', 'DecisionSharedService'];
 
-    function DecisionCriteriaController($uibModal, DecisionDataService, DecisionNotificationService) {
-        var
-            vm = this,
-            selectedCriteria = {
-                sortCriteriaIds: [],
-                sortCriteriaCoefficients: {},
-                pageNumber: 0, 
-                pageSize: 10
-            };
+    function DecisionCriteriaController($uibModal, DecisionDataService, DecisionNotificationService, DecisionSharedService) {
+        var vm = this;
 
         vm.criteriaGroups = [];
 
@@ -41,21 +34,21 @@
                 criterion.isSelected = !criterion.isSelected;
             }
             formDataForSearchRequest(criterion, coefCall);
-            DecisionDataService.searchDecision(vm.decisionId, selectedCriteria).then(function(result) {
+            DecisionDataService.searchDecision(vm.decisionId, DecisionSharedService.getFilterObject()).then(function(result) {
                 DecisionNotificationService.notifySelectCriterion(result.decisions);
             });
         }
 
         function formDataForSearchRequest(criterion, coefCall) {
-            var position = selectedCriteria.sortCriteriaIds.indexOf(criterion.criterionId);
+            var position = DecisionSharedService.filterObject.selectedCriteria.sortCriteriaIds.indexOf(criterion.criterionId);
             if (position === -1) {
-                selectedCriteria.sortCriteriaIds.push(criterion.criterionId);
-                selectedCriteria.sortCriteriaCoefficients[criterion.criterionId] = criterion.coefficient.value;
+                DecisionSharedService.filterObject.selectedCriteria.sortCriteriaIds.push(criterion.criterionId);
+                DecisionSharedService.filterObject.selectedCriteria.sortCriteriaCoefficients[criterion.criterionId] = criterion.coefficient.value;
             } else if (coefCall) {
-                selectedCriteria.sortCriteriaCoefficients[criterion.criterionId] = criterion.coefficient.value;
+                DecisionSharedService.filterObject.selectedCriteria.sortCriteriaCoefficients[criterion.criterionId] = criterion.coefficient.value;
             } else {
-                selectedCriteria.sortCriteriaIds.splice(position, 1);
-                delete selectedCriteria.sortCriteriaCoefficients[criterion.criterionId];
+                DecisionSharedService.filterObject.selectedCriteria.sortCriteriaIds.splice(position, 1);
+                delete DecisionSharedService.filterObject.selectedCriteria.sortCriteriaCoefficients[criterion.criterionId];
             }
         }
 

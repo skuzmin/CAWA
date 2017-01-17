@@ -13,9 +13,10 @@
     	dataType: "json",
         url: 'app.config'
     }).done(function(result) {
-    	angular.module('app').constant('Config', {
+    	angular.module('app.core').constant('Config', {
     		authUrl: result.authUrl,
-    		endpointUrl: result.endpointUrl
+    		endpointUrl: result.endpointUrl,
+            mode: result.mode
     	});
     }).always(function() {
         angular.element(function() {

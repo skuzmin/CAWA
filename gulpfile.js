@@ -15,7 +15,8 @@ var gulp = require('gulp'),
     templateCache = require('gulp-angular-templatecache'),
     argv = require('yargs').argv,
     del = require('del'),
-    inject = require('gulp-inject');
+    inject = require('gulp-inject'),
+    jeditor = require('gulp-json-editor');
 
 //=======config
 
@@ -90,6 +91,13 @@ gulp.task('fonts', function() {
 gulp.task('configFile', function() {
     log('Copying config file');
     return gulp.src(config.configFile)
+        .pipe(gulpIf(argv.prod, jeditor(function(json) {
+            json.mode = 'prod';
+            return json;
+        }), jeditor(function(json) {
+            json.mode = 'dev';
+            return json;         
+        })))
         .pipe(gulp.dest(config.release));
 });
 

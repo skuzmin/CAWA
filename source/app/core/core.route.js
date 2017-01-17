@@ -6,9 +6,9 @@
         .module('app.core')
         .config(configuration);
 
-    configuration.$inject = ['$stateProvider', '$urlRouterProvider'];
+    configuration.$inject = ['$stateProvider', '$urlRouterProvider', '$compileProvider', 'Config'];
 
-    function configuration($stateProvider, $urlRouterProvider) {
+    function configuration($stateProvider, $urlRouterProvider, $compileProvider, Config) {
 
         $stateProvider
             .state('404', {
@@ -17,6 +17,8 @@
             });
 
         $urlRouterProvider.otherwise('/404');
+
+        $compileProvider.debugInfoEnabled(Config.mode === 'dev');
     }
 
 })();

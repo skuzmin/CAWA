@@ -96,7 +96,6 @@
                     vm.gridStack.move(item, 0, index);
                 }
             });
-            vm.initList = vm.updateList;
             //Set decions percent(% criterion match)
             var newItem;
             _.forEach(vm.initList, function(initItem) {
@@ -111,6 +110,8 @@
             vm.showPercentage = _.find(vm.updateList, function(item) {
                 return item.criteriaCompliancePercentage !== null;
             });
+            //Add not existed decisions after moving(existing)
+            vm.initList = vm.updateList;
         }
 
         function setDecisionMatchPercent(newItem, initItem) {
@@ -128,6 +129,7 @@
                 characteristicGroupNames = data;
             });
 
+            //Activate animation when gridstack object created
             $timeout(function() {
                 vm.gridStack.setAnimation(true);
             }, 0);
