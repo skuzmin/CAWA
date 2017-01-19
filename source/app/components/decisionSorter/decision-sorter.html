@@ -1,5 +1,7 @@
 <ul class="decision-sorter">
-    <li ng-repeat="sorter in sorters track by $index" ng-click="selectSorter(sorter)">
+    <li ng-repeat="sorter in sorters track by $index" ng-click="selectSorter(sorter)" ng-class="{'selected': sorter.order}">
         <span>{{sorter.name}}</span>
+        <span ng-show="sorter.order === 'DESC'" class="glyphicon glyphicon-sort-by-attributes-alt" aria-hidden="true"></span>
+        <span ng-show="sorter.order === 'ASC'" class="glyphicon glyphicon-sort-by-attributes" aria-hidden="true"></span>
     </li>
 </ul>

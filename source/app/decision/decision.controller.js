@@ -70,8 +70,8 @@
             searchDecisions();
             //Init sorters, when directives loaded
             $timeout(function() {
-                DecisionNotificationService.notifyInitSorter({ list: [{ name: 'Weight' }], type: 'firstLevelSort' });
-                DecisionNotificationService.notifyInitSorter({ list: [{ name: 'Create Date' }, { name: 'Update Date' }, { name: 'Name' }], type: 'thirdLevelSort' });
+                DecisionNotificationService.notifyInitSorter({ list: [{ name: 'Weight', order: 'DESC', isSelected: true }], type: 'firstLevelSort', mode: 'twoStep' });
+                DecisionNotificationService.notifyInitSorter({ list: [{ name: 'Create Date' }, { name: 'Update Date' }, { name: 'Name' }], type: 'thirdLevelSort', mode: 'threeStep' });
             }, 0);
             //Subscribe to notification events
             DecisionNotificationService.subscribeSelectCriterion(function(event, data) {

@@ -55,7 +55,7 @@
                     }
                 });
             });
-            DecisionNotificationService.notifyInitSorter({list: vm.sorterList, type: 'secondLevelSort'});
+            DecisionNotificationService.notifyInitSorter({list: vm.sorterList, type: 'secondLevelSort', mode: 'threeStep'});
         }
 
         function init() {
