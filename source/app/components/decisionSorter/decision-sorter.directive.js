@@ -48,17 +48,17 @@
                 }
                 switch(scope.sortType) {
                     case 'sortCriteriaDirection':
-                        sortObj.sort.sortCriteriaDirection = order;
+                        sortObj.sort.sortCriteriaDirection = sorter.order;
                         sortObj.mode = scope.sortType;
                         break;
                     case 'sortCharacteristicDirection':
                         sortObj.sort.sortCharacteristicId = sorter.characteristicId;
-                        sortObj.sort.sortCharacteristicDirection = order;
+                        sortObj.sort.sortCharacteristicDirection = sorter.order;
                         sortObj.mode = scope.sortType;
                         break;
                     case 'sortDecisionPropertyDirection':
-                        sortObj.sort.sortDecisionPropertyDirection = sorter.id;
-                        sortObj.sort.sortDecisionPropertyDirection = order;
+                        sortObj.sort.sortDecisionPropertyName = sorter.id;
+                        sortObj.sort.sortDecisionPropertyDirection = sorter.order;
                         sortObj.mode = scope.sortType;
                         break;
                 }

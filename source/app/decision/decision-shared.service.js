@@ -35,7 +35,7 @@
 					sortCriteriaCoefficients: service.filterObject.selectedCriteria.sortCriteriaCoefficients,
 					pageNumber: service.filterObject.pagination.pageNumber - 1,
 					pageSize: service.filterObject.pagination.pageSize,
-					sortCriteriaDirection: service.filterObject.sorters.sortCriteriaDirection.sortCriteriaDirection,
+					sortCriteriaDirection: service.filterObject.sorters.sortCriteriaDirection.sortCriteriaDirection || null,
 					sortCharacteristicId: service.filterObject.sorters.sortCharacteristicDirection.sortCharacteristicId || null,
 					sortCharacteristicDirection: service.filterObject.sorters.sortCharacteristicDirection.sortCharacteristicDirection || null,
 					sortDecisionPropertyName: service.filterObject.sorters.sortDecisionPropertyDirection.sortDecisionPropertyName || null,
