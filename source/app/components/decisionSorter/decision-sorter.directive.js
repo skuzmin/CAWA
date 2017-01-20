@@ -32,19 +32,37 @@
             });
 
             scope.selectSorter = function(sorter) {
-                var order = sorter.order;
+                var 
+                    order = sorter.order,
+                    sortObj = {sort: {}, mode: ''};
+
                 _.forEach(scope.sorters, function(s) {
                     s.order = '';
                 });
                 if (order === 'DESC') {
-                    sorter.order = 'ASC'
+                    sorter.order = 'ASC';
                 } else if (order === 'ASC' && scope.mode === 'threeStep') {
                     sorter.order = '';
                 } else {
                     sorter.order = 'DESC';
                 }
-                sorter.isSelected = !sorter.isSelected;
-                scope.$emit('selectSorter', sorter);
+                switch(scope.sortType) {
+                    case 'sortCriteriaDirection':
+                        sortObj.sort.sortCriteriaDirection = order;
+                        sortObj.mode = scope.sortType;
+                        break;
+                    case 'sortCharacteristicDirection':
+                        sortObj.sort.sortCharacteristicId = sorter.characteristicId;
+                        sortObj.sort.sortCharacteristicDirection = order;
+                        sortObj.mode = scope.sortType;
+                        break;
+                    case 'sortDecisionPropertyDirection':
+                        sortObj.sort.sortDecisionPropertyDirection = sorter.id;
+                        sortObj.sort.sortDecisionPropertyDirection = order;
+                        sortObj.mode = scope.sortType;
+                        break;
+                }
+                scope.$emit('selectSorter', sortObj);
             };
 
         }

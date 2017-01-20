@@ -70,8 +70,8 @@
             searchDecisions();
             //Init sorters, when directives loaded
             $timeout(function() {
-                DecisionNotificationService.notifyInitSorter({ list: [{ name: 'Weight', order: 'DESC', isSelected: true }], type: 'firstLevelSort', mode: 'twoStep' });
-                DecisionNotificationService.notifyInitSorter({ list: [{ name: 'Create Date' }, { name: 'Update Date' }, { name: 'Name' }], type: 'thirdLevelSort', mode: 'threeStep' });
+                DecisionNotificationService.notifyInitSorter({ list: [{ name: 'Weight', order: 'DESC', isSelected: true }], type: 'sortCriteriaDirection', mode: 'twoStep' });
+                DecisionNotificationService.notifyInitSorter({ list: [{ name: 'Create Date', id: 'createDate' }, { name: 'Update Date', id: 'updateDate' }, { name: 'Name', id: 'name' }], type: 'sortDecisionPropertyDirection', mode: 'threeStep' });
             }, 0);
             //Subscribe to notification events
             DecisionNotificationService.subscribeSelectCriterion(function(event, data) {
@@ -89,10 +89,13 @@
                     data.detailsSpinner = false;
                 });
             });
-            // Not implemented yet
             DecisionNotificationService.subscribeSelectSorter(function(event, data) {
-                console.log(data);
+                vm.decisionsSpinner = true;
+                DecisionSharedService.filterObject.sorters[data.mode] = data.sort;
+                searchDecisions();
             });
+
+            // Not implemented yet
             DecisionNotificationService.subscribeSelectCharacteristic(function(event, data) {
                 console.log(data);
             });

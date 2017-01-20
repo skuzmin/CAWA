@@ -23,9 +23,9 @@
 				},
 				selectedCharacteristics: {},
 				sorters: {
-					fistLevel: {},
-					secondLevel: {},
-					thirdLevel: {}
+					sortCriteriaDirection: {},
+					sortCharacteristicDirection: {},
+					sortDecisionPropertyDirection: {}
 				}
 			};
 
@@ -34,7 +34,12 @@
 					sortCriteriaIds: service.filterObject.selectedCriteria.sortCriteriaIds,
 					sortCriteriaCoefficients: service.filterObject.selectedCriteria.sortCriteriaCoefficients,
 					pageNumber: service.filterObject.pagination.pageNumber - 1,
-					pageSize: service.filterObject.pagination.pageSize
+					pageSize: service.filterObject.pagination.pageSize,
+					sortCriteriaDirection: service.filterObject.sorters.sortCriteriaDirection.sortCriteriaDirection,
+					sortCharacteristicId: service.filterObject.sorters.sortCharacteristicDirection.sortCharacteristicId || null,
+					sortCharacteristicDirection: service.filterObject.sorters.sortCharacteristicDirection.sortCharacteristicDirection || null,
+					sortDecisionPropertyName: service.filterObject.sorters.sortDecisionPropertyDirection.sortDecisionPropertyName || null,
+					sortDecisionPropertyDirection: service.filterObject.sorters.sortDecisionPropertyDirection.sortDecisionPropertyDirection || null
 				};
 			};
 
