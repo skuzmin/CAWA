@@ -1,47 +1,57 @@
 (function() {
 
-	'use strict';
+    'use strict';
 
-	angular
-		.module('app.decision')
-		.service('DecisionSharedService', DecisionSharedService);
+    angular
+        .module('app.decision')
+        .service('DecisionSharedService', DecisionSharedService);
 
-		DecisionSharedService.$inject = [];
+    DecisionSharedService.$inject = [];
 
-		function DecisionSharedService() {
-			var service = this;
+    function DecisionSharedService() {
+        var service = this;
 
-			service.filterObject = {
-				selectedCriteria: {
-					sortCriteriaIds: [],
-                	sortCriteriaCoefficients: {}
-				},
-				pagination: {
-					pageNumber: 1, 
-                	pageSize: 10,
-                	totalDecisions: 0
-				},
-				selectedCharacteristics: {},
-				sorters: {
-					sortCriteriaDirection: {},
-					sortCharacteristicDirection: {},
-					sortDecisionPropertyDirection: {}
-				}
-			};
+        service.filterObject = {
+            selectedCriteria: {
+                sortCriteriaIds: [],
+                sortCriteriaCoefficients: {}
+            },
+            pagination: {
+                pageNumber: 1,
+                pageSize: 10,
+                totalDecisions: 0
+            },
+            selectedCharacteristics: {},
+            sorters: {
+                sortByCriteria: { order: 'DESC' },
+                sortByCharacteristic: { id: null, order: null },
+                sortByDecisionProperty: { id: null, order: null }
+            }
+        };
 
-			service.getFilterObject = function() {
-				return {
-					sortCriteriaIds: service.filterObject.selectedCriteria.sortCriteriaIds,
-					sortCriteriaCoefficients: service.filterObject.selectedCriteria.sortCriteriaCoefficients,
-					pageNumber: service.filterObject.pagination.pageNumber - 1,
-					pageSize: service.filterObject.pagination.pageSize,
-					sortCriteriaDirection: service.filterObject.sorters.sortCriteriaDirection.sortCriteriaDirection || null,
-					sortCharacteristicId: service.filterObject.sorters.sortCharacteristicDirection.sortCharacteristicId || null,
-					sortCharacteristicDirection: service.filterObject.sorters.sortCharacteristicDirection.sortCharacteristicDirection || null,
-					sortDecisionPropertyName: service.filterObject.sorters.sortDecisionPropertyDirection.sortDecisionPropertyName || null,
-					sortDecisionPropertyDirection: service.filterObject.sorters.sortDecisionPropertyDirection.sortDecisionPropertyDirection || null
-				};
-			};
+        //allias
+        var _fo = service.filterObject;
 
-		}
+        service.getFilterObject = function() {
+            return {
+                //selected criteria
+                sortCriteriaIds: _fo.selectedCriteria.sortCriteriaIds,
+                //selected criteria coefficients
+                sortCriteriaCoefficients: _fo.selectedCriteria.sortCriteriaCoefficients,
+                //pagination
+                pageNumber: _fo.pagination.pageNumber - 1,
+                pageSize: _fo.pagination.pageSize,
+                //sorting by:
+                //criteria weight (1st level)
+                sortCriteriaDirection: _fo.sorters.sortByCriteria.order,
+                //characteristic (2nd level)
+                sortCharacteristicId: _fo.sorters.sortByCharacteristic.id,
+                sortCharacteristicDirection: _fo.sorters.sortByCharacteristic.order,
+                //property (3rd level)
+                sortDecisionPropertyName: _fo.sorters.sortByDecisionProperty.id,
+                sortDecisionPropertyDirection: _fo.sorters.sortByDecisionProperty.order
+            };
+        };
+
+    }
 })();

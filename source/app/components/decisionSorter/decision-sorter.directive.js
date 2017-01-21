@@ -20,25 +20,28 @@
         return directive;
 
         function link(scope, elem, attrs) {
-            var sorterListener = scope.$on('initSorter', function(event, data) {
-                if (scope.sortType !== data.type) {
-                    return;
-                }
-                scope.mode = data.mode;
-                scope.sorters = data.list;
-                scope.$on('$destroy', function() {
-                    sorterListener();
-                });
-            });
+            //subscribe on init sorter event
+            var
+                sorterListener = scope.$on('initSorter', function(event, data) {
+                    if (scope.sortType === data.type) {
+                        scope.mode = data.mode;
+                        scope.sorters = data.list;
+                    }
+                    scope.$on('$destroy', function() {
+                        sorterListener();
+                    });
+                }),
+                order,
+                sortObj;
 
             scope.selectSorter = function(sorter) {
-                var 
-                    order = sorter.order,
-                    sortObj = {sort: {}, mode: ''};
-
+                //clear all sorting orders
+                order = sorter.order;
+                sortObj = { sort: {}, mode: '' };
                 _.forEach(scope.sorters, function(s) {
                     s.order = '';
                 });
+                //set correct sort order for sorter button
                 if (order === 'DESC') {
                     sorter.order = 'ASC';
                 } else if (order === 'ASC' && scope.mode === 'threeStep') {
@@ -46,22 +49,11 @@
                 } else {
                     sorter.order = 'DESC';
                 }
-                switch(scope.sortType) {
-                    case 'sortCriteriaDirection':
-                        sortObj.sort.sortCriteriaDirection = sorter.order;
-                        sortObj.mode = scope.sortType;
-                        break;
-                    case 'sortCharacteristicDirection':
-                        sortObj.sort.sortCharacteristicId = sorter.characteristicId;
-                        sortObj.sort.sortCharacteristicDirection = sorter.order;
-                        sortObj.mode = scope.sortType;
-                        break;
-                    case 'sortDecisionPropertyDirection':
-                        sortObj.sort.sortDecisionPropertyName = sorter.id;
-                        sortObj.sort.sortDecisionPropertyDirection = sorter.order;
-                        sortObj.mode = scope.sortType;
-                        break;
-                }
+                //set sortObj data for sorting request
+                sortObj.sort.id = sorter.characteristicId || sorter.propertyId;
+                sortObj.sort.order = sorter.order;
+                sortObj.mode = scope.sortType;
+                
                 scope.$emit('selectSorter', sortObj);
             };
 

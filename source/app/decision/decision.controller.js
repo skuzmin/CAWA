@@ -65,14 +65,29 @@
             if (!_.isEmpty(vm.decision.parentDecisionIds)) {
                 vm.parentDecisions = vm.decision.parentDecisionIds;
             }
+
             //Get data for decision panel (main)
             vm.decisionsSpinner = true;
             searchDecisions();
+
             //Init sorters, when directives loaded
             $timeout(function() {
-                DecisionNotificationService.notifyInitSorter({ list: [{ name: 'Weight', order: 'DESC', isSelected: true }], type: 'sortCriteriaDirection', mode: 'twoStep' });
-                DecisionNotificationService.notifyInitSorter({ list: [{ name: 'Create Date', id: 'createDate' }, { name: 'Update Date', id: 'updateDate' }, { name: 'Name', id: 'name' }], type: 'sortDecisionPropertyDirection', mode: 'threeStep' });
+                DecisionNotificationService.notifyInitSorter({
+                    list: [{ name: 'Weight', order: 'DESC', isSelected: true }],
+                    type: 'sortByCriteria',
+                    mode: 'twoStep'
+                });
+                DecisionNotificationService.notifyInitSorter({
+                    list: [
+                        { name: 'Create Date', propertyId: 'createDate' },
+                        { name: 'Update Date', propertyId: 'updateDate' },
+                        { name: 'Name', propertyId: 'name' }
+                    ],
+                    type: 'sortByDecisionProperty',
+                    mode: 'threeStep'
+                });
             }, 0);
+
             //Subscribe to notification events
             DecisionNotificationService.subscribeSelectCriterion(function(event, data) {
                 vm.updateDecisionList = data;

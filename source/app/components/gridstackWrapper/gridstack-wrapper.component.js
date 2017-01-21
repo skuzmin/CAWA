@@ -111,6 +111,7 @@
                 return item.criteriaCompliancePercentage !== null;
             });
             //Add not existed decisions after moving(existing)
+            //TODO fix overlap ( move existing and add new)
             vm.initList = vm.updateList;
         }
 

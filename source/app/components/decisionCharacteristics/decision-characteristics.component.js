@@ -1,4 +1,4 @@
-(function () {
+(function() {
 
     'use strict';
 
@@ -45,8 +45,8 @@
 
         function prepareCharacteristicsToDisplay(data) {
             vm.characteristicGroups = data;
-            _.forEach(vm.characteristicGroups, function (group) {
-                _.forEachRight(group.characteristics, function (characteristic, index) {
+            _.forEach(vm.characteristicGroups, function(group) {
+                _.forEachRight(group.characteristics, function(characteristic, index) {
                     if (characteristic.sortable) {
                         vm.sorterList.push(characteristic);
                     }
@@ -55,14 +55,18 @@
                     }
                 });
             });
-            DecisionNotificationService.notifyInitSorter({list: vm.sorterList, type: 'sortCharacteristicDirection', mode: 'threeStep'});
+            DecisionNotificationService.notifyInitSorter({
+                list: vm.sorterList,
+                type: 'sortByCharacteristic',
+                mode: 'threeStep'
+            });
         }
 
         function init() {
             vm.characteristicSpinner = true;
-            DecisionDataService.getCharacteristictsGroupsById(vm.decisionId).then(function (result) {
+            DecisionDataService.getCharacteristictsGroupsById(vm.decisionId).then(function(result) {
                 var temp;
-                var characteristicGroupNames = _.map(result, function (group) {
+                var characteristicGroupNames = _.map(result, function(group) {
                     return {
                         characteristicGroupId: group.characteristicGroupId,
                         name: group.name
@@ -70,7 +74,7 @@
                 });
                 DecisionNotificationService.notifyCharacteristicsGroups(characteristicGroupNames);
                 prepareCharacteristicsToDisplay(result);
-            }).finally(function () {
+            }).finally(function() {
                 if (vm.characteristicGroups.length > 0) {
                     vm.characteristicGroups[0].isOpen = true;
                 }
