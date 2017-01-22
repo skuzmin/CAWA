@@ -14,10 +14,12 @@
             controllerAs: 'vm'
         });
 
-    DecisionCriteriaController.$inject = ['$uibModal', 'DecisionDataService', 'DecisionNotificationService', 'DecisionSharedService'];
+    DecisionCriteriaController.$inject = ['$uibModal', 'DecisionDataService', 'DecisionNotificationService', 'DecisionSharedService', 'DecisionCriteriaConstant'];
 
-    function DecisionCriteriaController($uibModal, DecisionDataService, DecisionNotificationService, DecisionSharedService) {
-        var vm = this;
+    function DecisionCriteriaController($uibModal, DecisionDataService, DecisionNotificationService, DecisionSharedService, DecisionCriteriaConstant) {
+        var
+            vm = this,
+            _fo = DecisionSharedService.filterObject.selectedCriteria;
 
         vm.criteriaGroups = [];
 
@@ -40,15 +42,21 @@
         }
 
         function formDataForSearchRequest(criterion, coefCall) {
-            var position = DecisionSharedService.filterObject.selectedCriteria.sortCriteriaIds.indexOf(criterion.criterionId);
+            var position = _fo.sortCriteriaIds.indexOf(criterion.criterionId);
+            //select criterion
             if (position === -1) {
-                DecisionSharedService.filterObject.selectedCriteria.sortCriteriaIds.push(criterion.criterionId);
-                DecisionSharedService.filterObject.selectedCriteria.sortCriteriaCoefficients[criterion.criterionId] = criterion.coefficient.value;
-            } else if (coefCall) {
-                DecisionSharedService.filterObject.selectedCriteria.sortCriteriaCoefficients[criterion.criterionId] = criterion.coefficient.value;
+                _fo.sortCriteriaIds.push(criterion.criterionId);
+                //don't add default coefficient
+                if (criterion.coefficient.value !== DecisionCriteriaConstant.coefficientDefault.value) {
+                    _fo.sortCriteriaCoefficients[criterion.criterionId] = criterion.coefficient.value;
+                }
+            //add only coefficient (but not default)
+            } else if (coefCall && criterion.coefficient.value !== DecisionCriteriaConstant.coefficientDefault.value) {
+                _fo.sortCriteriaCoefficients[criterion.criterionId] = criterion.coefficient.value;
+            //unselect criterion
             } else {
-                DecisionSharedService.filterObject.selectedCriteria.sortCriteriaIds.splice(position, 1);
-                delete DecisionSharedService.filterObject.selectedCriteria.sortCriteriaCoefficients[criterion.criterionId];
+                _fo.sortCriteriaIds.splice(position, 1);
+                delete _fo.sortCriteriaCoefficients[criterion.criterionId];
             }
         }
 

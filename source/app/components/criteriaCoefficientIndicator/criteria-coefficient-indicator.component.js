@@ -25,12 +25,7 @@
         init();
 
         function setCoefficientIndicator(coefficient) {
-            if(!coefficient.value) {
-                _.forEach(vm.coefficientList, function(c) { 
-                    c.class = coefficient.name.toLowerCase();
-                });
-                return;
-            }
+            // set color of indicator
             _.forEach(vm.coefficientList, function(c) {
                 c.class = '';
                 if(c.value <= coefficient.value) {
