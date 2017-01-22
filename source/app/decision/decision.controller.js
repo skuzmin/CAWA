@@ -11,6 +11,7 @@
     function DecisionController(decisionBasicInfo, DecisionDataService, $stateParams, $timeout, DecisionNotificationService, DecisionSharedService) {
         var
             vm = this,
+            isInitedSorters = false,
             defaultDecisionCount = 10;
 
         console.log('Decision controller');
@@ -51,27 +52,34 @@
         }
 
         function searchDecisions() {
-            DecisionDataService.searchDecision(vm.decisionId, DecisionSharedService.getFilterObject()).then(function(result) {
+            return DecisionDataService.searchDecision(vm.decisionId, DecisionSharedService.getFilterObject()).then(function(result) {
                 vm.decisionsList.length = 0;
+                setDecisionMatchPercent(result.decisions);
                 asyncLoading(result.decisions);
+                initSorters();
                 DecisionSharedService.filterObject.pagination.totalDecisions = result.totalDecisions;
             }).finally(function() {
                 vm.decisionsSpinner = false;
             });
         }
 
-        function init() {
-            //Check if main decision
-            if (!_.isEmpty(vm.decision.parentDecisionIds)) {
-                vm.parentDecisions = vm.decision.parentDecisionIds;
-            }
+        //Set decions percent(% criterion match)
+        function setDecisionMatchPercent(list) {
+            var percent;
+            _.forEach(list, function(initItem) {
+                percent = parseFloat(initItem.criteriaCompliancePercentage);
+                if (_.isNaN(percent)) {
+                    percent = 0;
+                } else if (!_.isInteger(percent)) {
+                    percent = percent.toFixed(2);
+                }
+                initItem.criteriaCompliancePercentage = percent + '%';
+            });
+        }
 
-            //Get data for decision panel (main)
-            vm.decisionsSpinner = true;
-            searchDecisions();
-
-            //Init sorters, when directives loaded
-            $timeout(function() {
+        //Init sorters, when directives loaded
+        function initSorters() {
+            if (!isInitedSorters) {
                 DecisionNotificationService.notifyInitSorter({
                     list: [{ name: 'Weight', order: 'DESC', isSelected: true }],
                     type: 'sortByCriteria',
@@ -86,10 +94,23 @@
                     type: 'sortByDecisionProperty',
                     mode: 'threeStep'
                 });
-            }, 0);
+                isInitedSorters = true;
+            }
+        }
+
+        function init() {
+            //Check if main decision
+            if (!_.isEmpty(vm.decision.parentDecisionIds)) {
+                vm.parentDecisions = vm.decision.parentDecisionIds;
+            }
+
+            //Get data for decision panel (main)
+            vm.decisionsSpinner = true;
+            searchDecisions();
 
             //Subscribe to notification events
             DecisionNotificationService.subscribeSelectCriterion(function(event, data) {
+                setDecisionMatchPercent(data);
                 vm.updateDecisionList = data;
             });
             DecisionNotificationService.subscribePageChanged(function() {

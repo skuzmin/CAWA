@@ -45,7 +45,6 @@
 
         vm.selectDecision = selectDecision;
         vm.$onChanges = onChanges;
-        vm.$doCheck = doCheck;
         vm.goToDecision = goToDecision;
         vm.getDetails = getDetails;
         vm.getGroupNameById = getGroupNameById;
@@ -86,10 +85,6 @@
             vm.callback({ decision: currentDecision });
         }
 
-        function doCheck() {
-            setDecisionMatchPercent();
-        }
-
         function onChanges() {
             //Move elements(decisions) in main column (animation)
             gridItems = $('.' + vm.element);
@@ -103,36 +98,19 @@
             });
             //Add not existed decisions after moving(existing)
             vm.initList = vm.updateList;
-            //Set decions percent(% criterion match)
-            setDecisionMatchPercent();
+
             //Show percent
             vm.showPercentage = DecisionSharedService.filterObject.selectedCriteria.sortCriteriaIds.length > 0;
-        }
-
-        function setDecisionMatchPercent() {
-            var percent;
-            _.forEach(vm.initList, function(initItem) {
-                percent = parseFloat(initItem.criteriaCompliancePercentage);
-                if (_.isNaN(percent)) {
-                    percent = 0;
-                } else if (!_.isInteger(percent)) {
-                    percent = percent.toFixed(2);
-                }
-                initItem.criteriaCompliancePercentage = percent + '%';
-            });
         }
 
         function init() {
             DecisionNotificationService.subscribeCharacteristicsGroups(function(event, data) {
                 characteristicGroupNames = data;
             });
-            setDecisionMatchPercent();
             //Activate animation when gridstack object created
             $timeout(function() {
                 vm.gridStack.setAnimation(true);
             }, 0);
         }
-
-
     }
 })();
