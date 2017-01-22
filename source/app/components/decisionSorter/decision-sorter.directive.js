@@ -37,7 +37,10 @@
             scope.selectSorter = function(sorter) {
                 //clear all sorting orders
                 order = sorter.order;
-                sortObj = { sort: {}, mode: '' };
+                sortObj = { 
+                    sort: {id: null, order: null}, 
+                    mode: '' 
+                };
                 _.forEach(scope.sorters, function(s) {
                     s.order = '';
                 });
@@ -45,13 +48,15 @@
                 if (order === 'DESC') {
                     sorter.order = 'ASC';
                 } else if (order === 'ASC' && scope.mode === 'threeStep') {
-                    sorter.order = '';
+                    sorter.order = null;
                 } else {
                     sorter.order = 'DESC';
                 }
                 //set sortObj data for sorting request
-                sortObj.sort.id = sorter.characteristicId || sorter.propertyId;
-                sortObj.sort.order = sorter.order;
+                if(sorter.order) {
+                    sortObj.sort.id = sorter.characteristicId || sorter.propertyId;
+                    sortObj.sort.order = sorter.order;
+                }
                 sortObj.mode = scope.sortType;
                 
                 scope.$emit('selectSorter', sortObj);

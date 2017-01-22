@@ -20,9 +20,9 @@
             controllerAs: 'vm'
         });
 
-    GridstackMovementController.$inject = ['$timeout', '$state', 'DecisionNotificationService'];
+    GridstackMovementController.$inject = ['$timeout', '$state', 'DecisionNotificationService', 'DecisionSharedService'];
 
-    function GridstackMovementController($timeout, $state, DecisionNotificationService) {
+    function GridstackMovementController($timeout, $state, DecisionNotificationService, DecisionSharedService) {
         var
             vm = this,
             gridItems = [],
@@ -45,6 +45,7 @@
 
         vm.selectDecision = selectDecision;
         vm.$onChanges = onChanges;
+        vm.$doCheck = doCheck;
         vm.goToDecision = goToDecision;
         vm.getDetails = getDetails;
         vm.getGroupNameById = getGroupNameById;
@@ -85,6 +86,10 @@
             vm.callback({ decision: currentDecision });
         }
 
+        function doCheck() {
+            setDecisionMatchPercent();
+        }
+
         function onChanges() {
             //Move elements(decisions) in main column (animation)
             gridItems = $('.' + vm.element);
@@ -96,40 +101,32 @@
                     vm.gridStack.move(item, 0, index);
                 }
             });
-            //Set decions percent(% criterion match)
-            var newItem;
-            _.forEach(vm.initList, function(initItem) {
-                newItem = _.find(vm.updateList, function(updateItem) {
-                    return updateItem.decisionId === initItem.decisionId;
-                });
-                if (newItem) {
-                    setDecisionMatchPercent(newItem, initItem);
-                }
-            });
-            //Show percent
-            vm.showPercentage = _.find(vm.updateList, function(item) {
-                return item.criteriaCompliancePercentage !== null;
-            });
             //Add not existed decisions after moving(existing)
-            //TODO fix overlap ( move existing and add new)
             vm.initList = vm.updateList;
+            //Set decions percent(% criterion match)
+            setDecisionMatchPercent();
+            //Show percent
+            vm.showPercentage = DecisionSharedService.filterObject.selectedCriteria.sortCriteriaIds.length > 0;
         }
 
-        function setDecisionMatchPercent(newItem, initItem) {
-            var percent = parseFloat(newItem.criteriaCompliancePercentage);
-            if (_.isNaN(percent)) {
-                percent = 0;
-            } else if (!_.isInteger(percent)) {
-                percent = percent.toFixed(2);
-            }
-            initItem.criteriaCompliancePercentage = percent + '%';
+        function setDecisionMatchPercent() {
+            var percent;
+            _.forEach(vm.initList, function(initItem) {
+                percent = parseFloat(initItem.criteriaCompliancePercentage);
+                if (_.isNaN(percent)) {
+                    percent = 0;
+                } else if (!_.isInteger(percent)) {
+                    percent = percent.toFixed(2);
+                }
+                initItem.criteriaCompliancePercentage = percent + '%';
+            });
         }
 
         function init() {
             DecisionNotificationService.subscribeCharacteristicsGroups(function(event, data) {
                 characteristicGroupNames = data;
             });
-
+            setDecisionMatchPercent();
             //Activate animation when gridstack object created
             $timeout(function() {
                 vm.gridStack.setAnimation(true);
