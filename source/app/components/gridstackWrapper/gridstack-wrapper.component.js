@@ -8,8 +8,7 @@
         .component('gridstackWrapper', {
             templateUrl: 'app/components/gridstackWrapper/gridstack-wrapper.html',
             bindings: {
-                initList: '=',
-                updateList: '<',
+                list: '<',
                 element: '@',
                 cellHeight: '=',
                 verticalMargin: '=',
@@ -32,6 +31,7 @@
             },
             characteristicGroupNames = [];
 
+        vm.displayList = [];
         vm.showPercentage = false;
         vm.gridStack = {};
         vm.innerTemplate = content[vm.template];
@@ -86,18 +86,48 @@
         }
 
         function onChanges() {
-            //Move elements(decisions) in main column (animation)
             gridItems = $('.' + vm.element);
-            _.forEach(gridItems, function(item) {
-                index = vm.updateList.findIndex(function(data) {
-                    return data.decisionId === Number(item.getAttribute('id'));
+            var plank, elIndex;
+            if(vm.displayList.length === 0) {
+                vm.displayList = angular.copy(vm.list);
+            } else {
+                _.forEach(vm.list, function(newItem, index) {
+                    plank = _.find(gridItems, function(item) {
+                        return newItem.decisionId === Number(item.getAttribute('id'));
+                    });
+
+                    if (plank) {
+                        vm.gridStack.move(plank, 0, index);
+                        newItem.reInit = true;
+                        newItem.position = index;
+                    }
                 });
-                if (index !== -1) {
-                    vm.gridStack.move(item, 0, index);
-                }
-            });
-            //Add not existed decisions after moving(existing)
-            vm.initList = vm.updateList;
+                $timeout(function() {
+                    _.forEach(vm.list, function(newItem, i) {
+                        if (!newItem.reInit) {
+                            elIndex = _.findIndex(vm.displayList, function(item) {
+                                return item.position === i;
+                            });
+                            newItem.position = i;
+                            vm.displayList[elIndex] = newItem;
+                        }
+                    });    
+                }, 0);
+                
+            }
+
+            // //Move elements(decisions) in main column (animation)
+            // gridItems = $('.' + vm.element);
+            // _.forEach(gridItems, function(item) {
+            //     index = vm.updateList.findIndex(function(data) {
+            //         return data.decisionId === Number(item.getAttribute('id'));
+            //     });
+            //     if (index !== -1) {
+            //         vm.gridStack.move(item, 0, index);
+            //     }
+            // });
+            // //Add not existed decisions after moving(existing)
+            // vm.initList = vm.updateList;
 
             //Show percent
             vm.showPercentage = DecisionSharedService.filterObject.selectedCriteria.sortCriteriaIds.length > 0;
