@@ -85,9 +85,19 @@
             vm.callback({ decision: currentDecision });
         }
 
+        //TEST
+        vm.move = function(index) {
+            gridItems = $('.' + vm.element);
+            var element = _.find(gridItems, function(item) {
+                return Number(item.getAttribute('id')) === 2124;
+            });
+            vm.gridStack.move(element, 0, index);
+        }
+
+        //REFACTOR THIS SH1T
         function onChanges() {
             gridItems = $('.' + vm.element);
-            var plank, elIndex;
+            var plank, elIndex, prevPosition;
             if(vm.displayList.length === 0) {
                 vm.displayList = angular.copy(vm.list);
             } else {
@@ -97,37 +107,25 @@
                     });
 
                     if (plank) {
+                        prevPosition = _.find(vm.displayList, function(prevItem) {
+                            return prevItem.decisionId === newItem.decisionId;
+                        }).position;
+                        if(prevPosition < index) { index++; }
                         vm.gridStack.move(plank, 0, index);
-                        newItem.reInit = true;
                         newItem.position = index;
                     }
                 });
                 $timeout(function() {
                     _.forEach(vm.list, function(newItem, i) {
-                        if (!newItem.reInit) {
-                            elIndex = _.findIndex(vm.displayList, function(item) {
-                                return item.position === i;
-                            });
-                            newItem.position = i;
-                            vm.displayList[elIndex] = newItem;
-                        }
+                        elIndex = _.findIndex(vm.displayList, function(item) {
+                            return item.position === i;
+                        });
+                        newItem.position = i;
+                        vm.displayList[elIndex] = newItem;
                     });    
                 }, 0);
                 
             }
-
-            // //Move elements(decisions) in main column (animation)
-            // gridItems = $('.' + vm.element);
-            // _.forEach(gridItems, function(item) {
-            //     index = vm.updateList.findIndex(function(data) {
-            //         return data.decisionId === Number(item.getAttribute('id'));
-            //     });
-            //     if (index !== -1) {
-            //         vm.gridStack.move(item, 0, index);
-            //     }
-            // });
-            // //Add not existed decisions after moving(existing)
-            // vm.initList = vm.updateList;
 
             //Show percent
             vm.showPercentage = DecisionSharedService.filterObject.selectedCriteria.sortCriteriaIds.length > 0;
