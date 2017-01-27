@@ -85,15 +85,6 @@
             vm.callback({ decision: currentDecision });
         }
 
-        //TEST
-        vm.move = function(index) {
-            gridItems = $('.' + vm.element);
-            var element = _.find(gridItems, function(item) {
-                return Number(item.getAttribute('id')) === 2124;
-            });
-            vm.gridStack.move(element, 0, index);
-        }
-
         //REFACTOR THIS SH1T
         function onChanges() {
             gridItems = $('.' + vm.element);

@@ -1,5 +1,3 @@
-<div><input type="number" ng-model="vm.test"/><button ng-click="vm.move(vm.test)">MOVE</button></div>
-
 <div gridstack gridstack-handler="vm.gridStack" class="grid-stack grid-stack-animate" options="vm.options">
     <div gridstack-item ng-repeat="item in vm.displayList track by $index" class="grid-stack-item {{vm.element}}" gs-item-x="0" gs-item-y="item.position" id="{{item.decisionId}}" gs-item-width="12" gs-item-height="1" gs-item-autopos="1" ng-mouseover="vm.getDetails(item)">
         <div class="panel-drag-handler"></div>
