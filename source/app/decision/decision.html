@@ -52,7 +52,8 @@
                 </div>
             </div>
             <div class="scroll-wrapper">
-                <h1 ng-show="vm.decisionsSpinner">LOADING...</h1>
+                <!--TODO: TEMP fix for future spinner -->
+                <h1 ng-show="vm.decisionsSpinner" style="position: absolute; right: 0;">LOADING...</h1>
                 <app-paginator></app-paginator>
                 <gridstack-wrapper list="vm.decisionsList" element="decision-item" cell-height="100" vertical-margin="10" grid-class="custom-grid" template="decision" callback="vm.selectDecision(decision)">
                 </gridstack-wrapper>
