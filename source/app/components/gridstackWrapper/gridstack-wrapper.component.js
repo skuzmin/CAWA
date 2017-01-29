@@ -92,6 +92,10 @@
             //init list if it's empty or if changed page size 
             if (vm.displayList.length === 0 || vm.displayList.length !== vm.list.length) {
                 vm.displayList = angular.copy(vm.list);
+                //init start positions for new items (position === index)
+                _.forEach(vm.displayList, function(item, i) {
+                    item.position = i;
+                });
             } else {
                 _.forEach(vm.list, function(newItem, index) {
                     //finding element(plank) in decision list
@@ -106,7 +110,7 @@
                             return prevItem.decisionId === newItem.decisionId;
                         });
                         if (oldItem.position < index) { index++; }
-                        if (oldItem.characteristics) { newItem.characteristics = oldItem.characteristics }
+                        if (oldItem.characteristics) { newItem.characteristics = oldItem.characteristics; }
                         if (plankHeight > 1) { planSizeMap[newItem.decisionId] = plankHeight; }
                         //resize to default size
                         vm.gridStack.resize(plank, 12, 1);
