@@ -85,27 +85,37 @@
             vm.callback({ decision: currentDecision });
         }
 
-        //REFACTOR THIS SH1T
         function onChanges() {
             gridItems = $('.' + vm.element);
-            var plank, elIndex, prevPosition;
-            if(vm.displayList.length === 0) {
+            var
+                plank, elIndex, oldItem, plankHeight, planSizeMap = {};
+            //init list if it's empty or if changed page size 
+            if (vm.displayList.length === 0 || vm.displayList.length !== vm.list.length) {
                 vm.displayList = angular.copy(vm.list);
             } else {
                 _.forEach(vm.list, function(newItem, index) {
+                    //finding element(plank) in decision list
                     plank = _.find(gridItems, function(item) {
                         return newItem.decisionId === Number(item.getAttribute('id'));
                     });
-
+                    //if element already exist
                     if (plank) {
-                        prevPosition = _.find(vm.displayList, function(prevItem) {
+                        plankHeight = Number(plank.getAttribute('data-gs-height'));
+                        //fix for gridstack movement bug
+                        oldItem = _.find(vm.displayList, function(prevItem) {
                             return prevItem.decisionId === newItem.decisionId;
-                        }).position;
-                        if(prevPosition < index) { index++; }
+                        });
+                        if (oldItem.position < index) { index++; }
+                        if (oldItem.characteristics) { newItem.characteristics = oldItem.characteristics }
+                        if (plankHeight > 1) { planSizeMap[newItem.decisionId] = plankHeight; }
+                        //resize to default size
+                        vm.gridStack.resize(plank, 12, 1);
+                        //move element to the correct position and set correct position number
                         vm.gridStack.move(plank, 0, index);
                         newItem.position = index;
                     }
                 });
+                //set data for new items, when movement animation ended
                 $timeout(function() {
                     _.forEach(vm.list, function(newItem, i) {
                         elIndex = _.findIndex(vm.displayList, function(item) {
@@ -113,9 +123,16 @@
                         });
                         newItem.position = i;
                         vm.displayList[elIndex] = newItem;
-                    });    
+                    });
+                    //restore size of correct plank
+                    _.forIn(planSizeMap, function(value, key) {
+                        plank = _.find(gridItems, function(item) {
+                            return key === item.getAttribute('id');
+                        });
+                        vm.gridStack.resize(plank, 12, value);
+                    });
                 }, 0);
-                
+
             }
 
             //Show percent

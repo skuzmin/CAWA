@@ -110,9 +110,8 @@
 
             //Subscribe to notification events
             DecisionNotificationService.subscribeSelectCriterion(function(event, data) {
-                vm.decisionsList.length = 0;
                 setDecisionMatchPercent(data);
-                asyncLoading(data);
+                vm.decisionsList = data;
             });
             DecisionNotificationService.subscribePageChanged(function() {
                 vm.decisionsSpinner = true;
