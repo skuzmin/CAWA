@@ -28,7 +28,8 @@
             content = {
                 decision: 'app/components/gridstackWrapper/decision-partial.html'
             },
-            characteristicGroupNames = [];
+            characteristicGroupNames = [],
+            plankSizeMap = {};
 
         vm.displayList = [];
         vm.showPercentage = false;
@@ -47,8 +48,14 @@
         vm.goToDecision = goToDecision;
         vm.getDetails = getDetails;
         vm.getGroupNameById = getGroupNameById;
+        vm.onResize = onResize;
 
         init();
+
+        function onResize(event, ui) {
+            var element = ui.element[0];
+            plankSizeMap[element.getAttribute('id')] = element.getAttribute('data-gs-height');
+        }
 
         function getGroupNameById(id) {
             var group = _.find(characteristicGroupNames, function(group) {
@@ -87,7 +94,7 @@
         function onChanges() {
             gridItems = $('.' + vm.element);
             var
-                plank, elIndex, oldItem, plankHeight, planSizeMap = {};
+                plank, elIndex, oldItem, plankHeight;
             //init list if it's empty or if changed page size 
             if (vm.displayList.length === 0 || vm.displayList.length !== vm.list.length) {
                 vm.displayList = angular.copy(vm.list);
@@ -111,8 +118,6 @@
                         if (oldItem.position < index) { index++; }
                         //saving already downloaded characteristics details
                         if (oldItem.characteristics) { newItem.characteristics = oldItem.characteristics; }
-                        //saving resized planks
-                        if (plankHeight > 1) { planSizeMap[newItem.decisionId] = plankHeight; }
                         //resize to default size
                         vm.gridStack.resize(plank, 12, 1);
                         //move element to the correct position and set correct position number
@@ -129,20 +134,22 @@
                         newItem.position = i;
                         vm.displayList[elIndex] = newItem;
                     });
-                    //restore size of correct plank
-                    _.forEach(gridItems, function(plank) {
-                        vm.gridStack.resize(plank, 12, 1);
-                    });
-                    _.forIn(planSizeMap, function(value, key) {
-                        plank = _.find(gridItems, function(item) {
-                            return key === item.getAttribute('id');
-                        });
-                        vm.gridStack.resize(plank, 12, value);
-                    });
                 }, 0);
 
-            }
 
+            }
+            $timeout(function() {
+                //restore size of correct plank
+                _.forEach(gridItems, function(plank) {
+                    vm.gridStack.resize(plank, 12, 1);
+                });
+                _.forIn(plankSizeMap, function(value, key) {
+                    plank = _.find(gridItems, function(item) {
+                        return key === item.getAttribute('id');
+                    });
+                    vm.gridStack.resize(plank, 12, parseInt(value));
+                });
+            }, 0);
             //Show percent
             vm.showPercentage = DecisionSharedService.filterObject.selectedCriteria.sortCriteriaIds.length > 0;
         }
