@@ -21,14 +21,7 @@
         vm.updateDecisionList = [];
         vm.decision = decisionBasicInfo || {};
 
-        vm.selectDecision = selectDecision;
-
         init();
-
-        function selectDecision(decision) {
-            console.log(decision);
-            //BACKEND CALL...
-        }
 
         function asyncLoading(result) {
             //Acync rendering

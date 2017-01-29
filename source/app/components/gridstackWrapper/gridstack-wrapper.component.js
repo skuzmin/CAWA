@@ -12,8 +12,7 @@
                 element: '@',
                 cellHeight: '=',
                 verticalMargin: '=',
-                template: '@',
-                callback: '&'
+                template: '@'
             },
             controller: 'GridstackMovementController',
             controllerAs: 'vm'
@@ -82,7 +81,7 @@
                 prevDecision.isSelected = false;
                 currentDecision.isSelected = true;
             }
-            vm.callback({ decision: currentDecision });
+            console.log(currentDecision);
         }
 
         function onChanges() {
