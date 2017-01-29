@@ -71,7 +71,7 @@
         }
 
         function selectDecision(currentDecision) {
-            var prevDecision = _.find(vm.initList, function(decision) {
+            var prevDecision = _.find(vm.displayList, function(decision) {
                 return decision.isSelected;
             });
             if (!prevDecision) {
@@ -110,7 +110,9 @@
                             return prevItem.decisionId === newItem.decisionId;
                         });
                         if (oldItem.position < index) { index++; }
+                        //saving already downloaded characteristics details
                         if (oldItem.characteristics) { newItem.characteristics = oldItem.characteristics; }
+                        //saving resized planks
                         if (plankHeight > 1) { planSizeMap[newItem.decisionId] = plankHeight; }
                         //resize to default size
                         vm.gridStack.resize(plank, 12, 1);
