@@ -129,6 +129,9 @@
                         vm.displayList[elIndex] = newItem;
                     });
                     //restore size of correct plank
+                    _.forEach(gridItems, function(plank) {
+                        vm.gridStack.resize(plank, 12, 1);
+                    });
                     _.forIn(planSizeMap, function(value, key) {
                         plank = _.find(gridItems, function(item) {
                             return key === item.getAttribute('id');
