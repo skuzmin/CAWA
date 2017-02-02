@@ -1,3 +1,8 @@
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
 a {
   cursor: pointer;
 }
@@ -23,12 +28,15 @@ a {
 }
 .app-header {
   min-height: 60px;
-  background-color: #1d365d;
+  background-color: #226eb1;
   color: #fff;
   padding-right: 15px;
   padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
+}
+.app-header a {
+  color: #fff;
 }
 .app-header .header-menu-btn {
   text-align: left;
@@ -41,8 +49,7 @@ a {
 }
 .app-footer {
   min-height: 60px;
-  background-color: #1d365d;
-  color: #fff;
+  background-color: #ccc;
   padding: 10px;
 }
 .divider {
@@ -206,6 +213,34 @@ a {
 .modal-dialog .criteria-coefficient-popup .modal-drag-handler:hover {
   cursor: move;
 }
+.criteria-item {
+  -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  border: 1px solid #ebebeb;
+  margin: 0 0 10px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+.criteria-item:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.criteria-item:hover {
+  border-color: #226eb1;
+}
+.criteria-item.selected {
+  background-color: #ccc;
+  border-color: #226eb1;
+}
+.criteria-item-left {
+  float: left;
+  width: 50%;
+}
+.criteria-item-right {
+  float: left;
+  width: 50%;
+}
 .home .search-box {
   padding-top: 100px;
   margin-bottom: 30px;
@@ -215,8 +250,11 @@ a {
 }
 .dicision .top-panel {
   min-height: 40px;
-  background-color: rgba(128, 128, 128, 0.2);
-  border-bottom: 1px solid #808080;
+  background-color: #fff;
+  border-bottom: 1px solid #ebebeb;
+  overflow: hidden;
+  position: relative;
+  z-index: 3;
 }
 .dicision .scroll-wrapper {
   overflow-y: auto;
@@ -226,6 +264,7 @@ a {
   top: 50px;
   bottom: 0;
   z-index: 1;
+  background-color: #ccc;
   right: 8px;
 }
 .dicision .scroll-wrapper-header {
@@ -235,12 +274,17 @@ a {
   width: 100%;
   z-index: 2;
   background-color: #fff;
-  border-bottom: 1px solid #808080;
+  border-bottom: 1px solid #ebebeb;
+  -ms-overflow-x: hidden;
+  overflow-x: hidden;
+  -webkit-box-shadow: 0 0 11px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 11px rgba(0, 0, 0, 0.2);
   height: 40px;
   margin-bottom: 10px;
 }
 .dicision .main-panel {
   position: relative;
+  z-index: 2;
   height: calc(100vh - 160px);
 }
 .dicision .main-panel .divider {
@@ -278,24 +322,54 @@ a {
 .dicision .main-panel .grid-stack-decision .grid-stack .decision-item .grid-stack-item-content.selected:hover {
   border: none;
 }
-.content {
-  min-height: calc(100vh - 120px);
-}
-
-
-body #sidebar-resizer-1 {
-  left: 33%;
-}
-body #sidebar-resizer-2 {
-  left: 66%;
-}
-
-body .sidebar-resizer {
-  background-color: #666;
+body .app-main-panel .app-panel-left {
   position: absolute;
-  top: 35px;
+  left: 0;
+  width: 25%;
+  top: 0;
+  height: 100%;
+  padding-right: 6px;
+}
+body .app-main-panel .app-panel-center {
+  position: absolute;
+  left: 25%;
+  width: 50%;
+  top: 0;
+  height: 100%;
+}
+body .app-main-panel .app-panel-right {
+  position: absolute;
+  left: 75%;
+  width: 25%;
+  top: 0;
+  height: 100%;
+}
+body .app-main-panel .panels-2 {
+  left: 25%;
+  width: 75%;
+  padding-left: 6px;
+}
+body .app-main-panel .panels-2 .app-panel-center {
+  left: 0;
+  width: 66%;
+}
+body .app-main-panel .panels-2 .app-panel-right {
+  left: 66%;
+  width: 33%;
+}
+body .decision-item {
+  background-color: #FFF;
+}
+body .app-resizer {
+  position: absolute;
+  right: 0;
+  top: 0;
   bottom: 0;
-  left: 200px;
+  background-color: #808080;
   width: 6px;
   cursor: e-resize;
+  z-index: 111;
+}
+.content {
+  min-height: calc(100vh - 120px);
 }

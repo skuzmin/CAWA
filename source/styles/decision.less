@@ -1,8 +1,11 @@
 .dicision {
     .top-panel {
         min-height: 40px;
-        background-color: @bg-dark;
-        border-bottom: 1px solid @dark;
+        background-color: #fff;
+        border-bottom: 1px solid @gray-light;
+        overflow: hidden;
+        position: relative;
+        z-index: 3;
     }
     .scroll-wrapper {
         overflow-y: auto;
@@ -12,6 +15,7 @@
         top: 50px;
         bottom: 0;
         z-index: 1;
+        background-color: @gray-mid;
         right: 8px;
     }
     .scroll-wrapper-header {
@@ -21,12 +25,17 @@
         width: 100%;
         z-index: 2;
         background-color: @bg-light;
-        border-bottom: 1px solid @dark;
+        border-bottom: 1px solid @gray-light;
+        -ms-overflow-x: hidden;
+            overflow-x: hidden;
+        -webkit-box-shadow: 0 0 11px rgba(0,0,0,0.2);
+                box-shadow: 0 0 11px rgba(0,0,0,0.2);
         height: 40px;
         margin-bottom: 10px;
     }
     .main-panel {
         position: relative;
+        z-index: 2;
         height: calc(~"100vh - 160px");
         .divider {
             height: 100%;
@@ -69,3 +78,87 @@
         }
     }
 }
+
+// Absolute layout
+body .app-main-panel {
+    .app-panel-left {
+        position: absolute;
+        left: 0;
+        width: 25%;
+        top: 0;
+        height: 100%;
+        padding-right: 6px;
+    }
+
+    .app-panel-center {
+        position: absolute;
+        left: 25%;
+        width: 50%;
+        top: 0;
+        height: 100%;
+    }
+    .app-panel-right {
+        position: absolute;
+        left: 75%;
+        width: 25%;
+        top: 0;
+        height: 100%;
+    }
+
+    .panels-2 {
+        left: 25%;
+        width: 75%;
+        padding-left: 6px;
+        .app-panel-center {
+            left: 0;
+            width: 66%;
+        }
+        .app-panel-right {
+            left: 66%;
+            width: 33%;
+        }
+    }
+}
+
+body {
+    .decision-item {
+        background-color: #FFF;
+    }
+
+    .app-resizer {
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background-color: @dark;
+        width: 6px;
+        cursor: e-resize;
+        z-index: 111;
+    }
+}
+
+// Table layout to slow
+// body .app-main-panel {
+//     display: table;
+//     width: 100%;
+//     .app-panel-left {
+//         display: table-cell;
+//         left: 0;
+//         width: 25%;
+//         height: 100%;
+//         padding-right: 6px;
+//     }
+
+//     .app-panel-center {
+//         display: table-cell;
+//         left: 25%;
+//         width: 50%;
+//         height: 100%;
+//     }
+//     .app-panel-right {
+//         display: table-cell;
+//         left: 75%;
+//         width: 25%;
+//         height: 100%;
+//     }
+// }

@@ -1,55 +1,63 @@
-angular.module('mc.resizer', []).directive('resizer', function($document) {
+(function() {
 
-	return function($scope, $element, $attrs) {
+    'use strict';
+    angular
+        .module('app.components')
+        .directive('resizer', function($document) {
 
-		$element.on('mousedown', function(event) {
-			event.preventDefault();
+        return function($scope, $element, $attrs) {
 
-			$document.on('mousemove', mousemove);
-			$document.on('mouseup', mouseup);
-		});
+            $element.on('mousedown', function(event) {
+                event.preventDefault();
 
-		function mousemove(event) {
+                $document.on('mousemove', mousemove);
+                $document.on('mouseup', mouseup);
+            });
 
-			if ($attrs.resizer == 'vertical') {
-				// Handle vertical resizer
-				var x = event.pageX;
+            function mousemove(event) {
 
-				if ($attrs.resizerMax && x > $attrs.resizerMax) {
-					x = parseInt($attrs.resizerMax);
-				}
+                if ($attrs.resizer == 'vertical') {
+                    // Handle vertical resizer
+                    var x = event.pageX;
 
-				$element.css({
-					left: x + 'px'
-				});
+                    if ($attrs.resizerMax && x > $attrs.resizerMax) {
+                        x = parseInt($attrs.resizerMax);
+                    } else if($attrs.resizerMin && x < $attrs.resizerMin) {
+                        x = parseInt($attrs.resizerMin);
+                    }
 
-				$($attrs.resizerLeft).css({
-					width: x + 'px'
-				});
-				$($attrs.resizerRight).css({
-					left: (x + parseInt($attrs.resizerWidth)) + 'px'
-				});
+                    $element.css({
+                        left: x + 'px'
+                    });
 
-			} else {
-				// Handle horizontal resizer
-				var y = window.innerHeight - event.pageY;
+                    $($attrs.resizerLeft).css({
+                        width: x + 'px'
+                    });
+                    $($attrs.resizerRight).css({
+                        left: (x + parseInt($attrs.resizerWidth)) + 'px'
+                    });
 
-				$element.css({
-					bottom: y + 'px'
-				});
+                } else {
+                    // Handle horizontal resizer
+                    var y = window.innerHeight - event.pageY;
 
-				$($attrs.resizerTop).css({
-					bottom: (y + parseInt($attrs.resizerHeight)) + 'px'
-				});
-				$($attrs.resizerBottom).css({
-					height: y + 'px'
-				});
-			}
-		}
+                    $element.css({
+                        bottom: y + 'px'
+                    });
 
-		function mouseup() {
-			$document.unbind('mousemove', mousemove);
-			$document.unbind('mouseup', mouseup);
-		}
-	};
-});
+                    $($attrs.resizerTop).css({
+                        bottom: (y + parseInt($attrs.resizerHeight)) + 'px'
+                    });
+                    $($attrs.resizerBottom).css({
+                        height: y + 'px'
+                    });
+                }
+            }
+
+            function mouseup() {
+                $document.unbind('mousemove', mousemove);
+                $document.unbind('mouseup', mouseup);
+            }
+        };
+    });
+})();

@@ -25,7 +25,7 @@
                     minHeight: elem.outerHeight(),
                     minWidth: elem.outerWidth(),
                     maxHeight: elem.outerHeight() + resizableMaxValue,
-                    maxWidth: elem.outerWidth()+ resizableMaxValue
+                    maxWidth: elem.outerWidth() + resizableMaxValue
                 });
             });
         }

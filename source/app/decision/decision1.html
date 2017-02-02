@@ -25,22 +25,15 @@
         </div>
     </div>
     <!-- Main stuff -->
-    <div class="app-main-panel main-panel">
-       <div id="panel-left" class="app-panel-left">
-           <decision-criteria decision-id="vm.decisionId"></decision-criteria>
-
-            <div id="app-resizer-left" 
-                class="app-resizer" 
-                resizer="vertical" 
-                resizer-width="6" 
-                resizer-left="#panel-left" 
-                resizer-right="#panel-center"
-                resizer-min="200"
-                resizer-max="400"></div>
-
-       </div>
-
-       <div id="panel-center" class="app-panel-center">
+    <div class="row main-panel">
+        <!-- CRITERIA SECTION -->
+        <div class="col-md-3 col-sm-3 criteria-section app-divider-wrapper">
+            <decision-criteria decision-id="vm.decisionId"></decision-criteria>
+        </div>
+        <!-- Left Divider -->
+        <app-divider axis="x"></app-divider>
+        <!-- DECISION SECTION -->
+        <div class="col-md-6 col-sm-6 grid-stack-decision app-divider-wrapper ">
             <div class="decisions-header scroll-wrapper-header">
                 <div class="col-md-1 col-sm-1">
                     <h4>Decisions</h4>
@@ -65,12 +58,13 @@
                 <gridstack-wrapper list="vm.decisionsList" element="decision-item" cell-height="100" vertical-margin="10" grid-class="custom-grid" template="decision">
                 </gridstack-wrapper>
                 <app-paginator></app-paginator>
-            </div>           
-       </div>
-
-       <div class="app-panel-right">
-           <decision-characteristics decision-id="vm.decisionId"></decision-characteristics>
-       </div>
-
+            </div>
+        </div>
+        <!-- Right divider -->
+        <app-divider axis="x" side="right"></app-divider>
+        <!-- CHARACTERISTIC SECTION -->
+        <div class="col-md-3 col-sm-3 ">
+            <decision-characteristics decision-id="vm.decisionId"></decision-characteristics>
+        </div>
     </div>
 </div>
