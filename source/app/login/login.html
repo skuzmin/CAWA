@@ -1,10 +1,16 @@
-<div class="login-btn">
+<div class="login-btn pull-right">
 	<div ng-if="vm.loginService.getLoginStatus()">
 		<label>Username:</label>
 		<span>{{vm.user.user_name}}</span>
 	</div>
-	<a ng-if="!vm.loginService.getLoginStatus()" href="" class="btn btn-default" ng-click="vm.loginService.login()">Login</a>
-	<form ng-if="vm.loginService.getLoginStatus()" name="logoutForm" action="{{vm.loginService.getLogoutUrl()}}" method="POST" novalidate>
-		<a href="" class="btn btn-default" ng-click="vm.logout()">Logout</a>
-	</form>
+	<ul class="nav navbar-nav">
+		<li>
+			<a ng-if="!vm.loginService.getLoginStatus()" ng-click="vm.loginService.login()">Login</a>
+		</li>
+		<li>
+			<form ng-if="vm.loginService.getLoginStatus()" name="logoutForm" action="{{vm.loginService.getLogoutUrl()}}" method="POST" novalidate>
+				<a href="" class="btn btn-default" ng-click="vm.logout()">Logout</a>
+			</form>
+		</li>
+	</ul>
 </div>

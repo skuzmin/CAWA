@@ -9,12 +9,12 @@
 		DecisionDataService.$inject = ['$resource', 'Config'];
 
 		function DecisionDataService($resource, Config) {
-			var 
+			var
 				decisionUrl = Config.endpointUrl + 'decisions/:id',
 
 				decisions = $resource(decisionUrl + '/decisions', {id: '@id'},
 				{
-					searchDecisionById: {method: 'POST', isArray: false} 
+					searchDecisionById: {method: 'POST', isArray: false}
 				}),
 
 				decisionInfo = $resource(decisionUrl),
