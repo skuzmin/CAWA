@@ -1,0 +1,10 @@
+<h3>Sort by:</h3>
+<div class="sort-links">
+    <a href ng-click="sorter = 'id'">ID</a>
+    <a href ng-click="sorter = 'first_name'">First Name</a>
+</div>
+<div class="container">
+    <div ng-repeat="item in items | orderBy:sorter track by item.id" class="item" app-list-item>
+        {{ item.id }}: {{item.name}}
+    </div>
+</div>

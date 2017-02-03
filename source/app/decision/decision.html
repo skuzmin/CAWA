@@ -9,7 +9,7 @@
         <div class="col-md-3 col-sm-3">
             <div class="row form-group" ng-show="vm.parentDecisions">
                 <label class="col-md-2 col-sm-2 control-label">Parents:</label>
-                <div class="col-md-4 col-sm-4">                    
+                <div class="col-md-4 col-sm-4">
                     <select ng-model="vm.parentId" ng-options="parent for parent in vm.parentDecisions">
                         <option value="" selected>Select parentId</option>
                     </select>
@@ -29,11 +29,11 @@
        <div id="panel-left" class="app-panel-left">
            <decision-criteria decision-id="vm.decisionId"></decision-criteria>
 
-            <div id="app-resizer-left" 
-                class="app-resizer" 
-                resizer="vertical" 
-                resizer-width="6" 
-                resizer-left="#panel-left" 
+            <div id="app-resizer-left"
+                class="app-resizer"
+                resizer="vertical"
+                resizer-width="6"
+                resizer-left="#panel-left"
                 resizer-right="#panel-center"
                 resizer-min="200"
                 resizer-max="400"></div>
@@ -60,12 +60,13 @@
             </div>
             <div class="scroll-wrapper">
                 <!--TODO: TEMP fix for future spinner -->
-                <h1 ng-show="vm.decisionsSpinner" style="position: absolute; right: 0;">LOADING...</h1>
-                <app-paginator></app-paginator>
+                <h1 ng-show="vm.decisionsSpinner" class="app-loader-small">LOADING...</h1>
+<!--                 <app-paginator></app-paginator>
                 <gridstack-wrapper list="vm.decisionsList" element="decision-item" cell-height="100" vertical-margin="10" grid-class="custom-grid" template="decision">
                 </gridstack-wrapper>
-                <app-paginator></app-paginator>
-            </div>           
+                <app-paginator></app-paginator> -->
+                <app-list items="vm.decisionsList"></app-list>
+            </div>
        </div>
 
        <div class="app-panel-right">

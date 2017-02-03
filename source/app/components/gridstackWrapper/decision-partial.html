@@ -15,9 +15,7 @@
         </div>
         <div class="row decision-detailed-chars">
             <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-12" ng-show="item.detailsSpinner">LOADING...</div>
-                </div>
+                <div class="app-loader-small" ng-show="item.detailsSpinner">LOADING...</div>
                 <div ng-if="item.characteristics">
                     <h4>Characteristics</h4>
                     <div class="row" ng-repeat="(key, value) in item.characteristics track by key">

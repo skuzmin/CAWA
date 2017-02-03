@@ -229,7 +229,7 @@
     cursor: pointer;
     &:hover {
         border-color: @basic-active;
-    }    
+    }
     &.selected {
         background-color: @activePanel;
         border-color: @basic-active;
@@ -245,3 +245,53 @@
     float: left;
     width: 50%;
 }
+
+.app-loader-small {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 111;
+    background-color: #fff;
+    font-size: 13px;
+    color: #000;
+    padding: 30px 0;
+}
+
+
+// App List component
+.sort-links {
+    margin: 10px 0 10px;
+}
+
+.sort-links a {
+    display: inline-block;
+    text-decoration: none;
+    padding: 3px 10px;
+}
+
+.container {
+    position: relative;
+    height: 500px;
+}
+
+.item {
+    position: absolute;
+    left: 0;
+    width: 500px;
+    height: 50px;
+    text-align: left;
+    color: #555;
+    -webkit-transition: top 0.4s ease-out, opacity 0.4s;
+    -moz-transition: top 0.4s ease-out, opacity 1s;
+    padding: 15px;
+    background-color: #eee;
+    border: solid 1px #999;
+}
+
+.moving {
+    opacity: 1;
+    z-index: 10;
+}
+
