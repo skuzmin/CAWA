@@ -1,11 +1,6 @@
 <div class="app-list-wrapper">
-  <h3>Sort by:</h3>
-  <div class="sort-links">
-      <a href ng-click="sorter = 'decisionId'">ID</a>
-      <a href ng-click="sorter = 'name'">First Name</a>
-  </div>
   <div class="app-list-container">
-      <div ng-repeat="item in vm.list | orderBy:sorter " class="list-item-sort" style="top: {{$index*55}}px" app-list-item>
+      <div id="decision-{{ item.decisionId }}" ng-repeat="item in vm.list track by item.decisionId" class="list-item-sort" style="top: {{$index*55}}px" app-list-item>
           <strong>{{ item.decisionId }}</strong>: {{item.name}} | {{tem.criteriaCompliancePercentage}}
       </div>
   </div>

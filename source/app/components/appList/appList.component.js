@@ -9,7 +9,7 @@
             templateUrl: 'app/components/appList/appList.html',
             bindings: {
                 decisionId: '=',
-                list: '<'
+                list: '='
             },
             controller: 'AppListController',
             controllerAs: 'vm'
@@ -23,6 +23,8 @@
         $scope.timer = 0;
 
         $root.currItemIndex = 0;
+        var oldList =[],
+            reloatItems = [];
 
         // TODO: oprimize code
         $scope.$watch('sorter', function() {
@@ -30,12 +32,24 @@
             $scope.timer = $window.setTimeout(rearrange, 100);
         });
 
-        $scope.$watch('vm.list', function() {
+        $scope.$watch('vm.list', function(list) {
             $window.clearTimeout($scope.timer);
             $scope.timer = $window.setTimeout(rearrange, 100);
+
+            var currentList = [];
+            _.each(list, function(value, key) {
+                currentList.push(value.decisionId);
+            })
+
+            // Get items that chnage position
+            reloatItems = _.differenceWith(oldList, currentList, _.isEqual);
+            console.log(reloatItems);
+            oldList = currentList;
+            return oldList, reloatItems;
         });
 
         rearrange();
+
 
         function checkPositionUpdate(list, newList) {
 
@@ -47,17 +61,16 @@
                 var $el = $(el);
                 var OFFSET_Y = 50 + 5; // added margin
                 var newTop = idx * OFFSET_Y;
-                console.log(idx * OFFSET_Y);
 
-                if (newTop != parseInt($el.css('top'))) {
-                    $el.css({
-                            'top': newTop
-                        })
-                        .one('webkitTransitionEnd', function(evt) {
-                            $(evt.target).removeClass('moving');
-                        })
-                        .addClass('moving');
-                }
+                // if (newTop != parseInt($el.css('top'))) {
+                //     $el.css({
+                //             'top': newTop
+                //         })
+                //         .one('webkitTransitionEnd', function(evt) {
+                //             $(evt.target).removeClass('moving');
+                //         })
+                //         // .addClass('moving');
+                // }
             });
         }
     }
