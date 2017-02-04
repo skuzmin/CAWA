@@ -9,7 +9,7 @@
             templateUrl: 'app/components/appList/appList.html',
             bindings: {
                 decisionId: '=',
-                items: '<'
+                list: '<'
             },
             controller: 'AppListController',
             controllerAs: 'vm'
@@ -18,68 +18,36 @@
     AppListController.$inject = ['$scope', '$rootScope', '$window'];
 
     function AppListController($scope, $root, $window) {
-        $scope.sorter = 'id';
-        // console.log($scope.items);
-        $scope.items = [{
-            "id": 1,
-            "first_name": "John",
-            "last_name": "Doe"
-        }, {
-            "id": 2,
-            "first_name": "Jane",
-            "last_name": "Doe"
-        }, {
-            "id": 3,
-            "first_name": "Jon",
-            "last_name": "Dobbs"
-        }, {
-            "id": 4,
-            "first_name": "Alice",
-            "last_name": "Birdman"
-        }, {
-            "id": 5,
-            "first_name": "Sally",
-            "last_name": "Xylophony"
-        }, {
-            "id": 6,
-            "first_name": "Ray",
-            "last_name": "Bradbury"
-        }, {
-            "id": 7,
-            "first_name": "Arthur C.",
-            "last_name": "Clark"
-        }, {
-            "id": 8,
-            "first_name": "Good King",
-            "last_name": "Wensuslausage"
-        }, {
-            "id": 9,
-            "first_name": "Booker T.",
-            "last_name": "Washington"
-        }, {
-            "id": 10,
-            "first_name": "Miles",
-            "last_name": "Davis"
-        }, {
-            "id": 11,
-            "first_name": "Daniel",
-            "last_name": "McDaniels"
-        }];
+        $scope.sorter = 'decisionId';
 
         $scope.timer = 0;
 
         $root.currItemIndex = 0;
 
+        // TODO: oprimize code
         $scope.$watch('sorter', function() {
             $window.clearTimeout($scope.timer);
             $scope.timer = $window.setTimeout(rearrange, 100);
         });
 
+        $scope.$watch('vm.list', function() {
+            $window.clearTimeout($scope.timer);
+            $scope.timer = $window.setTimeout(rearrange, 100);
+        });
+
+        rearrange();
+
+        function checkPositionUpdate(list, newList) {
+
+        }
+
         function rearrange() {
-            $('.item').each(function(idx, el) {
+            // Check if current postion changed
+            $('.list-item-sort').each(function(idx, el) {
                 var $el = $(el);
-                var OFFSET_Y = 50;
+                var OFFSET_Y = 50 + 5; // added margin
                 var newTop = idx * OFFSET_Y;
+                console.log(idx * OFFSET_Y);
 
                 if (newTop != parseInt($el.css('top'))) {
                     $el.css({
@@ -90,7 +58,6 @@
                         })
                         .addClass('moving');
                 }
-
             });
         }
     }
@@ -100,7 +67,7 @@
         .controller('appListItemConrtoller', ['$element', '$rootScope',
 
             function($el, $root) {
-                var OFFSET_Y = 50;
+                var OFFSET_Y = 50 + 5; // added margin
                 $el.css({
                     'top': $root.currItemIndex * OFFSET_Y
                 });

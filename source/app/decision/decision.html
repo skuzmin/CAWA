@@ -65,11 +65,19 @@
                 <gridstack-wrapper list="vm.decisionsList" element="decision-item" cell-height="100" vertical-margin="10" grid-class="custom-grid" template="decision">
                 </gridstack-wrapper>
                 <app-paginator></app-paginator> -->
-                <app-list items="vm.decisionsList"></app-list>
+                <app-list list="vm.decisionsList"></app-list>
             </div>
+           <!--  <div id="app-resizer-right"
+                class="app-resizer"
+                resizer="vertical"
+                resizer-width="6"
+                resizer-left="#panel-center"
+                resizer-min="200"
+                resizer-max="900"></div> -->
+
        </div>
 
-       <div class="app-panel-right">
+       <div id="panel-right" class="app-panel-right">
            <decision-characteristics decision-id="vm.decisionId"></decision-characteristics>
        </div>
 
