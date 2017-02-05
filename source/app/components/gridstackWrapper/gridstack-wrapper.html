@@ -1,3 +1,5 @@
+<pre ng-repeat="item in vm.list">{{item.name}} - {{item.position}}</pre><button ng-click=vm.test(vm.index)>PEW</button>
+<input type="number" ng-model="vm.index" />
 <div gridstack gridstack-handler="vm.gridStack" class="grid-stack grid-stack-animate" options="vm.options" on-resize-stop="vm.onResize($event, ui)">
     <div gridstack-item ng-repeat="item in vm.displayList track by $index" class="grid-stack-item {{vm.element}}" gs-item-x="0" gs-item-y="item.position" id="{{item.decisionId}}" gs-item-width="12" gs-item-height="1" gs-item-autopos="1" ng-mouseover="vm.getDetails(item)">
         <div class="panel-drag-handler"></div>

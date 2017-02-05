@@ -91,65 +91,103 @@
             console.log(currentDecision);
         }
 
+vm.test = function(index) {
+    gridItems = $('.' + vm.element);
+    var aaa = _.find(gridItems, function(item) {
+        return Number(item.getAttribute('id')) === 2124;
+    });
+    vm.gridStack.move(aaa, 0, index);
+};
+
         function onChanges() {
             gridItems = $('.' + vm.element);
-            var
-                plank, elIndex, oldItem, plankHeight;
-            //init list if it's empty or if changed page size 
-            if (vm.displayList.length === 0 || vm.displayList.length !== vm.list.length) {
+            _.forEach(vm.list, function(newItem, i) {
+                newItem.position = i;
+            });
+            var index, oldItem;
+            if (vm.displayList.length === 0) {
                 vm.displayList = angular.copy(vm.list);
-                //init start positions for new items (position === index)
-                _.forEach(vm.displayList, function(item, i) {
-                    item.position = i;
+            }
+            _.forEach(gridItems, function(item) {
+                index = _.findIndex(vm.list, function(newItem) {
+                    newItem.isInited = Number(item.getAttribute('id')) === newItem.decisionId;
+                    return Number(item.getAttribute('id')) === newItem.decisionId;
                 });
-            } else {
-                _.forEach(vm.list, function(newItem, index) {
-                    //finding element(plank) in decision list
-                    plank = _.find(gridItems, function(item) {
-                        return newItem.decisionId === Number(item.getAttribute('id'));
-                    });
-                    //if element already exist
-                    if (plank) {
-                        plankHeight = Number(plank.getAttribute('data-gs-height'));
-                        //fix for gridstack movement bug
-                        oldItem = _.find(vm.displayList, function(prevItem) {
-                            return prevItem.decisionId === newItem.decisionId;
+                if(index !== -1) {
+                    //fix for gridstack movement bug
+                    oldItem = _.find(vm.displayList, function(prevItem) {
+                        return prevItem.decisionId === Number(item.getAttribute('id'));
+                    });                    
+                    vm.gridStack.move(item, 0, index);
+                }
+            });
+            $timeout(function() {
+                _.forEach(vm.list, function(newItem) {
+                    if(!newItem.isInited) {
+                        var index = _.findIndex(vm.displayList, function(item) {
+                            return item.position === newItem.position;
                         });
-                        if (oldItem.position < index) { index++; }
-                        //saving already downloaded characteristics details
-                        if (oldItem.characteristics) { newItem.characteristics = oldItem.characteristics; }
-                        //resize to default size
-                        vm.gridStack.resize(plank, 12, 1);
-                        //move element to the correct position and set correct position number
-                        vm.gridStack.move(plank, 0, index);
-                        newItem.position = index;
+                        vm.displayList[index] = newItem;
                     }
                 });
-                //set data for new items, when movement animation ended
-                $timeout(function() {
-                    _.forEach(vm.list, function(newItem, i) {
-                        elIndex = _.findIndex(vm.displayList, function(item) {
-                            return item.position === i;
-                        });
-                        newItem.position = i;
-                        vm.displayList[elIndex] = newItem;
-                    });
-                }, 0);
-
-
-            }
-            $timeout(function() {
-                //restore size of correct plank
-                _.forEach(gridItems, function(plank) {
-                    vm.gridStack.resize(plank, 12, 1);
-                });
-                _.forIn(plankSizeMap, function(value, key) {
-                    plank = _.find(gridItems, function(item) {
-                        return key === item.getAttribute('id');
-                    });
-                    vm.gridStack.resize(plank, 12, parseInt(value));
-                });
             }, 0);
+            // var
+            //     plank, elIndex, oldItem, plankHeight;
+            // //init list if it's empty or if changed page size 
+            // if (vm.displayList.length === 0 || vm.displayList.length !== vm.list.length) {
+            //     vm.displayList = angular.copy(vm.list);
+            //     //init start positions for new items (position === index)
+            //     _.forEach(vm.displayList, function(item, i) {
+            //         item.position = i;
+            //     });
+            // } else {
+            //     _.forEach(vm.list, function(newItem, index) {
+            //         //finding element(plank) in decision list
+            //         plank = _.find(gridItems, function(item) {
+            //             return newItem.decisionId === Number(item.getAttribute('id'));
+            //         });
+            //         //if element already exist
+            //         if (plank) {
+            //             plankHeight = Number(plank.getAttribute('data-gs-height'));
+            //             //fix for gridstack movement bug
+            //             oldItem = _.find(vm.displayList, function(prevItem) {
+            //                 return prevItem.decisionId === newItem.decisionId;
+            //             });
+            //             if (oldItem.position < index) { index++; }
+            //             //saving already downloaded characteristics details
+            //             if (oldItem.characteristics) { newItem.characteristics = oldItem.characteristics; }
+            //             //resize to default size
+            //             vm.gridStack.resize(plank, 12, 1);
+            //             //move element to the correct position and set correct position number
+            //             vm.gridStack.move(plank, 0, index);
+            //             newItem.position = index;
+            //         }
+            //     });
+            //     //set data for new items, when movement animation ended
+            //     $timeout(function() {
+            //         _.forEach(vm.list, function(newItem, i) {
+            //             elIndex = _.findIndex(vm.displayList, function(item) {
+            //                 return item.position === i;
+            //             });
+            //             newItem.position = i;
+            //             vm.displayList[elIndex] = newItem;
+            //         });
+            //     }, 0);
+
+
+            // }
+            // $timeout(function() {
+            //     //restore size of correct plank
+            //     _.forEach(gridItems, function(plank) {
+            //         vm.gridStack.resize(plank, 12, 1);
+            //     });
+            //     _.forIn(plankSizeMap, function(value, key) {
+            //         plank = _.find(gridItems, function(item) {
+            //             return key === item.getAttribute('id');
+            //         });
+            //         vm.gridStack.resize(plank, 12, parseInt(value));
+            //     });
+            // }, 0);
             //Show percent
             vm.showPercentage = DecisionSharedService.filterObject.selectedCriteria.sortCriteriaIds.length > 0;
         }

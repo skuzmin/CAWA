@@ -76,6 +76,7 @@ gulp.task('inject', ['jshint', 'less'], function() {
 
     return gulp.src(config.index)
         .pipe(wiredep({ ignorePath: '../' }))
+        .pipe(wiredep({ exclude: ['ev-emitter', 'outlayer', 'masonry', 'get-size', 'utils', 'matches-selector']}))
         .pipe(inject(gulp.src(sources), { ignorePath: '/source' }))
         .pipe(rename('index.html'))
         .pipe(gulp.dest('source'));
