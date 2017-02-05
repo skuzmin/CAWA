@@ -15,10 +15,12 @@
             controllerAs: 'vm'
         });
 
-    AppListController.$inject = ['$scope', '$rootScope', '$window'];
+    AppListController.$inject = ['$scope', '$rootScope', '$window', 'DecisionNotificationService', 'DecisionSharedService'];
 
-    function AppListController($scope, $root, $window) {
+    function AppListController($scope, $root, $window, DecisionNotificationService, DecisionSharedService) {
         var vm = this;
+        vm.showPercentage = false;
+        vm.showPercentage = DecisionSharedService.filterObject.selectedCriteria.sortCriteriaIds.length > 0;
         $scope.sorter = 'decisionId';
 
         $scope.timer = 0;
