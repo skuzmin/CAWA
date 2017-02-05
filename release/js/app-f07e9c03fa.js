@@ -871,7 +871,7 @@
 
         function rearrangeList(currentList) {
             console.log(currentList);
-            var OFFSET_Y = 80 + 5; // added margin
+            var OFFSET_Y = 80 + 10; // added margin
             var maxHeight = OFFSET_Y * 10; //$('.list-item-sort').length();
             // Check if current postion changed
             for (var i = 0; i < currentList.length; i++) {
@@ -883,24 +883,12 @@
                     $el.css({
                         'top': newTop,
                     });
+                    // .one('webkitTransitionEnd', function(evt) {
+                    //         $(evt.target).removeClass('animation-move'); //Bug with first element
+                    //     })
+                    //     .addClass('animation-move');
                 }
-            };
-            // $('.list-item-sort').not('.ng-leave').each(function(idx, el) {
-            //     var $el = $(el);
-
-            //     var newTop = idx * OFFSET_Y;
-
-            //     if (newTop != parseInt($el.css('top')) && newTop <= maxHeight) {
-            //         $el.css({
-            //                 'top': newTop
-            //             });
-            //         console.log(newTop);
-            //             // .one('webkitTransitionEnd', function(evt) {
-            //             //     $(evt.target).removeClass('moving');
-            //             // })
-            //             // .addClass('moving');
-            //     }
-            // });
+            }
         }
     }
     // Item
@@ -1270,6 +1258,41 @@
 
     angular
         .module('app.components')
+        .directive('dragResizeHandler', dragResizeHandler);
+
+    function dragResizeHandler() {
+        var directive = {
+            restrict: 'A',
+            scope: { },
+            link: link
+        };
+
+        return directive;
+
+        function link(scope, elem, attrs) {
+            var resizableMaxValue = 300;
+            elem.ready(function() {
+                $('.modal-dialog').draggable({
+                    handle: '.modal-drag-handler'
+                });
+                $('.modal-content').resizable({
+                    minHeight: elem.outerHeight(),
+                    minWidth: elem.outerWidth(),
+                    maxHeight: elem.outerHeight() + resizableMaxValue,
+                    maxWidth: elem.outerWidth() + resizableMaxValue
+                });
+            });
+        }
+    }
+
+})();
+
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.components')
         .directive('decisionSorter', decisionSorter);
 
     function decisionSorter() {
@@ -1328,41 +1351,6 @@
                 scope.$emit('selectSorter', sortObj);
             };
 
-        }
-    }
-
-})();
-
-(function() {
-
-    'use strict';
-
-    angular
-        .module('app.components')
-        .directive('dragResizeHandler', dragResizeHandler);
-
-    function dragResizeHandler() {
-        var directive = {
-            restrict: 'A',
-            scope: { },
-            link: link
-        };
-
-        return directive;
-
-        function link(scope, elem, attrs) {
-            var resizableMaxValue = 300;
-            elem.ready(function() {
-                $('.modal-dialog').draggable({
-                    handle: '.modal-drag-handler'
-                });
-                $('.modal-content').resizable({
-                    minHeight: elem.outerHeight(),
-                    minWidth: elem.outerWidth(),
-                    maxHeight: elem.outerHeight() + resizableMaxValue,
-                    maxWidth: elem.outerWidth() + resizableMaxValue
-                });
-            });
         }
     }
 
@@ -1675,14 +1663,14 @@ $templateCache.put('app/home/home.html','<div class=home><div class="row search-
 $templateCache.put('app/login/login.html','<div class="login-btn pull-right"><div ng-if=vm.loginService.getLoginStatus()><label>Username:</label> <span>{{vm.user.user_name}}</span></div><ul class="nav navbar-nav"><li><a ng-if=!vm.loginService.getLoginStatus() ng-click=vm.loginService.login()>Login</a></li><li><form ng-if=vm.loginService.getLoginStatus() name=logoutForm action={{vm.loginService.getLogoutUrl()}} method=POST novalidate><a href class="btn btn-default" ng-click=vm.logout()>Logout</a></form></li></ul></div>');
 $templateCache.put('app/components/appFooter/app-footer.html','<footer class=app-footer></footer>');
 $templateCache.put('app/components/appHeader/app-header.html','<header class=app-header><div class=row><div class="col-md-3 header-menu-btn"><div class=navbar-brand><a ui-sref=home>AppName</a></div></div><div class="col-md-6 header-text"><span>Millions of lemmings can\'t be wrong!</span></div><div class="col-md-3 header-login"><app-login></app-login></div></div></header>');
-$templateCache.put('app/components/appList/appList.html','<div class=app-list-wrapper><div class=app-list-container><div id="decision-{{ item.decisionId }}" ng-repeat="item in vm.list track by item.decisionId" class=list-item-sort app-list-item><strong>{{ item.decisionId }}</strong>: {{item.name}}<div class=pull-right>Criteria compliance: <span class=list-item-sort-criteria>{{item.criteriaCompliancePercentage}}</span></div><h4 class=list-item-sort-title><a href ng-click="vm.goToDecision($event, item.decisionId)">{{item.name}}</a></h4></div></div></div>');
+$templateCache.put('app/components/appList/appList.html','<div class=app-list-wrapper><div class=app-list-container><div id="decision-{{ item.decisionId }}" ng-repeat="item in vm.list track by item.decisionId" class=list-item-sort app-list-item><strong>{{ item.decisionId }}</strong><div class=pull-right>Criteria compliance: <span class=list-item-sort-criteria>{{item.criteriaCompliancePercentage}}</span></div><h4 class=list-item-sort-title><a href ng-click="vm.goToDecision($event, item.decisionId)">{{item.name}}</a></h4></div></div></div>');
 $templateCache.put('app/components/appPaginator/app-paginator.html','<div class="row app-pagination"><div class="col-md-10 col-sm-10 paginator"><div uib-pagination ng-model=vm.pagination.pageNumber boundary-links=true boundary-link-numbers=true total-items=vm.pagination.totalDecisions items-per-page=vm.pagination.pageSize ng-change=vm.changePage()></div></div><div class="col-md-2 col-sm-2 counter"><select class="pagination form-control" ng-model=vm.pagination.pageSize ng-options="item for item in vm.itemsPerPage" ng-change=vm.changePageSize()></select></div></div>');
 $templateCache.put('app/components/criteriaCoefficientIndicator/criteria-coefficient-indicator.html','<div class=criteria-coefficient-indicator><div class=criteria-coefficient-item ng-repeat="coefficient in vm.coefficientList | orderBy: \'value\' : true" ng-class=coefficient.class></div></div>');
 $templateCache.put('app/components/decisionCharacteristics/decision-characteristics-select-partial.html','<select class="decision-select form-control" ng-model=characteristic.filterValue ng-options="item as item.name for item in characteristic.options" ng-change=vm.selectCharacteristic(characteristic.filterValue)><option value selected>Select all</option></select>');
 $templateCache.put('app/components/decisionCharacteristics/decision-characteristics-yearpicker-partial.html','<div class="input-group decision-yearpicker"><input type=text class=form-control uib-datepicker-popup=yyyy is-open=characteristic.isOpen ng-model=characteristic.filterValue datepicker-mode=year datepicker-options="{minMode: \'year\'}" placeholder=YEAR ng-change=vm.selectCharacteristic(characteristic.filterValue)> <span class=input-group-btn><button type=button class="btn btn-default" ng-click="characteristic.isOpen = true"><i class="glyphicon glyphicon-calendar"></i></button></span></div>');
 $templateCache.put('app/components/decisionCharacteristics/decision-characteristics.html','<div class=decision-characteristics><div class="char-header scroll-wrapper-header"><div class="col-md-6 col-sm-6"><h4>Characteristics</h4></div><div class="col-md-6 col-sm-6"><a href class=add-createria-btn><span class="glyphicon glyphicon-plus" aria-hidden=true></span>Add characteristic</a></div></div><div class=scroll-wrapper><h1 ng-show=vm.characteristicSpinner>LOADING...</h1><uib-accordion close-others=false><div uib-accordion-group class=panel-default ng-repeat="group in vm.characteristicGroups track by $index" is-open=group.isOpen><uib-accordion-heading>{{group.name}} <i class="pull-right glyphicon" ng-class="{\'glyphicon-chevron-down\': group.isOpen, \'glyphicon-chevron-right\': !group.isOpen}"></i></uib-accordion-heading><div class="row criteria-item" ng-repeat="characteristic in group.characteristics track by $index"><div class=col-md-6>{{characteristic.name}}</div><div class=col-md-6><ng-include src=vm.getControl(characteristic)></ng-include></div></div></div></uib-accordion></div></div>');
 $templateCache.put('app/components/decisionCriteria/criteria-coefficient-popup.html','<div class=criteria-coefficient-popup drag-resize-handler><div class=row><div class="col-md-12 col-sm-12 modal-drag-handler"></div></div><div class=row><div class="col-md-12 col-sm-12"><div class=row><div class="col-md-10 col-sm-10"><h4>Choose Criterion Factor of Importance</h4></div><div class="col-md-2 col-sm-2"><h3><a href ng-click=vm.close()>X</a></h3></div></div><form class=form-horizontal name=criteriaCoefficientForm ng-submit=vm.apply()><div class="row form-group"><div class="col-md-6 col-sm-6"><label class=control-label>Criterion name:</label></div><div class="col-md-6 col-sm-6">{{vm.criteria.name}}</div></div><div class="row form-group"><div class="col-md-6 col-sm-6"><label class=control-label>Factor of Importance:</label></div><div class="col-md-6 col-sm-6"><select class=form-control ng-model=vm.criteria.coefficient ng-options="coefficient as coefficient.name for coefficient in vm.coefficientList track by coefficient.value"></select></div></div><div class="row form-group"><div class="col-md-offset-6 col-sm-offset-6 col-md-6 col-sm-6"><button class="btn btn-default" type=submit>Apply</button></div></div></form></div></div></div>');
-$templateCache.put('app/components/decisionCriteria/decision-criteria.html','<div class=decision-criteria><div class="criteria-header scroll-wrapper-header"><div class="col-md-6 col-sm-6"><h4>Criteria</h4></div><div class="col-md-6 col-sm-6"><a href class=add-createria-btn><span class="glyphicon glyphicon-plus" aria-hidden=true></span>Add criterion</a></div></div><div class=scroll-wrapper><h1 ng-show=vm.criteriaSpinner>LOADING...</h1><uib-accordion close-others=false><div uib-accordion-group class="panel-default criteria-panel" ng-repeat="group in vm.criteriaGroups track by $index" is-open=group.isOpen><uib-accordion-heading>{{group.name}} <i class="pull-right glyphicon" ng-class="{\'glyphicon-chevron-down\': group.isOpen, \'glyphicon-chevron-right\': !group.isOpen}"></i></uib-accordion-heading><div class=criteria-item ng-repeat="criterion in group.criteria track by $index" ng-click=vm.selectCriterion(criterion) ng-class="{\'selected\' : criterion.isSelected}"><div class=criteria-item-left>{{criterion.name}}</div><div class=criteria-item-right><div class=text-right><span>icon1</span> <span>icon2</span></div><button class="btn btn-default pull-right" ng-click="vm.editCriteriaCoefficient($event, criterion)"><criteria-coefficient-indicator coefficient=criterion.coefficient></criteria-coefficient-indicator></button></div><div class="criteria-item-footer text-right">STARS</div></div></div></uib-accordion></div></div>');
+$templateCache.put('app/components/decisionCriteria/decision-criteria.html','<div class=decision-criteria><div class="criteria-header scroll-wrapper-header"><div class="col-md-6 col-sm-6"><h4>Criteria</h4></div><div class="col-md-6 col-sm-6"><a href class=add-createria-btn><span class="glyphicon glyphicon-plus" aria-hidden=true></span>Add criterion</a></div></div><div class=scroll-wrapper><h1 ng-show=vm.criteriaSpinner>LOADING...</h1><uib-accordion close-others=false><div uib-accordion-group class="panel-default criteria-panel" ng-repeat="group in vm.criteriaGroups track by $index" is-open=group.isOpen><uib-accordion-heading>{{group.name}} <i class="pull-right glyphicon" ng-class="{\'glyphicon-chevron-down\': group.isOpen, \'glyphicon-chevron-right\': !group.isOpen}"></i></uib-accordion-heading><div class=criteria-item ng-repeat="criterion in group.criteria track by $index" ng-click=vm.selectCriterion(criterion) ng-class="{\'selected\' : criterion.isSelected}"><div class=criteria-item-left>{{criterion.name}} <span>STARS</span></div><div class=criteria-item-right><button class="btn btn-default pull-right" ng-click="vm.editCriteriaCoefficient($event, criterion)"><criteria-coefficient-indicator coefficient=criterion.coefficient></criteria-coefficient-indicator></button></div></div></div></uib-accordion></div></div>');
 $templateCache.put('app/components/decisionSorter/decision-sorter.html','<ul class=decision-sorter><li ng-repeat="sorter in sorters track by $index" ng-click=selectSorter(sorter) ng-class="{\'selected\': sorter.order}"><span>{{sorter.name}}</span> <span ng-show="sorter.order === \'DESC\'" class="glyphicon glyphicon-sort-by-attributes-alt" aria-hidden=true></span> <span ng-show="sorter.order === \'ASC\'" class="glyphicon glyphicon-sort-by-attributes" aria-hidden=true></span></li></ul>');
 $templateCache.put('app/components/gridstackWrapper/decision-partial.html','<div class=row><div class=col-md-12><div class=row><div class=col-md-3><label ng-show=vm.showPercentage>Criteria compliance: {{item.criteriaCompliancePercentage}}</label></div><div class=col-md-6><h4><a href ng-click="vm.goToDecision($event, item.decisionId)">{{item.name}}</a></h4></div><div class=col-md-3></div></div><div class=row><div class=col-md-2>IMG</div><div class=col-md-10></div></div><div class="row decision-detailed-chars"><div class=col-md-12><div class=app-loader-small ng-show=item.detailsSpinner>LOADING...</div><div ng-if=item.characteristics><h4>Characteristics</h4><div class=row ng-repeat="(key, value) in item.characteristics track by key"><div class="col-md-12 chars-group-name"><label>{{vm.getGroupNameById(key)}}</label></div><div class=row ng-repeat="characteristic in value track by $index"><div class=col-md-6>{{characteristic.name}}:</div><div class=col-md-6><span ng-show=characteristic.value>{{characteristic.value}}</span> <span ng-show=!characteristic.value class=not-set>Not set</span></div></div></div></div></div></div></div></div>');
 $templateCache.put('app/components/gridstackWrapper/gridstack-wrapper.html','<div gridstack gridstack-handler=vm.gridStack class="grid-stack grid-stack-animate" options=vm.options on-resize-stop="vm.onResize($event, ui)"><div gridstack-item ng-repeat="item in vm.displayList track by $index" class="grid-stack-item {{vm.element}}" gs-item-x=0 gs-item-y=item.position id={{item.decisionId}} gs-item-width=12 gs-item-height=1 gs-item-autopos=1 ng-mouseover=vm.getDetails(item)><div class=panel-drag-handler></div><div class=grid-stack-item-content ng-class="{\'selected\' : item.isSelected}" ng-click=vm.selectDecision(item)><ng-include src=vm.innerTemplate></ng-include></div></div></div>');}]);

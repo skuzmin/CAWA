@@ -68,7 +68,7 @@
 
         function rearrangeList(currentList) {
             console.log(currentList);
-            var OFFSET_Y = 80 + 5; // added margin
+            var OFFSET_Y = 80 + 10; // added margin
             var maxHeight = OFFSET_Y * 10; //$('.list-item-sort').length();
             // Check if current postion changed
             for (var i = 0; i < currentList.length; i++) {
@@ -80,24 +80,12 @@
                     $el.css({
                         'top': newTop,
                     });
+                    // .one('webkitTransitionEnd', function(evt) {
+                    //         $(evt.target).removeClass('animation-move'); //Bug with first element
+                    //     })
+                    //     .addClass('animation-move');
                 }
-            };
-            // $('.list-item-sort').not('.ng-leave').each(function(idx, el) {
-            //     var $el = $(el);
-
-            //     var newTop = idx * OFFSET_Y;
-
-            //     if (newTop != parseInt($el.css('top')) && newTop <= maxHeight) {
-            //         $el.css({
-            //                 'top': newTop
-            //             });
-            //         console.log(newTop);
-            //             // .one('webkitTransitionEnd', function(evt) {
-            //             //     $(evt.target).removeClass('moving');
-            //             // })
-            //             // .addClass('moving');
-            //     }
-            // });
+            }
         }
     }
     // Item

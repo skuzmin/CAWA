@@ -18,19 +18,22 @@
                 <div class="criteria-item" ng-repeat="criterion in group.criteria track by $index" ng-click="vm.selectCriterion(criterion)" ng-class="{'selected' : criterion.isSelected}">
                     <div class="criteria-item-left">
                         {{criterion.name}}
+                        <span>
+                            STARS
+                        </span>
                     </div>
                     <div class="criteria-item-right">
-                        <div class="text-right">
+<!--                         <div class="text-right">
                             <span>icon1</span>
                             <span>icon2</span>
-                        </div>
+                        </div> -->
                         <button class="btn btn-default pull-right" ng-click="vm.editCriteriaCoefficient($event, criterion)">
                             <criteria-coefficient-indicator coefficient="criterion.coefficient"></criteria-coefficient-indicator>
                         </button>
                     </div>
-                    <div class="criteria-item-footer text-right">
-                        STARS
-                    </div>
+<!--                     <div class="criteria-item-footer text-right">
+                        
+                    </div> -->
                 </div>
             </div>
         </uib-accordion>
