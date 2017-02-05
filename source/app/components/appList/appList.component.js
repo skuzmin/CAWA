@@ -18,60 +18,84 @@
     AppListController.$inject = ['$scope', '$rootScope', '$window'];
 
     function AppListController($scope, $root, $window) {
+        var vm = this;
         $scope.sorter = 'decisionId';
 
         $scope.timer = 0;
 
         $root.currItemIndex = 0;
-        var oldList =[],
+        var oldList = [],
             reloatItems = [];
+        var currentList = [];
 
         // TODO: oprimize code
-        $scope.$watch('sorter', function() {
-            $window.clearTimeout($scope.timer);
-            $scope.timer = $window.setTimeout(rearrange, 100);
+        // $scope.$watch('sorter', function() {
+        //     $window.clearTimeout($scope.timer);
+        //     $scope.timer = $window.setTimeout(rearrangeList, 100);
+        // });
+        _.each(vm.list, function(value, key) {
+            currentList.push(value.decisionId);
         });
+
 
         $scope.$watch('vm.list', function(list) {
             $window.clearTimeout($scope.timer);
-            $scope.timer = $window.setTimeout(rearrange, 100);
 
-            var currentList = [];
+
+            currentList = [];
             _.each(list, function(value, key) {
                 currentList.push(value.decisionId);
-            })
+            });
+            $scope.timer = $window.setTimeout(function() {
+                rearrangeList(currentList);
+            }, 10);
 
-            // Get items that chnage position
-            reloatItems = _.differenceWith(oldList, currentList, _.isEqual);
-            console.log(reloatItems);
-            oldList = currentList;
-            return oldList, reloatItems;
+            // // Get items that chnage position
+            // reloatItems = _.differenceWith(oldList, currentList, _.isEqual);
+            // console.log(reloatItems);
+            // oldList = currentList;
+            // return oldList, reloatItems;
         });
 
-        rearrange();
+        rearrangeList(currentList);
 
 
         function checkPositionUpdate(list, newList) {
 
         }
 
-        function rearrange() {
+        function rearrangeList(currentList) {
+            console.log(currentList);
+            var OFFSET_Y = 80 + 5; // added margin
+            var maxHeight = OFFSET_Y * 10; //$('.list-item-sort').length();
             // Check if current postion changed
-            $('.list-item-sort').each(function(idx, el) {
-                var $el = $(el);
-                var OFFSET_Y = 50 + 5; // added margin
-                var newTop = idx * OFFSET_Y;
+            for (var i = 0; i < currentList.length; i++) {
+                var $el = $('#decision-' + currentList[i]);
+                var newTop = i * OFFSET_Y;
+                console.log(newTop);
 
-                // if (newTop != parseInt($el.css('top'))) {
-                //     $el.css({
-                //             'top': newTop
-                //         })
-                //         .one('webkitTransitionEnd', function(evt) {
-                //             $(evt.target).removeClass('moving');
-                //         })
-                //         // .addClass('moving');
-                // }
-            });
+                if (newTop != parseInt($el.css('top'))) {
+                    $el.css({
+                        'top': newTop,
+                    });
+                }
+            };
+            // $('.list-item-sort').not('.ng-leave').each(function(idx, el) {
+            //     var $el = $(el);
+
+            //     var newTop = idx * OFFSET_Y;
+
+            //     if (newTop != parseInt($el.css('top')) && newTop <= maxHeight) {
+            //         $el.css({
+            //                 'top': newTop
+            //             });
+            //         console.log(newTop);
+            //             // .one('webkitTransitionEnd', function(evt) {
+            //             //     $(evt.target).removeClass('moving');
+            //             // })
+            //             // .addClass('moving');
+            //     }
+            // });
         }
     }
     // Item

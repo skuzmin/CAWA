@@ -1,7 +1,17 @@
 <div class="app-list-wrapper">
-  <div class="app-list-container">
-      <div id="decision-{{ item.decisionId }}" ng-repeat="item in vm.list track by item.decisionId" class="list-item-sort" style="top: {{$index*55}}px" app-list-item>
-          <strong>{{ item.decisionId }}</strong>: {{item.name}} | {{tem.criteriaCompliancePercentage}}
-      </div>
-  </div>
+    <div class="app-list-container">
+        <div id="decision-{{ item.decisionId }}" ng-repeat="item in vm.list track by item.decisionId" class="list-item-sort" app-list-item>
+            <strong>{{ item.decisionId }}</strong>: {{item.name}}
+            <h4><a href="" ng-click="vm.goToDecision($event, item.decisionId)">{{item.name}}</a></h4>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label ng-show="vm.showPercentage">Criteria compliance: {{item.criteriaCompliancePercentage}}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
