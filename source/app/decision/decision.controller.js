@@ -25,12 +25,12 @@
 
         function asyncLoading(result) {
             //Acync rendering
-            $timeout(function() {
+            // $timeout(function() {
                 vm.decisionsList = vm.decisionsList.concat(result.splice(0, defaultDecisionCount));
                 if (result.length > 0) {
                     asyncLoading(result);
                 }
-            }, 0);
+            // }, 0);
         }
 
         function prepareDataToDisplay(characteristics) {

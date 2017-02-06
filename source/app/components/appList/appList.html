@@ -1,0 +1,11 @@
+<div class="app-list-wrapper">
+    <div class="app-list-container">
+        <div id="decision-{{ item.decisionId }}" ng-repeat="item in vm.list track by item.decisionId" class="list-item-sort" app-list-item>
+            <strong>{{ item.decisionId }}</strong> 
+            <div class="pull-right">
+              Criteria compliance: <span class="list-item-sort-criteria">{{item.criteriaCompliancePercentage}}</span>
+            </div>
+            <h4 class="list-item-sort-title"><a href="" ng-click="vm.goToDecision($event, item.decisionId)">{{item.name}}</a></h4>
+        </div>
+    </div>
+</div>
