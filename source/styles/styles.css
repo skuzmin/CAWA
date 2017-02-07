@@ -249,6 +249,8 @@ a {
   width: 100%;
   background-color: #FFF;
   height: 80px;
+  min-height: 80px;
+  max-height: 300px;
   top: 0;
   margin: 0 0 10px;
   padding: 8px 16px;
@@ -259,20 +261,23 @@ a {
   -webkit-border-radius: 2px;
   border-radius: 2px;
   z-index: 3;
-  -webkit-transition: left 0.3s, top 0.3s, height 0.3s, width 0.3s, opacity 0.3s;
-  -moz-transition: left 0.3s, top 0.3s, height 0.3s, width 0.3s, opacity 0.3s;
+}
+.list-item-sort:hover {
+  z-index: 10;
+  border-color: #226eb1;
 }
 .list-item-sort.ng-animate {
   z-index: 2;
+  -webkit-transition: left 0.3s, top 0.3s, opacity 0.3s;
+  -moz-transition: left 0.3s, top 0.3s, opacity 0.3s;
 }
 .list-item-sort.ng-enter {
   z-index: 2;
   opacity: 0;
-  -webkit-transition: opacity 0.25s;
-  -moz-transition: opacity 0.25s;
-  -webkit-transition-delay: 0.15s;
-  /* Safari */
-  transition-delay: 0.15s;
+  -webkit-transition: opacity 0.3s;
+  -moz-transition: opacity 0.3s;
+  -webkit-transition-delay: 0.2s;
+  transition-delay: 0.2s;
 }
 .list-item-sort.ng-enter.ng-enter-active {
   opacity: 1;
