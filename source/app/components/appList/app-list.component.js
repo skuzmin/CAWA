@@ -44,21 +44,24 @@
             });
 
             // Create obj with id and el height
-            currentListWithHeight = generateHeightList(currentList);
+            currentListWithHeight = generateList(currentList);
 
-            // TODO: maybe remove delay need
+            // TODO: maybe remove delay
             // timer = $timeout(function() {
-            // rearrangeList(currentList);
-            rearrangeListHeight(currentListWithHeight);
+            // reRangeList(currentList);
+            reRangeList(currentListWithHeight, 0);
             // }, 10);
         }
 
-        function generateHeightList(arr) { //save to local storage
-            var $el, elHeight, arrHeight = [];
+        function generateList(arr) { //save to local storage
+            var el,
+                elHeight,
+                arrHeight = [],
+                obj = {};
+
             for (var i = 0; i < arr.length; i++) {
-                var obj = {};
-                $el = $('#decision-' + arr[i]);
-                elHeight = $el.outerHeight(); //not include bottom margin
+                el = document.getElementById('decision-' + arr[i]);
+                elHeight = el.offsetHeight; //not include bottom margin
                 obj = {
                     id: arr[i],
                     height: elHeight
@@ -78,80 +81,44 @@
             return sum;
         }
 
-        function rearrangeListHeight(currentList) {
-            var $el,
+        // Just move elements under resizeble el
+        function reRangeList(currentList, index) {
+            var el,
+                elStyle,
                 newTop,
+                currentTop,
                 offset,
                 OFFSET_Y_BOTTOM = 10;
 
-            for (var i = 0; i < currentList.length; i++) {
-                $el = $('#decision-' + currentList[i].id);
+            for (var i = 0; i < arr.length; i++) {
+                el = document.getElementById('decision-' + arr[i]);
                 offset = i * OFFSET_Y_BOTTOM;
                 newTop = sumArrayIndex(currentList, i) + offset;
-                if (newTop != parseInt($el.css('top'))) {
-                    $el.css({
-                        'top': newTop
-                    });
-                }
-            }
 
+                elStyle = window.getComputedStyle(element);
+                currentTop = style.getPropertyValue('top');
 
-            // Store to local storage
-            // $window.localStorage.setItem(sortList, currentList);
-        }
-
-        // Just move elements inder resizeble el
-        function rearrangeListHeightByIndex(currentList, index) {
-            var $el,
-                newTop,
-                offset,
-                OFFSET_Y_BOTTOM = 10;
-
-            for (var i = index; i < currentList.length; i++) {
-                $el = $('#decision-' + currentList[i].id);
-                offset = i * OFFSET_Y_BOTTOM;
-                newTop = sumArrayIndex(currentList, i) + offset;
-                if (newTop != parseInt($el.css('top'))) {
-                    $el.css({
-                        'top': newTop
-                    });
+                if (newTop != currentTop) {
+                    el.style.top = currentTop;
                 }
             }
         }
 
-        // TODO: remove
-        function rearrangeList(currentList) {
-            var $el, newTop;
-            _.forEach(currentList, function(id, i) {
-                $el = $('#decision-' + id);
-                newTop = i * OFFSET_Y;
-                if (newTop != parseInt($el.css('top'))) {
-                    $el.css({
-                        'top': newTop
-                    });
-                }
-            });
-        }
-
-
+        // Resize
         function updateResizeElement(event) {
+            if (event.rect.height > 300 || event.rect.height < 80) return false;
+
             var target = event.target,
                 y = (parseFloat(target.getAttribute('data-y')) || 0);
-
-            // update the element's style
-
-            if (event.rect.height > 300 || event.rect.height < 80) return false;
             target.style.height = event.rect.height + 'px';
 
-            // console.log(target.id);
             // TODO: avoid jQuery and move only index from current index
             var elIndex = $('#' + target.id).index();
 
             currentListWithHeight[elIndex].height = event.rect.height;
-            rearrangeListHeightByIndex(currentListWithHeight, elIndex);
+            reRangeList(currentListWithHeight, elIndex);
         }
 
-        // Resize
         interact('.app-resize-h')
             .resizable({
                 preserveAspectRatio: true,
