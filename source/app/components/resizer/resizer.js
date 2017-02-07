@@ -18,7 +18,6 @@
                 var rightW = $($attrs.resizerRight).width();
                 var leftW = $($attrs.resizerLeft).width();
                 var totalW = rightW + leftW;
-                console.log(rightW);
 
                 function mousemove(event) {
 

@@ -47,10 +47,10 @@
             currentListWithHeight = generateHeightList(currentList);
 
             // TODO: maybe remove delay need
-            timer = $timeout(function() {
-                // rearrangeList(currentList);
-                rearrangeListHeight(currentListWithHeight);
-            }, 10);
+            // timer = $timeout(function() {
+            // rearrangeList(currentList);
+            rearrangeListHeight(currentListWithHeight);
+            // }, 10);
         }
 
         function generateHeightList(arr) { //save to local storage
@@ -84,20 +84,39 @@
                 offset,
                 OFFSET_Y_BOTTOM = 10;
 
-            _.forEach(currentList, function(item, i) {
-                $el = $('#decision-' + item.id);
+            for (var i = 0; i < currentList.length; i++) {
+                $el = $('#decision-' + currentList[i].id);
                 offset = i * OFFSET_Y_BOTTOM;
                 newTop = sumArrayIndex(currentList, i) + offset;
-                // console.log(newTop);
                 if (newTop != parseInt($el.css('top'))) {
                     $el.css({
                         'top': newTop
                     });
                 }
-            });
+            }
+
 
             // Store to local storage
             // $window.localStorage.setItem(sortList, currentList);
+        }
+
+        // Just move elements inder resizeble el
+        function rearrangeListHeightByIndex(currentList, index) {
+            var $el,
+                newTop,
+                offset,
+                OFFSET_Y_BOTTOM = 10;
+
+            for (var i = index; i < currentList.length; i++) {
+                $el = $('#decision-' + currentList[i].id);
+                offset = i * OFFSET_Y_BOTTOM;
+                newTop = sumArrayIndex(currentList, i) + offset;
+                if (newTop != parseInt($el.css('top'))) {
+                    $el.css({
+                        'top': newTop
+                    });
+                }
+            }
         }
 
         // TODO: remove
@@ -127,8 +146,9 @@
             // console.log(target.id);
             // TODO: avoid jQuery and move only index from current index
             var elIndex = $('#' + target.id).index();
+
             currentListWithHeight[elIndex].height = event.rect.height;
-            rearrangeListHeight(currentListWithHeight);
+            rearrangeListHeightByIndex(currentListWithHeight, elIndex);
         }
 
         // Resize

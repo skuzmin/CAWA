@@ -799,10 +799,10 @@
             currentListWithHeight = generateHeightList(currentList);
 
             // TODO: maybe remove delay need
-            timer = $timeout(function() {
-                // rearrangeList(currentList);
-                rearrangeListHeight(currentListWithHeight);
-            }, 10);
+            // timer = $timeout(function() {
+            // rearrangeList(currentList);
+            rearrangeListHeight(currentListWithHeight);
+            // }, 10);
         }
 
         function generateHeightList(arr) { //save to local storage
@@ -836,20 +836,39 @@
                 offset,
                 OFFSET_Y_BOTTOM = 10;
 
-            _.forEach(currentList, function(item, i) {
-                $el = $('#decision-' + item.id);
+            for (var i = 0; i < currentList.length; i++) {
+                $el = $('#decision-' + currentList[i].id);
                 offset = i * OFFSET_Y_BOTTOM;
                 newTop = sumArrayIndex(currentList, i) + offset;
-                // console.log(newTop);
                 if (newTop != parseInt($el.css('top'))) {
                     $el.css({
                         'top': newTop
                     });
                 }
-            });
+            }
+
 
             // Store to local storage
             // $window.localStorage.setItem(sortList, currentList);
+        }
+
+        // Just move elements inder resizeble el
+        function rearrangeListHeightByIndex(currentList, index) {
+            var $el,
+                newTop,
+                offset,
+                OFFSET_Y_BOTTOM = 10;
+
+            for (var i = index; i < currentList.length; i++) {
+                $el = $('#decision-' + currentList[i].id);
+                offset = i * OFFSET_Y_BOTTOM;
+                newTop = sumArrayIndex(currentList, i) + offset;
+                if (newTop != parseInt($el.css('top'))) {
+                    $el.css({
+                        'top': newTop
+                    });
+                }
+            }
         }
 
         // TODO: remove
@@ -879,8 +898,9 @@
             // console.log(target.id);
             // TODO: avoid jQuery and move only index from current index
             var elIndex = $('#' + target.id).index();
+
             currentListWithHeight[elIndex].height = event.rect.height;
-            rearrangeListHeight(currentListWithHeight);
+            rearrangeListHeightByIndex(currentListWithHeight, elIndex);
         }
 
         // Resize
@@ -1078,6 +1098,75 @@
 
     angular
         .module('app.components')
+        .directive('decisionSorter', decisionSorter);
+
+    function decisionSorter() {
+        var directive = {
+            restrict: 'E',
+            replace: 'true',
+            templateUrl: 'app/components/decisionSorter/decision-sorter.html',
+            scope: {
+                sortType: '@'
+            },
+            link: link
+        };
+
+        return directive;
+
+        function link(scope, elem, attrs) {
+            //subscribe on init sorter event
+            var
+                sorterListener = scope.$on('initSorter', function(event, data) {
+                    if (scope.sortType === data.type) {
+                        scope.mode = data.mode;
+                        scope.sorters = data.list;
+                    }
+                    scope.$on('$destroy', function() {
+                        sorterListener();
+                    });
+                }),
+                order,
+                sortObj;
+
+            scope.selectSorter = function(sorter) {
+                //clear all sorting orders
+                order = sorter.order;
+                sortObj = { 
+                    sort: {id: null, order: null}, 
+                    mode: '' 
+                };
+                _.forEach(scope.sorters, function(s) {
+                    s.order = '';
+                });
+                //set correct sort order for sorter button
+                if (order === 'DESC') {
+                    sorter.order = 'ASC';
+                } else if (order === 'ASC' && scope.mode === 'threeStep') {
+                    sorter.order = null;
+                } else {
+                    sorter.order = 'DESC';
+                }
+                //set sortObj data for sorting request
+                if(sorter.order) {
+                    sortObj.sort.id = sorter.characteristicId || sorter.propertyId;
+                    sortObj.sort.order = sorter.order;
+                }
+                sortObj.mode = scope.sortType;
+                
+                scope.$emit('selectSorter', sortObj);
+            };
+
+        }
+    }
+
+})();
+
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.components')
         .controller('CriteriaCoefficientPopupController', CriteriaCoefficientPopupController);
 
     CriteriaCoefficientPopupController.$inject = ['$uibModalInstance', 'criteria', 'DecisionCriteriaConstant'];
@@ -1246,75 +1335,6 @@
 
     angular
         .module('app.components')
-        .directive('decisionSorter', decisionSorter);
-
-    function decisionSorter() {
-        var directive = {
-            restrict: 'E',
-            replace: 'true',
-            templateUrl: 'app/components/decisionSorter/decision-sorter.html',
-            scope: {
-                sortType: '@'
-            },
-            link: link
-        };
-
-        return directive;
-
-        function link(scope, elem, attrs) {
-            //subscribe on init sorter event
-            var
-                sorterListener = scope.$on('initSorter', function(event, data) {
-                    if (scope.sortType === data.type) {
-                        scope.mode = data.mode;
-                        scope.sorters = data.list;
-                    }
-                    scope.$on('$destroy', function() {
-                        sorterListener();
-                    });
-                }),
-                order,
-                sortObj;
-
-            scope.selectSorter = function(sorter) {
-                //clear all sorting orders
-                order = sorter.order;
-                sortObj = { 
-                    sort: {id: null, order: null}, 
-                    mode: '' 
-                };
-                _.forEach(scope.sorters, function(s) {
-                    s.order = '';
-                });
-                //set correct sort order for sorter button
-                if (order === 'DESC') {
-                    sorter.order = 'ASC';
-                } else if (order === 'ASC' && scope.mode === 'threeStep') {
-                    sorter.order = null;
-                } else {
-                    sorter.order = 'DESC';
-                }
-                //set sortObj data for sorting request
-                if(sorter.order) {
-                    sortObj.sort.id = sorter.characteristicId || sorter.propertyId;
-                    sortObj.sort.order = sorter.order;
-                }
-                sortObj.mode = scope.sortType;
-                
-                scope.$emit('selectSorter', sortObj);
-            };
-
-        }
-    }
-
-})();
-
-(function() {
-
-    'use strict';
-
-    angular
-        .module('app.components')
         .directive('dragResizeHandler', dragResizeHandler);
 
     function dragResizeHandler() {
@@ -1364,7 +1384,6 @@
                 var rightW = $($attrs.resizerRight).width();
                 var leftW = $($attrs.resizerLeft).width();
                 var totalW = rightW + leftW;
-                console.log(rightW);
 
                 function mousemove(event) {
 
