@@ -90,23 +90,25 @@
                 offset,
                 OFFSET_Y_BOTTOM = 10;
 
-            for (var i = 0; i < arr.length; i++) {
-                el = document.getElementById('decision-' + arr[i]);
+            for (var i = 0; i < currentList.length; i++) {
+                el = document.getElementById('decision-' + currentList[i].id);
                 offset = i * OFFSET_Y_BOTTOM;
                 newTop = sumArrayIndex(currentList, i) + offset + 'px';
 
                 elStyle = window.getComputedStyle(el);
                 currentTop = elStyle.getPropertyValue('top');
 
+                console.log(currentTop);
+                console.log(newTop);
                 if (newTop !== currentTop) {
-                    el.style.top = currentTop;
+                    el.style.top = newTop;
                 }
             }
         }
 
         // Resize
         function updateResizeElement(event) {
-            if (event.rect.height > 300 || event.rect.height < 80) return false;
+            if (event.rect.height >= 400 || event.rect.height <= 80) return false; //Make value as constants
 
             var target = event.target,
                 y = (parseFloat(target.getAttribute('data-y')) || 0);
