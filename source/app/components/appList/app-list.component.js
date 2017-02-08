@@ -93,12 +93,12 @@
             for (var i = 0; i < arr.length; i++) {
                 el = document.getElementById('decision-' + arr[i]);
                 offset = i * OFFSET_Y_BOTTOM;
-                newTop = sumArrayIndex(currentList, i) + offset;
+                newTop = sumArrayIndex(currentList, i) + offset + 'px';
 
-                elStyle = window.getComputedStyle(element);
-                currentTop = style.getPropertyValue('top');
+                elStyle = window.getComputedStyle(el);
+                currentTop = elStyle.getPropertyValue('top');
 
-                if (newTop != currentTop) {
+                if (newTop !== currentTop) {
                     el.style.top = currentTop;
                 }
             }
