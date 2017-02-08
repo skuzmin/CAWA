@@ -26,21 +26,14 @@
     </div>
     <!-- Main stuff -->
     <div class="app-main-panel main-panel">
-       <div id="panel-left" class="app-panel-left">
+       <div id="panel-left" class="app-panel-left resizer" resizer-right="#panel-center" resizer>
            <decision-criteria decision-id="vm.decisionId"></decision-criteria>
 
-            <div id="app-resizer-left"
-                class="app-resizer"
-                resizer="vertical"
-                resizer-width="6"
-                resizer-left="#panel-left"
-                resizer-right="#panel-center"
-                resizer-min="200"
-                resizer-max="400"></div>
+        <span class="app-resizer"></span>
 
        </div>
 
-       <div id="panel-center" class="app-panel-center">
+       <div id="panel-center" class="app-panel-center" resizer-right="#panel-right" resizer>
             <div class="decisions-header scroll-wrapper-header">
                 <div class="col-md-2">
                     <h4>Decisions</h4>
@@ -54,8 +47,9 @@
                     <a href="" class="add-createria-btn"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Add decision</a>
                 </div>
             </div>
-            <div class="scroll-wrapper">
-                <!--TODO: TEMP fix for future spinner -->
+            <!-- <span class="app-resizer"></span> -->
+            <!-- <div class="scroll-wrapper"> -->
+                <!--TODO: TEMP fix for future spinner
                 <h1 ng-show="vm.decisionsSpinner" class="app-loader-small">LOADING...</h1>
                 <app-paginator></app-paginator>
                 <app-list list="vm.decisionsList"></app-list>
