@@ -97,9 +97,6 @@
 
                 elStyle = window.getComputedStyle(el);
                 currentTop = elStyle.getPropertyValue('top');
-
-                console.log(currentTop);
-                console.log(newTop);
                 if (newTop !== currentTop) {
                     el.style.top = newTop;
                 }
@@ -108,7 +105,7 @@
 
         // Resize
         function updateResizeElement(event) {
-            if (event.rect.height >= 400 || event.rect.height <= 80) return false; //Make value as constants
+            if (event.rect.height <= 80) return false; //Make value as constants
 
             var target = event.target,
                 y = (parseFloat(target.getAttribute('data-y')) || 0);
@@ -116,6 +113,8 @@
 
             // TODO: avoid jQuery and move only index from current index
             var elIndex = $('#' + target.id).index();
+
+            $('.list-item-sort').addClass('app-stop-animation');
 
             currentListWithHeight[elIndex].height = event.rect.height;
             reRangeList(currentListWithHeight, elIndex);
@@ -131,7 +130,10 @@
                     top: true
                 }
             })
-            .on('resizemove', updateResizeElement); //TODO: check performance
+            .on('resizemove', updateResizeElement)
+            .on('resizeend', function() {
+                $('.list-item-sort').removeClass('app-stop-animation');
+            });
 
 
     }

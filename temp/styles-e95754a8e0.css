@@ -259,6 +259,8 @@ a {
   margin-bottom: 10px;
   -webkit-border-radius: 2px;
   border-radius: 2px;
+  -webkit-transition: left 0.3s, top 0.3s, opacity 0.3s;
+  -moz-transition: left 0.3s, top 0.3s, opacity 0.3s;
   z-index: 3;
 }
 .list-item-sort:hover {
@@ -267,8 +269,6 @@ a {
 }
 .list-item-sort.ng-animate {
   z-index: 2;
-  -webkit-transition: left 0.3s, top 0.3s, opacity 0.3s;
-  -moz-transition: left 0.3s, top 0.3s, opacity 0.3s;
 }
 .list-item-sort.ng-enter {
   z-index: 2;
@@ -284,10 +284,9 @@ a {
 .list-item-sort.ng-leave {
   opacity: 0;
 }
-.list-item-sort.animation-move {
-  z-index: 5;
-  -webkit-box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.5);
-  box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.5);
+.app-stop-animation {
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
 }
 .list-item-sort-title {
   margi: 5px 0 10px;
