@@ -5,66 +5,63 @@
         .module('app.components')
         .directive('resizer', function($document) {
 
-            return function($scope, $element, $attrs) {
+            return function($scope, $el, $attrs) {
 
-                $element.on('mousedown', function(event) {
-                    event.preventDefault();
-
-                    $document.on('mousemove', mousemove);
-                    $document.on('mouseup', mouseup);
-                });
+                function updateResizeElement(event) {
+                    var target = event.target,
+                        x = (parseFloat(target.getAttribute('data-x')) || 0);
 
 
-                var rightW = $($attrs.resizerRight).width();
-                var leftW = $($attrs.resizerLeft).width();
-                var totalW = rightW + leftW;
-                console.log(rightW);
+                    // TODO: use pure JS not jQuery
+                    var el, elMax, elMin,
+                        elW, elLeft,
 
-                function mousemove(event) {
+                        elNext, elNextW, elNextLeft,
+                        totalWidth;
 
-                    if ($attrs.resizer == 'vertical') {
-                        // Handle vertical resizer
-                        var x = event.pageX;
 
-                        if ($attrs.resizerMax && x > $attrs.resizerMax) {
-                            x = parseInt($attrs.resizerMax);
-                        } else if ($attrs.resizerMin && x < $attrs.resizerMin) {
-                            x = parseInt($attrs.resizerMin);
+                    el = $(target);
+
+                    // Limit
+                    elMax = el.attr('resizer-max') || 1900;
+                    elMin = el.attr('resizer-min') || 100;
+
+                    if (event.rect.width <= elMin || event.rect.width >= elMax) return;
+
+                    elW = el.outerWidth();
+                    elLeft = el.position();
+
+
+                    elNext = $(el.attr('resizer-right'));
+                    elNextW = elNext.outerWidth();
+                    elNextLeft = elNext.position();
+
+                    totalWidth = elW + elNextW;
+
+                    // Current element
+                    el.css({
+                        left: elLeft.left,
+                        width: event.rect.width + 'px'
+                    });
+
+                    // Next element
+                    elNext.css({
+                        left: elLeft.left + event.rect.width + 'px',
+                        width: totalWidth - event.rect.width + 'px'
+                    });
+                }
+
+                interact('.app-resizer-horizontal')
+                    .resizable({
+                        preserveAspectRatio: true,
+                        edges: {
+                            left: false,
+                            right: true,
+                            bottom: false,
+                            top: true
                         }
-
-                        $element.css({
-                            left: x + 'px'
-                        });
-
-                        $($attrs.resizerLeft).css({
-                            width: x + 'px'
-                        });
-                        $($attrs.resizerRight).css({
-                            left: (x + parseInt($attrs.resizerWidth)) + 'px',
-                            width: totalW - parseInt(x) + parseInt($attrs.resizerWidth)
-                        });
-
-                    } else {
-                        // Handle horizontal resizer
-                        var y = window.innerHeight - event.pageY;
-
-                        $element.css({
-                            bottom: y + 'px'
-                        });
-
-                        $($attrs.resizerTop).css({
-                            bottom: (y + parseInt($attrs.resizerHeight)) + 'px'
-                        });
-                        $($attrs.resizerBottom).css({
-                            height: y + 'px'
-                        });
-                    }
-                }
-
-                function mouseup() {
-                    $document.unbind('mousemove', mousemove);
-                    $document.unbind('mouseup', mouseup);
-                }
+                    })
+                    .on('resizemove', updateResizeElement);
             };
         });
 })();

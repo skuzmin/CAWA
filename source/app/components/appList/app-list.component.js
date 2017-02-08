@@ -14,15 +14,22 @@
             controllerAs: 'vm'
         });
 
-    AppListController.$inject = ['$timeout', 'DecisionNotificationService', 'DecisionSharedService'];
+    AppListController.$inject = ['$timeout', 'DecisionNotificationService', 'DecisionSharedService', '$window'];
 
-    function AppListController($timeout, DecisionNotificationService, DecisionSharedService) {
+    function AppListController($timeout, DecisionNotificationService, DecisionSharedService, $window) {
         var
             vm = this,
             currentList = [],
             timer,
             OFFSET_Y = 80 + 10, // refactor
-            maxHeight = OFFSET_Y * 10; // refactor
+            maxHeight = OFFSET_Y * 10, // refactor
+            currentListWithHeight = [];
+
+
+        // TODO: save all list elements with height to localstorage
+        // if ($window.localStorage.getItem(sortList).length > 0) {
+        //     currentList = JSON.parse($window.localStorage.getItem(sortList))
+        // }
 
         //TODO: refactor later skuzmin
         vm.showPercentage = false;
@@ -35,24 +42,100 @@
             currentList = _.map(vm.list, function(item) {
                 return item.decisionId;
             });
-            timer = $timeout(function() {
-                rearrangeList(currentList);
-            }, 0);
+
+            // Create obj with id and el height
+            currentListWithHeight = generateList(currentList);
+
+            // TODO: maybe remove delay
+            // timer = $timeout(function() {
+            // reRangeList(currentList);
+            reRangeList(currentListWithHeight, 0);
+            // }, 10);
         }
 
-        function rearrangeList(currentList) {
-            var $el, newTop;
-            console.log(currentList);
-            // Check if current postion changed
-            _.forEach(currentList, function(id, i) {
-                $el = $('#decision-' + id);
-                newTop = i * OFFSET_Y;
-                console.log(newTop);
-                if (newTop != parseInt($el.css('top'))) {
-                    $el.css({ 'top': newTop });
-                }
-            });
+        function generateList(arr) { //save to local storage
+            var el,
+                elHeight,
+                arrHeight = [],
+                obj = {};
+
+            for (var i = 0; i < arr.length; i++) {
+                el = document.getElementById('decision-' + arr[i]);
+                elHeight = el.offsetHeight; //not include bottom margin
+                obj = {
+                    id: arr[i],
+                    height: elHeight
+                };
+                arrHeight[i] = obj;
+            }
+
+            return arrHeight;
         }
+
+        // TODO: Find better solution
+        function sumArrayIndex(arr, index) {
+            var sum = 0;
+            for (var i = 0; i < index; i++) {
+                sum += parseInt(arr[i].height);
+            }
+            return sum;
+        }
+
+        // Just move elements under resizeble el
+        function reRangeList(currentList, index) {
+            var el,
+                elStyle,
+                newTop,
+                currentTop,
+                offset,
+                OFFSET_Y_BOTTOM = 10;
+
+            for (var i = 0; i < currentList.length; i++) {
+                el = document.getElementById('decision-' + currentList[i].id);
+                offset = i * OFFSET_Y_BOTTOM;
+                newTop = sumArrayIndex(currentList, i) + offset + 'px';
+
+                elStyle = window.getComputedStyle(el);
+                currentTop = elStyle.getPropertyValue('top');
+                if (newTop !== currentTop) {
+                    el.style.top = newTop;
+                }
+            }
+        }
+
+        // Resize
+        function updateResizeElement(event) {
+            if (event.rect.height <= 80) return false; //Make value as constants
+
+            var target = event.target,
+                y = (parseFloat(target.getAttribute('data-y')) || 0);
+            target.style.height = event.rect.height + 'px';
+
+            // TODO: avoid jQuery and move only index from current index
+            var elIndex = $('#' + target.id).index();
+
+            $('.list-item-sort').addClass('app-stop-animation');
+
+            currentListWithHeight[elIndex].height = event.rect.height;
+            reRangeList(currentListWithHeight, elIndex);
+        }
+
+        interact('.app-resize-h')
+            .resizable({
+                preserveAspectRatio: true,
+                edges: {
+                    left: false,
+                    right: false,
+                    bottom: true,
+                    top: true
+                }
+            })
+            .on('resizemove', updateResizeElement)
+            .on('resizeend', function() {
+                $('.list-item-sort').removeClass('app-stop-animation');
+            });
+
+
     }
 
 

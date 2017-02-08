@@ -43,7 +43,7 @@
                 pageSize: _fo.pagination.pageSize,
                 //sorting by:
                 //criteria weight (1st level)
-                sortCriteriaDirection: _fo.sorters.sortByCriteria.order,
+                sortWeightCriteriaDirection: _fo.sorters.sortByCriteria.order,
                 //characteristic (2nd level)
                 sortCharacteristicId: _fo.sorters.sortByCharacteristic.id,
                 sortCharacteristicDirection: _fo.sorters.sortByCharacteristic.order,
