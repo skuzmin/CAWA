@@ -4,7 +4,6 @@
 	angular
 		.module('app.core', ['ui.router',
 							 'ngResource',
-							 'gridstack-angular',
 							 'ui.bootstrap', 
 							 'ngAnimate', 
 							 'ngStorage',

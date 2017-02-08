@@ -14,23 +14,16 @@
             controllerAs: 'vm'
         });
 
-    AppListController.$inject = ['$timeout', 'DecisionNotificationService', 'DecisionSharedService', '$window'];
+    AppListController.$inject = ['DecisionNotificationService', 'DecisionSharedService', 'AppListConstant'];
 
-    function AppListController($timeout, DecisionNotificationService, DecisionSharedService, $window) {
+    function AppListController(DecisionNotificationService, DecisionSharedService, AppListConstant) {
         var
             vm = this,
             currentList = [],
-            timer,
-            OFFSET_Y = 80 + 10, // refactor
-            maxHeight = OFFSET_Y * 10, // refactor
             currentListWithHeight = [];
 
 
-        // TODO: save all list elements with height to localstorage
-        // if ($window.localStorage.getItem(sortList).length > 0) {
-        //     currentList = JSON.parse($window.localStorage.getItem(sortList))
-        // }
-
+        //TODO: create hashmap for saving resized items
         //TODO: refactor later skuzmin
         vm.showPercentage = false;
         vm.showPercentage = DecisionSharedService.filterObject.selectedCriteria.sortCriteriaIds.length > 0;
@@ -38,41 +31,33 @@
         vm.$onChanges = onChanges;
 
         function onChanges() {
-            $timeout.cancel(timer);
             currentList = _.map(vm.list, function(item) {
                 return item.decisionId;
             });
-
             // Create obj with id and el height
             currentListWithHeight = generateList(currentList);
-
-            // TODO: maybe remove delay
-            // timer = $timeout(function() {
-            // reRangeList(currentList);
             reRangeList(currentListWithHeight, 0);
-            // }, 10);
         }
 
-        function generateList(arr) { //save to local storage
-            var el,
-                elHeight,
+        function generateList(arr) {
+            var
+                el, elHeight,
                 arrHeight = [],
                 obj = {};
 
-            for (var i = 0; i < arr.length; i++) {
-                el = document.getElementById('decision-' + arr[i]);
+            _.forEach(arr, function(item) {
+                el = document.getElementById('decision-' + item);
                 elHeight = el.offsetHeight; //not include bottom margin
                 obj = {
-                    id: arr[i],
+                    id: item,
                     height: elHeight
                 };
-                arrHeight[i] = obj;
-            }
+                arrHeight.push(obj);
+            });
 
             return arrHeight;
         }
 
-        // TODO: Find better solution
         function sumArrayIndex(arr, index) {
             var sum = 0;
             for (var i = 0; i < index; i++) {
@@ -81,18 +66,13 @@
             return sum;
         }
 
-        // Just move elements under resizeble el
+        // Move elements under resizeble el
         function reRangeList(currentList, index) {
-            var el,
-                elStyle,
-                newTop,
-                currentTop,
-                offset,
-                OFFSET_Y_BOTTOM = 10;
+            var el, elStyle, newTop, currentTop, offset;
 
             for (var i = 0; i < currentList.length; i++) {
                 el = document.getElementById('decision-' + currentList[i].id);
-                offset = i * OFFSET_Y_BOTTOM;
+                offset = i * AppListConstant.OFFSET_Y_BOTTOM;
                 newTop = sumArrayIndex(currentList, i) + offset + 'px';
 
                 elStyle = window.getComputedStyle(el);
@@ -105,10 +85,14 @@
 
         // Resize
         function updateResizeElement(event) {
-            if (event.rect.height <= 80) return false; //Make value as constants
+            if (event.rect.height <= AppListConstant.ELEMENT_HEIGHT) {
+                return false;
+            }
 
-            var target = event.target,
+            var 
+                target = event.target,
                 y = (parseFloat(target.getAttribute('data-y')) || 0);
+                
             target.style.height = event.rect.height + 'px';
 
             // TODO: avoid jQuery and move only index from current index
