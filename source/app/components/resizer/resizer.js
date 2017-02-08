@@ -7,47 +7,51 @@
 
             return function($scope, $el, $attrs) {
 
-                var totalWidth,
-                    $el,
-                    $elW,
-                    $elPos,
-                    rightEl,
-                    rightElPos,
-                    elW,
-                    rightElW;
-
-
-                // $el = $($attrs.resizerLeft);
-                elW = $el.outerWidth();
-                $elW = $el.outerWidth();
-                $elPos = $el.position();
-
-                rightEl = $($attrs.resizerRight);
-                rightElPos = rightEl.position();
-                rightElW = rightEl.outerWidth();
-
-                totalWidth = $elW + rightElW;
-
-                // Resize Change to pure JS
                 function updateResizeElement(event) {
                     var target = event.target,
                         x = (parseFloat(target.getAttribute('data-x')) || 0);
 
-                    console.log(x);
-                    // console.log($elPos);
 
-                    var changeW = $el.outerWidth();
-                    $el.css({
+                    // TODO: use pure JS not jQuery
+                    var el, elMax, elMin,
+                        elW, elLeft,
+
+                        elNext, elNextW, elNextLeft,
+                        totalWidth;
+
+
+                    el = $(target);
+
+                    // Limit
+                    elMax = el.attr('resizer-max') || 1900;
+                    elMin = el.attr('resizer-min') || 100;
+
+                    if (event.rect.width <= elMin || event.rect.width >= elMax) return;
+
+                    elW = el.outerWidth();
+                    elLeft = el.position();
+
+
+                    elNext = $(el.attr('resizer-right'));
+                    elNextW = elNext.outerWidth();
+                    elNextLeft = elNext.position();
+
+                    totalWidth = elW + elNextW;
+
+                    // Current element
+                    el.css({
+                        left: elLeft.left,
                         width: event.rect.width + 'px'
                     });
 
-                    $(rightEl).css({
-                        left: event.rect.width + 'px',
+                    // Next element
+                    elNext.css({
+                        left: elLeft.left + event.rect.width + 'px',
                         width: totalWidth - event.rect.width + 'px'
                     });
                 }
-                console.log()
-                interact($el)
+
+                interact('.app-resizer-horizontal')
                     .resizable({
                         preserveAspectRatio: true,
                         edges: {
@@ -57,8 +61,7 @@
                             top: true
                         }
                     })
-                    .on('resizemove', updateResizeElement)
-
+                    .on('resizemove', updateResizeElement);
             };
         });
 })();
