@@ -7,23 +7,35 @@
 
     span {
         vertical-align: middle;
-        font-size: 10px;
+        // font-size: 10px;
         display: inline-block;
     }
 }
 
 .app-rating-star {
     position: relative;
-    width: 80px;
-    height: 12px;
-    border: 1px solid @gray-light;
+    // width: 80px;
+    // height: 12px;
+    // border: 1px solid @gray-light;
     display: inline-block;
     margin: 3px 5px 3px 0;
+    &:before {
+        content: '\e007\e007\e007\e007\e007';
+        font-family: 'Glyphicons Halflings';
+        color: @rating-color;
+    }
     .bar {
         position: absolute;
+        top: 0;
         left: 0;
         width: 0;
         height: 100%;
-        background-color: @basic-active;
+        overflow: hidden;
+        // background-color: @basic-active;
+        &:before {
+            color: @rating-color-active;
+            content: '\e006\e006\e006\e006\e006';
+            font-family: 'Glyphicons Halflings';
+        }
     }
 }

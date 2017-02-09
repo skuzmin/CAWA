@@ -9,10 +9,10 @@
               </h5>
             </div>
             <h4 class="list-item-sort-title"><a href="" ng-click="vm.goToDecision($event, item.decisionId)">{{item.name}}</a></h4>
-            
+
             <!-- Details -->
-            <div class="app-loader-small" ng-show="item.detailsSpinner"><span class="glyphicon glyphicon-refresh app-loader-animation"></span>LOADING...</div>            
             <div class="list-item-sort-detail-wrapper">
+                <div class="app-loader-small" ng-show="item.detailsSpinner"><span class="glyphicon glyphicon-refresh app-loader-animation"></span>LOADING...</div>
                 <ng-include src="vm.innerTemplate"></ng-include>
             </div>
             <!-- End Details -->

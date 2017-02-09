@@ -23,7 +23,7 @@
 
         vm.criteriaGroups = [];
 
-        vm.showRating = false;
+        vm.showRating = true;
 
         vm.editCriteriaCoefficient = editCriteriaCoefficient;
         vm.selectCriterion = selectCriterion;
