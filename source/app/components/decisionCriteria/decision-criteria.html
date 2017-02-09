@@ -4,7 +4,7 @@
             <h4>Criteria</h4>
         </div>
         <div class="col-md-6 col-sm-6">
-            <a href="" class="add-createria-btn"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Add criterion</a>
+            <a href class="add-createria-btn"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Add criterion</a>
         </div>
     </div>
     <div class="scroll-wrapper">
@@ -18,9 +18,8 @@
                 <div class="criteria-item" ng-repeat="criterion in group.criteria track by $index" ng-click="vm.selectCriterion(criterion)" ng-class="{'selected' : criterion.isSelected}">
                     <div class="criteria-item-left">
                         {{criterion.name}}
-                        <span>
-                            STARS
-                        </span>
+
+                        <rating-star value="4.3"></rating-star>
                     </div>
                     <div class="criteria-item-right">
 <!--                         <div class="text-right">
@@ -32,7 +31,7 @@
                         </button>
                     </div>
 <!--                     <div class="criteria-item-footer text-right">
-                        
+
                     </div> -->
                 </div>
             </div>

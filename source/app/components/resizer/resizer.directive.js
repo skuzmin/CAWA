@@ -16,6 +16,7 @@
 
         function link($scope, $el, $attrs) {
 
+            // TODO: fix horizontal resize limit
             function updateResizeElement(event) {
                 var
                     target = event.target,

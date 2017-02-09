@@ -251,17 +251,24 @@ a {
   height: 80px;
   min-height: 80px;
   top: 0;
-  margin: 0 0 10px;
-  padding: 8px 16px;
+  margin: 0 0 0px;
+  padding: 8px 16px 20px;
   -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
   border: 1px solid #ebebeb;
   margin-bottom: 10px;
   -webkit-border-radius: 2px;
   border-radius: 2px;
-  -webkit-transition: left 0.3s, top 0.3s, opacity 0.3s;
-  -moz-transition: left 0.3s, top 0.3s, opacity 0.3s;
+  -webkit-transition: left 0.4s, top 0.4s, opacity 0.4s;
+  -moz-transition: left 0.4s, top 0.4s, opacity 0.4s;
+  overflow: hidden;
   z-index: 3;
+}
+.list-item-sort.selected {
+  -webkit-box-shadow: 1px 7px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 1px 7px 12px rgba(0, 0, 0, 0.2);
+  border-color: #226eb1;
+  background-color: #ebebeb;
 }
 .list-item-sort:hover {
   z-index: 10;
@@ -284,6 +291,15 @@ a {
 .list-item-sort.ng-leave {
   opacity: 0;
 }
+.list-item-sort-detail-wrapper {
+  overflow: hidden;
+}
+.list-item-sort-details {
+  padding: 16px 0 32px;
+  border-top: 1px solid #ebebeb;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
 .app-stop-animation {
   -webkit-transition: none !important;
   -moz-transition: none !important;
@@ -303,6 +319,32 @@ a {
 .moving {
   opacity: 0.8;
   z-index: 10;
+}
+.app-rating-star {
+  position: relative;
+  width: 80px;
+  height: 12px;
+  border: 1px solid #ebebeb;
+  display: inline-block;
+  margin: 3px 5px 3px 0;
+}
+.app-rating-star .bar {
+  position: absolute;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background-color: #226eb1;
+}
+.modal-content {
+  border-radius: 2px;
+  box-shadow: 0 27px 24px 0 rgba(0, 0, 0, 0.2), 0 40px 77px 0 rgba(0, 0, 0, 0.22);
+}
+.modal-content .close {
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: 15px;
+  z-index: 11;
 }
 .home .search-box {
   padding-top: 100px;
@@ -410,7 +452,7 @@ body .app-resizer {
   bottom: 0;
   background-color: #808080;
   width: 6px;
-  cursor: e-resize;
+  cursor: ew-resize;
   z-index: 111;
 }
 .content {
