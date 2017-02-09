@@ -30,7 +30,7 @@
 
                 // Limit
                 elMax = el.attr('resizer-max') || 1900;
-                elMin = el.attr('resizer-min') || 100;
+                elMin = el.attr('resizer-min') || 180; //Min width for panel
 
                 if (event.rect.width <= elMin || event.rect.width >= elMax) {
                     return;
@@ -44,6 +44,8 @@
                 elNextLeft = elNext.position();
 
                 totalWidth = elW + elNextW;
+
+                if(totalWidth - event.rect.width - 180 < 0) return;
 
                 // Current element
                 el.css({

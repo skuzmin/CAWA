@@ -54,7 +54,7 @@ a {
 }
 .app-footer {
   min-height: 50px;
-  background-color: #ccc;
+  background-color: #FFF;
   padding: 10px;
 }
 .modal-content {
@@ -373,7 +373,6 @@ a {
 }
 body .app-main-panel .app-panel-left {
   position: absolute;
-  background-color: #ccc;
   left: 0;
   width: 25%;
   top: 0;
@@ -382,7 +381,7 @@ body .app-main-panel .app-panel-left {
 }
 body .app-main-panel .app-panel-center {
   position: absolute;
-  background-color: #ccc;
+  background-color: #f3f5f6;
   left: 25%;
   width: 50%;
   top: 0;
@@ -390,7 +389,6 @@ body .app-main-panel .app-panel-center {
 }
 body .app-main-panel .app-panel-right {
   position: absolute;
-  background-color: #ccc;
   left: 75%;
   width: 25%;
   top: 0;
@@ -417,10 +415,12 @@ body .app-resizer {
   right: 0;
   top: 0;
   bottom: 0;
-  background-color: #808080;
   width: 6px;
   cursor: ew-resize;
   z-index: 111;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  border-right: 1px solid rgba(0, 0, 0, 0.4);
+  background: #f3f5f6;
 }
 .scroll-wrapper-header h4 {
   margin-top: 9px;
@@ -497,7 +497,7 @@ body .app-resizer {
   text-align: center;
 }
 .content {
-  background-color: #ccc;
+  background-color: #FFF;
   min-height: calc(100vh - 100px);
 }
 .app-row-content-label {
