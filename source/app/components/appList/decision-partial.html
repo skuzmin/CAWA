@@ -1,15 +1,16 @@
 <div class="list-item-sort-details">
     <div class="decision-detailed-chars">
-        <div class="app-loader-small" ng-show="item.detailsSpinner"><span class="glyphicon glyphicon-refresh app-loader-animation"></span>LOADING...</div>
         <div ng-if="item.characteristics">
             <h4>Characteristics</h4>
             <div ng-repeat="(key, value) in item.characteristics track by key">
                 <div class="chars-group-name">
                     <label>{{vm.getGroupNameById(key)}}</label>
                 </div>
-                <div class="row" ng-repeat="characteristic in value track by $index">
-                    <div class="col-md-6">{{characteristic.name}}:</div>
-                    <div class="col-md-6">
+                <div class="app-row-content" ng-repeat="characteristic in value track by $index">
+                        <div class="app-row-content-label">
+                            {{characteristic.name}}:
+                        </div>
+
                         <span ng-show="characteristic.value">{{characteristic.value}}</span>
                         <span ng-show="!characteristic.value" class="not-set">Not set</span>
                     </div>

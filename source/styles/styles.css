@@ -49,6 +49,9 @@ a {
   display: inline-block;
   margin-top: 15px;
 }
+.app-header-sub-title {
+  margin-left: 15px;
+}
 .app-footer {
   min-height: 50px;
   background-color: #ccc;
@@ -77,9 +80,6 @@ a {
 }
 .modal-dialog .criteria-coefficient-popup .modal-drag-handler:hover {
   cursor: move;
-}
-.app-rating-star-wrapper {
-  background-color: #FFF;
 }
 .app-rating-star-wrapper .app-rating-star {
   vertical-align: middle;
@@ -334,7 +334,6 @@ a {
   top: 40px;
   bottom: 0;
   z-index: 1;
-  background-color: #ccc;
   right: 8px;
 }
 .dicision .scroll-wrapper-header {
@@ -374,6 +373,7 @@ a {
 }
 body .app-main-panel .app-panel-left {
   position: absolute;
+  background-color: #ccc;
   left: 0;
   width: 25%;
   top: 0;
@@ -382,6 +382,7 @@ body .app-main-panel .app-panel-left {
 }
 body .app-main-panel .app-panel-center {
   position: absolute;
+  background-color: #ccc;
   left: 25%;
   width: 50%;
   top: 0;
@@ -389,6 +390,7 @@ body .app-main-panel .app-panel-center {
 }
 body .app-main-panel .app-panel-right {
   position: absolute;
+  background-color: #ccc;
   left: 75%;
   width: 25%;
   top: 0;
@@ -421,7 +423,8 @@ body .app-resizer {
   z-index: 111;
 }
 .scroll-wrapper-header h4 {
-  margin-top: 10px;
+  margin-top: 9px;
+  margin-bottom: 5px;
 }
 .app-pagination {
   margin: 0;
@@ -437,10 +440,10 @@ body .app-resizer {
   width: 100%;
   height: 100%;
   z-index: 111;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(0, 0, 0, 0.3);
   font-size: 13px;
   color: #000;
-  padding: 30px 0;
+  padding: 0;
   text-align: center;
 }
 .app-loader-small {
@@ -448,11 +451,15 @@ body .app-resizer {
 }
 .app-loader-small .app-loader-animation {
   font-size: 18px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -9px -8px;
 }
 .app-loader-animation {
-  -webkit-animation: spin 2s linear infinite;
-  -moz-animation: spin 2s linear infinite;
-  animation: spin 2s linear infinite;
+  -webkit-animation: spin 1.2s linear infinite;
+  -moz-animation: spin 1.2s linear infinite;
+  animation: spin 1.2s linear infinite;
 }
 @-moz-keyframes spin {
   100% {
@@ -470,6 +477,14 @@ body .app-resizer {
     transform: rotate(360deg);
   }
 }
+.btn {
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+}
+.form-control {
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+}
 .col-sm-padding {
   padding-left: 3px !important;
   padding-right: 3px !important;
@@ -482,5 +497,14 @@ body .app-resizer {
   text-align: center;
 }
 .content {
+  background-color: #ccc;
   min-height: calc(100vh - 100px);
+}
+.app-row-content-label {
+  display: inline-block;
+  min-width: 120px;
+  color: #808080;
+}
+.app-row-content {
+  margin-bottom: 10px;
 }

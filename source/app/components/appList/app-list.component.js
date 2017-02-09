@@ -27,7 +27,6 @@
         //TODO: create hashmap for saving resized items
         //TODO: refactor later skuzmin
         vm.showPercentage = false;
-        vm.showRating = false;
 
         vm.$onChanges = onChanges;
 
@@ -39,6 +38,7 @@
             currentListWithHeight = generateList(currentList);
             reRangeList(currentListWithHeight, 0);
             vm.showPercentage = DecisionSharedService.filterObject.selectedCriteria.sortCriteriaIds.length > 0;
+            vm.showRating = DecisionSharedService.filterObject.selectedCriteria.sortCriteriaIds.length > 0;
         }
 
         function generateList(arr) {
@@ -146,6 +146,7 @@
             return group ? group.name : 'Group';
         }
 
+        // TODO: save loaded data push to vm.displayList?!
         function getDetails(decision) {
             if (!decision.characteristics && !decision.detailsSpinner) {
                 DecisionNotificationService.notifyGetDetailedCharacteristics(decision);
@@ -173,7 +174,7 @@
                 currentDecision.isSelected = true;
             }
 
-            vm.showRating = true;
+            console.log(DecisionSharedService.filterObject);
         }
 
 
