@@ -1,0 +1,30 @@
+// Rating star
+
+.app-rating-star-wrapper {
+    background-color: #FFF;
+    .app-rating-star {
+        vertical-align: middle;
+    }
+
+    span {
+        vertical-align: middle;
+        font-size: 10px;
+        display: inline-block;
+    }
+}
+
+.app-rating-star {
+    position: relative;
+    width: 80px;
+    height: 12px;
+    border: 1px solid @gray-light;
+    display: inline-block;
+    margin: 3px 5px 3px 0;
+    .bar {
+        position: absolute;
+        left: 0;
+        width: 0;
+        height: 100%;
+        background-color: @basic-active;
+    }
+}

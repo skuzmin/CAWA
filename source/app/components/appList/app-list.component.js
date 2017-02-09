@@ -27,6 +27,7 @@
         //TODO: create hashmap for saving resized items
         //TODO: refactor later skuzmin
         vm.showPercentage = false;
+        vm.showRating = false;
 
         vm.$onChanges = onChanges;
 
@@ -127,7 +128,6 @@
             },
             characteristicGroupNames = [];
 
-        vm.displayList = vm.list;
         vm.innerTemplate = content.decision; //content[vm.template];
 
         vm.selectDecision = selectDecision;
@@ -172,6 +172,8 @@
                 prevDecision.isSelected = false;
                 currentDecision.isSelected = true;
             }
+
+            vm.showRating = true;
         }
 
 
