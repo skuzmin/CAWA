@@ -299,33 +299,7 @@ a:hover {
   border-color: #fc0d1b;
 }
 .decision-sorter {
-  list-style: none;
-  float: left;
-  font-size: 0;
-  margin: 0 3px;
-  padding: 0;
-}
-.decision-sorter li {
-  color: #000;
-  display: inline-block;
-  float: left;
-  padding: 5px 3px;
-  border: 1px solid #c0c0c0;
-  border-right: none;
-  margin: 4px 0;
-  cursor: pointer;
-  font-size: 12px;
-}
-.decision-sorter li:last-child {
-  border-right: 1px solid #c0c0c0;
-}
-.decision-sorter li:hover {
-  background-color: #245580;
-  color: #fff;
-}
-.decision-sorter li.selected {
-  background-color: #226eb1;
-  color: #fff;
+  margin: 10px 0 0;
 }
 .decision-characteristics .decision-select,
 .decision-characteristics .decision-yearpicker {
@@ -497,6 +471,9 @@ body .app-resizer {
 }
 .form-control {
   -webkit-border-radius: 2px;
+  border-radius: 2px;
+}
+.panel-group .panel {
   border-radius: 2px;
 }
 .col-sm-padding {

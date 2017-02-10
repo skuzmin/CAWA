@@ -37,9 +37,9 @@
             scope.selectSorter = function(sorter) {
                 //clear all sorting orders
                 order = sorter.order;
-                sortObj = { 
-                    sort: {id: null, order: null}, 
-                    mode: '' 
+                sortObj = {
+                    sort: {id: null, order: null},
+                    mode: ''
                 };
                 _.forEach(scope.sorters, function(s) {
                     s.order = '';
@@ -58,7 +58,7 @@
                     sortObj.sort.order = sorter.order;
                 }
                 sortObj.mode = scope.sortType;
-                
+
                 scope.$emit('selectSorter', sortObj);
             };
 
