@@ -6,9 +6,6 @@
 a {
   cursor: pointer;
 }
-a:hover {
-  text-decoration: none;
-}
 .search-input {
   margin-top: 5px;
   padding-left: 25px;
@@ -59,10 +56,6 @@ a:hover {
   min-height: 50px;
   background-color: #FFF;
   padding: 10px;
-}
-.app-footer-info {
-  color: #ebebeb;
-  font-size: 13px;
 }
 .modal-content {
   border-radius: 2px;
