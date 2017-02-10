@@ -27,9 +27,6 @@
                         value: null,
                         squash: true
                     }
-                },
-                data: {
-                    pageTitle: 'Decision '
                 }
             });
     }

@@ -38,7 +38,6 @@
             currentListWithHeight = generateList(currentList);
             reRangeList(currentListWithHeight, 0);
             vm.showPercentage = DecisionSharedService.filterObject.selectedCriteria.sortCriteriaIds.length > 0;
-            vm.showRating = DecisionSharedService.filterObject.selectedCriteria.sortCriteriaIds.length > 0;
         }
 
         function generateList(arr) {
@@ -167,14 +166,21 @@
             });
             if (!prevDecision) {
                 currentDecision.isSelected = true;
+                DecisionSharedService.filterObject.selectedDecision.decisionsIds.push(currentDecision.decisionId);
             } else if (prevDecision.decisionId === currentDecision.decisionId) {
+                DecisionSharedService.filterObject.selectedDecision.decisionsIds = []; //TODO: use splice
                 currentDecision.isSelected = false;
             } else {
                 prevDecision.isSelected = false;
                 currentDecision.isSelected = true;
+
+                DecisionSharedService.filterObject.selectedDecision.decisionsIds = []; //TODO: use splice
+                DecisionSharedService.filterObject.selectedDecision.decisionsIds.push(currentDecision.decisionId);
             }
 
-            console.log(DecisionSharedService.filterObject);
+            DecisionNotificationService.notifySelectDecision(DecisionSharedService.filterObject.selectedDecision.decisionsIds);
+            console.log(DecisionSharedService.filterObject.selectedDecision.decisionsIds);
+            // console.log(DecisionSharedService.filterObject);
         }
 
 

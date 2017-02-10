@@ -1,5 +1,5 @@
 <div class="dicision" >
-    <!--Top panel with search  -->
+    <!--Left panel  -->
     <div class="row top-panel">
         <div class="col-md-4 col-sm-4">
             <h4 class="app-header-sub-title">
@@ -28,13 +28,13 @@
             <span class="glyphicon glyphicon-search search-input-icon"></span>
         </div>
     </div>
+    <!--End Left panel  -->
+
     <!-- Main stuff -->
     <div class="app-main-panel main-panel">
        <div id="panel-left" class="app-panel-left app-resizer-horizontal" resizer-right="#panel-center" resizer>
            <decision-criteria decision-id="vm.decisionId"></decision-criteria>
-
-        <span class="app-resizer"></span>
-
+            <span class="app-resizer"></span>
        </div>
 
        <div id="panel-center" class="app-panel-center app-resizer-horizontal" resizer-right="#panel-right" resizer>
@@ -58,14 +58,15 @@
                 <app-paginator></app-paginator>
                 <app-list list="vm.decisionsList"></app-list>
             </div>
-
             <span class="app-resizer"></span>
-
        </div>
-
+       <!-- End Main stuff -->
+        
+       <!-- Right panel  -->
        <div id="panel-right" class="app-panel-right">
            <decision-characteristics decision-id="vm.decisionId"></decision-characteristics>
        </div>
+       <!-- End Right panel  -->
 
     </div>
 </div>

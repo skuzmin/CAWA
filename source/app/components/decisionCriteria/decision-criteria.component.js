@@ -23,12 +23,18 @@
 
         vm.criteriaGroups = [];
 
-        vm.showRating = true;
+        vm.showRating = false;
+
+        vm.$onChanges = onChanges;
 
         vm.editCriteriaCoefficient = editCriteriaCoefficient;
         vm.selectCriterion = selectCriterion;
 
         init();
+
+        function onChanges() {
+            vm.showRating = DecisionSharedService.filterObject.selectedDecision.decisionsIds.length > 0;
+        }
 
         function selectCriterion(criterion, coefCall) {
             if (coefCall && !criterion.isSelected) {
@@ -52,10 +58,10 @@
                 if (criterion.coefficient.value !== DecisionCriteriaConstant.coefficientDefault.value) {
                     _fo.sortCriteriaCoefficients[criterion.criterionId] = criterion.coefficient.value;
                 }
-            //add only coefficient (but not default)
+                //add only coefficient (but not default)
             } else if (coefCall && criterion.coefficient.value !== DecisionCriteriaConstant.coefficientDefault.value) {
                 _fo.sortCriteriaCoefficients[criterion.criterionId] = criterion.coefficient.value;
-            //unselect criterion
+                //unselect criterion
             } else {
                 _fo.sortCriteriaIds.splice(position, 1);
                 delete _fo.sortCriteriaCoefficients[criterion.criterionId];
@@ -78,8 +84,12 @@
             });
 
             modalInstance.result.then(function(result) {
-                var groupIndex = _.findIndex(vm.criteriaGroups, { criterionGroupId: result.criterionGroupId });
-                var criteriaIndex = _.findIndex(vm.criteriaGroups[groupIndex].criteria, { criterionId: result.criterionId });
+                var groupIndex = _.findIndex(vm.criteriaGroups, {
+                    criterionGroupId: result.criterionGroupId
+                });
+                var criteriaIndex = _.findIndex(vm.criteriaGroups[groupIndex].criteria, {
+                    criterionId: result.criterionId
+                });
                 vm.criteriaGroups[groupIndex].criteria[criteriaIndex] = result;
                 selectCriterion(result, true);
             });
@@ -94,6 +104,14 @@
                 if (vm.criteriaGroups.length > 0) {
                     vm.criteriaGroups[0].isOpen = true;
                 }
+            });
+
+
+            // TODO: need to refactor
+            //Subscribe to notification events
+            DecisionNotificationService.subscribeSelectDecision(function(event, data) {
+                // console.log(data);
+                vm.showRating = data.length;
             });
         }
     }

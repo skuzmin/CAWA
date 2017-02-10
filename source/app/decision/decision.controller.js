@@ -6,9 +6,9 @@
         .module('app.decision')
         .controller('DecisionController', DecisionController);
 
-    DecisionController.$inject = ['decisionBasicInfo', 'DecisionDataService', '$stateParams', '$timeout', 'DecisionNotificationService', 'DecisionSharedService'];
+    DecisionController.$inject = ['$rootScope', 'decisionBasicInfo', 'DecisionDataService', '$stateParams', '$timeout', 'DecisionNotificationService', 'DecisionSharedService'];
 
-    function DecisionController(decisionBasicInfo, DecisionDataService, $stateParams, $timeout, DecisionNotificationService, DecisionSharedService) {
+    function DecisionController($rootScope, decisionBasicInfo, DecisionDataService, $stateParams, $timeout, DecisionNotificationService, DecisionSharedService) {
         var
             vm = this,
             isInitedSorters = false,
@@ -20,6 +20,7 @@
         vm.decisionsList = [];
         vm.updateDecisionList = [];
         vm.decision = decisionBasicInfo || {};
+        $rootScope.pageTitle = vm.decision.name + ' | DecisionWanted';
 
         init();
 
