@@ -21,7 +21,17 @@
     .header-text {
         display: inline-block;
         margin-top: 15px;
-    }    
+    }
+    .navbar-nav {
+        & > li {
+            & > a {
+                &:hover {
+                    color: #FFF;
+                    background-color: darken(@header-background, 20%);
+                }
+            }
+        }
+    }
 }
 
 .app-header-sub-title {

@@ -13,7 +13,7 @@
             <div uib-accordion-group class="panel-default criteria-panel" ng-repeat="group in vm.criteriaGroups track by $index" is-open="group.isOpen">
                 <uib-accordion-heading>
                     {{group.name}}
-                    <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': group.isOpen, 'glyphicon-chevron-right': !group.isOpen}"></i>
+                    <i class="pull-right glyphicon glyphicon-chevron-right"></i>
                 </uib-accordion-heading>
                 <div class="criteria-item" ng-repeat="criterion in group.criteria track by $index" ng-click="vm.selectCriterion(criterion)" ng-class="{'selected' : criterion.isSelected}">
                     <div class="criteria-item-left">

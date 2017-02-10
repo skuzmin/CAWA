@@ -52,16 +52,21 @@ a:hover {
   display: inline-block;
   margin-top: 15px;
 }
+.app-header .navbar-nav > li > a:hover {
+  color: #FFF;
+  background-color: #12395b;
+}
 .app-header-sub-title {
   margin-left: 15px;
 }
 .app-footer {
   min-height: 50px;
   background-color: #FFF;
+  border-top: 1px solid #ebebeb;
   padding: 10px;
 }
 .app-footer-info {
-  color: #ebebeb;
+  color: #7f8c8d;
   font-size: 13px;
 }
 .modal-content {
@@ -299,7 +304,8 @@ a:hover {
   border-color: #fc0d1b;
 }
 .decision-sorter {
-  margin: 3px 0 0;
+  margin: 3px 20px 0px 0px;
+  padding: 0;
 }
 .decision-characteristics .decision-select,
 .decision-characteristics .decision-yearpicker {
@@ -410,6 +416,9 @@ body .app-resizer {
   border-right: 1px solid rgba(0, 0, 0, 0.3);
   background: #f3f5f6;
 }
+.scroll-wrapper-header .btn {
+  margin-top: 1px;
+}
 .scroll-wrapper-header h4 {
   margin-top: 9px;
   margin-bottom: 5px;
@@ -475,6 +484,23 @@ body .app-resizer {
 }
 .panel-group .panel {
   border-radius: 2px;
+}
+.panel-title .glyphicon {
+  color: #7f8c8d;
+}
+.panel .glyphicon {
+  -webkit-transition: transform 0.2s ease-in-out;
+  -moz-transition: transform 0.2s ease-in-out;
+  -ms-transition: transform 0.2s ease-in-out;
+  -o-transition: transform 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out;
+}
+.panel.panel-open .glyphicon {
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
 }
 .col-sm-padding {
   padding-left: 3px !important;
