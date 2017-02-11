@@ -20,7 +20,11 @@
         var
             vm = this;
 
-        vm.rating = parseFloat(vm.value) / AppRatingStarConstant.MAX_RATING * 100 + '%';
+            vm.$onChanges = onChanges;
+
+            function onChanges() {
+                vm.rating = parseFloat(vm.value) / AppRatingStarConstant.MAX_RATING * 100 + '%' || 0;
+            }
 
         init();
 

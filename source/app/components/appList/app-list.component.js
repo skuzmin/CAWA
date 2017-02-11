@@ -179,7 +179,7 @@
             }
 
             DecisionNotificationService.notifySelectDecision(DecisionSharedService.filterObject.selectedDecision.decisionsIds);
-            console.log(DecisionSharedService.filterObject.selectedDecision.decisionsIds);
+            // console.log(DecisionSharedService.filterObject.selectedDecision.decisionsIds);
             // console.log(DecisionSharedService.filterObject);
         }
 

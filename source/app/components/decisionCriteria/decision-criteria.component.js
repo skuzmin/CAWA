@@ -19,6 +19,7 @@
     function DecisionCriteriaController($uibModal, DecisionDataService, DecisionNotificationService, DecisionSharedService, DecisionCriteriaConstant) {
         var
             vm = this,
+            criteriaGroupsCurrent = [],
             _fo = DecisionSharedService.filterObject.selectedCriteria;
 
         vm.criteriaGroups = [];
@@ -95,10 +96,25 @@
             });
         }
 
+        function replacePropertyValue(prevVal, newVal, object) {
+            const newObject = _.clone(object);
+
+            _.each(object, (val, key) => {
+                if (val === prevVal) {
+                    newObject[key] = newVal;
+                } else if (typeof(val) === 'object' || typeof(val) === 'array') {
+                    newObject[key] = replacePropertyValue(prevVal, newVal, val);
+                }
+            });
+
+            return newObject;
+        }
+
         function init() {
             vm.criteriaSpinner = true;
             DecisionDataService.getCriteriaGroupsById(vm.decisionId).then(function(result) {
                 vm.criteriaGroups = result;
+                criteriaGroupsCurrent = result;
             }).finally(function() {
                 vm.criteriaSpinner = false;
                 if (vm.criteriaGroups.length > 0) {
@@ -110,8 +126,50 @@
             // TODO: need to refactor
             //Subscribe to notification events
             DecisionNotificationService.subscribeSelectDecision(function(event, data) {
-                // console.log(data);
+                var criterionId,
+                    criteriaGroupsRating;
+
                 vm.showRating = data.length;
+                criterionId = data[0];
+                console.log(!_.isEmpty(data));
+
+                if (!_.isEmpty(data)) {
+                    vm.criteriaSpinner = true;
+                    DecisionDataService.getCriteriaByDecision(criterionId, vm.decisionId).then(function(result) {
+                        criteriaGroupsRating = result;
+                        // console.log(vm.criteriaGroups);
+                        // console.log(criteriaGroupsRating);
+
+                        // Clean items
+                        
+
+                        vm.criteriaGroups = criteriaGroupsCurrent;
+                        // TODO: Optimize find deep and replace
+                        _.map(criteriaGroupsRating, function(item, itemIndex) {
+                            _.map(vm.criteriaGroups[0].criteria, function(el, index) {//TODO: all els
+                                if(item.criterionId === el.criterionId) {
+                                    // console.log(vm.criteriaGroups[0].criteria[index]);
+                                    console.log(vm.criteriaGroups[0].criteria[index]);
+                                   vm.criteriaGroups[0].criteria[index] = criteriaGroupsRating[itemIndex];
+                                } else {
+                                    vm.criteriaGroups[0].criteria[index].weight = null
+                                }
+                            });
+
+                        });
+
+
+
+                    }).finally(function() {
+                        vm.criteriaSpinner = false;
+                        if (vm.criteriaGroups.length > 0) {
+                            vm.criteriaGroups[0].isOpen = true;
+                        }
+                    });
+                } else {
+                    vm.criteriaGroups = criteriaGroupsCurrent;
+                }
+
             });
         }
     }

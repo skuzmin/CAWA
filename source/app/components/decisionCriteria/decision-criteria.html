@@ -17,9 +17,10 @@
                 </uib-accordion-heading>
                 <div class="criteria-item" ng-repeat="criterion in group.criteria track by $index" ng-click="vm.selectCriterion(criterion)" ng-class="{'selected' : criterion.isSelected}">
                     <div class="criteria-item-left">
+                        {{criterion.criterionId}}
                         {{criterion.name}}
         
-                        <rating-star value="2.5" ng-show="vm.showRating"></rating-star>
+                        <rating-star value="criterion.weight" ng-show="vm.showRating"></rating-star>
                     </div>
                     <div class="criteria-item-right">
 <!--                         <div class="text-right">

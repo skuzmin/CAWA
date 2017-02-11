@@ -5,8 +5,10 @@
 }
 a {
   cursor: pointer;
+  text-decoration: none;
 }
-a:hover {
+a:hover,
+a:focus {
   text-decoration: none;
 }
 .search-input {

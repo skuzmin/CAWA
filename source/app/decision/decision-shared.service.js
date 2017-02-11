@@ -54,7 +54,7 @@
                 sortDecisionPropertyName: _fo.sorters.sortByDecisionProperty.id,
                 sortDecisionPropertyDirection: _fo.sorters.sortByDecisionProperty.order,
 
-                decisionsIds: _fo.selectedDecision.decisionsIds,
+                decisionsIds: _fo.selectedDecision.decisionsIds
             };
         };
 
