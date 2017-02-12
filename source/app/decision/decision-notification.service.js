@@ -15,12 +15,14 @@
         var service = {
             subscribeSelectSorter: subscribeSelectSorter,
             subscribeSelectCriterion: subscribeSelectCriterion,
+            subscribeSelectDecision: subscribeSelectDecision,
             subscribeSelectCharacteristic: subscribeSelectCharacteristic,
             subscribeGetDetailedCharacteristics: subscribeGetDetailedCharacteristics,
             subscribeCharacteristicsGroups: subscribeCharacteristicsGroups,
             subscribePageChanged: subscribePageChanged,
             notifyGetDetailedCharacteristics: notifyGetDetailedCharacteristics,
             notifySelectCriterion: notifySelectCriterion,
+            notifySelectDecision: notifySelectDecision,
             notifySelectCharacteristic: notifySelectCharacteristic,
             notifyCharacteristicsGroups: notifyCharacteristicsGroups,
             notifyPageChanged: notifyPageChanged,
@@ -54,6 +56,10 @@
             subscribe('selectCriterion', callback);
         }
 
+        function subscribeSelectDecision(callback) {
+            subscribe('selectDecision', callback);
+        }        
+
         function subscribeSelectCharacteristic(callback) {
             subscribe('selectCharacteristic', callback);
         }
@@ -77,6 +83,10 @@
 
         function notifySelectCriterion(data) {
             emit('selectCriterion', data);
+        }
+
+        function notifySelectDecision(data) {
+            emit('selectDecision', data);
         }
 
         function notifySelectCharacteristic(data) {

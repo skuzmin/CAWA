@@ -25,6 +25,7 @@
         init();
 
         function setCoefficientIndicator(coefficient) {
+            if (!coefficient) return;
             // set color of indicator
             _.forEach(vm.coefficientList, function(c) {
                 c.class = '';

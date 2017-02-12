@@ -8,15 +8,16 @@
         .component('appList', {
             templateUrl: 'app/components/appList/app-list.html',
             bindings: {
-                list: '<'
+                list: '<',
+                template: '@'
             },
             controller: 'AppListController',
             controllerAs: 'vm'
         });
 
-    AppListController.$inject = ['DecisionNotificationService', 'DecisionSharedService', 'AppListConstant'];
+    AppListController.$inject = ['DecisionNotificationService', 'DecisionSharedService', 'AppListConstant', '$state'];
 
-    function AppListController(DecisionNotificationService, DecisionSharedService, AppListConstant) {
+    function AppListController(DecisionNotificationService, DecisionSharedService, AppListConstant, $state) {
         var
             vm = this,
             currentList = [],
@@ -26,7 +27,6 @@
         //TODO: create hashmap for saving resized items
         //TODO: refactor later skuzmin
         vm.showPercentage = false;
-        vm.showPercentage = DecisionSharedService.filterObject.selectedCriteria.sortCriteriaIds.length > 0;
 
         vm.$onChanges = onChanges;
 
@@ -37,6 +37,7 @@
             // Create obj with id and el height
             currentListWithHeight = generateList(currentList);
             reRangeList(currentListWithHeight, 0);
+            vm.showPercentage = DecisionSharedService.filterObject.selectedCriteria.sortCriteriaIds.length > 0;
         }
 
         function generateList(arr) {
@@ -89,10 +90,10 @@
                 return false;
             }
 
-            var 
+            var
                 target = event.target,
                 y = (parseFloat(target.getAttribute('data-y')) || 0);
-                
+
             target.style.height = event.rect.height + 'px';
 
             // TODO: avoid jQuery and move only index from current index
@@ -119,6 +120,75 @@
                 $('.list-item-sort').removeClass('app-stop-animation');
             });
 
+
+        // TODO: refactor it, maybe make as new component
+        var content = {
+                decision: 'app/components/appList/decision-partial.html'
+            },
+            characteristicGroupNames = [];
+
+        vm.innerTemplate = content.decision; //content[vm.template];
+
+        vm.selectDecision = selectDecision;
+        vm.$onChanges = onChanges;
+        vm.goToDecision = goToDecision;
+        vm.getDetails = getDetails;
+        vm.getGroupNameById = getGroupNameById;
+
+        init();
+
+
+        function getGroupNameById(id) {
+            var group = _.find(characteristicGroupNames, function(group) {
+                return group.characteristicGroupId.toString() === id;
+            });
+            return group ? group.name : 'Group';
+        }
+
+        // TODO: save loaded data push to vm.displayList?!
+        function getDetails(decision) {
+            if (!decision.characteristics && !decision.detailsSpinner) {
+                DecisionNotificationService.notifyGetDetailedCharacteristics(decision);
+            }
+        }
+
+        function goToDecision(event, decisionId) {
+            event.stopPropagation();
+            event.preventDefault();
+            $state.go('decision', {
+                id: decisionId
+            });
+        }
+
+        function selectDecision(currentDecision) {
+            var prevDecision = _.find(vm.list, function(decision) {
+                return decision.isSelected;
+            });
+            if (!prevDecision) {
+                currentDecision.isSelected = true;
+                DecisionSharedService.filterObject.selectedDecision.decisionsIds.push(currentDecision.decisionId);
+            } else if (prevDecision.decisionId === currentDecision.decisionId) {
+                DecisionSharedService.filterObject.selectedDecision.decisionsIds = []; //TODO: use splice
+                currentDecision.isSelected = false;
+            } else {
+                prevDecision.isSelected = false;
+                currentDecision.isSelected = true;
+
+                DecisionSharedService.filterObject.selectedDecision.decisionsIds = []; //TODO: use splice
+                DecisionSharedService.filterObject.selectedDecision.decisionsIds.push(currentDecision.decisionId);
+            }
+
+            DecisionNotificationService.notifySelectDecision(DecisionSharedService.filterObject.selectedDecision.decisionsIds);
+            // console.log(DecisionSharedService.filterObject.selectedDecision.decisionsIds);
+            // console.log(DecisionSharedService.filterObject);
+        }
+
+
+        function init() {
+            DecisionNotificationService.subscribeCharacteristicsGroups(function(event, data) {
+                characteristicGroupNames = data;
+            });
+        }
 
     }
 

@@ -19,8 +19,14 @@
                     decisionBasicInfo: DecisionResolver
                 },
                 params: {
-                    slug: { value: null, squash: true },
-                    criteria: { value: null, squash: true }
+                    slug: {
+                        value: null,
+                        squash: true
+                    },
+                    criteria: {
+                        value: null,
+                        squash: true
+                    }
                 }
             });
     }
@@ -36,11 +42,11 @@
                     $stateParams.slug = result.nameSlug;
                     //set criteria ( addtional user parameters)
                     var criteria = '';
-                    if(toParams.criteria && (!fromParams.id || toParams.id === fromParams.id)) {
+                    if (toParams.criteria && (!fromParams.id || toParams.id === fromParams.id)) {
                         criteria = '/' + toParams.criteria;
                     }
                     //two behaviors for changing URL
-                    if((fromState.name && toState.name !== fromState.name) || 
+                    if ((fromState.name && toState.name !== fromState.name) ||
                         (fromState.name && toState.name === fromState.name && toParams.id !== fromParams.id)) {
                         $location.path('/decisions/' + toParams.id + '/' + result.nameSlug + criteria);
                     } else {

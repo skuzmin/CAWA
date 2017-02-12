@@ -24,7 +24,7 @@ var config = {
     mainLessFile: 'source/styles/index.less',
     stylesLocation: 'source/styles/',
     allJsFiles: 'source/app/**/*.js',
-    allLessFiles: 'source/styles/*.less',
+    allLessFiles: 'source/styles/**/*.less',
     allCssFiles: 'source/styles/*.css',
     allHtmlFiles: 'source/app/**/*.html',
     bootstrapFonts: 'bower_components/bootstrap/fonts',

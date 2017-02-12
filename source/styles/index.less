@@ -1,10 +1,21 @@
 @import "variables";
 @import "utils";
 @import "controls";
-@import "components";
+@import "components/_index";
 @import "home";
-@import "decision";
+@import "helpers";
 
 .content {
-	min-height: calc(~"100vh - 120px");
+  background-color: @app-bg;
+	min-height: calc(~"100vh - 100px"); //@footer-height + @header-height
+}
+
+.app-row-content-label {
+  display: inline-block;
+  min-width: 120px;
+  color: @row-label-color;
+}
+
+.app-row-content {
+  margin-bottom: 10px;
 }

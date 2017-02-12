@@ -1,0 +1,42 @@
+// Rating star
+
+.app-rating-star-wrapper {
+    .app-rating-star {
+        vertical-align: middle;
+    }
+
+    span {
+        vertical-align: middle;
+        // font-size: 10px;
+        display: inline-block;
+    }
+}
+
+.app-rating-star {
+    position: relative;
+    // width: 80px;
+    // height: 12px;
+    // border: 1px solid @gray-light;
+    display: inline-block;
+    margin: 0 5px 0 0;
+    line-height: 1;
+    &:before {
+        content: '\e007\e007\e007\e007\e007';
+        font-family: 'Glyphicons Halflings';
+        color: @rating-color;
+    }
+    .bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 100%;
+        overflow: hidden;
+        // background-color: @basic-active;
+        &:before {
+            color: @rating-color-active;
+            content: '\e006\e006\e006\e006\e006';
+            font-family: 'Glyphicons Halflings';
+        }
+    }
+}

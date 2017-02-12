@@ -26,6 +26,9 @@
                 sortByCriteria: { order: 'DESC' },
                 sortByCharacteristic: { id: null, order: null },
                 sortByDecisionProperty: { id: null, order: null }
+            },
+            selectedDecision: {
+                decisionsIds: []
             }
         };
 
@@ -49,7 +52,9 @@
                 sortCharacteristicDirection: _fo.sorters.sortByCharacteristic.order,
                 //property (3rd level)
                 sortDecisionPropertyName: _fo.sorters.sortByDecisionProperty.id,
-                sortDecisionPropertyDirection: _fo.sorters.sortByDecisionProperty.order
+                sortDecisionPropertyDirection: _fo.sorters.sortByDecisionProperty.order,
+
+                decisionsIds: _fo.selectedDecision.decisionsIds
             };
         };
 
