@@ -13,6 +13,9 @@
             vm = this;
             
         function init() {
+            console.log('DecisionMatrixController');
         }
+
+        init();
     }
 })();

@@ -11,12 +11,12 @@
     function configuration($stateProvider) {
         $stateProvider
             .state('decisionMatrix', {
-                url: '/decisions/:id/{slug}/{criteria}/matrix',
+                url: '/matrix',
                 templateUrl: 'app/desicionMatrix/decision-matrix.html',
-                controller: 'DecisionController',
+                controller: 'DecisionMatrixController',
                 controllerAs: 'vm',
                 resolve: {
-                    // decisionBasicInfo: DecisionResolver
+                    // decisionBasicInfo: DecisionMatrixResolver
                 },
                 params: {
                     slug: {
@@ -30,6 +30,5 @@
                 }
             });
     }
-
 
 })();

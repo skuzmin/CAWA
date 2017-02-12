@@ -324,7 +324,7 @@ a:focus {
 .decision-characteristics .decision-yearpicker {
   width: 150px;
 }
-.dicision .top-panel {
+.decision .top-panel {
   min-height: 40px;
   background-color: #fff;
   border-bottom: 1px solid #ebebeb;
@@ -332,7 +332,7 @@ a:focus {
   position: relative;
   z-index: 3;
 }
-.dicision .scroll-wrapper {
+.decision .scroll-wrapper {
   overflow-y: auto;
   padding-bottom: 10px;
   position: absolute;
@@ -342,7 +342,7 @@ a:focus {
   z-index: 1;
   right: 8px;
 }
-.dicision .scroll-wrapper-header {
+.decision .scroll-wrapper-header {
   position: absolute;
   left: 0;
   top: 0;
@@ -358,24 +358,24 @@ a:focus {
   margin-bottom: 10px;
   z-index: 100;
 }
-.dicision .main-panel {
+.decision .main-panel {
   position: relative;
   z-index: 2;
   height: calc(100vh - 140px);
 }
-.dicision .main-panel .divider {
+.decision .main-panel .divider {
   height: 100%;
 }
-.dicision .main-panel > div {
+.decision .main-panel > div {
   padding: 0;
   position: relative;
   height: 100%;
 }
-.dicision .main-panel > div.app-divider-wrapper {
+.decision .main-panel > div.app-divider-wrapper {
   margin-right: -8px;
   padding-right: 8px;
 }
-.dicision .main-panel .grid-stack-decision {
+.decision .main-panel .grid-stack-decision {
   background-color: rgba(128, 128, 128, 0.2);
 }
 body .app-main-panel .app-panel-left {
@@ -541,6 +541,44 @@ h6,
 .h6 {
   color: #333;
 }
+.app-panel {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  top: 0;
+  height: 100%;
+  padding-right: 6px;
+}
+.decision-matrix .main-panel {
+  height: calc(100vh - 100px);
+}
+.decision-matrix-table-item {
+  display: block;
+  border: 1px solid transparent;
+  -webkit-transition: border 0.2s ease-in-out;
+  -moz-transition: border 0.2s ease-in-out;
+  -ms-transition: border 0.2s ease-in-out;
+  -o-transition: border 0.2s ease-in-out;
+  transition: border 0.2s ease-in-out;
+}
+.decision-matrix-table-item:hover {
+  border-color: #226eb1;
+}
+.decision-matrix-table-item.selcted {
+  border-color: #226eb1;
+}
+.decision-matrix-table-row {
+  display: table;
+  width: 100%;
+  border-bottom: 1px solid #ebebeb;
+}
+.decision-matrix-table-col {
+  display: table-cell;
+  padding: 8px 8px;
+}
+.decision-matrix-table-header {
+  font-weight: 600;
+}
 .col-sm-padding {
   padding-left: 3px !important;
   padding-right: 3px !important;
@@ -557,6 +595,9 @@ h6,
 }
 .app-inline-block {
   display: inline-block;
+}
+.item-loading {
+  pointer-events: none;
 }
 .content {
   background-color: #FFF;

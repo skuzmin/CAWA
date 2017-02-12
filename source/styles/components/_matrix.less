@@ -1,0 +1,50 @@
+.app-panel {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    top: 0;
+    height: 100%;
+    padding-right: @resizer-width;
+}
+
+
+.decision-matrix {
+    .main-panel {
+        height: calc(~"100vh - 100px");
+    }
+}
+
+
+.decision-matrix-table {
+
+}
+.decision-matrix-table-item {
+    display: block;
+    border: 1px solid transparent;
+    
+    // TODO: use mixin and Bootsrap less
+    -webkit-transition: border 0.2s ease-in-out;
+       -moz-transition: border 0.2s ease-in-out;
+        -ms-transition: border 0.2s ease-in-out;
+         -o-transition: border 0.2s ease-in-out;
+            transition: border 0.2s ease-in-out;
+    &:hover {
+        border-color: @basic-active;
+    }
+    &.selcted {
+        border-color: @basic-active;
+    }
+}
+.decision-matrix-table-row {
+    display: table;
+    width: 100%;
+    border-bottom: 1px solid @gray-light;
+}
+.decision-matrix-table-col {
+    display: table-cell;
+    padding: 8px 8px;
+}
+
+.decision-matrix-table-header {
+    font-weight: 600;
+}
