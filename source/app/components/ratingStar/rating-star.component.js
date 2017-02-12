@@ -17,22 +17,16 @@
     RatingStarController.$inject = ['AppRatingStarConstant'];
 
     function RatingStarController(AppRatingStarConstant) {
-        var
-            vm = this;
+        var vm = this;
 
-            vm.$onChanges = onChanges;
             vm.showRating = false;
+
+            vm.$onChanges = onChanges;            
 
             function onChanges() {
                 vm.rating = parseFloat(vm.value) / AppRatingStarConstant.MAX_RATING * 100 + '%' || 0;
                 vm.value = vm.value || 0;
                 vm.showRating = vm.value > 0;
             }
-
-        init();
-
-        function init() {
-
-        }
     }
 })();

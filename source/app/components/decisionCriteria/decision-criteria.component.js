@@ -55,11 +55,11 @@
             if (position === -1) {
                 _fo.sortCriteriaIds.push(criterion.criterionId);
                 //don't add default coefficient
-                if (criterion.coefficient && criterion.coefficient.value !== DecisionCriteriaConstant.coefficientDefault.value) {
+                if (criterion.coefficient && criterion.coefficient.value !== DecisionCriteriaConstant.COEFFICIENT_DEFAULT.value) {
                     _fo.sortCriteriaCoefficients[criterion.criterionId] = criterion.coefficient.value;
                 }
                 //add only coefficient (but not default)
-            } else if (coefCall && criterion.coefficient.value !== DecisionCriteriaConstant.coefficientDefault.value) {
+            } else if (coefCall && criterion.coefficient.value !== DecisionCriteriaConstant.COEFFICIENT_DEFAULT.value) {
                 _fo.sortCriteriaCoefficients[criterion.criterionId] = criterion.coefficient.value;
                 //unselect criterion
             } else {
