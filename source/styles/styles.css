@@ -171,11 +171,8 @@ a:focus {
   min-width: 430px;
 }
 .list-item-sort.selected {
-  -webkit-box-shadow: 1px 7px 12px rgba(0, 0, 0, 0.2);
-  box-shadow: 1px 7px 12px rgba(0, 0, 0, 0.2);
+  background-color: #ccc;
   border-color: #226eb1;
-  border-width: 2px;
-  padding: 7px 15px 19px;
 }
 .list-item-sort:hover {
   z-index: 10;
@@ -212,7 +209,7 @@ a:focus {
   -moz-transition: none !important;
 }
 .list-item-sort-title {
-  margi: 5px 0 10px;
+  margin: 15px 0 20px;
 }
 .list-item-sort-criteria {
   display: inline-block;

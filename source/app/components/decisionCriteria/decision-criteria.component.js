@@ -120,7 +120,6 @@
 
 
                 if (!_.isEmpty(data)) {
-                    vm.criteriaSpinner = true;
                     DecisionDataService.getCriteriaByDecision(criterionId, vm.decisionId).then(function(result) {
                         criteriaGroupsRating = result;
                         if(!criteriaGroupsRating || _.isEmpty(result)) return;
@@ -144,7 +143,6 @@
 
 
                     }).finally(function() {
-                        vm.criteriaSpinner = false;
                         if (vm.criteriaGroups.length > 0) {
                             vm.criteriaGroups[0].isOpen = true;
                         }

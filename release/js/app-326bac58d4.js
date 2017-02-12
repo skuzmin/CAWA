@@ -56,12 +56,6 @@
 })();
 
 (function() {
-	'use strict';
-
-	angular.module('app.login', ['app.core']);
-
-})();
-(function() {
 
     'use strict';
 
@@ -70,6 +64,12 @@
 
 })();
 
+(function() {
+	'use strict';
+
+	angular.module('app.login', ['app.core']);
+
+})();
 (function() {
     'use strict';
 
@@ -559,6 +559,52 @@
 
 })();
 (function() {
+
+	'user strict';
+
+	angular
+		.module('app.home')
+		.controller('HomeController', HomeController);
+
+		HomeController.$inject = [];
+
+		function HomeController() {
+			var vm = this;
+
+			console.log('Home controller');
+			
+			vm.search = search;
+
+			function search() {
+				vm.showTrigger = true;
+			}
+ 		}
+})();
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.home')
+        .config(configuration);
+
+    configuration.$inject = ['$stateProvider'];
+
+    function configuration($stateProvider) {
+        $stateProvider
+            .state('home', {
+                url: '/',
+                templateUrl: 'app/home/home.html',
+                controller: 'HomeController',
+                controllerAs: 'vm',
+                data: {
+                    pageTitle: 'Home'
+                }
+            });
+    }
+
+})();
+(function() {
 	'use strict';
 
 	angular
@@ -742,50 +788,16 @@
 
 (function() {
 
-	'user strict';
-
-	angular
-		.module('app.home')
-		.controller('HomeController', HomeController);
-
-		HomeController.$inject = [];
-
-		function HomeController() {
-			var vm = this;
-
-			console.log('Home controller');
-			
-			vm.search = search;
-
-			function search() {
-				vm.showTrigger = true;
-			}
- 		}
-})();
-(function() {
-
     'use strict';
 
     angular
-        .module('app.home')
-        .config(configuration);
-
-    configuration.$inject = ['$stateProvider'];
-
-    function configuration($stateProvider) {
-        $stateProvider
-            .state('home', {
-                url: '/',
-                templateUrl: 'app/home/home.html',
-                controller: 'HomeController',
-                controllerAs: 'vm',
-                data: {
-                    pageTitle: 'Home'
-                }
-            });
-    }
+        .module('app.components')
+        .component('appFooter', {
+            templateUrl: 'app/components/appFooter/app-footer.html'
+        });
 
 })();
+
 (function() {
 
     'use strict';
@@ -1005,18 +1017,6 @@
             ELEMENT_HEIGHT : 80
         });
 })();
-(function() {
-
-    'use strict';
-
-    angular
-        .module('app.components')
-        .component('appFooter', {
-            templateUrl: 'app/components/appFooter/app-footer.html'
-        });
-
-})();
-
 (function() {
 
     'use strict';
@@ -1344,7 +1344,6 @@
 
 
                 if (!_.isEmpty(data)) {
-                    vm.criteriaSpinner = true;
                     DecisionDataService.getCriteriaByDecision(criterionId, vm.decisionId).then(function(result) {
                         criteriaGroupsRating = result;
                         if(!criteriaGroupsRating || _.isEmpty(result)) return;
@@ -1368,7 +1367,6 @@
 
 
                     }).finally(function() {
-                        vm.criteriaSpinner = false;
                         if (vm.criteriaGroups.length > 0) {
                             vm.criteriaGroups[0].isOpen = true;
                         }
@@ -1417,52 +1415,6 @@
         });
 })();
 
-(function() {
-
-    'use strict';
-
-    angular
-        .module('app.components')
-        .controller('RatingStarController', RatingStarController)
-        .component('ratingStar', {
-            templateUrl: 'app/components/ratingStar/rating-star.html',
-            bindings: {
-                value: '<'
-            },
-            controller: 'RatingStarController',
-            controllerAs: 'vm'
-        });
-
-    RatingStarController.$inject = ['AppRatingStarConstant'];
-
-    function RatingStarController(AppRatingStarConstant) {
-        var
-            vm = this;
-
-            vm.$onChanges = onChanges;
-
-            function onChanges() {
-                vm.rating = parseFloat(vm.value) / AppRatingStarConstant.MAX_RATING * 100 + '%' || 0;
-                vm.value = vm.value || 0;
-            }
-
-        init();
-
-        function init() {
-
-        }
-    }
-})();
-(function() {
-
-    'use strict';
-
-    angular
-        .module('app.components')
-        .constant('AppRatingStarConstant', {
-            MAX_RATING : 5,
-        });
-})();
 (function() {
 
     'use strict';
@@ -1532,6 +1484,54 @@
 
 })();
 
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.components')
+        .controller('RatingStarController', RatingStarController)
+        .component('ratingStar', {
+            templateUrl: 'app/components/ratingStar/rating-star.html',
+            bindings: {
+                value: '<'
+            },
+            controller: 'RatingStarController',
+            controllerAs: 'vm'
+        });
+
+    RatingStarController.$inject = ['AppRatingStarConstant'];
+
+    function RatingStarController(AppRatingStarConstant) {
+        var
+            vm = this;
+
+            vm.$onChanges = onChanges;
+            vm.showRating = false;
+
+            function onChanges() {
+                vm.rating = parseFloat(vm.value) / AppRatingStarConstant.MAX_RATING * 100 + '%' || 0;
+                vm.value = vm.value || 0;
+                vm.showRating = vm.value > 0;
+            }
+
+        init();
+
+        function init() {
+
+        }
+    }
+})();
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.components')
+        .constant('AppRatingStarConstant', {
+            MAX_RATING : 5,
+        });
+})();
 (function() {
 
     'use strict';
@@ -1626,4 +1626,4 @@ $templateCache.put('app/components/decisionCharacteristics/decision-characterist
 $templateCache.put('app/components/decisionCriteria/criteria-coefficient-popup.html','<div class=criteria-coefficient-popup><div class=modal-header><h4>Choose Criterion Factor of Importance</h4><button type=button class=close data-dismiss=modal aria-hidden=true ng-click=vm.close()>\xD7</button></div><div class=modal-body><form class=form-horizontal name=criteriaCoefficientForm ng-submit=vm.apply()><div class="row form-group"><div class="col-md-6 col-sm-6"><label class=control-label>Criterion name:</label></div><div class="col-md-6 col-sm-6">{{vm.criteria.name}}</div></div><div class="row form-group"><div class="col-md-6 col-sm-6"><label class=control-label>Factor of Importance:</label></div><div class="col-md-6 col-sm-6"><select class=form-control ng-model=vm.criteria.coefficient ng-options="coefficient as coefficient.name for coefficient in vm.coefficientList track by coefficient.value"></select></div></div><div class="form-group row"><div class=col-sm-12><button class="btn btn-default btn-primary pull-right" type=submit>Apply</button></div></div></form></div></div>');
 $templateCache.put('app/components/decisionCriteria/decision-criteria.html','<div class=decision-criteria><div class="criteria-header scroll-wrapper-header"><div class="col-md-6 col-sm-6"><h4>Criteria</h4></div><div class="col-md-6 col-sm-6"><a href class="btn add-createria-btn"><span class="glyphicon glyphicon-plus" aria-hidden=true></span>Add criterion</a></div></div><div class=scroll-wrapper><div class=app-loader-small ng-show=vm.criteriaSpinner><span class="glyphicon glyphicon-refresh app-loader-animation"></span>LOADING...</div><uib-accordion close-others=false><div uib-accordion-group class="panel-default criteria-panel" ng-repeat="group in vm.criteriaGroups track by $index" is-open=group.isOpen><uib-accordion-heading>{{group.name}} <i class="pull-right glyphicon glyphicon-chevron-right"></i></uib-accordion-heading><div class=criteria-item ng-repeat="criterion in group.criteria track by $index" ng-click=vm.selectCriterion(criterion) ng-class="{\'selected\' : criterion.isSelected}"><div class=criteria-item-left>{{criterion.criterionId}} {{criterion.name}}<rating-star value=criterion.weight ng-show=vm.showRating></rating-star></div><div class=criteria-item-right><button class="btn btn-default pull-right" ng-click="vm.editCriteriaCoefficient($event, criterion)"><criteria-coefficient-indicator coefficient=criterion.coefficient></criteria-coefficient-indicator></button></div></div></div></uib-accordion></div></div>');
 $templateCache.put('app/components/decisionSorter/decision-sorter.html','<ul class="btn-group btn-group-sm decision-sorter"><li class="btn btn-default" ng-repeat="sorter in sorters track by $index" ng-click=selectSorter(sorter) ng-class="{\'selected btn-primary\': sorter.order}"><span>{{sorter.name}}</span> <span ng-show="sorter.order === \'DESC\'" class="glyphicon glyphicon-sort-by-attributes-alt" aria-hidden=true></span> <span ng-show="sorter.order === \'ASC\'" class="glyphicon glyphicon-sort-by-attributes" aria-hidden=true></span></li></ul>');
-$templateCache.put('app/components/ratingStar/rating-star.html','<div class=app-rating-star-wrapper><div class=app-rating-star><span class=bar style="width: {{vm.rating}}"></span></div><span>{{vm.value}}</span></div>');}]);
+$templateCache.put('app/components/ratingStar/rating-star.html','<div class=app-rating-star-wrapper ng-if=vm.showRating><div class=app-rating-star><span class=bar style="width: {{vm.rating}}"></span></div><span>{{vm.value}}</span></div>');}]);
