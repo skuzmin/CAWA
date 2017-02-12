@@ -5,10 +5,13 @@
             <!-- TODO: have bug when resize selected item unselect -->
             <div class="list-item-sort-content" ng-click="vm.selectDecision(item)">
                 <strong>{{ item.decisionId }}</strong>
-                <div class="pull-right" ng-show="vm.showPercentage">
+                <div class="pull-right text-right" ng-show="vm.showPercentage">
                     <h5>
-                  Criteria compliance: <span class="list-item-sort-criteria">{{item.criteriaCompliancePercentage}}</span>
-              </h5>
+                      Criteria compliance:
+                      <div class="">
+                          <rating-star value="item.criteriaCompliancePercentage" total-votes="item.totalVotes" ng-show="item.weight"></rating-star>
+                      </div>
+                    </h5>
                 </div>
                 <h4 class="list-item-sort-title"><a href="" ng-click="vm.goToDecision($event, item.decisionId)">{{item.name}}</a></h4>
                 <!-- Details -->

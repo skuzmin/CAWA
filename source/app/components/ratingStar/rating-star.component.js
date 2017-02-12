@@ -8,7 +8,8 @@
         .component('ratingStar', {
             templateUrl: 'app/components/ratingStar/rating-star.html',
             bindings: {
-                value: '<'
+                value: '<',
+                totalVotes: '<'
             },
             controller: 'RatingStarController',
             controllerAs: 'vm'
@@ -18,16 +19,21 @@
 
     function RatingStarController(AppRatingStarConstant) {
         var
-            vm = this;
+            vm = this,
+            value;
 
-            vm.$onChanges = onChanges;
-            vm.showRating = false;
+        vm.$onChanges = onChanges;
+        vm.showRating = false;
 
-            function onChanges() {
-                vm.rating = parseFloat(vm.value) / AppRatingStarConstant.MAX_RATING * 100 + '%' || 0;
-                vm.value = vm.value || 0;
-                vm.showRating = vm.value > 0;
-            }
+        function onChanges() {
+            if (vm.value) value = vm.value.toString();
+            vm.rating = value;
+
+            // calc default rating
+            if (value && value.indexOf('%') === -1) vm.rating = parseFloat(vm.value) / AppRatingStarConstant.MAX_RATING * 100 + '%' || 0;
+            vm.value = vm.value || 0;
+            vm.showRating = parseInt(vm.value) > 0;
+        }
 
         init();
 

@@ -129,6 +129,7 @@
                         // Set null rating
                         _.map(vm.criteriaGroups[0].criteria, function(criteria, index) {
                             vm.criteriaGroups[0].criteria[index].weight = null;
+                            vm.criteriaGroups[0].criteria[index].totalVotes = null;
                         });
 
                         // Update rating
@@ -136,6 +137,7 @@
                             _.map(vm.criteriaGroups[0].criteria, function(criteria, index) { //Include all group
                                 if (criteriaRating.criterionId === criteria.criterionId) {
                                     vm.criteriaGroups[0].criteria[index].weight = criteriaRating.weight; //Set only rating weight
+                                    vm.criteriaGroups[0].criteria[index].totalVotes = criteriaRating.totalVotes;
                                 }
                             });
                         });
