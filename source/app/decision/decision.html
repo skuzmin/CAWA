@@ -9,15 +9,17 @@
         <div class="col-md-5 col-sm-5">
             <div class="row" ng-show="vm.parentDecisions">
                 <div class="col-sm-3 col-md-2">
-                    <label for="decision-parent" class="control-label">Parents: </label>
+                    <div class="top-panel-label">
+                        <label for="decision-parent" class="control-label">Parents: </label>
+                    </div>
                 </div>
                 <div class="col-sm-5 col-md-6">
-                    <div class="input-group">
-                        <select id="decision-parent" ng-model="vm.parentId" class="form-control" ng-options="parent for parent in vm.parentDecisions">
+                    <div class="input-group top-panel-title">
+                        <select id="decision-parent" ng-model="vm.parentId" class="form-control input-sm" ng-options="parent for parent in vm.parentDecisions">
                             <option value="" selected>Select parentId</option>
                         </select>
                         <span class="input-group-btn">
-                            <a href="" class="btn btn-default" ui-sref="decision({id: vm.parentId})" ng-disabled="!vm.parentId">Go</a>
+                            <a href="" class="btn btn-default btn-sm" ui-sref="decision({id: vm.parentId})" ng-disabled="!vm.parentId">Go</a>
                         </span>
                     </div>
                 </div>

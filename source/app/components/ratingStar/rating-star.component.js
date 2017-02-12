@@ -24,6 +24,7 @@
 
             function onChanges() {
                 vm.rating = parseFloat(vm.value) / AppRatingStarConstant.MAX_RATING * 100 + '%' || 0;
+                vm.value = vm.value || 0;
             }
 
         init();
