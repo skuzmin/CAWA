@@ -4,11 +4,13 @@
 			<input class="form-control" type="text" ng-model="vm.searchText"/>
 		</div>
 		<div class="col-md-4">
-			<a href="" class="btn btn-default" ng-click="vm.search()">Search</a>
+			<a href class="btn btn-default" ng-click="vm.search()">Search</a>
 		</div>
 	</div>
 	<div class="row search-results" ng-show="vm.showTrigger">
 		<div class="col-md-offset-2 col-md-8 col-md-offset-2">RESULTS for {{vm.searchText}}</div>
-		<div class="col-md-offset-2 col-md-8 col-md-offset-2"><a href="" ui-sref="decision({id: vm.searchText || 2512})">DECISION</a></div>
+		<div class="col-md-offset-2 col-md-8 col-md-offset-2"><a href ui-sref="decision({id: vm.searchText || 2512})">DECISION</a> 
+		<!-- | <a href ui-sref="decisionMatrix({id: vm.searchText || 2512})">DECISION Matrix</a> -->
+		</div>
 	</div>
 </div>

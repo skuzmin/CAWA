@@ -3,4 +3,5 @@
         <span class="bar" style="width: {{vm.rating}}"></span>
     </div>
     <span>{{vm.value}}</span><span ng-if="vm.totalVotes">({{vm.totalVotes}})</span>
+    <a ng-if="!vm.totalVotes" href>Rate it first</a>
 </div>

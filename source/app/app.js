@@ -6,7 +6,8 @@
         'app.home',
         'app.components',
         'app.login',
-        'app.decision'
+        'app.decision',
+        'app.decisionMatrix',
     ]);
 
     $.get({

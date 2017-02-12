@@ -23,16 +23,18 @@
             value;
 
         vm.$onChanges = onChanges;
-        vm.showRating = false;
+        vm.showRating = true;
 
         function onChanges() {
             if (vm.value) value = vm.value.toString();
             vm.rating = value;
 
-            // calc default rating
-            if (value && value.indexOf('%') === -1) vm.rating = parseFloat(vm.value) / AppRatingStarConstant.MAX_RATING * 100 + '%' || 0;
-            vm.value = vm.value || 0;
-            vm.showRating = parseInt(vm.value) > 0;
+            // calc default rating widthout %
+            if (value && value.indexOf('%') === -1) {
+                vm.rating = parseFloat(vm.value) / AppRatingStarConstant.MAX_RATING * 100 + '%' || 0;
+                vm.value = vm.value || 0;
+                vm.showRating = parseInt(vm.value) > 0;
+            }
         }
 
         init();
