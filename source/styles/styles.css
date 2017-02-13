@@ -31,12 +31,15 @@ a:focus {
 }
 .app-header {
   min-height: 50px;
+  height: 50px;
   background-color: #226eb1;
   color: #fff;
   padding-right: 15px;
   padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
+  overflow: hidden;
+  letter-spacing: 0.02em;
 }
 .app-header a {
   color: #fff;
@@ -58,12 +61,19 @@ a:focus {
   color: #FFF;
   background-color: #12395b;
 }
+.app-header .navbar-nav .link {
+  padding: 15px 15px;
+  display: block;
+}
+.app-header .navbar-nav .link:hover {
+  background-color: #12395b;
+}
 .app-header-sub-title {
   margin-left: 15px;
   font-size: 17px;
 }
 .app-footer {
-  min-height: 50px;
+  height: 50px;
   background-color: #FFF;
   border-top: 1px solid #ebebeb;
   padding: 10px;
@@ -570,7 +580,7 @@ h6,
   height: auto;
 }
 .matrix .main-panel {
-  height: calc(100vh - 100px);
+  height: calc(100vh - 140px);
 }
 .matrix-table-item {
   display: block;

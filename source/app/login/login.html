@@ -9,7 +9,7 @@
 		</li>
 		<li>
 			<form ng-if="vm.loginService.getLoginStatus()" name="logoutForm" action="{{vm.loginService.getLogoutUrl()}}" method="POST" novalidate>
-				<a href="" class="btn btn-default" ng-click="vm.logout()">Logout</a>
+				<a href class="link" ng-click="vm.logout()">Logout</a>
 			</form>
 		</li>
 	</ul>

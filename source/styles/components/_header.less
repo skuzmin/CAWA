@@ -1,11 +1,14 @@
 .app-header {
     min-height: @header-height;
+    height: @header-height;
     background-color: @header-background;
     color: @white-text;
     padding-right: 15px;
     padding-left: 15px;
     margin-right: auto;
     margin-left: auto;
+    overflow: hidden;
+    letter-spacing: 0.02em;
     a {
         color: @white-text;
     }
@@ -31,7 +34,15 @@
                 }
             }
         }
+        .link {
+            padding: 15px 15px;
+            display: block;            
+            &:hover {
+                background-color: darken(@header-background, 20%);
+            }
+        }
     }
+
 }
 
 .app-header-sub-title {
