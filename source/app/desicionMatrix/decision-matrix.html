@@ -1,80 +1,164 @@
-<div class="decision decision-matrix">
-    <div class="main-panel">
+<div class="decision matrix">
+    <div class="main-panel matrix-table js-matrix-table">
         <div id="panel" class="app-panel">
             <div class="decisions-header scroll-wrapper-header">
-                <div class="col-md-8 col-sm-padding">
-                    <decision-sorter sort-type="sortByCriteria"></decision-sorter>
-                    <decision-sorter sort-type="sortByCharacteristic"></decision-sorter>
-                    <decision-sorter sort-type="sortByDecisionProperty"></decision-sorter>
+                <!-- Header -->
+                <div class="matrix-table-header">
+                    <div class="matrix-table-row">
+                        <div class="matrix-table-col">
+                            <div class="matrix-table-title">ID</div>
+                        </div>
+                        <div class="matrix-table-col">
+                            <div class="matrix-table-title">Title</div>
+                        </div>
+                        <div class="matrix-table-col">
+                            <div class="matrix-table-title">Company</div>
+                        </div>
+                        <div class="matrix-table-col">
+                            <div class="matrix-table-title">Original author/s</div>
+                        </div>
+                        <div class="matrix-table-col">
+                            <div class="matrix-table-title">OPSWAT</div>
+                        </div>
+                        <div class="matrix-table-col">
+                            <div class="matrix-table-title">Price</div>
+                        </div>
+                        <div class="matrix-table-col">
+                            <div class="matrix-table-title">License</div>
+                        </div>
+                        <div class="matrix-table-col">
+                            <div class="matrix-table-title">First release</div>
+                        </div>
+                        <div class="matrix-table-col">
+                            <div class="matrix-table-title">Country</div>
+                        </div>
+                        <div class="matrix-table-col">
+                            <div class="matrix-table-title">Notes</div>
+                        </div>
+                    </div>
                 </div>
+                <!-- End Header -->
             </div>
             <div class="scroll-wrapper">
                 <!-- TODO: TEMP fix for future spinner -->
-                <h1 ng-show="vm.decisionsSpinner" class="app-loader-small"><span class="glyphicon glyphicon-refresh app-loader-animation"></span>LOADING...</h1>
-                <app-paginator></app-paginator>
+                <div ng-show="vm.decisionsSpinner" class="app-loader-small"><span class="glyphicon glyphicon-refresh app-loader-animation"></span>LOADING...</div>
+                <!-- <app-paginator></app-paginator> -->
                 <!-- <app-list list="vm.decisionsList"></app-list> -->
-
                 <!-- TODO: set width for all cols -->
-                <div class="decision-matrix-table">
-                    <!-- Header -->
-                    <div class="decision-matrix-table-header">
-                        <div class="decision-matrix-table-row">
-                            <div class="decision-matrix-table-col">ID</div>
-                            <div class="decision-matrix-table-col">Title</div>
-                            <div class="decision-matrix-table-col">Company</div>
-                            <div class="decision-matrix-table-col">Original author/s</div>
-                            <div class="decision-matrix-table-col">OPSWAT</div>
-                            <div class="decision-matrix-table-col">Price</div>
-                            <div class="decision-matrix-table-col">License</div>
-                            <div class="decision-matrix-table-col">First release</div>
-                            <div class="decision-matrix-table-col">Country</div>
-                            <div class="decision-matrix-table-col">Notes</div>
-                        </div>
-                    </div>
-                    <!-- End Header -->
+                <div class="">
                     <!-- Content -->
-                    <div class="decision-matrix-table-item">
-                        <div class="decision-matrix-table-row">
-                            <div class="decision-matrix-table-col"> 4487</div>
-                            <div class="decision-matrix-table-col"> Zemana Antilogger and Antimalware</div>
-                            <div class="decision-matrix-table-col"> Zemana</div>
-                            <div class="decision-matrix-table-col"> Not set</div>
-                            <div class="decision-matrix-table-col"> Not set</div>
-                            <div class="decision-matrix-table-col"> Trialware</div>
-                            <div class="decision-matrix-table-col"> Proprietary</div>
-                            <div class="decision-matrix-table-col"> Not set</div>
-                            <div class="decision-matrix-table-col"> Turkey</div>
-                            <div class="decision-matrix-table-col"> Not set</div>
+                    <div class="matrix-table-content">
+                        <div class="matrix-table-item">
+                            <div class="matrix-table-row with-border">
+                                <div class="matrix-table-col"> 4487</div>
+                                <div class="matrix-table-col"> Zemana Antilogger and Antimalware</div>
+                                <div class="matrix-table-col"> Zemana</div>
+                                <div class="matrix-table-col"> Not set</div>
+                                <div class="matrix-table-col"> Not set</div>
+                                <div class="matrix-table-col"> Trialware</div>
+                                <div class="matrix-table-col"> Proprietary</div>
+                                <div class="matrix-table-col"> Not set</div>
+                                <div class="matrix-table-col"> Turkey</div>
+                                <div class="matrix-table-col"> Not set</div>
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="decision-matrix-table-item">
-                        <div class="decision-matrix-table-row">
-                            <div class="decision-matrix-table-col"> 4487</div>
-                            <div class="decision-matrix-table-col"> Zemana Antilogger and Antimalware</div>
-                            <div class="decision-matrix-table-col"> Zemana</div>
-                            <div class="decision-matrix-table-col"> Not set</div>
-                            <div class="decision-matrix-table-col"> Not set</div>
-                            <div class="decision-matrix-table-col"> Trialware</div>
-                            <div class="decision-matrix-table-col"> Proprietary</div>
-                            <div class="decision-matrix-table-col"> Not set</div>
-                            <div class="decision-matrix-table-col"> Turkey</div>
-                            <div class="decision-matrix-table-col"> Not set</div>
+                        <div class="matrix-table-item">
+                            <div class="matrix-table-row with-border">
+                                <div class="matrix-table-col"> 4487</div>
+                                <div class="matrix-table-col"> Zemana Antilogger and Antimalware</div>
+                                <div class="matrix-table-col"> Zemana</div>
+                                <div class="matrix-table-col"> Not set</div>
+                                <div class="matrix-table-col"> Not set</div>
+                                <div class="matrix-table-col"> Trialware</div>
+                                <div class="matrix-table-col"> Proprietary</div>
+                                <div class="matrix-table-col"> Not set</div>
+                                <div class="matrix-table-col"> Turkey</div>
+                                <div class="matrix-table-col"> Not set</div>
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="decision-matrix-table-item">
-                        <div class="decision-matrix-table-row">
-                            <div class="decision-matrix-table-col"> 4487</div>
-                            <div class="decision-matrix-table-col"> Zemana Antilogger and Antimalware</div>
-                            <div class="decision-matrix-table-col"> Zemana</div>
-                            <div class="decision-matrix-table-col"> Not set</div>
-                            <div class="decision-matrix-table-col"> Not set</div>
-                            <div class="decision-matrix-table-col"> Trialware</div>
-                            <div class="decision-matrix-table-col"> Proprietary</div>
-                            <div class="decision-matrix-table-col"> Not set</div>
-                            <div class="decision-matrix-table-col"> Turkey</div>
-                            <div class="decision-matrix-table-col"> Not set</div>
+                        <div class="matrix-table-item">
+                            <div class="matrix-table-row">
+                                <div class="matrix-table-col"> 4487</div>
+                                <div class="matrix-table-col"> Zemana Antilogger and Antimalware</div>
+                                <div class="matrix-table-col"> Zemana</div>
+                                <div class="matrix-table-col"> Not set</div>
+                                <div class="matrix-table-col"> Not set</div>
+                                <div class="matrix-table-col"> Trialware</div>
+                                <div class="matrix-table-col"> Proprietary</div>
+                                <div class="matrix-table-col"> Not set</div>
+                                <div class="matrix-table-col"> Turkey</div>
+                                <div class="matrix-table-col"> Not set</div>
+                            </div>
+                        </div>
+                        <div class="matrix-table-item">
+                            <div class="matrix-table-row">
+                                <div class="matrix-table-col"> 4487</div>
+                                <div class="matrix-table-col"> Zemana Antilogger and Antimalware</div>
+                                <div class="matrix-table-col"> Zemana</div>
+                                <div class="matrix-table-col"> Not set</div>
+                                <div class="matrix-table-col"> Not set</div>
+                                <div class="matrix-table-col"> Trialware</div>
+                                <div class="matrix-table-col"> Proprietary</div>
+                                <div class="matrix-table-col"> Not set</div>
+                                <div class="matrix-table-col"> Turkey</div>
+                                <div class="matrix-table-col"> Not set</div>
+                            </div>
+                        </div>
+                        <div class="matrix-table-item">
+                            <div class="matrix-table-row">
+                                <div class="matrix-table-col"> 4487</div>
+                                <div class="matrix-table-col"> Zemana Antilogger and Antimalware</div>
+                                <div class="matrix-table-col"> Zemana</div>
+                                <div class="matrix-table-col"> Not set</div>
+                                <div class="matrix-table-col"> Not set</div>
+                                <div class="matrix-table-col"> Trialware</div>
+                                <div class="matrix-table-col"> Proprietary</div>
+                                <div class="matrix-table-col"> Not set</div>
+                                <div class="matrix-table-col"> Turkey</div>
+                                <div class="matrix-table-col"> Not set</div>
+                            </div>
+                        </div>
+                        <div class="matrix-table-item">
+                            <div class="matrix-table-row">
+                                <div class="matrix-table-col"> 4487</div>
+                                <div class="matrix-table-col"> Zemana Antilogger and Antimalware</div>
+                                <div class="matrix-table-col"> Zemana</div>
+                                <div class="matrix-table-col"> Not set</div>
+                                <div class="matrix-table-col"> Not set</div>
+                                <div class="matrix-table-col"> Trialware</div>
+                                <div class="matrix-table-col"> Proprietary</div>
+                                <div class="matrix-table-col"> Not set</div>
+                                <div class="matrix-table-col"> Turkey</div>
+                                <div class="matrix-table-col"> Not set</div>
+                            </div>
+                        </div>
+                        <div class="matrix-table-item">
+                            <div class="matrix-table-row">
+                                <div class="matrix-table-col"> 4487</div>
+                                <div class="matrix-table-col"> Zemana Antilogger and Antimalware</div>
+                                <div class="matrix-table-col"> Zemana</div>
+                                <div class="matrix-table-col"> Not set</div>
+                                <div class="matrix-table-col"> Not set</div>
+                                <div class="matrix-table-col"> Trialware</div>
+                                <div class="matrix-table-col"> Proprietary</div>
+                                <div class="matrix-table-col"> Not set</div>
+                                <div class="matrix-table-col"> Turkey</div>
+                                <div class="matrix-table-col"> Not set</div>
+                            </div>
+                        </div>
+                        <div class="matrix-table-item">
+                            <div class="matrix-table-row">
+                                <div class="matrix-table-col"> 4487</div>
+                                <div class="matrix-table-col"> Zemana Antilogger and Antimalware</div>
+                                <div class="matrix-table-col"> Zemana</div>
+                                <div class="matrix-table-col"> Not set</div>
+                                <div class="matrix-table-col"> Not set</div>
+                                <div class="matrix-table-col"> Trialware</div>
+                                <div class="matrix-table-col"> Proprietary</div>
+                                <div class="matrix-table-col"> Not set</div>
+                                <div class="matrix-table-col"> Turkey</div>
+                                <div class="matrix-table-col"> Not set</div>
+                            </div>
                         </div>
                     </div>
                     <!-- End Content -->

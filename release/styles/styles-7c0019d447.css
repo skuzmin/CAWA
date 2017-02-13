@@ -164,8 +164,9 @@ a:focus {
   margin-bottom: 10px;
   -webkit-border-radius: 2px;
   border-radius: 2px;
-  -webkit-transition: left 0.4s, top 0.4s, opacity 0.4s;
-  -moz-transition: left 0.4s, top 0.4s, opacity 0.4s;
+  -webkit-transition: left 0.4s, top 0.4s, opacity 0.4s, background 0.2s, border 0.2s;
+  -o-transition: left 0.4s, top 0.4s, opacity 0.4s, background 0.2s, border 0.2s;
+  transition: left 0.4s, top 0.4s, opacity 0.4s, background 0.2s, border 0.2s;
   overflow: hidden;
   z-index: 3;
   min-width: 430px;
@@ -233,6 +234,17 @@ a:focus {
   position: relative;
   cursor: pointer;
   line-height: 1.2;
+  -webkit-transition: background 0.2s, border 0.2s;
+  -o-transition: background 0.2s, border 0.2s;
+  transition: background 0.2s, border 0.2s;
+}
+.criteria-item:before,
+.criteria-item:after {
+  content: " ";
+  display: table;
+}
+.criteria-item:after {
+  clear: both;
 }
 .criteria-item:after {
   content: "";
@@ -370,6 +382,7 @@ a:focus {
   padding: 0;
   position: relative;
   height: 100%;
+  overflow: hidden;
 }
 .decision .main-panel > div.app-divider-wrapper {
   margin-right: -8px;
@@ -378,28 +391,34 @@ a:focus {
 .decision .main-panel .grid-stack-decision {
   background-color: rgba(128, 128, 128, 0.2);
 }
-body .app-main-panel .app-panel-left {
-  position: absolute;
-  left: 0;
-  width: 25%;
-  top: 0;
-  height: 100%;
-  padding-right: 6px;
+@media (min-width: 768px) {
+  body .app-main-panel .app-panel-left {
+    position: absolute;
+    left: 0;
+    width: 25%;
+    top: 0;
+    height: 100%;
+    padding-right: 6px;
+  }
 }
-body .app-main-panel .app-panel-center {
-  position: absolute;
-  background-color: #f3f5f6;
-  left: 25%;
-  width: 50%;
-  top: 0;
-  height: 100%;
+@media (min-width: 768px) {
+  body .app-main-panel .app-panel-center {
+    position: absolute;
+    background-color: #f3f5f6;
+    left: 25%;
+    width: 50%;
+    top: 0;
+    height: 100%;
+  }
 }
-body .app-main-panel .app-panel-right {
-  position: absolute;
-  left: 75%;
-  width: 25%;
-  top: 0;
-  height: 100%;
+@media (min-width: 768px) {
+  body .app-main-panel .app-panel-right {
+    position: absolute;
+    left: 75%;
+    width: 25%;
+    top: 0;
+    height: 100%;
+  }
 }
 body .app-main-panel .panels-2 {
   left: 25%;
@@ -414,10 +433,10 @@ body .app-main-panel .panels-2 .app-panel-right {
   left: 66%;
   width: 33%;
 }
-body .decision-item {
+.decision-item {
   background-color: #FFF;
 }
-body .app-resizer {
+.app-resizer {
   position: absolute;
   right: 0;
   top: 0;
@@ -448,7 +467,7 @@ body .app-resizer {
 }
 .app-pagination .paginator,
 .app-pagination .counter {
-  padding: 0 10px;
+  padding: 0 16px;
 }
 .app-loader-small {
   position: absolute;
@@ -515,15 +534,12 @@ body .app-resizer {
 }
 .panel .glyphicon {
   -webkit-transition: transform 0.2s ease-in-out;
-  -moz-transition: transform 0.2s ease-in-out;
-  -ms-transition: transform 0.2s ease-in-out;
   -o-transition: transform 0.2s ease-in-out;
   transition: transform 0.2s ease-in-out;
 }
 .panel.panel-open .glyphicon {
   -webkit-transform: rotate(90deg);
   -moz-transform: rotate(90deg);
-  -ms-transform: rotate(90deg);
   -o-transform: rotate(90deg);
   transform: rotate(90deg);
 }
@@ -549,35 +565,45 @@ h6,
   height: 100%;
   padding-right: 6px;
 }
-.decision-matrix .main-panel {
+.matrix.decision .scroll-wrapper-header {
+  min-height: 40px;
+  height: auto;
+}
+.matrix .main-panel {
   height: calc(100vh - 100px);
 }
-.decision-matrix-table-item {
+.matrix-table-item {
   display: block;
   border: 1px solid transparent;
   -webkit-transition: border 0.2s ease-in-out;
-  -moz-transition: border 0.2s ease-in-out;
-  -ms-transition: border 0.2s ease-in-out;
   -o-transition: border 0.2s ease-in-out;
   transition: border 0.2s ease-in-out;
 }
-.decision-matrix-table-item:hover {
+.matrix-table-item:hover {
   border-color: #226eb1;
 }
-.decision-matrix-table-item.selcted {
+.matrix-table-item.selcted {
   border-color: #226eb1;
 }
-.decision-matrix-table-row {
+.matrix-table-row {
   display: table;
   width: 100%;
+}
+.matrix-table-row.with-border {
   border-bottom: 1px solid #ebebeb;
 }
-.decision-matrix-table-col {
+.matrix-table-col {
   display: table-cell;
   padding: 8px 8px;
 }
-.decision-matrix-table-header {
+.matrix-table-header {
   font-weight: 600;
+  color: #333;
+}
+.matrix-table-title {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 1.2;
 }
 .col-sm-padding {
   padding-left: 3px !important;
@@ -602,6 +628,7 @@ h6,
 .content {
   background-color: #FFF;
   min-height: calc(100vh - 100px);
+  overflow: hidden;
 }
 .app-row-content-label {
   display: inline-block;

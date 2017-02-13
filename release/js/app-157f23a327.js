@@ -93,17 +93,15 @@
 
         // Page title
         var pageTitle = 'DecisionWanted';
+        $rootScope.pageTitle = pageTitle;
 
         $rootScope.$on('$stateChangeSuccess', function($state, $stateParams) {
             if (angular.isDefined($stateParams.data)) {
                 if ($stateParams.data.pageTitle) {
                     $rootScope.pageTitle = $stateParams.data.pageTitle + ' | ' + pageTitle;
                 }
-            } else {
-                $rootScope.pageTitle = pageTitle;
             }
         });
-
     }
 
 })();
@@ -500,7 +498,7 @@
             DecisionNotificationService.subscribeSelectCharacteristic(function(event, data) {
                 console.log(data);
             });
-        }
+        }    
     }
 })();
 
@@ -581,15 +579,25 @@
     function DecisionMatrixController() {
         var
             vm = this;
-            
+
         function init() {
             console.log('DecisionMatrixController');
         }
 
         init();
+
+
+        // Set table as col depend of table content
+        $('.js-matrix-table .matrix-table-content > .matrix-table-item:first() .matrix-table-col').each(function(index, val) {
+            var colWidth = $(this).outerWidth() + 'px';
+            $('.js-matrix-table .matrix-table-header .matrix-table-col').eq(index).css({
+                'width': colWidth
+            });
+
+        });
+
     }
 })();
-
 (function() {
 
     'use strict';
@@ -882,6 +890,42 @@
 
     angular
         .module('app.components')
+        .controller('PaginatorController', PaginatorController)
+        .component('appPaginator', {
+            templateUrl: 'app/components/appPaginator/app-paginator.html',
+            controller: 'PaginatorController',
+            controllerAs: 'vm'
+        });
+
+    PaginatorController.$inject = ['DecisionSharedService', 'DecisionNotificationService'];
+
+    function PaginatorController(DecisionSharedService, DecisionNotificationService) {
+        var vm = this;
+
+        vm.pagination = DecisionSharedService.filterObject.pagination;
+        vm.itemsPerPage = [5, 10, 20, 50, 100];
+
+        vm.changePage = changePage;
+        vm.changePageSize = changePageSize;
+
+        function changePage() {
+            DecisionNotificationService.notifyPageChanged();
+        }
+
+        function changePageSize() {
+            DecisionSharedService.filterObject.pagination.pageNumber = 1;
+            DecisionNotificationService.notifyPageChanged();
+        }
+    }
+
+})();
+
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.components')
         .controller('AppListController', AppListController)
         .component('appList', {
             templateUrl: 'app/components/appList/app-list.html',
@@ -1083,42 +1127,6 @@
             ELEMENT_HEIGHT : 80
         });
 })();
-(function() {
-
-    'use strict';
-
-    angular
-        .module('app.components')
-        .controller('PaginatorController', PaginatorController)
-        .component('appPaginator', {
-            templateUrl: 'app/components/appPaginator/app-paginator.html',
-            controller: 'PaginatorController',
-            controllerAs: 'vm'
-        });
-
-    PaginatorController.$inject = ['DecisionSharedService', 'DecisionNotificationService'];
-
-    function PaginatorController(DecisionSharedService, DecisionNotificationService) {
-        var vm = this;
-
-        vm.pagination = DecisionSharedService.filterObject.pagination;
-        vm.itemsPerPage = [5, 10, 20, 50, 100];
-
-        vm.changePage = changePage;
-        vm.changePageSize = changePageSize;
-
-        function changePage() {
-            DecisionNotificationService.notifyPageChanged();
-        }
-
-        function changePageSize() {
-            DecisionSharedService.filterObject.pagination.pageNumber = 1;
-            DecisionNotificationService.notifyPageChanged();
-        }
-    }
-
-})();
-
 (function() {
 
     'use strict';
@@ -1688,7 +1696,7 @@
 
 angular.module('app.core').run(['$templateCache', function($templateCache) {$templateCache.put('app/core/404.html','<div class=container><div class=app-content><div class=header-text><h1>Error 404</h1><h3>Page Not Found!</h3><a ui-sref=home>Home</a></div></div></div>');
 $templateCache.put('app/decision/decision.html','<div class=decision><div class="row top-panel"><div class="col-md-4 col-sm-4"><h4 class=app-header-sub-title>{{vm.decision.name}}</h4></div><div class="col-md-5 col-sm-5"><div class=row ng-show=vm.parentDecisions><div class="col-sm-3 col-md-2"><div class=top-panel-label><label for=decision-parent class=control-label>Parents:</label></div></div><div class="col-sm-5 col-md-6"><div class="input-group top-panel-title"><select id=decision-parent ng-model=vm.parentId class="form-control input-sm" ng-options="parent for parent in vm.parentDecisions"><option value selected>Select parentId</option></select><span class=input-group-btn><a href class="btn btn-default btn-sm" ui-sref="decision({id: vm.parentId})" ng-disabled=!vm.parentId>Go</a></span></div></div></div></div><div class="col-md-3 col-sm-3"><input class="form-control search-input" type=text> <span class="glyphicon glyphicon-search search-input-icon"></span></div></div><div class="app-main-panel main-panel"><div id=panel-left class="app-panel-left app-resizer-horizontal" resizer-right=#panel-center resizer><decision-criteria decision-id=vm.decisionId></decision-criteria><span class=app-resizer></span></div><div id=panel-center class="app-panel-center app-resizer-horizontal" resizer-right=#panel-right resizer><div class="decisions-header scroll-wrapper-header"><div class=col-md-2><h4>Decisions</h4></div><div class="col-md-8 col-sm-padding"><decision-sorter sort-type=sortByCriteria></decision-sorter><decision-sorter sort-type=sortByCharacteristic></decision-sorter><decision-sorter sort-type=sortByDecisionProperty></decision-sorter></div><div class="col-md-2 col-sm-padding"><a href class="btn add-createria-btn"><span class="glyphicon glyphicon-plus" aria-hidden=true></span>Add decision</a></div></div><div class=scroll-wrapper><h1 ng-show=vm.decisionsSpinner class=app-loader-small><span class="glyphicon glyphicon-refresh app-loader-animation"></span>LOADING...</h1><app-paginator></app-paginator><app-list list=vm.decisionsList></app-list></div><span class=app-resizer></span></div><div id=panel-right class=app-panel-right><decision-characteristics decision-id=vm.decisionId></decision-characteristics></div></div></div>');
-$templateCache.put('app/desicionMatrix/decision-matrix.html','<div class="decision decision-matrix"><div class=main-panel><div id=panel class=app-panel><div class="decisions-header scroll-wrapper-header"><div class="col-md-8 col-sm-padding"><decision-sorter sort-type=sortByCriteria></decision-sorter><decision-sorter sort-type=sortByCharacteristic></decision-sorter><decision-sorter sort-type=sortByDecisionProperty></decision-sorter></div></div><div class=scroll-wrapper><h1 ng-show=vm.decisionsSpinner class=app-loader-small><span class="glyphicon glyphicon-refresh app-loader-animation"></span>LOADING...</h1><app-paginator></app-paginator><div class=decision-matrix-table><div class=decision-matrix-table-header><div class=decision-matrix-table-row><div class=decision-matrix-table-col>ID</div><div class=decision-matrix-table-col>Title</div><div class=decision-matrix-table-col>Company</div><div class=decision-matrix-table-col>Original author/s</div><div class=decision-matrix-table-col>OPSWAT</div><div class=decision-matrix-table-col>Price</div><div class=decision-matrix-table-col>License</div><div class=decision-matrix-table-col>First release</div><div class=decision-matrix-table-col>Country</div><div class=decision-matrix-table-col>Notes</div></div></div><div class=decision-matrix-table-item><div class=decision-matrix-table-row><div class=decision-matrix-table-col>4487</div><div class=decision-matrix-table-col>Zemana Antilogger and Antimalware</div><div class=decision-matrix-table-col>Zemana</div><div class=decision-matrix-table-col>Not set</div><div class=decision-matrix-table-col>Not set</div><div class=decision-matrix-table-col>Trialware</div><div class=decision-matrix-table-col>Proprietary</div><div class=decision-matrix-table-col>Not set</div><div class=decision-matrix-table-col>Turkey</div><div class=decision-matrix-table-col>Not set</div></div></div><div class=decision-matrix-table-item><div class=decision-matrix-table-row><div class=decision-matrix-table-col>4487</div><div class=decision-matrix-table-col>Zemana Antilogger and Antimalware</div><div class=decision-matrix-table-col>Zemana</div><div class=decision-matrix-table-col>Not set</div><div class=decision-matrix-table-col>Not set</div><div class=decision-matrix-table-col>Trialware</div><div class=decision-matrix-table-col>Proprietary</div><div class=decision-matrix-table-col>Not set</div><div class=decision-matrix-table-col>Turkey</div><div class=decision-matrix-table-col>Not set</div></div></div><div class=decision-matrix-table-item><div class=decision-matrix-table-row><div class=decision-matrix-table-col>4487</div><div class=decision-matrix-table-col>Zemana Antilogger and Antimalware</div><div class=decision-matrix-table-col>Zemana</div><div class=decision-matrix-table-col>Not set</div><div class=decision-matrix-table-col>Not set</div><div class=decision-matrix-table-col>Trialware</div><div class=decision-matrix-table-col>Proprietary</div><div class=decision-matrix-table-col>Not set</div><div class=decision-matrix-table-col>Turkey</div><div class=decision-matrix-table-col>Not set</div></div></div></div></div></div></div></div>');
+$templateCache.put('app/desicionMatrix/decision-matrix.html','<div class="decision matrix"><div class="main-panel matrix-table js-matrix-table"><div id=panel class=app-panel><div class="decisions-header scroll-wrapper-header"><div class=matrix-table-header><div class=matrix-table-row><div class=matrix-table-col><div class=matrix-table-title>ID</div></div><div class=matrix-table-col><div class=matrix-table-title>Title</div></div><div class=matrix-table-col><div class=matrix-table-title>Company</div></div><div class=matrix-table-col><div class=matrix-table-title>Original author/s</div></div><div class=matrix-table-col><div class=matrix-table-title>OPSWAT</div></div><div class=matrix-table-col><div class=matrix-table-title>Price</div></div><div class=matrix-table-col><div class=matrix-table-title>License</div></div><div class=matrix-table-col><div class=matrix-table-title>First release</div></div><div class=matrix-table-col><div class=matrix-table-title>Country</div></div><div class=matrix-table-col><div class=matrix-table-title>Notes</div></div></div></div></div><div class=scroll-wrapper><div ng-show=vm.decisionsSpinner class=app-loader-small><span class="glyphicon glyphicon-refresh app-loader-animation"></span>LOADING...</div><div class><div class=matrix-table-content><div class=matrix-table-item><div class="matrix-table-row with-border"><div class=matrix-table-col>4487</div><div class=matrix-table-col>Zemana Antilogger and Antimalware</div><div class=matrix-table-col>Zemana</div><div class=matrix-table-col>Not set</div><div class=matrix-table-col>Not set</div><div class=matrix-table-col>Trialware</div><div class=matrix-table-col>Proprietary</div><div class=matrix-table-col>Not set</div><div class=matrix-table-col>Turkey</div><div class=matrix-table-col>Not set</div></div></div><div class=matrix-table-item><div class="matrix-table-row with-border"><div class=matrix-table-col>4487</div><div class=matrix-table-col>Zemana Antilogger and Antimalware</div><div class=matrix-table-col>Zemana</div><div class=matrix-table-col>Not set</div><div class=matrix-table-col>Not set</div><div class=matrix-table-col>Trialware</div><div class=matrix-table-col>Proprietary</div><div class=matrix-table-col>Not set</div><div class=matrix-table-col>Turkey</div><div class=matrix-table-col>Not set</div></div></div><div class=matrix-table-item><div class=matrix-table-row><div class=matrix-table-col>4487</div><div class=matrix-table-col>Zemana Antilogger and Antimalware</div><div class=matrix-table-col>Zemana</div><div class=matrix-table-col>Not set</div><div class=matrix-table-col>Not set</div><div class=matrix-table-col>Trialware</div><div class=matrix-table-col>Proprietary</div><div class=matrix-table-col>Not set</div><div class=matrix-table-col>Turkey</div><div class=matrix-table-col>Not set</div></div></div><div class=matrix-table-item><div class=matrix-table-row><div class=matrix-table-col>4487</div><div class=matrix-table-col>Zemana Antilogger and Antimalware</div><div class=matrix-table-col>Zemana</div><div class=matrix-table-col>Not set</div><div class=matrix-table-col>Not set</div><div class=matrix-table-col>Trialware</div><div class=matrix-table-col>Proprietary</div><div class=matrix-table-col>Not set</div><div class=matrix-table-col>Turkey</div><div class=matrix-table-col>Not set</div></div></div><div class=matrix-table-item><div class=matrix-table-row><div class=matrix-table-col>4487</div><div class=matrix-table-col>Zemana Antilogger and Antimalware</div><div class=matrix-table-col>Zemana</div><div class=matrix-table-col>Not set</div><div class=matrix-table-col>Not set</div><div class=matrix-table-col>Trialware</div><div class=matrix-table-col>Proprietary</div><div class=matrix-table-col>Not set</div><div class=matrix-table-col>Turkey</div><div class=matrix-table-col>Not set</div></div></div><div class=matrix-table-item><div class=matrix-table-row><div class=matrix-table-col>4487</div><div class=matrix-table-col>Zemana Antilogger and Antimalware</div><div class=matrix-table-col>Zemana</div><div class=matrix-table-col>Not set</div><div class=matrix-table-col>Not set</div><div class=matrix-table-col>Trialware</div><div class=matrix-table-col>Proprietary</div><div class=matrix-table-col>Not set</div><div class=matrix-table-col>Turkey</div><div class=matrix-table-col>Not set</div></div></div><div class=matrix-table-item><div class=matrix-table-row><div class=matrix-table-col>4487</div><div class=matrix-table-col>Zemana Antilogger and Antimalware</div><div class=matrix-table-col>Zemana</div><div class=matrix-table-col>Not set</div><div class=matrix-table-col>Not set</div><div class=matrix-table-col>Trialware</div><div class=matrix-table-col>Proprietary</div><div class=matrix-table-col>Not set</div><div class=matrix-table-col>Turkey</div><div class=matrix-table-col>Not set</div></div></div><div class=matrix-table-item><div class=matrix-table-row><div class=matrix-table-col>4487</div><div class=matrix-table-col>Zemana Antilogger and Antimalware</div><div class=matrix-table-col>Zemana</div><div class=matrix-table-col>Not set</div><div class=matrix-table-col>Not set</div><div class=matrix-table-col>Trialware</div><div class=matrix-table-col>Proprietary</div><div class=matrix-table-col>Not set</div><div class=matrix-table-col>Turkey</div><div class=matrix-table-col>Not set</div></div></div></div></div></div></div></div></div>');
 $templateCache.put('app/home/home.html','<div class=home><div class="row search-box"><div class="col-md-offset-2 col-md-6"><input class=form-control type=text ng-model=vm.searchText></div><div class=col-md-4><a href class="btn btn-default" ng-click=vm.search()>Search</a></div></div><div class="row search-results" ng-show=vm.showTrigger><div class="col-md-offset-2 col-md-8 col-md-offset-2">RESULTS for {{vm.searchText}}</div><div class="col-md-offset-2 col-md-8 col-md-offset-2"><a href ui-sref="decision({id: vm.searchText || 2512})">DECISION</a></div></div></div>');
 $templateCache.put('app/login/login.html','<div class="login-btn pull-right"><div ng-if=vm.loginService.getLoginStatus()><label>Username:</label> <span>{{vm.user.user_name}}</span></div><ul class="nav navbar-nav"><li><a ng-if=!vm.loginService.getLoginStatus() ng-click=vm.loginService.login()>Login</a></li><li><form ng-if=vm.loginService.getLoginStatus() name=logoutForm action={{vm.loginService.getLogoutUrl()}} method=POST novalidate><a href class="btn btn-default" ng-click=vm.logout()>Logout</a></form></li></ul></div>');
 $templateCache.put('app/components/appFooter/app-footer.html','<footer class=app-footer><div class="app-footer-info text-center">&copy; DecisionWanted - 2017</div></footer>');
