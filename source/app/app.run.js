@@ -11,14 +11,13 @@
 
         // Page title
         var pageTitle = 'DecisionWanted';
+        $rootScope.pageTitle = pageTitle;
 
         $rootScope.$on('$stateChangeSuccess', function($state, $stateParams) {
             if (angular.isDefined($stateParams.data)) {
                 if ($stateParams.data.pageTitle) {
                     $rootScope.pageTitle = $stateParams.data.pageTitle + ' | ' + pageTitle;
                 }
-            } else {
-                $rootScope.pageTitle = pageTitle;
             }
         });
 

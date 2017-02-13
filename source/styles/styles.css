@@ -234,6 +234,14 @@ a:focus {
   cursor: pointer;
   line-height: 1.2;
 }
+.criteria-item:before,
+.criteria-item:after {
+  content: " ";
+  display: table;
+}
+.criteria-item:after {
+  clear: both;
+}
 .criteria-item:after {
   content: "";
   display: table;
@@ -378,28 +386,34 @@ a:focus {
 .decision .main-panel .grid-stack-decision {
   background-color: rgba(128, 128, 128, 0.2);
 }
-body .app-main-panel .app-panel-left {
-  position: absolute;
-  left: 0;
-  width: 25%;
-  top: 0;
-  height: 100%;
-  padding-right: 6px;
+@media (min-width: 768px) {
+  body .app-main-panel .app-panel-left {
+    position: absolute;
+    left: 0;
+    width: 25%;
+    top: 0;
+    height: 100%;
+    padding-right: 6px;
+  }
 }
-body .app-main-panel .app-panel-center {
-  position: absolute;
-  background-color: #f3f5f6;
-  left: 25%;
-  width: 50%;
-  top: 0;
-  height: 100%;
+@media (min-width: 768px) {
+  body .app-main-panel .app-panel-center {
+    position: absolute;
+    background-color: #f3f5f6;
+    left: 25%;
+    width: 50%;
+    top: 0;
+    height: 100%;
+  }
 }
-body .app-main-panel .app-panel-right {
-  position: absolute;
-  left: 75%;
-  width: 25%;
-  top: 0;
-  height: 100%;
+@media (min-width: 768px) {
+  body .app-main-panel .app-panel-right {
+    position: absolute;
+    left: 75%;
+    width: 25%;
+    top: 0;
+    height: 100%;
+  }
 }
 body .app-main-panel .panels-2 {
   left: 25%;
@@ -414,10 +428,10 @@ body .app-main-panel .panels-2 .app-panel-right {
   left: 66%;
   width: 33%;
 }
-body .decision-item {
+.decision-item {
   background-color: #FFF;
 }
-body .app-resizer {
+.app-resizer {
   position: absolute;
   right: 0;
   top: 0;
@@ -515,15 +529,12 @@ body .app-resizer {
 }
 .panel .glyphicon {
   -webkit-transition: transform 0.2s ease-in-out;
-  -moz-transition: transform 0.2s ease-in-out;
-  -ms-transition: transform 0.2s ease-in-out;
   -o-transition: transform 0.2s ease-in-out;
   transition: transform 0.2s ease-in-out;
 }
 .panel.panel-open .glyphicon {
   -webkit-transform: rotate(90deg);
   -moz-transform: rotate(90deg);
-  -ms-transform: rotate(90deg);
   -o-transform: rotate(90deg);
   transform: rotate(90deg);
 }

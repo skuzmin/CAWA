@@ -71,28 +71,34 @@
 @resizer-width: 6px;
 body .app-main-panel {
     .app-panel-left {
-        position: absolute;
-        left: 0;
-        width: 25%;
-        top: 0;
-        height: 100%;
-        padding-right: @resizer-width;
+        @media (min-width: @screen-sm-min) {
+            position: absolute;
+            left: 0;
+            width: 25%;
+            top: 0;
+            height: 100%;
+            padding-right: @resizer-width;
+        }
     }
 
     .app-panel-center {
-        position: absolute;
-        background-color: @app-bg-light;
-        left: 25%;
-        width: 50%;
-        top: 0;
-        height: 100%;
+        @media (min-width: @screen-sm-min) {
+            position: absolute;
+            background-color: @app-bg-light;
+            left: 25%;
+            width: 50%;
+            top: 0;
+            height: 100%;
+        }
     }
     .app-panel-right {
-        position: absolute;
-        left: 75%;
-        width: 25%;
-        top: 0;
-        height: 100%;
+        @media (min-width: @screen-sm-min) {
+            position: absolute;
+            left: 75%;
+            width: 25%;
+            top: 0;
+            height: 100%;
+        }
     }
 
     .panels-2 {
@@ -110,23 +116,22 @@ body .app-main-panel {
     }
 }
 
-body {
-    .decision-item {
-        background-color: #FFF;
-    }
 
-    .app-resizer {
-        position: absolute;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        width: @resizer-width;
-        cursor: col-resize;
-        z-index: 111;
-        border-left: 1px solid rgba(0,0,0,0.3);
-        border-right: 1px solid rgba(0,0,0,0.3);
-        background: @app-bg-light;        
-    }
+.decision-item {
+    background-color: #FFF;
+}
+
+.app-resizer {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: @resizer-width;
+    cursor: col-resize;
+    z-index: 111;
+    border-left: 1px solid rgba(0,0,0,0.3);
+    border-right: 1px solid rgba(0,0,0,0.3);
+    background: @app-bg-light;
 }
 
 .scroll-wrapper-header {
