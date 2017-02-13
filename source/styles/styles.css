@@ -165,7 +165,8 @@ a:focus {
   -webkit-border-radius: 2px;
   border-radius: 2px;
   -webkit-transition: left 0.4s, top 0.4s, opacity 0.4s;
-  -moz-transition: left 0.4s, top 0.4s, opacity 0.4s;
+  -o-transition: left 0.4s, top 0.4s, opacity 0.4s;
+  transition: left 0.4s, top 0.4s, opacity 0.4s;
   overflow: hidden;
   z-index: 3;
   min-width: 430px;
@@ -567,8 +568,6 @@ h6,
   display: block;
   border: 1px solid transparent;
   -webkit-transition: border 0.2s ease-in-out;
-  -moz-transition: border 0.2s ease-in-out;
-  -ms-transition: border 0.2s ease-in-out;
   -o-transition: border 0.2s ease-in-out;
   transition: border 0.2s ease-in-out;
 }
