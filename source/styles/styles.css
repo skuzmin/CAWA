@@ -628,6 +628,41 @@ h6,
   font-weight: 600;
   font-size: 14px;
 }
+.app-sorter-wrapper {
+  position: relative;
+  height: 100%;
+  padding-right: 10px;
+}
+.app-sorter {
+  display: inline-block;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  height: 20px;
+  margin: -10px 5px;
+  color: #7f8c8d;
+}
+.app-sorter .app-sorter-bottom {
+  position: absolute;
+  bottom: 0;
+  height: 50%;
+  left: 0;
+  font-size: 12px;
+  top: auto;
+}
+.app-sorter .app-sorter-bottom.selected {
+  color: #000;
+}
+.app-sorter .app-sorter-top {
+  position: absolute;
+  top: 0;
+  height: 50%;
+  left: 0;
+  font-size: 12px;
+}
+.app-sorter .app-sorter-top.selected {
+  color: #000;
+}
 .col-sm-padding {
   padding-left: 3px !important;
   padding-right: 3px !important;

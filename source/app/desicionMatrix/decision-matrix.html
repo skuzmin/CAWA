@@ -39,7 +39,12 @@
                             </div>
                             <div class="matrix-table-row">
                                 <div class="matrix-table-col" ng-repeat="criteria in group.criteria track by $index">
-                                    <div class="matrix-table-title">{{criteria.name}}</div>
+                                    <div class="matrix-table-title app-sorter-wrapper">{{criteria.name}}
+                                        <div class="app-sorter">
+                                            <span class="app-sorter-top glyphicon glyphicon-triangle-top"></span>
+                                            <span class="app-sorter-bottom glyphicon glyphicon-triangle-bottom"></span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -52,7 +57,12 @@
                             </div>
                             <div class="matrix-table-row">
                                 <div class="matrix-table-col" ng-repeat="characteristic in group.characteristics track by $index">
-                                    <div class="matrix-table-title">{{characteristic.name}}</div>
+                                    <div class="matrix-table-title app-sorter-wrapper">{{characteristic.name}}
+                                        <div class="app-sorter">
+                                            <span class="app-sorter-top glyphicon glyphicon-triangle-top"></span>
+                                            <span class="app-sorter-bottom glyphicon glyphicon-triangle-bottom"></span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
