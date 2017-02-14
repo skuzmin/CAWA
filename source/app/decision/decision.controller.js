@@ -129,6 +129,6 @@
             DecisionNotificationService.subscribeSelectCharacteristic(function(event, data) {
                 console.log(data);
             });
-        }    
+        }
     }
 })();

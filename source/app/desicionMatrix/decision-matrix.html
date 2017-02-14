@@ -1,5 +1,4 @@
 <div class="decision matrix">
-
     <div class="row top-panel">
         <div class="col-md-4 col-sm-4">
             <h4 class="app-header-sub-title">
@@ -7,66 +6,57 @@
             </h4>
         </div>
         <div class="col-md-5 col-sm-5">
-            <div class="row" ng-show="vm.parentDecisions">
-                <div class="col-sm-3 col-md-2">
-                    <div class="top-panel-label">
-                        <label for="decision-parent" class="control-label">Parents: </label>
-                    </div>
-                </div>
-                <div class="col-sm-5 col-md-6">
-                    <div class="input-group top-panel-title">
-                        <select id="decision-parent" ng-model="vm.parentId" class="form-control input-sm" ng-options="parent for parent in vm.parentDecisions">
-                            <option value="" selected>Select parentId</option>
-                        </select>
-                        <span class="input-group-btn">
-                            <a href="" class="btn btn-default btn-sm" ui-sref="decision({id: vm.parentId})" ng-disabled="!vm.parentId">Go</a>
-                        </span>
-                    </div>
-                </div>
-            </div>
         </div>
         <div class="col-md-3 col-sm-3">
-            <input class="form-control search-input" type="text"/>
+            <input class="form-control search-input" type="text" />
             <span class="glyphicon glyphicon-search search-input-icon"></span>
         </div>
     </div>
-
     <div class="main-panel matrix-table js-matrix-table">
         <div id="panel" class="app-panel">
             <div class="decisions-header scroll-wrapper-header">
                 <!-- Header -->
                 <div class="matrix-table-header">
                     <div class="matrix-table-row">
-                        <div class="matrix-table-col">
-                            <div class="matrix-table-title">ID</div>
+
+                        <!-- TODO: Make Sticky -->
+                        <div class="matrix-table-col matrix-table-group">
+                            <div class="matrix-table-group-title">
+                                Empty
+                            </div>
+                            <div class="matrix-table-row">
+                                <div class="matrix-table-col">
+                                    <div class="matrix-table-title">Name</div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="matrix-table-col">
-                            <div class="matrix-table-title">Title</div>
+                        <!-- End Make Sticky -->
+
+                        <!-- Criteria Header -->
+                        <div class="matrix-table-col matrix-table-group" ng-repeat="group in vm.criteriaGroups track by $index">
+                            <div class="matrix-table-group-title">
+                                {{group.name}}
+                            </div>
+                            <div class="matrix-table-row">
+                                <div class="matrix-table-col" ng-repeat="criteria in group.criteria track by $index">
+                                    <div class="matrix-table-title">{{criteria.name}}</div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="matrix-table-col">
-                            <div class="matrix-table-title">Company</div>
+                        <!-- End Criteria Header -->
+
+                        <!-- characteristic Header -->
+                        <div class="matrix-table-col matrix-table-group" ng-repeat="group in vm.characteristicGroups track by $index">
+                            <div class="matrix-table-group-title">
+                                {{group.name}}
+                            </div>
+                            <div class="matrix-table-row">
+                                <div class="matrix-table-col" ng-repeat="characteristic in group.characteristics track by $index">
+                                    <div class="matrix-table-title">{{characteristic.name}}</div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="matrix-table-col">
-                            <div class="matrix-table-title">Original author/s</div>
-                        </div>
-                        <div class="matrix-table-col">
-                            <div class="matrix-table-title">OPSWAT</div>
-                        </div>
-                        <div class="matrix-table-col">
-                            <div class="matrix-table-title">Price</div>
-                        </div>
-                        <div class="matrix-table-col">
-                            <div class="matrix-table-title">License</div>
-                        </div>
-                        <div class="matrix-table-col">
-                            <div class="matrix-table-title">First release</div>
-                        </div>
-                        <div class="matrix-table-col">
-                            <div class="matrix-table-title">Country</div>
-                        </div>
-                        <div class="matrix-table-col">
-                            <div class="matrix-table-title">Notes</div>
-                        </div>
+                        <!-- End characteristic Header -->
                     </div>
                 </div>
                 <!-- End Header -->
