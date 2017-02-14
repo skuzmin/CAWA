@@ -579,9 +579,15 @@ h6,
 .matrix.decision .scroll-wrapper-header {
   min-height: 40px;
   height: auto;
+  width: auto;
 }
 .matrix .main-panel {
   height: calc(100vh - 140px);
+}
+.matrix.decision .main-panel > div,
+.matrix .app-panel {
+  -ms-overflow-x: scroll;
+  overflow-x: scroll;
 }
 .matrix-table-item {
   display: block;
@@ -617,6 +623,20 @@ h6,
   font-weight: 500;
   color: #333;
 }
+.matrix-table-header .matrix-table-row {
+  height: calc(100% - 36px);
+}
+.matrix-table-header .matrix-table-row .matrix-table-col {
+  padding: 0;
+  vertical-align: middle;
+}
+.matrix-table-header .matrix-table-row .matrix-table-col > .matrix-table-group-title,
+.matrix-table-header .matrix-table-row .matrix-table-col > .matrix-table-title {
+  padding: 4px 8px;
+}
+.matrix-table-header .matrix-table-row .matrix-table-col .app-sorter-wrapper {
+  padding-right: 20px;
+}
 .matrix-table-group-title {
   font-size: 18px;
   border-bottom: 1px solid #ebebeb;
@@ -630,8 +650,8 @@ h6,
 }
 .app-sorter-wrapper {
   position: relative;
-  height: 100%;
   padding-right: 10px;
+  font-size: 13px;
 }
 .app-sorter {
   display: inline-block;
@@ -641,13 +661,15 @@ h6,
   height: 20px;
   margin: -10px 5px;
   color: #7f8c8d;
+  width: 10px;
 }
 .app-sorter .app-sorter-bottom {
   position: absolute;
   bottom: 0;
   height: 50%;
   left: 0;
-  font-size: 12px;
+  font-size: 9px;
+  cursor: pointer;
   top: auto;
 }
 .app-sorter .app-sorter-bottom.selected {
@@ -658,7 +680,8 @@ h6,
   top: 0;
   height: 50%;
   left: 0;
-  font-size: 12px;
+  font-size: 9px;
+  cursor: pointer;
 }
 .app-sorter .app-sorter-top.selected {
   color: #000;
