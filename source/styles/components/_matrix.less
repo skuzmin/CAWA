@@ -14,8 +14,12 @@
         height: auto;
         width: auto;
     }
+    &.decision .scroll-wrapper {
+        top: 105px; //TODO: use variable
+    }
     .main-panel {
-        height: calc(~"100vh - 140px");
+        height: calc(~"100vh - 157px");
+        margin: 0 10px;
     }
     &.decision .main-panel > div,
     .app-panel {
@@ -52,29 +56,41 @@
         }
     }
 }
+
+.matrix-table-col-content {
+    padding: 4px 8px;
+}
+
+// Width for cols
+.matrix-content-name {
+    width: 200px;
+}
+
 .matrix-table-col {
     display: table-cell;
-    padding: 8px 8px;
 }
 
 .matrix-table-header {
     font-weight: 500;
     color: @title-color;
 
-    
+
     .matrix-table-row {
         height: calc(~"100% - 36px"); // TODO: not use it!!!
 
         .matrix-table-col {
             padding: 0;
             vertical-align: middle;
-            & > .matrix-table-group-title, 
+            & > .matrix-table-group-title {
+                padding: 4px 8px;
+                min-height: 36px; // TODO: not use it!!!
+            }
             & > .matrix-table-title {
                 padding: 4px 8px;
             }
             .app-sorter-wrapper {
                 padding-right: 20px;
-            }            
+            }
         }
     }
 }
@@ -83,6 +99,8 @@
     font-size: 18px;
     // background-color: @gray-light;
     border-bottom: 1px solid @gray-light;
+
+
 }
 
 .matrix-table-title {

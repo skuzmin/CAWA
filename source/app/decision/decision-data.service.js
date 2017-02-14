@@ -17,6 +17,11 @@
 					searchDecisionById: {method: 'POST', isArray: false}
 				}),
 
+				decisionsMatrix = $resource(decisionUrl + '/decisions/matrix', {id: '@id'},
+				{
+					searchDecisionById: {method: 'POST', isArray: false}
+				}),				
+
 				decisionInfo = $resource(decisionUrl),
 				decisionCharacteristics = $resource(decisionUrl + '/decisions/:childId/characteristics', {id: '@id', childId: '@childId'}, {}),
 				criteriasGroups = $resource(decisionUrl + '/criteria/groups'),
@@ -25,6 +30,7 @@
 
 			var service = {
 				searchDecision: searchDecision,
+				searchDecisionMatrix: searchDecisionMatrix,
 				getCriteriaGroupsById: getCriteriaGroupsById,
 				getCharacteristictsGroupsById: getCharacteristictsGroupsById,
 				getDecisionInfo: getDecisionInfo,
@@ -37,6 +43,10 @@
 			function searchDecision(id, data) {
 				return decisions.searchDecisionById({id: id}, data).$promise;
 			}
+
+			function searchDecisionMatrix(id, data) {
+				return decisionsMatrix.searchDecisionById({id: id}, data).$promise;
+			}			
 
 			function getCriteriaGroupsById(id) {
 				return criteriasGroups.query({id: id}).$promise;

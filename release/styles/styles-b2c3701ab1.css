@@ -581,8 +581,12 @@ h6,
   height: auto;
   width: auto;
 }
+.matrix.decision .scroll-wrapper {
+  top: 105px;
+}
 .matrix .main-panel {
-  height: calc(100vh - 140px);
+  height: calc(100vh - 157px);
+  margin: 0 10px;
 }
 .matrix.decision .main-panel > div,
 .matrix .app-panel {
@@ -615,9 +619,14 @@ h6,
 .matrix-table-row .matrix-table-col:last-child {
   border-right: 0;
 }
+.matrix-table-col-content {
+  padding: 4px 8px;
+}
+.matrix-content-name {
+  width: 200px;
+}
 .matrix-table-col {
   display: table-cell;
-  padding: 8px 8px;
 }
 .matrix-table-header {
   font-weight: 500;
@@ -630,7 +639,10 @@ h6,
   padding: 0;
   vertical-align: middle;
 }
-.matrix-table-header .matrix-table-row .matrix-table-col > .matrix-table-group-title,
+.matrix-table-header .matrix-table-row .matrix-table-col > .matrix-table-group-title {
+  padding: 4px 8px;
+  min-height: 36px;
+}
 .matrix-table-header .matrix-table-row .matrix-table-col > .matrix-table-title {
   padding: 4px 8px;
 }

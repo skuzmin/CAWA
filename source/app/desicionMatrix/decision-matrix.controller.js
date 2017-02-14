@@ -6,9 +6,9 @@
         .module('app.decision')
         .controller('DecisionMatrixController', DecisionMatrixController);
 
-    DecisionMatrixController.$inject = ['DecisionDataService'];
+    DecisionMatrixController.$inject = ['DecisionDataService', 'DecisionSharedService'];
 
-    function DecisionMatrixController(DecisionDataService) {
+    function DecisionMatrixController(DecisionDataService, DecisionSharedService) {
         var
             vm = this;
             // vm.criteriaTitles,
@@ -33,6 +33,15 @@
             // Characteristicts
             DecisionDataService.getCharacteristictsGroupsById(vm.decisionId).then(function(result) {
                 vm.characteristicGroups = result;
+                console.log(result);
+            });
+
+            searchDecisionMatrix(vm.decisionId);
+        }
+
+        function searchDecisionMatrix(id) {
+            DecisionDataService.searchDecisionMatrix(id, DecisionSharedService.getFilterObject()).then(function(result) {
+                vm.decisionMatrixList = result;
                 console.log(result);
             });
         }

@@ -25,7 +25,7 @@
                             </div>
                             <div class="matrix-table-row">
                                 <div class="matrix-table-col">
-                                    <div class="matrix-table-title app-sorter-wrapper">Name
+                                    <div class="matrix-table-title app-sorter-wrapper matrix-content-name">Name
                                         <div class="app-sorter">
                                             <span class="app-sorter-top glyphicon glyphicon-triangle-top"></span>
                                             <span class="app-sorter-bottom glyphicon glyphicon-triangle-bottom"></span>
@@ -79,124 +79,22 @@
                 <!-- <app-paginator></app-paginator> -->
                 <!-- <app-list list="vm.decisionsList"></app-list> -->
                 <!-- TODO: set width for all cols -->
-                <div class="">
-                    <!-- Content -->
-                    <div class="matrix-table-content">
-                        <div class="matrix-table-item">
-                            <div class="matrix-table-row with-border">
-                                <div class="matrix-table-col"> 4487</div>
-                                <div class="matrix-table-col"> Zemana Antilogger and Antimalware</div>
-                                <div class="matrix-table-col"> Zemana</div>
-                                <div class="matrix-table-col"> Not set</div>
-                                <div class="matrix-table-col"> Not set</div>
-                                <div class="matrix-table-col"> Trialware</div>
-                                <div class="matrix-table-col"> Proprietary</div>
-                                <div class="matrix-table-col"> Not set</div>
-                                <div class="matrix-table-col"> Turkey</div>
-                                <div class="matrix-table-col"> Not set</div>
+                <!-- Content -->
+                <div class="matrix-table-content">
+                    <div class="matrix-table-item" ng-repeat="item in vm.decisionMatrixList.decisionMatrixs track by item.decision.decisionId">
+                        <div class="matrix-table-row with-border">
+                            <div class="matrix-table-col">
+                                <div class="matrix-table-col-content matrix-content-name">{{item.decision.name}}</div>
                             </div>
-                        </div>
-                        <div class="matrix-table-item">
-                            <div class="matrix-table-row with-border">
-                                <div class="matrix-table-col"> 4487</div>
-                                <div class="matrix-table-col"> Zemana Antilogger and Antimalware</div>
-                                <div class="matrix-table-col"> Zemana</div>
-                                <div class="matrix-table-col"> Not set</div>
-                                <div class="matrix-table-col"> Not set</div>
-                                <div class="matrix-table-col"> Trialware</div>
-                                <div class="matrix-table-col"> Proprietary</div>
-                                <div class="matrix-table-col"> Not set</div>
-                                <div class="matrix-table-col"> Turkey</div>
-                                <div class="matrix-table-col"> Not set</div>
-                            </div>
-                        </div>
-                        <div class="matrix-table-item">
-                            <div class="matrix-table-row">
-                                <div class="matrix-table-col"> 4487</div>
-                                <div class="matrix-table-col"> Zemana Antilogger and Antimalware</div>
-                                <div class="matrix-table-col"> Zemana</div>
-                                <div class="matrix-table-col"> Not set</div>
-                                <div class="matrix-table-col"> Not set</div>
-                                <div class="matrix-table-col"> Trialware</div>
-                                <div class="matrix-table-col"> Proprietary</div>
-                                <div class="matrix-table-col"> Not set</div>
-                                <div class="matrix-table-col"> Turkey</div>
-                                <div class="matrix-table-col"> Not set</div>
-                            </div>
-                        </div>
-                        <div class="matrix-table-item">
-                            <div class="matrix-table-row">
-                                <div class="matrix-table-col"> 4487</div>
-                                <div class="matrix-table-col"> Zemana Antilogger and Antimalware</div>
-                                <div class="matrix-table-col"> Zemana</div>
-                                <div class="matrix-table-col"> Not set</div>
-                                <div class="matrix-table-col"> Not set</div>
-                                <div class="matrix-table-col"> Trialware</div>
-                                <div class="matrix-table-col"> Proprietary</div>
-                                <div class="matrix-table-col"> Not set</div>
-                                <div class="matrix-table-col"> Turkey</div>
-                                <div class="matrix-table-col"> Not set</div>
-                            </div>
-                        </div>
-                        <div class="matrix-table-item">
-                            <div class="matrix-table-row">
-                                <div class="matrix-table-col"> 4487</div>
-                                <div class="matrix-table-col"> Zemana Antilogger and Antimalware</div>
-                                <div class="matrix-table-col"> Zemana</div>
-                                <div class="matrix-table-col"> Not set</div>
-                                <div class="matrix-table-col"> Not set</div>
-                                <div class="matrix-table-col"> Trialware</div>
-                                <div class="matrix-table-col"> Proprietary</div>
-                                <div class="matrix-table-col"> Not set</div>
-                                <div class="matrix-table-col"> Turkey</div>
-                                <div class="matrix-table-col"> Not set</div>
-                            </div>
-                        </div>
-                        <div class="matrix-table-item">
-                            <div class="matrix-table-row">
-                                <div class="matrix-table-col"> 4487</div>
-                                <div class="matrix-table-col"> Zemana Antilogger and Antimalware</div>
-                                <div class="matrix-table-col"> Zemana</div>
-                                <div class="matrix-table-col"> Not set</div>
-                                <div class="matrix-table-col"> Not set</div>
-                                <div class="matrix-table-col"> Trialware</div>
-                                <div class="matrix-table-col"> Proprietary</div>
-                                <div class="matrix-table-col"> Not set</div>
-                                <div class="matrix-table-col"> Turkey</div>
-                                <div class="matrix-table-col"> Not set</div>
-                            </div>
-                        </div>
-                        <div class="matrix-table-item">
-                            <div class="matrix-table-row">
-                                <div class="matrix-table-col"> 4487</div>
-                                <div class="matrix-table-col"> Zemana Antilogger and Antimalware</div>
-                                <div class="matrix-table-col"> Zemana</div>
-                                <div class="matrix-table-col"> Not set</div>
-                                <div class="matrix-table-col"> Not set</div>
-                                <div class="matrix-table-col"> Trialware</div>
-                                <div class="matrix-table-col"> Proprietary</div>
-                                <div class="matrix-table-col"> Not set</div>
-                                <div class="matrix-table-col"> Turkey</div>
-                                <div class="matrix-table-col"> Not set</div>
-                            </div>
-                        </div>
-                        <div class="matrix-table-item">
-                            <div class="matrix-table-row">
-                                <div class="matrix-table-col"> 4487</div>
-                                <div class="matrix-table-col"> Zemana Antilogger and Antimalware</div>
-                                <div class="matrix-table-col"> Zemana</div>
-                                <div class="matrix-table-col"> Not set</div>
-                                <div class="matrix-table-col"> Not set</div>
-                                <div class="matrix-table-col"> Trialware</div>
-                                <div class="matrix-table-col"> Proprietary</div>
-                                <div class="matrix-table-col"> Not set</div>
-                                <div class="matrix-table-col"> Turkey</div>
-                                <div class="matrix-table-col"> Not set</div>
+                            <div class="matrix-table-col">
+                                <div class="matrix-table-col-content">
+                                    {{item.decision | json }}
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <!-- End Content -->
                 </div>
+                <!-- End Content -->
             </div>
         </div>
     </div>
