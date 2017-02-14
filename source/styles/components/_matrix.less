@@ -10,7 +10,7 @@
 
 .matrix {
     &.decision .scroll-wrapper-header {
-        min-height: 40px;   
+        min-height: 40px;
         height: auto;
     }
     .main-panel {
@@ -39,6 +39,12 @@
     &.with-border {
         border-bottom: 1px solid @gray-light;
     }
+    .matrix-table-col {
+        border-right: 1px solid @gray-light;
+        &:last-child {
+            border-right: 0;
+        }
+    }
 }
 .matrix-table-col {
     display: table-cell;
@@ -46,12 +52,20 @@
 }
 
 .matrix-table-header {
-    font-weight: 600;
+    font-weight: 500;
     color: @title-color;
+}
+
+.matrix-table-group-title {
+    font-size: 18px;
+    // background-color: @gray-light;
+    border-bottom: 1px solid @gray-light;
 }
 
 .matrix-table-title {
     display: inline-block;
     vertical-align: middle;
     line-height: 1.2;
+    font-weight: 600;
+    font-size: 14px;
 }
