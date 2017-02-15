@@ -42,21 +42,23 @@
             DecisionDataService.searchDecisionMatrix(id, DecisionSharedService.getFilterObject()).then(function(result) {
                 vm.decisionMatrixList = result;
                 console.log(result);
+                setTimeout(function() {
+                    prepareDisplayMatrix(vm.decisionMatrixList);
+                }, 200);
             });
         }
 
-        function prepareDisplayMatrix(decisonMatrix, criteriaGroups) {
-            var matrix = decisonMatrix.decisionMatrixs;
-            _.map(matrix, function(decison, index) {
-                var ctiteria = decison.criteria;
+        function prepareDisplayMatrix(decisionMatrix) {
+            var matrix = decisionMatrix.decisionMatrixs;
+            _.map(matrix, function(el, index) {
+                var ctiteria = el.criteria;
 
                 _.map(ctiteria, function(obj, index) {
                     var criteriaStore = obj;
                     // obj = 
                     // obj.criterionId
-                    _.map(criteriaGroups, function() {
-
-                    });
+                    $('#decision-row-' + el.decision.decisionId).find('.matrix-table-col-content[data-criterion-id="'+ obj.criterionId +'"]').html(obj.criterionId + ' | ' + obj.weight);
+                    console.log($('#decision-row-' + el.decision.decisionId).find('.matrix-table-col-content[data-criterion-id="'+ obj.criterionId +'"]'));
                 });
             });
         }

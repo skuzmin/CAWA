@@ -84,18 +84,18 @@
                 <!-- Content -->
                 <div class="matrix-table-content">
                     <div class="matrix-table-item" ng-repeat="item in vm.decisionMatrixList.decisionMatrixs track by item.decision.decisionId">
-                        <div class="matrix-table-row with-border">
+                        <div class="matrix-table-row with-border" id="decision-row-{{item.decision.decisionId}}">
                             <div class="matrix-table-col">
                                 <div class="matrix-table-col-content matrix-content-name">{{item.decision.name}}</div>
                             </div>
                             <!-- Criteria Content -->
-                            <div class="matrix-table-col" style="width: 1500px">
+                            <div class="matrix-table-col matrix-table-group" ng-repeat="group in vm.criteriaGroups track by $index" style="width: 1500px">
+                                <div class="matrix-table-group-title">
+                                    <!-- {{group.name}} -->
+                                </div>
                                 <div class="matrix-table-row">
-                                    <div class="matrix-table-col color-{{criteria.weight}}" ng-repeat="criteria in item.criteria track by $index" style="width: 120px">
-                                        <div class="matrix-table-col-content">
-                                            criterionId: {{criteria.criterionId}}
-                                            <!-- {{criteria.weight}} {{criteria.totalVotes}} -->
-                                            <!-- <rating-star value="criterion.weight" total-votes="criterion.totalVotes" ng-show="true"></rating-star> -->
+                                    <div class="matrix-table-col" ng-repeat="criteria in group.criteria | orderBy:'criterionId'" style="width: 120px">
+                                        <div class="matrix-table-col-content" data-criterion-id="{{criteria.criterionId}}">
                                         </div>
                                     </div>
                                 </div>
