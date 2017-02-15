@@ -16,6 +16,8 @@
     }
     &.decision .scroll-wrapper {
         top: 105px; //TODO: use variable
+        -ms-overflow-x: hidden;
+            overflow-x: hidden;
     }
     .main-panel {
         height: calc(~"100vh - 157px");
@@ -61,25 +63,25 @@
 // Colors
 .matrix-table-col {
     &.color-1 {
-        border-color: @coefficientLower;
+        // background-color: @coefficientLower;
     }
     &.color-2 {
-        border-color: @coefficientLow;
+        // background-color: @coefficientLow;
     }
     &.color-3 {
-        border-color: @coefficientNormal;
+        // background-color: @coefficientNormal;
     }
     &.color-4 {
-        border-color: @coefficientHigh;
+        // background-color: @coefficientHigh;
     }
     &.color-5 {
-        border-color: @coefficientImportant;
+        // background-color: @coefficientImportant;
     }
     &.color-6 {
-        border-color: @coefficientSignificant;
+        // background-color: @coefficientSignificant;
     }
     &.color-7 {
-        border-color: @coefficientCritical;
+        // background-color: @coefficientCritical;
     }
 }
 

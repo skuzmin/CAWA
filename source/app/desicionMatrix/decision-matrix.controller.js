@@ -11,9 +11,10 @@
     function DecisionMatrixController(DecisionDataService, DecisionSharedService) {
         var
             vm = this;
-            // vm.criteriaTitles,
-            // characteristicTitles;
-
+        // vm.criteriaTitles,
+        // characteristicTitles;
+        criteriaIds = [];
+        vm.displayMatrix = [];
         vm.decisionId = 2512;
 
         function init() {
@@ -24,16 +25,14 @@
             // Criteria
             DecisionDataService.getCriteriaGroupsById(vm.decisionId).then(function(result) {
                 vm.criteriaGroups = result;
-                // vm.criteriaTitles = _.map(result["0"].criteria, function(el) {
-                //     return el.name;
-                // });
-                console.log(vm.criteriaGroups);
+                criteriaIds = _.map(result["0"].criteria, function(el) {
+                    return el.name;
+                });
             });
 
             // Characteristicts
             DecisionDataService.getCharacteristictsGroupsById(vm.decisionId).then(function(result) {
                 vm.characteristicGroups = result;
-                console.log(result);
             });
 
             searchDecisionMatrix(vm.decisionId);
@@ -43,6 +42,22 @@
             DecisionDataService.searchDecisionMatrix(id, DecisionSharedService.getFilterObject()).then(function(result) {
                 vm.decisionMatrixList = result;
                 console.log(result);
+            });
+        }
+
+        function prepareDisplayMatrix(decisonMatrix, criteriaGroups) {
+            var matrix = decisonMatrix.decisionMatrixs;
+            _.map(matrix, function(decison, index) {
+                var ctiteria = decison.criteria;
+
+                _.map(ctiteria, function(obj, index) {
+                    var criteriaStore = obj;
+                    // obj = 
+                    // obj.criterionId
+                    _.map(criteriaGroups, function() {
+
+                    });
+                });
             });
         }
 
