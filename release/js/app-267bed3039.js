@@ -906,8 +906,8 @@
 
     angular
         .module('app.components')
-        .component('appFooter', {
-            templateUrl: 'app/components/appFooter/app-footer.html'
+        .component('appHeader', {
+            templateUrl: 'app/components/appHeader/app-header.html'
         });
 
 })();
@@ -918,8 +918,8 @@
 
     angular
         .module('app.components')
-        .component('appHeader', {
-            templateUrl: 'app/components/appHeader/app-header.html'
+        .component('appFooter', {
+            templateUrl: 'app/components/appFooter/app-footer.html'
         });
 
 })();
@@ -1309,6 +1309,75 @@
 
     angular
         .module('app.components')
+        .directive('decisionSorter', decisionSorter);
+
+    function decisionSorter() {
+        var directive = {
+            restrict: 'E',
+            replace: 'true',
+            templateUrl: 'app/components/decisionSorter/decision-sorter.html',
+            scope: {
+                sortType: '@'
+            },
+            link: link
+        };
+
+        return directive;
+
+        function link(scope, elem, attrs) {
+            //subscribe on init sorter event
+            var
+                sorterListener = scope.$on('initSorter', function(event, data) {
+                    if (scope.sortType === data.type) {
+                        scope.mode = data.mode;
+                        scope.sorters = data.list;
+                    }
+                    scope.$on('$destroy', function() {
+                        sorterListener();
+                    });
+                }),
+                order,
+                sortObj;
+
+            scope.selectSorter = function(sorter) {
+                //clear all sorting orders
+                order = sorter.order;
+                sortObj = {
+                    sort: {id: null, order: null},
+                    mode: ''
+                };
+                _.forEach(scope.sorters, function(s) {
+                    s.order = '';
+                });
+                //set correct sort order for sorter button
+                if (order === 'DESC') {
+                    sorter.order = 'ASC';
+                } else if (order === 'ASC' && scope.mode === 'threeStep') {
+                    sorter.order = null;
+                } else {
+                    sorter.order = 'DESC';
+                }
+                //set sortObj data for sorting request
+                if(sorter.order) {
+                    sortObj.sort.id = sorter.characteristicId || sorter.propertyId;
+                    sortObj.sort.order = sorter.order;
+                }
+                sortObj.mode = scope.sortType;
+
+                scope.$emit('selectSorter', sortObj);
+            };
+
+        }
+    }
+
+})();
+
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.components')
         .controller('CriteriaCoefficientPopupController', CriteriaCoefficientPopupController);
 
     CriteriaCoefficientPopupController.$inject = ['$uibModalInstance', 'criteria', 'DecisionCriteriaConstant'];
@@ -1537,75 +1606,6 @@
 
     angular
         .module('app.components')
-        .directive('decisionSorter', decisionSorter);
-
-    function decisionSorter() {
-        var directive = {
-            restrict: 'E',
-            replace: 'true',
-            templateUrl: 'app/components/decisionSorter/decision-sorter.html',
-            scope: {
-                sortType: '@'
-            },
-            link: link
-        };
-
-        return directive;
-
-        function link(scope, elem, attrs) {
-            //subscribe on init sorter event
-            var
-                sorterListener = scope.$on('initSorter', function(event, data) {
-                    if (scope.sortType === data.type) {
-                        scope.mode = data.mode;
-                        scope.sorters = data.list;
-                    }
-                    scope.$on('$destroy', function() {
-                        sorterListener();
-                    });
-                }),
-                order,
-                sortObj;
-
-            scope.selectSorter = function(sorter) {
-                //clear all sorting orders
-                order = sorter.order;
-                sortObj = {
-                    sort: {id: null, order: null},
-                    mode: ''
-                };
-                _.forEach(scope.sorters, function(s) {
-                    s.order = '';
-                });
-                //set correct sort order for sorter button
-                if (order === 'DESC') {
-                    sorter.order = 'ASC';
-                } else if (order === 'ASC' && scope.mode === 'threeStep') {
-                    sorter.order = null;
-                } else {
-                    sorter.order = 'DESC';
-                }
-                //set sortObj data for sorting request
-                if(sorter.order) {
-                    sortObj.sort.id = sorter.characteristicId || sorter.propertyId;
-                    sortObj.sort.order = sorter.order;
-                }
-                sortObj.mode = scope.sortType;
-
-                scope.$emit('selectSorter', sortObj);
-            };
-
-        }
-    }
-
-})();
-
-(function() {
-
-    'use strict';
-
-    angular
-        .module('app.components')
         .controller('RatingStarController', RatingStarController)
         .component('ratingStar', {
             templateUrl: 'app/components/ratingStar/rating-star.html',
@@ -1736,11 +1736,11 @@
 
 angular.module('app.core').run(['$templateCache', function($templateCache) {$templateCache.put('app/core/404.html','<div class=container><div class=app-content><div class=header-text><h1>Error 404</h1><h3>Page Not Found!</h3><a ui-sref=home>Home</a></div></div></div>');
 $templateCache.put('app/decision/decision.html','<div class=decision><div class="row top-panel"><div class="col-md-4 col-sm-4"><h4 class=app-header-sub-title>{{vm.decision.name}}</h4></div><div class="col-md-5 col-sm-5"><div class=row ng-show=vm.parentDecisions><div class="col-sm-3 col-md-2"><div class=top-panel-label><label for=decision-parent class=control-label>Parents:</label></div></div><div class="col-sm-5 col-md-6"><div class="input-group top-panel-title"><select id=decision-parent ng-model=vm.parentId class="form-control input-sm" ng-options="parent for parent in vm.parentDecisions"><option value selected>Select parentId</option></select><span class=input-group-btn><a href class="btn btn-default btn-sm" ui-sref="decision({id: vm.parentId})" ng-disabled=!vm.parentId>Go</a></span></div></div></div></div><div class="col-md-3 col-sm-3"><input class="form-control search-input" type=text> <span class="glyphicon glyphicon-search search-input-icon"></span></div></div><div class="app-main-panel main-panel"><div id=panel-left class="app-panel-left app-resizer-horizontal" resizer-right=#panel-center resizer><decision-criteria decision-id=vm.decisionId></decision-criteria><span class=app-resizer></span></div><div id=panel-center class="app-panel-center app-resizer-horizontal" resizer-right=#panel-right resizer><div class="decisions-header scroll-wrapper-header"><div class=col-md-2><h4>Decisions</h4></div><div class="col-md-8 col-sm-padding"><decision-sorter sort-type=sortByCriteria></decision-sorter><decision-sorter sort-type=sortByCharacteristic></decision-sorter><decision-sorter sort-type=sortByDecisionProperty></decision-sorter></div><div class="col-md-2 col-sm-padding"><a href class="btn add-createria-btn"><span class="glyphicon glyphicon-plus" aria-hidden=true></span>Add decision</a></div></div><div class=scroll-wrapper><h1 ng-show=vm.decisionsSpinner class=app-loader-small><span class="glyphicon glyphicon-refresh app-loader-animation"></span>LOADING...</h1><app-paginator></app-paginator><app-list list=vm.decisionsList></app-list></div><span class=app-resizer></span></div><div id=panel-right class=app-panel-right><decision-characteristics decision-id=vm.decisionId></decision-characteristics></div></div></div>');
-$templateCache.put('app/desicionMatrix/decision-matrix.html','<div class="decision matrix"><div class="row top-panel"><div class="col-md-4 col-sm-4"><h4 class=app-header-sub-title>{{vm.decision.name}} Fake title: Comparison of antivirus software for Windows Matrix</h4></div><div class="col-md-5 col-sm-5"></div><div class="col-md-3 col-sm-3"><input class="form-control search-input" type=text> <span class="glyphicon glyphicon-search search-input-icon"></span></div></div><div class="main-panel matrix-table js-matrix-table"><div id=panel class=app-panel><div class="decisions-header scroll-wrapper-header"><div class=matrix-table-header><div class=matrix-table-row><div class="matrix-table-col matrix-table-group"><div class=matrix-table-group-title>Empty</div><div class=matrix-table-row><div class=matrix-table-col><div class="matrix-table-title app-sorter-wrapper matrix-content-name">Name<div class=app-sorter><span class="app-sorter-top glyphicon glyphicon-triangle-top"></span> <span class="app-sorter-bottom glyphicon glyphicon-triangle-bottom"></span></div></div></div></div></div><div class="matrix-table-col matrix-table-group" ng-repeat="group in vm.criteriaGroups track by $index"><div class=matrix-table-group-title>{{group.name}}</div><div class=matrix-table-row><div class=matrix-table-col ng-repeat="criteria in group.criteria track by $index"><div class="matrix-table-title app-sorter-wrapper">{{criteria.name}}<div class=app-sorter><span class="app-sorter-top glyphicon glyphicon-triangle-top"></span> <span class="app-sorter-bottom glyphicon glyphicon-triangle-bottom"></span></div></div></div></div></div><div class="matrix-table-col matrix-table-group" ng-repeat="group in vm.characteristicGroups track by $index"><div class=matrix-table-group-title>{{group.name}}</div><div class=matrix-table-row><div class=matrix-table-col ng-repeat="characteristic in group.characteristics track by $index"><div class="matrix-table-title app-sorter-wrapper">{{characteristic.name}}<div class=app-sorter><span class="app-sorter-top glyphicon glyphicon-triangle-top"></span> <span class="app-sorter-bottom glyphicon glyphicon-triangle-bottom"></span></div></div></div></div></div></div></div></div><div class=scroll-wrapper><div ng-show=vm.decisionsSpinner class=app-loader-small><span class="glyphicon glyphicon-refresh app-loader-animation"></span>LOADING...</div><div class=matrix-table-content><div class=matrix-table-item ng-repeat="item in vm.decisionMatrixList.decisionMatrixs track by item.decision.decisionId"><div class="matrix-table-row with-border"><div class=matrix-table-col><div class="matrix-table-col-content matrix-content-name">{{item.decision.name}}</div></div><div class=matrix-table-col><div class=matrix-table-col-content>{{item.decision | json }}</div></div></div></div></div></div></div></div></div>');
+$templateCache.put('app/desicionMatrix/decision-matrix.html','<div class="decision matrix"><div class="row top-panel"><div class="col-md-4 col-sm-4"><h4 class=app-header-sub-title>{{vm.decision.name}} Fake title: Comparison of antivirus software for Windows Matrix</h4></div><div class="col-md-5 col-sm-5"></div><div class="col-md-3 col-sm-3"><input class="form-control search-input" type=text> <span class="glyphicon glyphicon-search search-input-icon"></span></div></div><div class="main-panel matrix-table js-matrix-table"><div id=panel class=app-panel><div class="decisions-header scroll-wrapper-header"><div class=matrix-table-header><div class=matrix-table-row><div class="matrix-table-col matrix-table-group"><div class=matrix-table-group-title>Empty</div><div class=matrix-table-row><div class=matrix-table-col><div class="matrix-table-title app-sorter-wrapper matrix-content-name">Name<div class=app-sorter><span class="app-sorter-top glyphicon glyphicon-triangle-top"></span> <span class="app-sorter-bottom glyphicon glyphicon-triangle-bottom"></span></div></div></div></div></div><div class="matrix-table-col matrix-table-group" ng-repeat="group in vm.criteriaGroups track by $index" style="width: 1500px"><div class=matrix-table-group-title>{{group.name}}</div><div class=matrix-table-row><div class=matrix-table-col ng-repeat="criteria in group.criteria track by $index" style="width: 120px"><div class="matrix-table-title app-sorter-wrapper">{{criteria.name}}<div class=app-sorter><span class="app-sorter-top glyphicon glyphicon-triangle-top"></span> <span class="app-sorter-bottom glyphicon glyphicon-triangle-bottom"></span></div></div></div></div></div><div class="matrix-table-col matrix-table-group" ng-repeat="group in vm.characteristicGroups track by $index" style="width: 1200px"><div class=matrix-table-group-title>{{group.name}}</div><div class=matrix-table-row><div class=matrix-table-col ng-repeat="characteristic in group.characteristics track by $index"><div class="matrix-table-title app-sorter-wrapper">{{characteristic.name}}<div class=app-sorter><span class="app-sorter-top glyphicon glyphicon-triangle-top"></span> <span class="app-sorter-bottom glyphicon glyphicon-triangle-bottom"></span></div></div></div></div></div></div></div></div><div class=scroll-wrapper><div ng-show=vm.decisionsSpinner class=app-loader-small><span class="glyphicon glyphicon-refresh app-loader-animation"></span>LOADING...</div><div class=matrix-table-content><div class=matrix-table-item ng-repeat="item in vm.decisionMatrixList.decisionMatrixs track by item.decision.decisionId"><div class="matrix-table-row with-border"><div class=matrix-table-col><div class="matrix-table-col-content matrix-content-name">{{item.decision.name}}</div></div><div class=matrix-table-col style="width: 1500px"><div class=matrix-table-col-content><div class=matrix-table-row><div class="matrix-table-col color-{{criteria.weight}}" ng-repeat="criteria in item.criteria" style="width: 120px"><rating-star value=criterion.weight total-votes=criterion.totalVotes ng-show=true></rating-star></div></div></div></div><div class=matrix-table-col style="width: 1200px"><div class=matrix-table-col-content><div class=matrix-table-row><div class=matrix-table-col ng-repeat="characteristic in item.characteristics">{{characteristic.value}}</div></div></div></div></div></div></div></div></div></div></div>');
 $templateCache.put('app/home/home.html','<div class=home><div class="row search-box"><div class="col-md-offset-2 col-md-6"><input class=form-control type=text ng-model=vm.searchText></div><div class=col-md-4><a href class="btn btn-default" ng-click=vm.search()>Search</a></div></div><div class="row search-results" ng-show=vm.showTrigger><div class="col-md-offset-2 col-md-8 col-md-offset-2">RESULTS for {{vm.searchText}}</div><div class="col-md-offset-2 col-md-8 col-md-offset-2"><a href ui-sref="decision({id: vm.searchText || 2512})">DECISION</a></div></div></div>');
 $templateCache.put('app/login/login.html','<div class="login-btn pull-right"><div ng-if=vm.loginService.getLoginStatus()><label>Username:</label> <span>{{vm.user.user_name}}</span></div><ul class="nav navbar-nav"><li><a ng-if=!vm.loginService.getLoginStatus() ng-click=vm.loginService.login()>Login</a></li><li><form ng-if=vm.loginService.getLoginStatus() name=logoutForm action={{vm.loginService.getLogoutUrl()}} method=POST novalidate><a href class=link ng-click=vm.logout()>Logout</a></form></li></ul></div>');
 $templateCache.put('app/components/appFooter/app-footer.html','<footer class=app-footer><div class="app-footer-info text-center">&copy; DecisionWanted - 2017</div></footer>');
-$templateCache.put('app/components/appHeader/app-header.html','<header class=app-header><div class=row><div class="col-md-3 header-menu-btn"><div class=navbar-brand><a ui-sref=home>DecisionWanted</a></div></div><div class="col-md-6 text-center"><span class=header-text>Millions of lemmings can\'t be wrong!</span></div><div class="col-md-3 header-login"><app-login></app-login></div></div></header>');
+$templateCache.put('app/components/appHeader/app-header.html','<header class=app-header><div class=row><div class="col-md-2 header-menu-btn"><div class=navbar-brand><a ui-sref=home>DecisionWanted</a></div></div><div class="col-md-4 text-center"><span class=header-text>Millions of lemmings can\'t be wrong!</span></div><div class="col-md-6 header-login"><app-login></app-login></div></div></header>');
 $templateCache.put('app/components/appList/app-list.html','<div class=app-list-wrapper><div class=app-list-container><div id="decision-{{ item.decisionId }}" ng-repeat="item in vm.list track by item.decisionId" class="list-item-sort app-resize-h" ng-class="{\'selected\' : item.isSelected, \'item-loading\' : data.detailsSpinner}" ng-mouseover="vm.getDetails(item, $event)"><div class=list-item-sort-content ng-click=vm.selectDecision(item)><strong>{{ item.decisionId }}</strong><div class="pull-right text-right" ng-show=vm.showPercentage><h5>Criteria compliance:<rating-star class=text-left value=item.criteriaCompliancePercentage total-votes=item.totalVotes ng-show=item.criteriaCompliancePercentage></rating-star></h5></div><h4 class=list-item-sort-title><a href ng-click="vm.goToDecision($event, item.decisionId)">{{item.name}}</a></h4><div class=list-item-sort-detail-wrapper><div class=app-loader-small ng-show=item.detailsSpinner><span class="glyphicon glyphicon-refresh app-loader-animation"></span>LOADING...</div><ng-include src=vm.innerTemplate></ng-include></div></div></div></div></div>');
 $templateCache.put('app/components/appList/decision-partial.html','<div class=list-item-sort-details><div class=decision-detailed-chars><div ng-if=item.characteristics><h4>Characteristics</h4><div ng-repeat="(key, value) in item.characteristics track by key"><div class=chars-group-name><label>{{vm.getGroupNameById(key)}}</label></div><div class=app-row-content ng-repeat="characteristic in value track by $index"><div class=app-row-content-label>{{characteristic.name}}:</div><span ng-show=characteristic.value>{{characteristic.value}}</span> <span ng-show=!characteristic.value class=not-set>Not set</span></div></div></div></div></div>');
 $templateCache.put('app/components/appPaginator/app-paginator.html','<div class="row app-pagination"><div class="col-md-10 col-sm-10 paginator"><div uib-pagination ng-model=vm.pagination.pageNumber boundary-links=true boundary-link-numbers=true total-items=vm.pagination.totalDecisions items-per-page=vm.pagination.pageSize ng-change=vm.changePage() class=pagination-sm previous-text=&lsaquo; next-text=&rsaquo; first-text=&laquo; last-text=&raquo;></div></div><div class="col-md-2 col-sm-2 counter"><select class="pagination form-control input-sm" ng-model=vm.pagination.pageSize ng-options="item for item in vm.itemsPerPage" ng-change=vm.changePageSize()></select></div></div>');
@@ -1750,5 +1750,5 @@ $templateCache.put('app/components/decisionCharacteristics/decision-characterist
 $templateCache.put('app/components/decisionCharacteristics/decision-characteristics.html','<div class=decision-characteristics><div class="char-header scroll-wrapper-header"><div class="col-md-6 col-sm-6"><h4>Characteristics</h4></div><div class="col-md-6 col-sm-6"><a href class="btn add-createria-btn"><span class="glyphicon glyphicon-plus" aria-hidden=true></span>Add characteristic</a></div></div><div class=scroll-wrapper><div class=app-loader-small ng-show=vm.characteristicSpinner>LOADING...</div><uib-accordion close-others=false><div uib-accordion-group class=panel-default ng-repeat="group in vm.characteristicGroups track by $index" is-open=group.isOpen><uib-accordion-heading>{{group.name}} <i class="pull-right glyphicon glyphicon-chevron-right"></i></uib-accordion-heading><div class="row criteria-item" ng-repeat="characteristic in group.characteristics track by $index"><div class=col-md-6>{{characteristic.name}}</div><div class=col-md-6><ng-include src=vm.getControl(characteristic)></ng-include></div></div></div></uib-accordion></div></div>');
 $templateCache.put('app/components/decisionCriteria/criteria-coefficient-popup.html','<div class=criteria-coefficient-popup><div class=modal-header><h4>Choose Criterion Factor of Importance</h4><button type=button class=close data-dismiss=modal aria-hidden=true ng-click=vm.close()>\xD7</button></div><div class=modal-body><form class=form-horizontal name=criteriaCoefficientForm ng-submit=vm.apply()><div class="row form-group"><div class="col-md-6 col-sm-6"><label class=control-label>Criterion name:</label></div><div class="col-md-6 col-sm-6">{{vm.criteria.name}}</div></div><div class="row form-group"><div class="col-md-6 col-sm-6"><label class=control-label>Factor of Importance:</label></div><div class="col-md-6 col-sm-6"><select class=form-control ng-model=vm.criteria.coefficient ng-options="coefficient as coefficient.name for coefficient in vm.coefficientList track by coefficient.value"></select></div></div><div class="form-group row"><div class=col-sm-12><button class="btn btn-default btn-primary pull-right" type=submit>Apply</button></div></div></form></div></div>');
 $templateCache.put('app/components/decisionCriteria/decision-criteria.html','<div class=decision-criteria><div class="criteria-header scroll-wrapper-header"><div class="col-md-6 col-sm-6"><h4>Criteria</h4></div><div class="col-md-6 col-sm-6"><a href class="btn add-createria-btn"><span class="glyphicon glyphicon-plus" aria-hidden=true></span>Add criterion</a></div></div><div class=scroll-wrapper><div class=app-loader-small ng-show=vm.criteriaSpinner><span class="glyphicon glyphicon-refresh app-loader-animation"></span>LOADING...</div><uib-accordion close-others=false><div uib-accordion-group class="panel-default criteria-panel" ng-repeat="group in vm.criteriaGroups track by $index" is-open=group.isOpen><uib-accordion-heading>{{group.name}} <i class="pull-right glyphicon glyphicon-chevron-right"></i></uib-accordion-heading><div class=criteria-item ng-repeat="criterion in group.criteria track by $index" ng-click=vm.selectCriterion(criterion) ng-class="{\'selected\' : criterion.isSelected}"><div class=criteria-item-left>{{criterion.criterionId}} {{criterion.name}}<rating-star value=criterion.weight total-votes=criterion.totalVotes ng-show=criterion.weight></rating-star></div><div class=criteria-item-right><button class="btn btn-default pull-right" ng-click="vm.editCriteriaCoefficient($event, criterion)"><criteria-coefficient-indicator coefficient=criterion.coefficient></criteria-coefficient-indicator></button></div></div></div></uib-accordion></div></div>');
-$templateCache.put('app/components/decisionSorter/decision-sorter.html','<ul class="btn-group btn-group-sm decision-sorter"><li class="btn btn-default" ng-repeat="sorter in sorters track by $index" ng-click=selectSorter(sorter) ng-class="{\'selected btn-primary\': sorter.order}"><span>{{sorter.name}}</span> <span ng-show="sorter.order === \'DESC\'" class="glyphicon glyphicon-sort-by-attributes-alt" aria-hidden=true></span> <span ng-show="sorter.order === \'ASC\'" class="glyphicon glyphicon-sort-by-attributes" aria-hidden=true></span></li></ul>');
-$templateCache.put('app/components/ratingStar/rating-star.html','<div class=app-rating-star-wrapper ng-if=vm.showRating><div class=app-rating-star><span class=bar style="width: {{vm.rating}}"></span></div><span>{{vm.value}}</span><span ng-if=vm.totalVotes>({{vm.totalVotes}})</span> <a ng-if=!vm.totalVotes href>Rate it first</a></div>');}]);
+$templateCache.put('app/components/ratingStar/rating-star.html','<div class=app-rating-star-wrapper ng-if=vm.showRating><div class=app-rating-star><span class=bar style="width: {{vm.rating}}"></span></div><span>{{vm.value}}</span><span ng-if=vm.totalVotes>({{vm.totalVotes}})</span> <a ng-if=!vm.totalVotes href>Rate it first</a></div>');
+$templateCache.put('app/components/decisionSorter/decision-sorter.html','<ul class="btn-group btn-group-sm decision-sorter"><li class="btn btn-default" ng-repeat="sorter in sorters track by $index" ng-click=selectSorter(sorter) ng-class="{\'selected btn-primary\': sorter.order}"><span>{{sorter.name}}</span> <span ng-show="sorter.order === \'DESC\'" class="glyphicon glyphicon-sort-by-attributes-alt" aria-hidden=true></span> <span ng-show="sorter.order === \'ASC\'" class="glyphicon glyphicon-sort-by-attributes" aria-hidden=true></span></li></ul>');}]);

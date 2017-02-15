@@ -619,6 +619,27 @@ h6,
 .matrix-table-row .matrix-table-col:last-child {
   border-right: 0;
 }
+.matrix-table-col.color-1 {
+  border-color: #0d38fb;
+}
+.matrix-table-col.color-2 {
+  border-color: #22c7fc;
+}
+.matrix-table-col.color-3 {
+  border-color: #3cfd2f;
+}
+.matrix-table-col.color-4 {
+  border-color: #fffd38;
+}
+.matrix-table-col.color-5 {
+  border-color: #fec52e;
+}
+.matrix-table-col.color-6 {
+  border-color: #f58920;
+}
+.matrix-table-col.color-7 {
+  border-color: #fc0d1b;
+}
 .matrix-table-col-content {
   padding: 4px 8px;
 }
