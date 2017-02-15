@@ -36,12 +36,12 @@
                         </div>
                         <!-- End Make Sticky -->
                         <!-- Criteria Header -->
-                        <div class="matrix-table-col matrix-table-group" ng-repeat="group in vm.criteriaGroups track by $index">
+                        <div class="matrix-table-col matrix-table-group" ng-repeat="group in vm.criteriaGroups track by $index" style="width: 1500px">
                             <div class="matrix-table-group-title">
                                 {{group.name}}
                             </div>
                             <div class="matrix-table-row">
-                                <div class="matrix-table-col" ng-repeat="criteria in group.criteria track by $index">
+                                <div class="matrix-table-col" ng-repeat="criteria in group.criteria track by $index" style="width: 120px">
                                     <div class="matrix-table-title app-sorter-wrapper">{{criteria.name}}
                                         <div class="app-sorter">
                                             <span class="app-sorter-top glyphicon glyphicon-triangle-top"></span>
@@ -53,7 +53,7 @@
                         </div>
                         <!-- End Criteria Header -->
                         <!-- characteristic Header -->
-                        <div class="matrix-table-col matrix-table-group" ng-repeat="group in vm.characteristicGroups track by $index">
+                        <div class="matrix-table-col matrix-table-group" ng-repeat="group in vm.characteristicGroups track by $index"  style="width: 1200px">
                             <div class="matrix-table-group-title">
                                 {{group.name}}
                             </div>
@@ -86,11 +86,29 @@
                             <div class="matrix-table-col">
                                 <div class="matrix-table-col-content matrix-content-name">{{item.decision.name}}</div>
                             </div>
-                            <div class="matrix-table-col">
+                            <!-- Criteria Content -->
+                            <div class="matrix-table-col"  style="width: 1500px">
                                 <div class="matrix-table-col-content">
-                                    {{item.decision | json }}
+                                    <div class="matrix-table-row">
+                                        <div class="matrix-table-col color-{{criteria.weight}}" ng-repeat="criteria in item.criteria" style="width: 120px">
+                                            <!-- {{criteria.weight}} {{criteria.totalVotes}} -->
+                                            <rating-star value="criterion.weight" total-votes="criterion.totalVotes" ng-show="true"></rating-star>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                            <!-- End Criteria Content -->
+                            <!-- Characteristics Content -->
+                            <div class="matrix-table-col"  style="width: 1200px">
+                                <div class="matrix-table-col-content">
+                                    <div class="matrix-table-row">
+                                        <div class="matrix-table-col" ng-repeat="characteristic in item.characteristics">
+                                            {{characteristic.value}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Characteristics Content -->
                         </div>
                     </div>
                 </div>
