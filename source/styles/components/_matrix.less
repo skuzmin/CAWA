@@ -15,9 +15,10 @@
         width: auto;
     }
     &.decision .scroll-wrapper {
-        top: 105px; //TODO: use variable
+        top: 84px; //TODO: use variable
         -ms-overflow-x: hidden;
             overflow-x: hidden;
+        // margin: 0 -1px;
     }
     .main-panel {
         height: calc(~"100vh - 157px");
@@ -34,12 +35,25 @@
 
 }
 
+.matrix-table-content {
+    .matrix-table-item {
+        &:first-child {
+            margin-top: 0;
+        }
+    }    
+}
+
 .matrix-table-item {
     display: block;
     border: 1px solid transparent;
+    border-bottom: 1px solid @gray-light;
     .transition(border 0.2s ease-in-out);
+    margin: -1px 0 0 0;
+    position: relative;
+    z-index: 1;
     &:hover {
         border-color: @basic-active;
+        z-index: 2;
     }
     &.selcted {
         border-color: @basic-active;
@@ -48,11 +62,9 @@
 .matrix-table-row {
     display: table;
     width: 100%;
-    &.with-border {
-        border-bottom: 1px solid @gray-light;
-    }
     .matrix-table-col {
         border-right: 1px solid @gray-light;
+
         &:last-child {
             border-right: 0;
         }
@@ -61,27 +73,28 @@
 }
 
 // Colors
-.matrix-table-col {
+.matrix-table-col-content {
+    font-size: 13px;
     &.color-1 {
-        // background-color: @coefficientLower;
+        background-color: @coefficientLower;
     }
     &.color-2 {
-        // background-color: @coefficientLow;
+        background-color: @coefficientLow;
     }
     &.color-3 {
-        // background-color: @coefficientNormal;
+        background-color: @coefficientNormal;
     }
     &.color-4 {
-        // background-color: @coefficientHigh;
+        background-color: @coefficientHigh;
     }
     &.color-5 {
-        // background-color: @coefficientImportant;
+        background-color: @coefficientImportant;
     }
     &.color-6 {
-        // background-color: @coefficientSignificant;
+        background-color: @coefficientSignificant;
     }
     &.color-7 {
-        // background-color: @coefficientCritical;
+        background-color: @coefficientCritical;
     }
 }
 
@@ -92,16 +105,18 @@
 // Width for cols
 .matrix-content-name {
     width: 200px;
+    min-width: 200px;
 }
 
 .matrix-table-col {
     display: table-cell;
+    min-width: 105px;
 }
 
 .matrix-table-header {
     font-weight: 500;
     color: @title-color;
-
+    border: 1px solid transparent;
 
     .matrix-table-row {
         height: calc(~"100% - 36px"); // TODO: not use it!!!
@@ -110,14 +125,15 @@
             padding: 0;
             vertical-align: middle;
             & > .matrix-table-group-title {
-                padding: 4px 8px;
+                padding: 4px 4px;
                 min-height: 36px; // TODO: not use it!!!
             }
             & > .matrix-table-title {
-                padding: 4px 8px;
+                padding: 4px 4px;
             }
             .app-sorter-wrapper {
                 padding-right: 20px;
+                width: 100%;
             }
         }
     }
@@ -143,7 +159,7 @@
 .app-sorter-wrapper {
     position: relative;
     padding-right: 10px;
-    font-size: 13px;
+    font-size: 11px;
 }
 
 .app-sorter {

@@ -2,6 +2,8 @@
     <div class="app-rating-star">
         <span class="bar" style="width: {{vm.rating}}"></span>
     </div>
-    <span>{{vm.value}}</span><span ng-if="vm.totalVotes">({{vm.totalVotes}})</span>
+    <div class="app-rating-votes">
+      <span>{{vm.value}}</span><span ng-if="vm.totalVotes">({{vm.totalVotes}})</span>
+    </div>
     <a ng-if="!vm.totalVotes" href>Rate it first</a>
 </div>

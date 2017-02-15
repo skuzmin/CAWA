@@ -12,9 +12,9 @@
             <span class="glyphicon glyphicon-search search-input-icon"></span>
         </div>
     </div>
-    <div class="main-panel matrix-table js-matrix-table">
+    <div id="matrix-table" class="main-panel matrix-table js-matrix-table">
         <div id="panel" class="app-panel">
-            <div class="decisions-header scroll-wrapper-header" style="width: 2720px;">
+            <div class="decisions-header scroll-wrapper-header" style="width: 2920px;">
                 <!-- Header -->
                 <div class="matrix-table-header">
                     <div class="matrix-table-row">
@@ -36,14 +36,14 @@
                         </div>
                         <!-- End Make Sticky -->
                         <!-- Criteria Header -->
-                        <div class="matrix-table-col matrix-table-group" ng-repeat="group in vm.criteriaGroups track by $index" style="width: 1500px">
+                        <div class="matrix-table-col matrix-table-group" ng-repeat="group in vm.criteriaGroups track by $index">
                             <div class="matrix-table-group-title">
                                 {{group.name}}
                             </div>
                             <div class="matrix-table-row">
                                 <div class="matrix-table-col" ng-repeat="criteria in group.criteria | orderBy:'criterionId'" style="width: 120px">
                                     <div class="matrix-table-title app-sorter-wrapper">
-                                    {{criteria.criterionId}} | 
+<!--                                     {{criteria.criterionId}} |  -->
                                     {{criteria.name}}
                                         <div class="app-sorter">
                                             <span class="app-sorter-top glyphicon glyphicon-triangle-top"></span>
@@ -57,7 +57,7 @@
                         <!-- characteristic Header -->
                         <div class="matrix-table-col matrix-table-group" ng-repeat="group in vm.characteristicGroups track by $index" style="width: 1200px">
                             <div class="matrix-table-group-title">
-                                {{group.name}}
+                                {{group.name}} !it is not work correctly
                             </div>
                             <div class="matrix-table-row">
                                 <div class="matrix-table-col" ng-repeat="characteristic in group.characteristics track by $index">
@@ -75,7 +75,7 @@
                 </div>
                 <!-- End Header -->
             </div>
-            <div class="scroll-wrapper" style="width: 2740px;">
+            <div class="scroll-wrapper" style="width: 2940px;">
                 <!-- TODO: TEMP fix for future spinner -->
                 <div ng-show="vm.decisionsSpinner" class="app-loader-small"><span class="glyphicon glyphicon-refresh app-loader-animation"></span>LOADING...</div>
                 <!-- <app-paginator></app-paginator> -->
@@ -84,15 +84,12 @@
                 <!-- Content -->
                 <div class="matrix-table-content">
                     <div class="matrix-table-item" ng-repeat="item in vm.decisionMatrixList.decisionMatrixs track by item.decision.decisionId">
-                        <div class="matrix-table-row with-border" id="decision-row-{{item.decision.decisionId}}">
+                        <div class="matrix-table-row" id="decision-row-{{item.decision.decisionId}}">
                             <div class="matrix-table-col">
                                 <div class="matrix-table-col-content matrix-content-name">{{item.decision.name}}</div>
                             </div>
                             <!-- Criteria Content -->
-                            <div class="matrix-table-col matrix-table-group" ng-repeat="group in vm.criteriaGroups track by $index" style="width: 1500px">
-                                <div class="matrix-table-group-title">
-                                    <!-- {{group.name}} -->
-                                </div>
+                            <div class="matrix-table-col matrix-table-group" ng-repeat="group in vm.criteriaGroups track by $index">
                                 <div class="matrix-table-row">
                                     <div class="matrix-table-col" ng-repeat="criteria in group.criteria | orderBy:'criterionId'" style="width: 120px">
                                         <div class="matrix-table-col-content" data-criterion-id="{{criteria.criterionId}}">

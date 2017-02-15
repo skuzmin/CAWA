@@ -6,9 +6,9 @@
         .module('app.decision')
         .controller('DecisionMatrixController', DecisionMatrixController);
 
-    DecisionMatrixController.$inject = ['DecisionDataService', 'DecisionSharedService'];
+    DecisionMatrixController.$inject = ['DecisionDataService', 'DecisionSharedService', '$compile', '$scope'];
 
-    function DecisionMatrixController(DecisionDataService, DecisionSharedService) {
+    function DecisionMatrixController(DecisionDataService, DecisionSharedService, $compile, $scope) {
         var
             vm = this;
         // vm.criteriaTitles,
@@ -44,10 +44,11 @@
                 console.log(result);
                 setTimeout(function() {
                     prepareDisplayMatrix(vm.decisionMatrixList);
-                }, 200);
+                }, 0);
             });
         }
 
+        // TODO: find better solution
         function prepareDisplayMatrix(decisionMatrix) {
             var matrix = decisionMatrix.decisionMatrixs;
             _.map(matrix, function(el, index) {
@@ -57,10 +58,14 @@
                     var criteriaStore = obj;
                     // obj = 
                     // obj.criterionId
-                    $('#decision-row-' + el.decision.decisionId).find('.matrix-table-col-content[data-criterion-id="'+ obj.criterionId +'"]').html(obj.criterionId + ' | ' + obj.weight);
-                    console.log($('#decision-row-' + el.decision.decisionId).find('.matrix-table-col-content[data-criterion-id="'+ obj.criterionId +'"]'));
+
+                    var html = '<rating-star value="'+obj.weight+'" total-votes="' + obj.totalVotes + '" ng-show="true"></rating-star>';
+                    $('#decision-row-' + el.decision.decisionId).find('.matrix-table-col-content[data-criterion-id="'+ obj.criterionId +'"]').html($compile(html)($scope)).addClass('color-' + obj.weight);
+                    // console.log($('#decision-row-' + el.decision.decisionId).find('.matrix-table-col-content[data-criterion-id="'+ obj.criterionId +'"]'));
                 });
             });
+
+
         }
 
         init();
