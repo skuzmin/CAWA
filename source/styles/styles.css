@@ -752,3 +752,7 @@ h6,
 .app-row-content {
   margin-bottom: 10px;
 }
+.app-user-info {
+  float: left;
+  margin: 15px 5px;
+}
