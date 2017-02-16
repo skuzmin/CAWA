@@ -579,6 +579,9 @@ h6,
   height: 100%;
   padding-right: 6px;
 }
+.matrix .pagination {
+  margin: 5px 0;
+}
 .matrix.decision .scroll-wrapper-header {
   min-height: 40px;
   height: auto;
@@ -586,9 +589,7 @@ h6,
   width: auto;
 }
 .matrix.decision .scroll-wrapper {
-  top: 73px;
-  -ms-overflow-x: hidden;
-  overflow-x: hidden;
+  top: 76px;
 }
 .matrix .main-panel {
   height: calc(100vh - 177px);
@@ -596,8 +597,11 @@ h6,
 }
 .matrix.decision .main-panel > div,
 .matrix .app-panel {
-  -ms-overflow-x: scroll;
   overflow-x: scroll;
+  overflow-y: auto;
+}
+.matrix-table-content {
+  position: relative;
 }
 .matrix-table-content .matrix-table-item:first-child {
   margin-top: 0;
@@ -606,7 +610,7 @@ h6,
   display: block;
   border: 1px solid transparent;
   border-bottom: 1px solid #ebebeb;
-  margin: -1px 0 0 0;
+  margin: 0 0 -1px 0;
   position: relative;
   z-index: 1;
 }

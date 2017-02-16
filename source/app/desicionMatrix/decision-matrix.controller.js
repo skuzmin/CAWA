@@ -15,11 +15,12 @@
 
         criteriaIds = [];
         vm.displayMatrix = [];
-        // vm.decisionId = 2512;
 
         vm.decisionId = $stateParams.id;
         vm.decision = decisionBasicInfo || {};
         $rootScope.pageTitle = vm.decision.name + ' Matrix | DecisionWanted';
+
+        vm.orderByDecisionProperty = orderByDecisionProperty;
 
         init();
 
@@ -113,6 +114,36 @@
             });
         }
 
+        // TODO: make as in sorter directive
+        function orderByDecisionProperty(field, order) {
+            if (!field) return;
+            order = order || 'DESC';
+
+             sortObj = {
+                sort: {id: field, order: order},
+                mode: "sortByDecisionProperty"
+            };
+            $scope.$emit('selectSorter', sortObj);
+
+        }
+
+        // TODO: for test $compile vs pure JS
+        function ratingDirective(value, totalVotes) {
+            var ratingHtml,
+                rating;
+
+            rating = parseFloat(value) / 5 * 100 + '%' || 0;
+            ratingHtml = '<div class="app-rating-star-wrapper">' +
+                            '<div class="app-rating-star">' +
+                                '<span class="bar" style="width: ' + rating + '"></span>' +
+                            '</div>' +
+                            '<div class="app-rating-votes">' +
+                              '<span>' + value + '</span><span>(' + totalVotes + ')</span>' +
+                            '</div>' +
+                        '</div>';
+            return ratingHtml;
+        }
+
         // TODO: find better solution, optimize $compile maybe render whole row in js
         function prepareDisplayMatrix(decisionMatrix) {
             var matrix = decisionMatrix.decisionMatrixs;
@@ -121,12 +152,24 @@
             _.map(matrix, function(el, index) {
                 var criteria = el.criteria;
 
+                var criteriaEl = $('#decision-row-' + el.decision.decisionId);
+
                 _.map(criteria, function(obj, index) {
                     var criteriaStore = obj;
-                    var html = '<rating-star value="' + obj.weight + '" total-votes="' + obj.totalVotes + '" ng-show="true"></rating-star>';
-                    $('#decision-row-' + el.decision.decisionId).find('.matrix-table-col-content[data-criterion-id="' + obj.criterionId + '"]').html($compile(html)($scope)); //.addClass('color-' + obj.weight);
+
+                    // Angular
+                    // var html = '<rating-star value="' + obj.weight + '" total-votes="' + obj.totalVotes + '" ng-show="true"></rating-star>';
+                    // criteriaEl.find('.matrix-table-col-content[data-criterion-id="' + obj.criterionId + '"]').html(html); //.addClass('color-' + obj.weight);
+
+                    // Pure JS
+                    var html = ratingDirective(obj.weight, obj.totalVotes);
+                    criteriaEl.find('.matrix-table-col-content[data-criterion-id="' + obj.criterionId + '"]').html(html);
+
                 });
+
+                // $compile(criteriaEl.find('[data-criterion-id]'))($scope);
             });
+
 
 
             // Characteristic insert in table
