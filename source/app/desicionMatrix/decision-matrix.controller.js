@@ -6,19 +6,20 @@
         .module('app.decision')
         .controller('DecisionMatrixController', DecisionMatrixController);
 
-    DecisionMatrixController.$inject = ['DecisionDataService', '$stateParams', 'DecisionSharedService', 'decisionBasicInfo', '$rootScope', '$compile', '$scope'];
+    DecisionMatrixController.$inject = ['DecisionDataService', '$stateParams', 'DecisionNotificationService', 'decisionBasicInfo', '$rootScope', '$compile', '$scope'];
 
-    function DecisionMatrixController(DecisionDataService, $stateParams, DecisionSharedService, decisionBasicInfo, $rootScope, $compile, $scope) {
+    function DecisionMatrixController(DecisionDataService, $stateParams, DecisionNotificationService, decisionBasicInfo, $rootScope, $compile, $scope) {
         var
             vm = this;
 
         criteriaIds = [];
         vm.displayMatrix = [];
-        // vm.decisionId = 2512;
-        vm.decisionId = $stateParams.id;
+        vm.decisionId = 2512;
+        // vm.decisionId = $stateParams.id;
         vm.decision = decisionBasicInfo || {};
-
         $rootScope.pageTitle = vm.decision.name + ' Matrix | DecisionWanted';
+
+        init();
 
         function init() {
             console.log('Decision Matrix Controller');
@@ -38,12 +39,71 @@
             });
 
             searchDecisionMatrix(vm.decisionId);
+
+            //Get data for decision panel (main)
+            vm.decisionsSpinner = true;
+            searchDecisionMatrix(vm.decisionId);
+
+            //Subscribe to notification events
+            DecisionNotificationService.subscribeSelectCriterion(function(event, data) {
+                setDecisionMatchPercent(data);
+                vm.decisionsList = data;
+            });
+            DecisionNotificationService.subscribePageChanged(function() {
+                vm.decisionsSpinner = true;
+                searchDecisionMatrix(vm.decisionId);
+            });
+            DecisionNotificationService.subscribeGetDetailedCharacteristics(function(event, data) {
+                data.detailsSpinner = true;
+                DecisionDataService.getDecisionCharacteristics(vm.decisionId, data.decisionId).then(function(result) {
+                    data.characteristics = prepareDataToDisplay(result);
+                }).finally(function() {
+                    data.detailsSpinner = false;
+                });
+            });
+            DecisionNotificationService.subscribeSelectSorter(function(event, data) {
+                vm.decisionsSpinner = true;
+                DecisionSharedService.filterObject.sorters[data.mode] = data.sort;
+                searchDecisionMatrix(vm.decisionId);
+            });
+
+        }
+
+        //Init sorters, when directives loaded
+        function initSorters() {
+            if (!isInitedSorters) {
+                DecisionNotificationService.notifyInitSorter({
+                    list: [{
+                        name: 'Weight',
+                        order: 'DESC',
+                        isSelected: true
+                    }],
+                    type: 'sortByCriteria',
+                    mode: 'twoStep'
+                });
+                DecisionNotificationService.notifyInitSorter({
+                    list: [{
+                        name: 'Create Date',
+                        propertyId: 'createDate'
+                    }, {
+                        name: 'Update Date',
+                        propertyId: 'updateDate'
+                    }, {
+                        name: 'Name',
+                        propertyId: 'name'
+                    }],
+                    type: 'sortByDecisionProperty',
+                    mode: 'threeStep'
+                });
+                isInitedSorters = true;
+            }
         }
 
         function searchDecisionMatrix(id) {
             DecisionDataService.searchDecisionMatrix(id, DecisionSharedService.getFilterObject()).then(function(result) {
                 vm.decisionMatrixList = result;
                 console.log(result);
+                initSorters();
                 setTimeout(function() {
                     prepareDisplayMatrix(vm.decisionMatrixList);
                 }, 0);
@@ -78,8 +138,6 @@
             });
 
         }
-
-        init();
 
 
         // // Set table as col depend of table content

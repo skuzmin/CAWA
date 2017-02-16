@@ -11,7 +11,7 @@
     function configuration($stateProvider) {
         $stateProvider
             .state('decisionMatrix', {
-                url: '/matrix/:id', // url: '/decisions/:id/{slug}/{criteria}/matrix',
+                url: '/matrix', // url: '/decisions/:id/{slug}/{criteria}/matrix',
                 templateUrl: 'app/desicionMatrix/decision-matrix.html',
                 controller: 'DecisionMatrixController',
                 controllerAs: 'vm',
