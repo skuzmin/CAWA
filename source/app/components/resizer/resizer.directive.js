@@ -20,7 +20,7 @@
             function updateResizeElement(event) {
                 var
                     target = event.target,
-                    x = (parseFloat(target.getAttribute('data-x')) || 0),
+                    x = (parseInt(target.getAttribute('data-x')) || 0),
                     el, elMax, elMin,
                     elW, elLeft,
                     elNext, elNextW, elNextLeft,
@@ -49,14 +49,14 @@
 
                 // Current element
                 el.css({
-                    left: elLeft.left,
-                    width: event.rect.width + 'px'
+                    left: parseInt(elLeft.left),
+                    width: parseInt(event.rect.width) + 'px'
                 });
 
                 // Next element
                 elNext.css({
-                    left: elLeft.left + event.rect.width + 'px',
-                    width: totalWidth - event.rect.width + 'px'
+                    left: parseInt(elLeft.left + event.rect.width) + 'px',
+                    width: parseInt(totalWidth - event.rect.width) + 'px'
                 });
             }
 

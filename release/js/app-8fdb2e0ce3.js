@@ -682,7 +682,7 @@
         function searchDecisionMatrix(id) {
             DecisionDataService.searchDecisionMatrix(id, DecisionSharedService.getFilterObject()).then(function(result) {
                 vm.decisionMatrixList = result;
-                console.log(result);
+                // console.log(result);
                 initSorters();
                 vm.decisionsSpinner = false;
                 setTimeout(function() {
@@ -1044,6 +1044,18 @@
 
     angular
         .module('app.components')
+        .component('appHeader', {
+            templateUrl: 'app/components/appHeader/app-header.html'
+        });
+
+})();
+
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.components')
         .controller('AppListController', AppListController)
         .component('appList', {
             templateUrl: 'app/components/appList/app-list.html',
@@ -1132,7 +1144,7 @@
 
             var
                 target = event.target,
-                y = (parseFloat(target.getAttribute('data-y')) || 0);
+                y = (parseInt(target.getAttribute('data-y')) || 0);
 
             target.style.height = event.rect.height + 'px';
 
@@ -1251,18 +1263,6 @@
 
     angular
         .module('app.components')
-        .component('appHeader', {
-            templateUrl: 'app/components/appHeader/app-header.html'
-        });
-
-})();
-
-(function() {
-
-    'use strict';
-
-    angular
-        .module('app.components')
         .controller('PaginatorController', PaginatorController)
         .component('appPaginator', {
             templateUrl: 'app/components/appPaginator/app-paginator.html',
@@ -1339,6 +1339,92 @@
 
         function doCheck() {
             setCoefficientIndicator(vm.coefficient);
+        }
+    }
+})();
+
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.components')
+        .controller('DecisionCharacteristicsController', DecisionCharacteristicsController)
+        .component('decisionCharacteristics', {
+            templateUrl: 'app/components/decisionCharacteristics/decision-characteristics.html',
+            bindings: {
+                decisionId: '='
+            },
+            controller: 'DecisionCharacteristicsController',
+            controllerAs: 'vm'
+        });
+
+    DecisionCharacteristicsController.$inject = ['DecisionDataService', 'DecisionNotificationService'];
+
+    function DecisionCharacteristicsController(DecisionDataService, DecisionNotificationService) {
+        var
+            vm = this,
+            controls = {
+                CHECKBOX: '',
+                SLIDER: '',
+                SELECT: 'app/components/decisionCharacteristics/decision-characteristics-select-partial.html',
+                RADIOGROUP: '',
+                YEARPICKER: 'app/components/decisionCharacteristics/decision-characteristics-yearpicker-partial.html'
+            };
+
+        vm.characteristicGroups = [];
+        vm.sorterList = [];
+
+        vm.getControl = getControl;
+        vm.selectCharacteristic = selectCharacteristic;
+
+        init();
+
+        function selectCharacteristic(characteristic) {
+            DecisionNotificationService.notifySelectCharacteristic(characteristic);
+        }
+
+        function getControl(characteristic) {
+            return controls[characteristic.visualMode];
+        }
+
+        function prepareCharacteristicsToDisplay(data) {
+            vm.characteristicGroups = data;
+            _.forEach(vm.characteristicGroups, function(group) {
+                _.forEachRight(group.characteristics, function(characteristic, index) {
+                    if (characteristic.sortable) {
+                        vm.sorterList.push(characteristic);
+                    }
+                    if (!characteristic.filterable) {
+                        group.characteristics.splice(index, 1);
+                    }
+                });
+            });
+            DecisionNotificationService.notifyInitSorter({
+                list: vm.sorterList,
+                type: 'sortByCharacteristic',
+                mode: 'threeStep'
+            });
+        }
+
+        function init() {
+            vm.characteristicSpinner = true;
+            DecisionDataService.getCharacteristictsGroupsById(vm.decisionId).then(function(result) {
+                var temp;
+                var characteristicGroupNames = _.map(result, function(group) {
+                    return {
+                        characteristicGroupId: group.characteristicGroupId,
+                        name: group.name
+                    };
+                });
+                DecisionNotificationService.notifyCharacteristicsGroups(characteristicGroupNames);
+                prepareCharacteristicsToDisplay(result);
+            }).finally(function() {
+                if (vm.characteristicGroups.length > 0) {
+                    vm.characteristicGroups[0].isOpen = true;
+                }
+                vm.characteristicSpinner = false;
+            });
         }
     }
 })();
@@ -1646,92 +1732,6 @@
 
     angular
         .module('app.components')
-        .controller('DecisionCharacteristicsController', DecisionCharacteristicsController)
-        .component('decisionCharacteristics', {
-            templateUrl: 'app/components/decisionCharacteristics/decision-characteristics.html',
-            bindings: {
-                decisionId: '='
-            },
-            controller: 'DecisionCharacteristicsController',
-            controllerAs: 'vm'
-        });
-
-    DecisionCharacteristicsController.$inject = ['DecisionDataService', 'DecisionNotificationService'];
-
-    function DecisionCharacteristicsController(DecisionDataService, DecisionNotificationService) {
-        var
-            vm = this,
-            controls = {
-                CHECKBOX: '',
-                SLIDER: '',
-                SELECT: 'app/components/decisionCharacteristics/decision-characteristics-select-partial.html',
-                RADIOGROUP: '',
-                YEARPICKER: 'app/components/decisionCharacteristics/decision-characteristics-yearpicker-partial.html'
-            };
-
-        vm.characteristicGroups = [];
-        vm.sorterList = [];
-
-        vm.getControl = getControl;
-        vm.selectCharacteristic = selectCharacteristic;
-
-        init();
-
-        function selectCharacteristic(characteristic) {
-            DecisionNotificationService.notifySelectCharacteristic(characteristic);
-        }
-
-        function getControl(characteristic) {
-            return controls[characteristic.visualMode];
-        }
-
-        function prepareCharacteristicsToDisplay(data) {
-            vm.characteristicGroups = data;
-            _.forEach(vm.characteristicGroups, function(group) {
-                _.forEachRight(group.characteristics, function(characteristic, index) {
-                    if (characteristic.sortable) {
-                        vm.sorterList.push(characteristic);
-                    }
-                    if (!characteristic.filterable) {
-                        group.characteristics.splice(index, 1);
-                    }
-                });
-            });
-            DecisionNotificationService.notifyInitSorter({
-                list: vm.sorterList,
-                type: 'sortByCharacteristic',
-                mode: 'threeStep'
-            });
-        }
-
-        function init() {
-            vm.characteristicSpinner = true;
-            DecisionDataService.getCharacteristictsGroupsById(vm.decisionId).then(function(result) {
-                var temp;
-                var characteristicGroupNames = _.map(result, function(group) {
-                    return {
-                        characteristicGroupId: group.characteristicGroupId,
-                        name: group.name
-                    };
-                });
-                DecisionNotificationService.notifyCharacteristicsGroups(characteristicGroupNames);
-                prepareCharacteristicsToDisplay(result);
-            }).finally(function() {
-                if (vm.characteristicGroups.length > 0) {
-                    vm.characteristicGroups[0].isOpen = true;
-                }
-                vm.characteristicSpinner = false;
-            });
-        }
-    }
-})();
-
-(function() {
-
-    'use strict';
-
-    angular
-        .module('app.components')
         .controller('RatingStarController', RatingStarController)
         .component('ratingStar', {
             templateUrl: 'app/components/ratingStar/rating-star.html',
@@ -1804,7 +1804,7 @@
             function updateResizeElement(event) {
                 var
                     target = event.target,
-                    x = (parseFloat(target.getAttribute('data-x')) || 0),
+                    x = (parseInt(target.getAttribute('data-x')) || 0),
                     el, elMax, elMin,
                     elW, elLeft,
                     elNext, elNextW, elNextLeft,
@@ -1833,14 +1833,14 @@
 
                 // Current element
                 el.css({
-                    left: elLeft.left,
-                    width: event.rect.width + 'px'
+                    left: parseInt(elLeft.left),
+                    width: parseInt(event.rect.width) + 'px'
                 });
 
                 // Next element
                 elNext.css({
-                    left: elLeft.left + event.rect.width + 'px',
-                    width: totalWidth - event.rect.width + 'px'
+                    left: parseInt(elLeft.left + event.rect.width) + 'px',
+                    width: parseInt(totalWidth - event.rect.width) + 'px'
                 });
             }
 
@@ -1862,7 +1862,7 @@
 
 angular.module('app.core').run(['$templateCache', function($templateCache) {$templateCache.put('app/core/404.html','<div class=container><div class=app-content><div class=header-text><h1>Error 404</h1><h3>Page Not Found!</h3><a ui-sref=home>Home</a></div></div></div>');
 $templateCache.put('app/decision/decision.html','<div class=decision><div class="row top-panel"><div class="col-md-4 col-sm-4"><h4 class=app-header-sub-title>{{vm.decision.name}}</h4></div><div class="col-md-5 col-sm-5"><div class=row ng-show=vm.parentDecisions><div class="col-sm-3 col-md-2"><div class=top-panel-label><label for=decision-parent class=control-label>Parents:</label></div></div><div class="col-sm-5 col-md-6"><div class="input-group top-panel-title"><select id=decision-parent ng-model=vm.parentId class="form-control input-sm" ng-options="parent for parent in vm.parentDecisions"><option value selected>Select parentId</option></select><span class=input-group-btn><a href class="btn btn-default btn-sm" ui-sref="decision({id: vm.parentId})" ng-disabled=!vm.parentId>Go</a></span></div></div></div></div><div class="col-md-3 col-sm-3"><input class="form-control search-input" type=text> <span class="glyphicon glyphicon-search search-input-icon"></span></div></div><div class="app-main-panel main-panel"><div id=panel-left class="app-panel-left app-resizer-horizontal" resizer-right=#panel-center resizer><decision-criteria decision-id=vm.decisionId></decision-criteria><span class=app-resizer></span></div><div id=panel-center class="app-panel-center app-resizer-horizontal" resizer-right=#panel-right resizer><div class="decisions-header scroll-wrapper-header"><div class=col-md-2><h4>Decisions</h4></div><div class="col-md-8 col-sm-padding"><decision-sorter sort-type=sortByCriteria></decision-sorter><decision-sorter sort-type=sortByCharacteristic></decision-sorter><decision-sorter sort-type=sortByDecisionProperty></decision-sorter></div><div class="col-md-2 col-sm-padding"><a href class="btn add-createria-btn"><span class="glyphicon glyphicon-plus" aria-hidden=true></span>Add decision</a></div></div><div class=scroll-wrapper><h1 ng-show=vm.decisionsSpinner class=app-loader-small><span class="glyphicon glyphicon-refresh app-loader-animation"></span>LOADING...</h1><app-paginator></app-paginator><app-list list=vm.decisionsList></app-list></div><span class=app-resizer></span></div><div id=panel-right class=app-panel-right><decision-characteristics decision-id=vm.decisionId></decision-characteristics></div></div></div>');
-$templateCache.put('app/desicionMatrix/decision-matrix.html','<div class="decision matrix"><div class="row top-panel"><div class="col-md-6 col-sm-6"><h4 class=app-header-sub-title>{{vm.decision.name}}</h4></div><div class="col-md-3 col-sm-3"><app-paginator></app-paginator></div><div class="col-md-3 col-sm-3"><input class="form-control search-input" type=text> <span class="glyphicon glyphicon-search search-input-icon"></span></div></div><div id=matrix-table class="main-panel matrix-table js-matrix-table"><div id=panel class=app-panel><div class="decisions-header scroll-wrapper-header" style="width: 3900px;"><div class=matrix-table-header><div class=matrix-table-row><div class="matrix-table-col matrix-table-group"><div class=matrix-table-group-title>Empty</div><div class=matrix-table-row><div class=matrix-table-col><div class="matrix-table-title app-sorter-wrapper matrix-content-name">Name<div class=app-sorter><span class="app-sorter-top glyphicon glyphicon-triangle-top"></span> <span class="app-sorter-bottom glyphicon glyphicon-triangle-bottom"></span></div></div></div></div></div><div class="matrix-table-col matrix-table-group" ng-repeat="group in vm.criteriaGroups track by $index"><div class=matrix-table-group-title>{{group.name}}</div><div class=matrix-table-row><div class=matrix-table-col ng-repeat="criteria in group.criteria | orderBy:\'criterionId\'"><div class="matrix-table-title app-sorter-wrapper">{{criteria.name}}<div class=app-sorter><span class="app-sorter-top glyphicon glyphicon-triangle-top"></span> <span class="app-sorter-bottom glyphicon glyphicon-triangle-bottom"></span></div></div></div></div></div><div class="matrix-table-col matrix-table-group" ng-repeat="group in vm.characteristicGroups track by $index"><div class=matrix-table-group-title>{{group.name}}</div><div class=matrix-table-row><div class=matrix-table-col ng-repeat="characteristic in group.characteristics track by $index"><div class="matrix-table-title app-sorter-wrapper">{{characteristic.name}}<div class=app-sorter><span class="app-sorter-top glyphicon glyphicon-triangle-top"></span> <span class="app-sorter-bottom glyphicon glyphicon-triangle-bottom"></span></div></div></div></div></div></div></div></div><div class=scroll-wrapper style="width: 3900px;"><div ng-show=vm.decisionsSpinner class=app-loader-small><span class="glyphicon glyphicon-refresh app-loader-animation"></span>LOADING...</div><div class=matrix-table-content><div class=matrix-table-item ng-repeat="item in vm.decisionMatrixList.decisionMatrixs track by item.decision.decisionId"><div class=matrix-table-row id=decision-row-{{item.decision.decisionId}}><div class=matrix-table-col><div class="matrix-table-col-content matrix-content-name">{{item.decision.name}}</div></div><div class="matrix-table-col matrix-table-group" ng-repeat="group in vm.criteriaGroups track by $index"><div class=matrix-table-row><div class=matrix-table-col ng-repeat="criteria in group.criteria | orderBy:\'criterionId\'"><div class=matrix-table-col-content data-criterion-id={{criteria.criterionId}}></div></div></div></div><div class="matrix-table-col matrix-table-group" ng-repeat="group in vm.characteristicGroups track by $index"><div class=matrix-table-row><div class=matrix-table-col ng-repeat="characteristic in group.characteristics track by $index"><div class=matrix-table-col-content data-characteristic-id={{characteristic.characteristicId}}></div></div></div></div></div></div></div></div></div></div></div>');
+$templateCache.put('app/desicionMatrix/decision-matrix.html','<div class="decision matrix"><div class="row top-panel"><div class="col-md-3 col-sm-3"><h4 class=app-header-sub-title>{{vm.decision.name}}</h4></div><div class="col-md-6 col-sm-6"><app-paginator></app-paginator></div><div class="col-md-3 col-sm-3"><input class="form-control search-input" type=text> <span class="glyphicon glyphicon-search search-input-icon"></span></div></div><div id=matrix-table class="main-panel matrix-table js-matrix-table"><div id=panel class=app-panel><div class="decisions-header scroll-wrapper-header" style="width: 3900px;"><div class=matrix-table-header><div class=matrix-table-row><div class="matrix-table-col matrix-table-group"><div class=matrix-table-group-title>Empty</div><div class=matrix-table-row><div class=matrix-table-col><div class="matrix-table-title app-sorter-wrapper matrix-content-name">Name<div class=app-sorter><span class="app-sorter-top glyphicon glyphicon-triangle-top"></span> <span class="app-sorter-bottom glyphicon glyphicon-triangle-bottom"></span></div></div></div></div></div><div class="matrix-table-col matrix-table-group" ng-repeat="group in vm.criteriaGroups track by $index"><div class=matrix-table-group-title>{{group.name}}</div><div class=matrix-table-row><div class=matrix-table-col ng-repeat="criteria in group.criteria | orderBy:\'criterionId\'"><div class="matrix-table-title app-sorter-wrapper">{{criteria.name}}<div class=app-sorter><span class="app-sorter-top glyphicon glyphicon-triangle-top"></span> <span class="app-sorter-bottom glyphicon glyphicon-triangle-bottom"></span></div></div></div></div></div><div class="matrix-table-col matrix-table-group" ng-repeat="group in vm.characteristicGroups track by $index"><div class=matrix-table-group-title>{{group.name}}</div><div class=matrix-table-row><div class=matrix-table-col ng-repeat="characteristic in group.characteristics track by $index"><div class="matrix-table-title app-sorter-wrapper">{{characteristic.name}}<div class=app-sorter><span class="app-sorter-top glyphicon glyphicon-triangle-top"></span> <span class="app-sorter-bottom glyphicon glyphicon-triangle-bottom"></span></div></div></div></div></div></div></div></div><div class=scroll-wrapper style="width: 3900px;"><div ng-show=vm.decisionsSpinner class=app-loader-small><span class="glyphicon glyphicon-refresh app-loader-animation"></span>LOADING...</div><div class=matrix-table-content><div class=matrix-table-item ng-repeat="item in vm.decisionMatrixList.decisionMatrixs track by item.decision.decisionId"><div class=matrix-table-row id=decision-row-{{item.decision.decisionId}}><div class=matrix-table-col><div class="matrix-table-col-content matrix-content-name">{{item.decision.name}}</div></div><div class="matrix-table-col matrix-table-group" ng-repeat="group in vm.criteriaGroups track by $index"><div class=matrix-table-row><div class=matrix-table-col ng-repeat="criteria in group.criteria | orderBy:\'criterionId\'"><div class=matrix-table-col-content data-criterion-id={{criteria.criterionId}}></div></div></div></div><div class="matrix-table-col matrix-table-group" ng-repeat="group in vm.characteristicGroups track by $index"><div class=matrix-table-row><div class=matrix-table-col ng-repeat="characteristic in group.characteristics track by $index"><div class=matrix-table-col-content data-characteristic-id={{characteristic.characteristicId}}></div></div></div></div></div></div></div></div></div></div></div>');
 $templateCache.put('app/home/home.html','<div class=home><div class="row search-box"><div class="col-md-offset-2 col-md-6"><input class=form-control type=text ng-model=vm.searchText></div><div class=col-md-4><a href class="btn btn-default" ng-click=vm.search()>Search</a></div></div><div class="row search-results" ng-show=vm.showTrigger><div class="col-md-offset-2 col-md-8 col-md-offset-2">RESULTS for {{vm.searchText}}</div><div class="col-md-offset-2 col-md-8 col-md-offset-2"><a href ui-sref="decision({id: vm.searchText || 2512})">DECISION</a> | <a href ui-sref="decisionMatrix({id: vm.searchText || 2512})">DECISION Matrix</a></div></div></div>');
 $templateCache.put('app/login/login.html','<div class="login-btn pull-right"><div ng-if=vm.loginService.getLoginStatus() class=app-user-info><label>Username:</label> <span>{{vm.user.user_name}}</span></div><ul class="nav navbar-nav"><li><a ng-if=!vm.loginService.getLoginStatus() ng-click=vm.loginService.login()>Login</a></li><li><form ng-if=vm.loginService.getLoginStatus() name=logoutForm action={{vm.loginService.getLogoutUrl()}} method=POST novalidate><a href class=link ng-click=vm.logout()>Logout</a></form></li></ul></div>');
 $templateCache.put('app/components/appFooter/app-footer.html','<footer class=app-footer><div class="app-footer-info text-center">&copy; DecisionWanted - 2017</div></footer>');

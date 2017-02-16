@@ -104,7 +104,7 @@
         function searchDecisionMatrix(id) {
             DecisionDataService.searchDecisionMatrix(id, DecisionSharedService.getFilterObject()).then(function(result) {
                 vm.decisionMatrixList = result;
-                console.log(result);
+                // console.log(result);
                 initSorters();
                 vm.decisionsSpinner = false;
                 setTimeout(function() {

@@ -92,7 +92,7 @@
 
             var
                 target = event.target,
-                y = (parseFloat(target.getAttribute('data-y')) || 0);
+                y = (parseInt(target.getAttribute('data-y')) || 0);
 
             target.style.height = event.rect.height + 'px';
 
