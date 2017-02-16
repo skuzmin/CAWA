@@ -6,20 +6,22 @@
         .module('app.decision')
         .controller('DecisionMatrixController', DecisionMatrixController);
 
-    DecisionMatrixController.$inject = ['DecisionDataService', 'DecisionSharedService', '$compile', '$scope'];
+    DecisionMatrixController.$inject = ['DecisionDataService', '$stateParams', 'DecisionSharedService', 'decisionBasicInfo', '$rootScope', '$compile', '$scope'];
 
-    function DecisionMatrixController(DecisionDataService, DecisionSharedService, $compile, $scope) {
+    function DecisionMatrixController(DecisionDataService, $stateParams, DecisionSharedService, decisionBasicInfo, $rootScope, $compile, $scope) {
         var
             vm = this;
-        // vm.criteriaTitles,
-        // characteristicTitles;
+
         criteriaIds = [];
         vm.displayMatrix = [];
-        vm.decisionId = 2512;
+        // vm.decisionId = 2512;
+        vm.decisionId = $stateParams.id;
+        vm.decision = decisionBasicInfo || {};
+
+        $rootScope.pageTitle = vm.decision.name + ' Matrix | DecisionWanted';
 
         function init() {
             console.log('Decision Matrix Controller');
-
 
             // TODO: merge to one array with titles
             // Criteria
@@ -48,23 +50,32 @@
             });
         }
 
-        // TODO: find better solution
+        // TODO: find better solution, optimize $compile maybe render whole row in js
         function prepareDisplayMatrix(decisionMatrix) {
             var matrix = decisionMatrix.decisionMatrixs;
+
+            // Criteria insert in table
             _.map(matrix, function(el, index) {
-                var ctiteria = el.criteria;
+                var criteria = el.criteria;
 
-                _.map(ctiteria, function(obj, index) {
+                _.map(criteria, function(obj, index) {
                     var criteriaStore = obj;
-                    // obj = 
-                    // obj.criterionId
-
-                    var html = '<rating-star value="'+obj.weight+'" total-votes="' + obj.totalVotes + '" ng-show="true"></rating-star>';
-                    $('#decision-row-' + el.decision.decisionId).find('.matrix-table-col-content[data-criterion-id="'+ obj.criterionId +'"]').html($compile(html)($scope)).addClass('color-' + obj.weight);
-                    // console.log($('#decision-row-' + el.decision.decisionId).find('.matrix-table-col-content[data-criterion-id="'+ obj.criterionId +'"]'));
+                    var html = '<rating-star value="' + obj.weight + '" total-votes="' + obj.totalVotes + '" ng-show="true"></rating-star>';
+                    $('#decision-row-' + el.decision.decisionId).find('.matrix-table-col-content[data-criterion-id="' + obj.criterionId + '"]').html($compile(html)($scope)); //.addClass('color-' + obj.weight);
                 });
             });
 
+
+            // Characteristic insert in table
+            _.map(matrix, function(el, index) {
+                var characteristics = el.characteristics;
+
+                _.map(characteristics, function(obj, index) {
+                    var criteriaStore = obj;
+                    var html = obj.value;
+                    $('#decision-row-' + el.decision.decisionId).find('.matrix-table-col-content[data-characteristic-id="' + obj.characteristicId + '"]').html($compile(html)($scope)); //.addClass('color-' + obj.weight);
+                });
+            });
 
         }
 

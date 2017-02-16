@@ -20,7 +20,7 @@
 				decisionsMatrix = $resource(decisionUrl + '/decisions/matrix', {id: '@id'},
 				{
 					searchDecisionById: {method: 'POST', isArray: false}
-				}),				
+				}),
 
 				decisionInfo = $resource(decisionUrl),
 				decisionCharacteristics = $resource(decisionUrl + '/decisions/:childId/characteristics', {id: '@id', childId: '@childId'}, {}),
@@ -46,7 +46,7 @@
 
 			function searchDecisionMatrix(id, data) {
 				return decisionsMatrix.searchDecisionById({id: id}, data).$promise;
-			}			
+			}
 
 			function getCriteriaGroupsById(id) {
 				return criteriasGroups.query({id: id}).$promise;

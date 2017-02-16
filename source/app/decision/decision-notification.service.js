@@ -58,7 +58,7 @@
 
         function subscribeSelectDecision(callback) {
             subscribe('selectDecision', callback);
-        }        
+        }
 
         function subscribeSelectCharacteristic(callback) {
             subscribe('selectCharacteristic', callback);
