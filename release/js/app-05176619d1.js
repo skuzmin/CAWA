@@ -618,7 +618,7 @@
                 vm.characteristicGroups = result;
             });
 
-            searchDecisionMatrix(vm.decisionId);
+            // searchDecisionMatrix(vm.decisionId);
 
             //Get data for decision panel (main)
             vm.decisionsSpinner = true;
@@ -1032,194 +1032,10 @@
 
     angular
         .module('app.components')
-        .component('appHeader', {
-            templateUrl: 'app/components/appHeader/app-header.html'
-        });
-
-})();
-
-(function() {
-
-    'use strict';
-
-    angular
-        .module('app.components')
         .component('appFooter', {
             templateUrl: 'app/components/appFooter/app-footer.html'
         });
 
-})();
-
-(function() {
-
-    'use strict';
-
-    angular
-        .module('app.components')
-        .controller('PaginatorController', PaginatorController)
-        .component('appPaginator', {
-            templateUrl: 'app/components/appPaginator/app-paginator.html',
-            controller: 'PaginatorController',
-            controllerAs: 'vm'
-        });
-
-    PaginatorController.$inject = ['DecisionSharedService', 'DecisionNotificationService'];
-
-    function PaginatorController(DecisionSharedService, DecisionNotificationService) {
-        var vm = this;
-
-        vm.pagination = DecisionSharedService.filterObject.pagination;
-        vm.itemsPerPage = [5, 10, 20, 50, 100];
-
-        vm.changePage = changePage;
-        vm.changePageSize = changePageSize;
-
-        function changePage() {
-            DecisionNotificationService.notifyPageChanged();
-        }
-
-        function changePageSize() {
-            DecisionSharedService.filterObject.pagination.pageNumber = 1;
-            DecisionNotificationService.notifyPageChanged();
-        }
-    }
-
-})();
-
-(function() {
-
-    'use strict';
-
-    angular
-        .module('app.components')
-        .controller('CriteriaCoefficientIndicatorController', CriteriaCoefficientIndicatorController)
-        .component('criteriaCoefficientIndicator', {
-            templateUrl: 'app/components/criteriaCoefficientIndicator/criteria-coefficient-indicator.html',
-            bindings: {
-                coefficient: '='
-            },
-            controller: 'CriteriaCoefficientIndicatorController',
-            controllerAs: 'vm'
-        });
-
-
-    CriteriaCoefficientIndicatorController.$inject = ['DecisionCriteriaConstant'];
-
-    function CriteriaCoefficientIndicatorController(DecisionCriteriaConstant) {
-        var vm = this;
-
-        vm.$doCheck = doCheck;
-
-        init();
-
-        function setCoefficientIndicator(coefficient) {
-            if (!coefficient) return;
-            // set color of indicator
-            _.forEach(vm.coefficientList, function(c) {
-                c.class = '';
-                if(c.value <= coefficient.value) {
-                    c.class = coefficient.name.toLowerCase();
-                }
-            });
-        }
-
-        function init() {
-            if(!vm.coefficient) {
-                vm.coefficient = DecisionCriteriaConstant.coefficientDefault;
-            }
-            vm.coefficientList = angular.copy(DecisionCriteriaConstant.coefficientList);
-        }
-
-        function doCheck() {
-            setCoefficientIndicator(vm.coefficient);
-        }
-    }
-})();
-
-(function() {
-
-    'use strict';
-
-    angular
-        .module('app.components')
-        .controller('DecisionCharacteristicsController', DecisionCharacteristicsController)
-        .component('decisionCharacteristics', {
-            templateUrl: 'app/components/decisionCharacteristics/decision-characteristics.html',
-            bindings: {
-                decisionId: '='
-            },
-            controller: 'DecisionCharacteristicsController',
-            controllerAs: 'vm'
-        });
-
-    DecisionCharacteristicsController.$inject = ['DecisionDataService', 'DecisionNotificationService'];
-
-    function DecisionCharacteristicsController(DecisionDataService, DecisionNotificationService) {
-        var
-            vm = this,
-            controls = {
-                CHECKBOX: '',
-                SLIDER: '',
-                SELECT: 'app/components/decisionCharacteristics/decision-characteristics-select-partial.html',
-                RADIOGROUP: '',
-                YEARPICKER: 'app/components/decisionCharacteristics/decision-characteristics-yearpicker-partial.html'
-            };
-
-        vm.characteristicGroups = [];
-        vm.sorterList = [];
-
-        vm.getControl = getControl;
-        vm.selectCharacteristic = selectCharacteristic;
-
-        init();
-
-        function selectCharacteristic(characteristic) {
-            DecisionNotificationService.notifySelectCharacteristic(characteristic);
-        }
-
-        function getControl(characteristic) {
-            return controls[characteristic.visualMode];
-        }
-
-        function prepareCharacteristicsToDisplay(data) {
-            vm.characteristicGroups = data;
-            _.forEach(vm.characteristicGroups, function(group) {
-                _.forEachRight(group.characteristics, function(characteristic, index) {
-                    if (characteristic.sortable) {
-                        vm.sorterList.push(characteristic);
-                    }
-                    if (!characteristic.filterable) {
-                        group.characteristics.splice(index, 1);
-                    }
-                });
-            });
-            DecisionNotificationService.notifyInitSorter({
-                list: vm.sorterList,
-                type: 'sortByCharacteristic',
-                mode: 'threeStep'
-            });
-        }
-
-        function init() {
-            vm.characteristicSpinner = true;
-            DecisionDataService.getCharacteristictsGroupsById(vm.decisionId).then(function(result) {
-                var temp;
-                var characteristicGroupNames = _.map(result, function(group) {
-                    return {
-                        characteristicGroupId: group.characteristicGroupId,
-                        name: group.name
-                    };
-                });
-                DecisionNotificationService.notifyCharacteristicsGroups(characteristicGroupNames);
-                prepareCharacteristicsToDisplay(result);
-            }).finally(function() {
-                if (vm.characteristicGroups.length > 0) {
-                    vm.characteristicGroups[0].isOpen = true;
-                }
-                vm.characteristicSpinner = false;
-            });
-        }
-    }
 })();
 
 (function() {
@@ -1429,6 +1245,104 @@
             ELEMENT_HEIGHT : 80
         });
 })();
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.components')
+        .component('appHeader', {
+            templateUrl: 'app/components/appHeader/app-header.html'
+        });
+
+})();
+
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.components')
+        .controller('PaginatorController', PaginatorController)
+        .component('appPaginator', {
+            templateUrl: 'app/components/appPaginator/app-paginator.html',
+            controller: 'PaginatorController',
+            controllerAs: 'vm'
+        });
+
+    PaginatorController.$inject = ['DecisionSharedService', 'DecisionNotificationService'];
+
+    function PaginatorController(DecisionSharedService, DecisionNotificationService) {
+        var vm = this;
+
+        vm.pagination = DecisionSharedService.filterObject.pagination;
+        vm.itemsPerPage = [5, 10, 20, 50, 100];
+
+        vm.changePage = changePage;
+        vm.changePageSize = changePageSize;
+
+        function changePage() {
+            DecisionNotificationService.notifyPageChanged();
+        }
+
+        function changePageSize() {
+            DecisionSharedService.filterObject.pagination.pageNumber = 1;
+            DecisionNotificationService.notifyPageChanged();
+        }
+    }
+
+})();
+
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.components')
+        .controller('CriteriaCoefficientIndicatorController', CriteriaCoefficientIndicatorController)
+        .component('criteriaCoefficientIndicator', {
+            templateUrl: 'app/components/criteriaCoefficientIndicator/criteria-coefficient-indicator.html',
+            bindings: {
+                coefficient: '='
+            },
+            controller: 'CriteriaCoefficientIndicatorController',
+            controllerAs: 'vm'
+        });
+
+
+    CriteriaCoefficientIndicatorController.$inject = ['DecisionCriteriaConstant'];
+
+    function CriteriaCoefficientIndicatorController(DecisionCriteriaConstant) {
+        var vm = this;
+
+        vm.$doCheck = doCheck;
+
+        init();
+
+        function setCoefficientIndicator(coefficient) {
+            if (!coefficient) return;
+            // set color of indicator
+            _.forEach(vm.coefficientList, function(c) {
+                c.class = '';
+                if(c.value <= coefficient.value) {
+                    c.class = coefficient.name.toLowerCase();
+                }
+            });
+        }
+
+        function init() {
+            if(!vm.coefficient) {
+                vm.coefficient = DecisionCriteriaConstant.coefficientDefault;
+            }
+            vm.coefficientList = angular.copy(DecisionCriteriaConstant.coefficientList);
+        }
+
+        function doCheck() {
+            setCoefficientIndicator(vm.coefficient);
+        }
+    }
+})();
+
 (function() {
 
     'use strict';
@@ -1732,6 +1646,92 @@
 
     angular
         .module('app.components')
+        .controller('DecisionCharacteristicsController', DecisionCharacteristicsController)
+        .component('decisionCharacteristics', {
+            templateUrl: 'app/components/decisionCharacteristics/decision-characteristics.html',
+            bindings: {
+                decisionId: '='
+            },
+            controller: 'DecisionCharacteristicsController',
+            controllerAs: 'vm'
+        });
+
+    DecisionCharacteristicsController.$inject = ['DecisionDataService', 'DecisionNotificationService'];
+
+    function DecisionCharacteristicsController(DecisionDataService, DecisionNotificationService) {
+        var
+            vm = this,
+            controls = {
+                CHECKBOX: '',
+                SLIDER: '',
+                SELECT: 'app/components/decisionCharacteristics/decision-characteristics-select-partial.html',
+                RADIOGROUP: '',
+                YEARPICKER: 'app/components/decisionCharacteristics/decision-characteristics-yearpicker-partial.html'
+            };
+
+        vm.characteristicGroups = [];
+        vm.sorterList = [];
+
+        vm.getControl = getControl;
+        vm.selectCharacteristic = selectCharacteristic;
+
+        init();
+
+        function selectCharacteristic(characteristic) {
+            DecisionNotificationService.notifySelectCharacteristic(characteristic);
+        }
+
+        function getControl(characteristic) {
+            return controls[characteristic.visualMode];
+        }
+
+        function prepareCharacteristicsToDisplay(data) {
+            vm.characteristicGroups = data;
+            _.forEach(vm.characteristicGroups, function(group) {
+                _.forEachRight(group.characteristics, function(characteristic, index) {
+                    if (characteristic.sortable) {
+                        vm.sorterList.push(characteristic);
+                    }
+                    if (!characteristic.filterable) {
+                        group.characteristics.splice(index, 1);
+                    }
+                });
+            });
+            DecisionNotificationService.notifyInitSorter({
+                list: vm.sorterList,
+                type: 'sortByCharacteristic',
+                mode: 'threeStep'
+            });
+        }
+
+        function init() {
+            vm.characteristicSpinner = true;
+            DecisionDataService.getCharacteristictsGroupsById(vm.decisionId).then(function(result) {
+                var temp;
+                var characteristicGroupNames = _.map(result, function(group) {
+                    return {
+                        characteristicGroupId: group.characteristicGroupId,
+                        name: group.name
+                    };
+                });
+                DecisionNotificationService.notifyCharacteristicsGroups(characteristicGroupNames);
+                prepareCharacteristicsToDisplay(result);
+            }).finally(function() {
+                if (vm.characteristicGroups.length > 0) {
+                    vm.characteristicGroups[0].isOpen = true;
+                }
+                vm.characteristicSpinner = false;
+            });
+        }
+    }
+})();
+
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.components')
         .controller('RatingStarController', RatingStarController)
         .component('ratingStar', {
             templateUrl: 'app/components/ratingStar/rating-star.html',
@@ -1867,9 +1867,9 @@ $templateCache.put('app/home/home.html','<div class=home><div class="row search-
 $templateCache.put('app/login/login.html','<div class="login-btn pull-right"><div ng-if=vm.loginService.getLoginStatus() class=app-user-info><label>Username:</label> <span>{{vm.user.user_name}}</span></div><ul class="nav navbar-nav"><li><a ng-if=!vm.loginService.getLoginStatus() ng-click=vm.loginService.login()>Login</a></li><li><form ng-if=vm.loginService.getLoginStatus() name=logoutForm action={{vm.loginService.getLogoutUrl()}} method=POST novalidate><a href class=link ng-click=vm.logout()>Logout</a></form></li></ul></div>');
 $templateCache.put('app/components/appFooter/app-footer.html','<footer class=app-footer><div class="app-footer-info text-center">&copy; DecisionWanted - 2017</div></footer>');
 $templateCache.put('app/components/appHeader/app-header.html','<header class=app-header><div class=row><div class="col-md-3 header-menu-btn"><div class=navbar-brand><a ui-sref=home>DecisionWanted</a></div></div><div class="col-md-6 text-center"><span class=header-text>Millions of lemmings can\'t be wrong!</span></div><div class="col-md-3 header-login"><app-login></app-login></div></div></header>');
-$templateCache.put('app/components/appPaginator/app-paginator.html','<div class="row app-pagination"><div class="col-md-10 col-sm-10 paginator"><div uib-pagination ng-model=vm.pagination.pageNumber boundary-links=true boundary-link-numbers=true total-items=vm.pagination.totalDecisions items-per-page=vm.pagination.pageSize ng-change=vm.changePage() class=pagination-sm previous-text=&lsaquo; next-text=&rsaquo; first-text=&laquo; last-text=&raquo;></div></div><div class="col-md-2 col-sm-2 counter"><select class="pagination form-control input-sm" ng-model=vm.pagination.pageSize ng-options="item for item in vm.itemsPerPage" ng-change=vm.changePageSize()></select></div></div>');
 $templateCache.put('app/components/appList/app-list.html','<div class=app-list-wrapper><div class=app-list-container><div id="decision-{{ item.decisionId }}" ng-repeat="item in vm.list track by item.decisionId" class="list-item-sort app-resize-h" ng-class="{\'selected\' : item.isSelected, \'item-loading\' : data.detailsSpinner}" ng-mouseover="vm.getDetails(item, $event)"><div class=list-item-sort-content ng-click=vm.selectDecision(item)><strong>{{ item.decisionId }}</strong><div class="pull-right text-right" ng-show=vm.showPercentage><h5>Criteria compliance:<rating-star class=text-left value=item.criteriaCompliancePercentage total-votes=item.totalVotes ng-show=item.criteriaCompliancePercentage></rating-star></h5></div><h4 class=list-item-sort-title><a href ng-click="vm.goToDecision($event, item.decisionId)">{{item.name}}</a></h4><div class=list-item-sort-detail-wrapper><div class=app-loader-small ng-show=item.detailsSpinner><span class="glyphicon glyphicon-refresh app-loader-animation"></span>LOADING...</div><ng-include src=vm.innerTemplate></ng-include></div></div></div></div></div>');
 $templateCache.put('app/components/appList/decision-partial.html','<div class=list-item-sort-details><div class=decision-detailed-chars><div ng-if=item.characteristics><h4>Characteristics</h4><div ng-repeat="(key, value) in item.characteristics track by key"><div class=chars-group-name><label>{{vm.getGroupNameById(key)}}</label></div><div class=app-row-content ng-repeat="characteristic in value track by $index"><div class=app-row-content-label>{{characteristic.name}}:</div><span ng-show=characteristic.value>{{characteristic.value}}</span> <span ng-show=!characteristic.value class=not-set>Not set</span></div></div></div></div></div>');
+$templateCache.put('app/components/appPaginator/app-paginator.html','<div class="row app-pagination"><div class="col-md-10 col-sm-10 paginator"><div uib-pagination ng-model=vm.pagination.pageNumber boundary-links=true boundary-link-numbers=true total-items=vm.pagination.totalDecisions items-per-page=vm.pagination.pageSize ng-change=vm.changePage() class=pagination-sm previous-text=&lsaquo; next-text=&rsaquo; first-text=&laquo; last-text=&raquo;></div></div><div class="col-md-2 col-sm-2 counter"><select class="pagination form-control input-sm" ng-model=vm.pagination.pageSize ng-options="item for item in vm.itemsPerPage" ng-change=vm.changePageSize()></select></div></div>');
 $templateCache.put('app/components/criteriaCoefficientIndicator/criteria-coefficient-indicator.html','<div class=criteria-coefficient-indicator><div class=criteria-coefficient-item ng-repeat="coefficient in vm.coefficientList | orderBy: \'value\' : true" ng-class=coefficient.class></div></div>');
 $templateCache.put('app/components/decisionCharacteristics/decision-characteristics-select-partial.html','<select class="decision-select form-control" ng-model=characteristic.filterValue ng-options="item as item.name for item in characteristic.options" ng-change=vm.selectCharacteristic(characteristic.filterValue)><option value selected>Select all</option></select>');
 $templateCache.put('app/components/decisionCharacteristics/decision-characteristics-yearpicker-partial.html','<div class="input-group decision-yearpicker"><input type=text class=form-control uib-datepicker-popup=yyyy is-open=characteristic.isOpen ng-model=characteristic.filterValue datepicker-mode=year datepicker-options="{minMode: \'year\'}" placeholder=YEAR ng-change=vm.selectCharacteristic(characteristic.filterValue)> <span class=input-group-btn><button type=button class="btn btn-default" ng-click="characteristic.isOpen = true"><i class="glyphicon glyphicon-calendar"></i></button></span></div>');
