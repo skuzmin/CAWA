@@ -582,15 +582,16 @@ h6,
 .matrix.decision .scroll-wrapper-header {
   min-height: 40px;
   height: auto;
+  margin: 0;
   width: auto;
 }
 .matrix.decision .scroll-wrapper {
-  top: 84px;
+  top: 73px;
   -ms-overflow-x: hidden;
   overflow-x: hidden;
 }
 .matrix .main-panel {
-  height: calc(100vh - 157px);
+  height: calc(100vh - 177px);
   margin: 0 10px;
 }
 .matrix.decision .main-panel > div,
@@ -605,9 +606,6 @@ h6,
   display: block;
   border: 1px solid transparent;
   border-bottom: 1px solid #ebebeb;
-  -webkit-transition: border 0.2s ease-in-out;
-  -o-transition: border 0.2s ease-in-out;
-  transition: border 0.2s ease-in-out;
   margin: -1px 0 0 0;
   position: relative;
   z-index: 1;
@@ -622,6 +620,7 @@ h6,
 .matrix-table-row {
   display: table;
   width: 100%;
+  height: 100%;
 }
 .matrix-table-row .matrix-table-col {
   border-right: 1px solid #ebebeb;
@@ -663,6 +662,8 @@ h6,
 .matrix-table-col {
   display: table-cell;
   min-width: 105px;
+  height: 100%;
+  width: 120px;
 }
 .matrix-table-header {
   font-weight: 500;

@@ -11,12 +11,12 @@
     function configuration($stateProvider) {
         $stateProvider
             .state('decisionMatrix', {
-                url: '/matrix', // url: '/decisions/:id/{slug}/{criteria}/matrix',
+                url: '/matrix/:id', // url: '/decisions/:id/{slug}/{criteria}/matrix',
                 templateUrl: 'app/desicionMatrix/decision-matrix.html',
                 controller: 'DecisionMatrixController',
                 controllerAs: 'vm',
                 resolve: {
-                    // decisionBasicInfo: DecisionMatrixResolver
+                    decisionBasicInfo: DecisionMatrixResolver
                 },
                 params: {
                     slug: {
@@ -46,12 +46,12 @@
                         criteria = '/' + toParams.criteria;
                     }
                     //two behaviors for changing URL
-                    if ((fromState.name && toState.name !== fromState.name) ||
-                        (fromState.name && toState.name === fromState.name && toParams.id !== fromParams.id)) {
-                        $location.path('/decisions/' + toParams.id + '/' + result.nameSlug + criteria + '/matrix');
-                    } else {
-                        $location.path('/decisions/' + toParams.id + '/' + result.nameSlug + criteria + '/matrix').replace();
-                    }
+                    // if ((fromState.name && toState.name !== fromState.name) ||
+                    //     (fromState.name && toState.name === fromState.name && toParams.id !== fromParams.id)) {
+                    //     $location.path('/decisions/' + toParams.id + '/' + result.nameSlug + criteria + '/matrix');
+                    // } else {
+                    //     $location.path('/decisions/' + toParams.id + '/' + result.nameSlug + criteria + '/matrix').replace();
+                    // }
                     //unsubscribe event listener
                     stateListener();
                 });

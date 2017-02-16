@@ -6,16 +6,18 @@
         .module('app.decision')
         .controller('DecisionMatrixController', DecisionMatrixController);
 
-    DecisionMatrixController.$inject = ['DecisionDataService', '$stateParams', 'DecisionNotificationService', 'decisionBasicInfo', '$rootScope', '$compile', '$scope'];
+    DecisionMatrixController.$inject = ['DecisionDataService', 'DecisionSharedService', '$stateParams', 'DecisionNotificationService', 'decisionBasicInfo', '$rootScope', '$compile', '$scope'];
 
-    function DecisionMatrixController(DecisionDataService, $stateParams, DecisionNotificationService, decisionBasicInfo, $rootScope, $compile, $scope) {
+    function DecisionMatrixController(DecisionDataService, DecisionSharedService, $stateParams, DecisionNotificationService, decisionBasicInfo, $rootScope, $compile, $scope) {
         var
-            vm = this;
+            vm = this,
+            isInitedSorters = false;
 
         criteriaIds = [];
         vm.displayMatrix = [];
-        vm.decisionId = 2512;
-        // vm.decisionId = $stateParams.id;
+        // vm.decisionId = 2512;
+
+        vm.decisionId = $stateParams.id;
         vm.decision = decisionBasicInfo || {};
         $rootScope.pageTitle = vm.decision.name + ' Matrix | DecisionWanted';
 
@@ -104,6 +106,7 @@
                 vm.decisionMatrixList = result;
                 console.log(result);
                 initSorters();
+                vm.decisionsSpinner = false;
                 setTimeout(function() {
                     prepareDisplayMatrix(vm.decisionMatrixList);
                 }, 0);
@@ -133,7 +136,9 @@
                 _.map(characteristics, function(obj, index) {
                     var criteriaStore = obj;
                     var html = obj.value;
-                    $('#decision-row-' + el.decision.decisionId).find('.matrix-table-col-content[data-characteristic-id="' + obj.characteristicId + '"]').html($compile(html)($scope)); //.addClass('color-' + obj.weight);
+                    // console.log(obj);
+                    $('#decision-row-' + el.decision.decisionId).find('.matrix-table-col-content[data-characteristic-id="' + obj.characteristicId + '"]').html(html);
+                    // $('#decision-row-' + el.decision.decisionId).find('.matrix-table-col-content[data-characteristic-id="' + obj.characteristicId + '"]').html($compile(html)($scope));
                 });
             });
 
