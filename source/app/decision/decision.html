@@ -6,7 +6,7 @@
                 {{vm.decision.name}}
             </h4>
         </div>
-        <div class="col-md-5 col-sm-5">
+        <div class="col-md-4 col-sm-4">
             <div class="row" ng-show="vm.parentDecisions">
                 <div class="col-sm-3 col-md-2">
                     <div class="top-panel-label">
@@ -23,6 +23,11 @@
                         </span>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="col-sm-1 colm-md-1">
+            <div class="pull-right">
+                <a ui-sref="decisionMatrix({id: vm.decisionId})" class="btn pull-right"><span class="glyphicon glyphicon-th"></span> Matrix view</a>
             </div>
         </div>
         <div class="col-md-3 col-sm-3">

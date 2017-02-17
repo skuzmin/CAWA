@@ -41,8 +41,6 @@
                 vm.characteristicGroups = result;
             });
 
-            // searchDecisionMatrix(vm.decisionId);
-
             //Get data for decision panel (main)
             vm.decisionsSpinner = true;
             searchDecisionMatrix(vm.decisionId);
