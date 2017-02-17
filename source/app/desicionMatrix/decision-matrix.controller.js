@@ -104,11 +104,12 @@
             DecisionDataService.searchDecisionMatrix(id, DecisionSharedService.getFilterObject()).then(function(result) {
                 vm.decisionMatrixList = result;
                 // console.log(result);
-                initSorters();
                 vm.decisionsSpinner = false;
                 setTimeout(function() {
                     prepareDisplayMatrix(vm.decisionMatrixList);
+                    initSorters();
                 }, 0);
+                DecisionSharedService.filterObject.pagination.totalDecisions = result.totalDecisions;
             });
         }
 
@@ -160,7 +161,8 @@
                     // criteriaEl.find('.matrix-table-col-content[data-criterion-id="' + obj.criterionId + '"]').html(html); //.addClass('color-' + obj.weight);
 
                     // Pure JS
-                    var html = ratingDirective(obj.weight, obj.totalVotes);
+                    var comments = '<div class="app-item-comments">'+'<span class="glyphicon glyphicon-comment"></span>' + obj.comments + '<div>';
+                    var html = ratingDirective(obj.weight, obj.totalVotes) + comments;
                     criteriaEl.find('.matrix-table-col-content[data-criterion-id="' + obj.criterionId + '"]').html(html);
 
                 });

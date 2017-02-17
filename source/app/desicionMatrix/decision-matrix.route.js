@@ -45,6 +45,10 @@
                     if (toParams.criteria && (!fromParams.id || toParams.id === fromParams.id)) {
                         criteria = '/' + toParams.criteria;
                     }
+
+                    $location.path('/matrix/' + toParams.id + '/' + result.nameSlug + criteria + 'matrix');
+                    console.log('/matrix/' + toParams.id + '/' + result.nameSlug + criteria + 'matrix');
+                    console.log('fromState.name:' + fromState.name, '; toState.name:' + toState.name, 'result.nameSlug:' + result.nameSlug);
                     //two behaviors for changing URL
                     // if ((fromState.name && toState.name !== fromState.name) ||
                     //     (fromState.name && toState.name === fromState.name && toParams.id !== fromParams.id)) {
