@@ -46,6 +46,13 @@
                         criteria = '/' + toParams.criteria;
                     }
                     //two behaviors for changing URL
+                    // console.log(toState.name, fromState.name, toState.name === 'decision.matrix');
+                    console.log(toParams, fromParams);
+                    if( toParams.view === 'matrix' ) {
+                        console.log($location);
+                        // $location.path('/decisions/' + toParams.id + '/' + result.nameSlug + criteria + '/matrix').replace();
+                        // $state.go('decision.new');
+                    }
                     if ((fromState.name && toState.name !== fromState.name) ||
                         (fromState.name && toState.name === fromState.name && toParams.id !== fromParams.id)) {
                         $location.path('/decisions/' + toParams.id + '/' + result.nameSlug + criteria);
