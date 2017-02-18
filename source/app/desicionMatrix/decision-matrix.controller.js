@@ -193,6 +193,19 @@
         }
 
 
+        // Hover for vertical lines
+        $(document).on({
+            mouseenter: function() {
+                var colId = $(this).data('col-id');
+                if (!colId) return;
+                $('.matrix-table-col[data-col-id="' + colId + '"]').addClass('matrix-col-selected');;
+            },
+            mouseleave: function() {
+                $('.matrix-table-col.matrix-col-selected').removeClass('matrix-col-selected');
+            }
+        }, ".matrix-table-col");
+
+
         // // Set table as col depend of table content
         // $('.js-matrix-table .matrix-table-content > .matrix-table-item:first() .matrix-table-col').each(function(index, val) {
         //     var colWidth = $(this).outerWidth() + 'px';

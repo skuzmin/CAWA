@@ -14,11 +14,15 @@
     margin: 0;
     padding: 0 4px;
     .glyphicon {
-        color: @icon-color;
         display: inline-block;
         margin: 0 3px;
-        vertical-align: top;
-    }
+        color: @icon-color;
+    }    
+}
+
+.matrix-table-col-name {
+    // position: fixed;
+    background: #FFF;
 }
 
 .criteria-item .app-rating-votes-weight {
@@ -26,11 +30,6 @@
 }
 
 .matrix {
-    .glyphicon {
-        display: inline-block;
-        margin: 0 3px;
-        color: @icon-color;
-    }
     &.decision {
         .app-rating-votes {
             display: inline-block;
@@ -55,21 +54,21 @@
     .pagination {
         margin: 5px 0;
     }
-    &.decision .scroll-wrapper-header {
-        min-height: 40px;
-        height: auto;
-        margin: 0;
-        width: auto;
-    }
-    &.decision .scroll-wrapper {
-        top: 76px; //TODO: use variable
-        // overflow: hidden;
-        // // margin: 0 -1px;
-        // position: relative;
-    }
+
     .main-panel {
         height: calc(~"100vh - 177px");
         margin: 0 10px;
+    }
+    &.decision {
+        .scroll-wrapper-header {
+            min-height: 40px;
+            height: auto;
+            margin: 0;
+            width: auto;
+        }
+         .scroll-wrapper {
+            top: 76px; //TODO: use variable
+        }
     }
     &.decision .main-panel > div,
     .app-panel {
@@ -79,11 +78,19 @@
 }
 
 .matrix-table {
-
 }
 
 .matrix-table-content {
     position: relative;
+    .matrix-table-col {
+        &:hover {
+            background-color: @gray-light;
+        }
+        &.matrix-table-group {
+            border-right: 0;
+            border-left: 0;
+        }
+    }
     .matrix-table-item {
         &:first-child {
             margin-top: 0;
@@ -106,18 +113,33 @@
         border-color: @basic-active;
     }
 }
+
+
 .matrix-table-row {
     display: table;
     width: 100%;
     height: 100%;
+    
     .matrix-table-col {
         border-right: 1px solid @gray-light;
-
+        // &:last-child {
+        //     border-right: 0;
+        // }
+    }
+    .matrix-table-group {
         &:last-child {
-            border-right: 0;
+            .matrix-table-col {
+                &:last-child {
+                    border-right: 0;
+                }
+            }            
         }
     }
-
+    .glyphicon {
+        display: inline-block;
+        margin: 0 3px;
+        color: @icon-color;
+    }
 }
 
 // Colors
@@ -161,7 +183,16 @@
     display: table-cell;
     min-width: 105px;
     height: 100%;
+    border-left: 1px solid transparent;
+    border-right: 1px solid @gray-light;
+    background: #FFF;
+    &.matrix-col-selected {
+        // background-color: @gray-light;
+        border-left-color: @basic-active;
+        border-right-color: @basic-active;
+    }
 }
+
 
 .matrix-table-header {
     font-weight: 500;
@@ -190,10 +221,7 @@
 
 .matrix-table-group-title {
     font-size: 18px;
-    // background-color: @gray-light;
     border-bottom: 1px solid @gray-light;
-
-
 }
 
 .matrix-table-title {

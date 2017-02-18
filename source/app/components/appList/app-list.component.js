@@ -76,10 +76,11 @@
                 offset = i * AppListConstant.OFFSET_Y_BOTTOM;
                 newTop = sumArrayIndex(currentList, i) + offset + 'px';
 
-                elStyle = window.getComputedStyle(el);
-                currentTop = elStyle.getPropertyValue('top');
-                if (newTop !== currentTop) {
-                    el.style.top = newTop;
+                elStyle = getComputedStyle(el);
+
+                if (elStyle) {
+                    currentTop = elStyle.getPropertyValue('top');
+                    if (newTop !== currentTop) el.style.top = newTop;
                 }
             }
         }
@@ -92,9 +93,8 @@
                 y = (parseFloat(target.getAttribute('data-y')) || 0);
 
             if ($('#' + target.id) && $('#' + target.id).hasClass('item-loading')) {
-
-                return false
-            };
+                return false;
+            }
 
             target.style.height = event.rect.height + 'px';
 

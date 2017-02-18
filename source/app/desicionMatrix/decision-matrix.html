@@ -93,13 +93,13 @@
 
                     <div class="matrix-table-item" ng-repeat="item in vm.decisionMatrixList.decisionMatrixs track by item.decision.decisionId">
                         <div class="matrix-table-row" id="decision-row-{{item.decision.decisionId}}">
-                            <div class="matrix-table-col">
+                            <div class="matrix-table-col matrix-table-col-name">
                                 <div class="matrix-table-col-content matrix-content-name">{{item.decision.name}}</div>
                             </div>
                             <!-- Criteria Content -->
                             <div class="matrix-table-col matrix-table-group" ng-repeat="group in vm.criteriaGroups track by $index">
                                 <div class="matrix-table-row">
-                                    <div class="matrix-table-col" ng-repeat="criteria in group.criteria | orderBy:'criterionId'">
+                                    <div class="matrix-table-col" ng-repeat="criteria in group.criteria | orderBy:'criterionId'" data-col-id="criteria-{{criteria.criterionId}}">
                                         <div class="matrix-table-col-content" data-criterion-id="{{criteria.criterionId}}"></div>
                                     </div>
                                 </div>
@@ -108,7 +108,7 @@
                             <!-- Characteristics Content -->
                             <div class="matrix-table-col matrix-table-group" ng-repeat="group in vm.characteristicGroups track by $index">
                                 <div class="matrix-table-row">
-                                    <div class="matrix-table-col" ng-repeat="characteristic in group.characteristics track by $index">
+                                    <div class="matrix-table-col" ng-repeat="characteristic in group.characteristics track by $index" data-col-id="characteristic-{{characteristic.characteristicId}}">
                                         <div class="matrix-table-col-content" data-characteristic-id="{{characteristic.characteristicId}}"></div>
                                     </div>
                                 </div>
