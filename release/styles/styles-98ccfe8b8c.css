@@ -579,16 +579,44 @@ h6,
   height: 100%;
   padding-right: 6px;
 }
+.app-rating-votes {
+  display: block;
+  margin-right: 10px;
+  margin: 0;
+  padding: 0 4px;
+}
+.app-rating-votes .glyphicon {
+  color: #7f8c8d;
+  display: inline-block;
+  margin: 0 3px;
+  vertical-align: top;
+}
+.criteria-item .app-rating-votes-weight {
+  display: none;
+}
+.matrix .glyphicon {
+  display: inline-block;
+  margin: 0 3px;
+  color: #7f8c8d;
+}
+.matrix.decision .app-rating-votes {
+  display: inline-block;
+  margin-right: 10px;
+  margin: 0;
+  border-right: 1px solid #ebebeb;
+  padding: 4px 8px;
+}
 .matrix .app-item-comments {
   text-align: right;
-  display: block;
-  margin: 5px 0;
+  display: inline-block;
+  margin: 0;
   color: #7f8c8d;
   font-size: 13px;
+  padding: 4px 8px;
 }
 .matrix .app-item-comments span {
   display: inline-block;
-  margin: 0 4px;
+  margin: 0 5px;
 }
 .matrix .pagination {
   margin: 5px 0;

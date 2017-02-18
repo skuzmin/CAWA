@@ -86,13 +86,15 @@
 
         // Resize
         function updateResizeElement(event) {
-            if (event.rect.height <= AppListConstant.ELEMENT_HEIGHT) {
-                return false;
-            }
-
+            if (event.rect.height <= AppListConstant.ELEMENT_HEIGHT) return false;
             var
                 target = event.target,
-                y = (parseInt(target.getAttribute('data-y')) || 0);
+                y = (parseFloat(target.getAttribute('data-y')) || 0);
+
+            if ($('#' + target.id) && $('#' + target.id).hasClass('item-loading')) {
+
+                return false
+            };
 
             target.style.height = event.rect.height + 'px';
 

@@ -69,7 +69,7 @@
                 searchDecisionMatrix(vm.decisionId);
             });
 
-        }   
+        }
 
         //Init sorters, when directives loaded
         function initSorters() {
@@ -120,8 +120,11 @@
             if (!field) return;
             order = order || 'DESC';
 
-             sortObj = {
-                sort: {id: field, order: order},
+            sortObj = {
+                sort: {
+                    id: field,
+                    order: order
+                },
                 mode: "sortByDecisionProperty"
             };
             $scope.$emit('selectSorter', sortObj);
@@ -135,13 +138,13 @@
 
             rating = parseFloat(value) / 5 * 100 + '%' || 0;
             ratingHtml = '<div class="app-rating-star-wrapper">' +
-                            '<div class="app-rating-star">' +
-                                '<span class="bar" style="width: ' + rating + '"></span>' +
-                            '</div>' +
-                            '<div class="app-rating-votes">' +
-                              '<span>' + value + '</span><span>(' + totalVotes + ')</span>' +
-                            '</div>' +
-                        '</div>';
+                '<div class="app-rating-star">' +
+                '<span class="bar" style="width: ' + rating + '"></span>' +
+                '</div>' +
+                '</div>' +
+                '<div class="app-rating-votes">' +
+                '<span><span class="glyphicon glyphicon-thumbs-up"></span> ' + totalVotes + '</span>' +
+                '</div>';;
             return ratingHtml;
         }
 
@@ -163,7 +166,7 @@
                     // criteriaEl.find('.matrix-table-col-content[data-criterion-id="' + obj.criterionId + '"]').html(html); //.addClass('color-' + obj.weight);
 
                     // Pure JS
-                    var comments = '<div class="app-item-comments">'+'<span class="glyphicon glyphicon-comment"></span>' + '<div>';
+                    var comments = '<div class="app-item-comments">' + '<span class="glyphicon glyphicon-comment"></span> 0' + '<div>';
                     var html = ratingDirective(obj.weight, obj.totalVotes) + comments;
                     criteriaEl.find('.matrix-table-col-content[data-criterion-id="' + obj.criterionId + '"]').html(html);
 
