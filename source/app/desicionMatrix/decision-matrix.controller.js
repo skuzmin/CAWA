@@ -11,7 +11,8 @@
     function DecisionMatrixController(DecisionDataService, DecisionSharedService, $stateParams, DecisionNotificationService, decisionBasicInfo, $rootScope, $compile, $scope) {
         var
             vm = this,
-            isInitedSorters = false;
+            isInitedSorters = false,
+            defaultDecisionCount = 10;
 
         criteriaIds = [];
         vm.displayMatrix = [];
@@ -68,7 +69,7 @@
                 searchDecisionMatrix(vm.decisionId);
             });
 
-        }
+        }   
 
         //Init sorters, when directives loaded
         function initSorters() {
@@ -109,7 +110,8 @@
                     prepareDisplayMatrix(vm.decisionMatrixList);
                     initSorters();
                 }, 0);
-                DecisionSharedService.filterObject.pagination.totalDecisions = result.totalDecisions;
+
+                DecisionSharedService.filterObject.pagination.totalDecisions = result.totalDecisionMatrixs;
             });
         }
 
@@ -161,7 +163,7 @@
                     // criteriaEl.find('.matrix-table-col-content[data-criterion-id="' + obj.criterionId + '"]').html(html); //.addClass('color-' + obj.weight);
 
                     // Pure JS
-                    var comments = '<div class="app-item-comments">'+'<span class="glyphicon glyphicon-comment"></span>' + obj.comments + '<div>';
+                    var comments = '<div class="app-item-comments">'+'<span class="glyphicon glyphicon-comment"></span>' + '<div>';
                     var html = ratingDirective(obj.weight, obj.totalVotes) + comments;
                     criteriaEl.find('.matrix-table-col-content[data-criterion-id="' + obj.criterionId + '"]').html(html);
 

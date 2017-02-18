@@ -9,8 +9,8 @@
 	</div>
 	<div class="row search-results" ng-show="vm.showTrigger">
 		<div class="col-md-offset-2 col-md-8 col-md-offset-2">RESULTS for {{vm.searchText}}</div>
-		<div class="col-md-offset-2 col-md-8 col-md-offset-2"><a href ui-sref="decision({id: vm.searchText || 2512})">DECISION</a> 
-		| <a href ui-sref="decisionMatrix({id: vm.searchText || 2512})">DECISION Matrix</a>
+		<div class="col-md-offset-2 col-md-8 col-md-offset-2"><a href ui-sref="decisions.view({id: vm.searchText || 2512})">DECISION</a> 
+		| <a href ui-sref="decisions.matrix({id: vm.searchText || 2512})">DECISION Matrix</a>
 		</div>
 	</div>
 </div>

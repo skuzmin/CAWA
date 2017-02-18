@@ -9,7 +9,7 @@
             <app-paginator></app-paginator>
         </div>
         <div class="col-sm-1">
-            <a ui-sref="decision({id: vm.decisionId})" class="btn pull-right"><span class="glyphicon glyphicon-menu-hamburger"></span> List view</a>
+            <a ui-sref="decisions.view({id: vm.decisionId})" class="btn pull-right"><span class="glyphicon glyphicon-menu-hamburger"></span> List view</a>
         </div>
         <div class="col-md-3 col-sm-3">
             <input class="form-control search-input" type="text" />
@@ -18,6 +18,8 @@
     </div>
     <div id="matrix-table" class="main-panel matrix-table js-matrix-table">
         <div id="panel" class="app-panel">
+
+
             <div class="decisions-header scroll-wrapper-header" style="width: 3900px;">
                 <!-- Header -->
                 <div class="matrix-table-header">
@@ -25,7 +27,7 @@
                         <!-- TODO: Make Sticky -->
                         <div class="matrix-table-col matrix-table-group">
                             <div class="matrix-table-group-title">
-                                Empty
+                                <!-- Empty Header -->
                             </div>
                             <div class="matrix-table-row">
                                 <div class="matrix-table-col">
@@ -79,13 +81,15 @@
                 </div>
                 <!-- End Header -->
             </div>
-            <div class="scroll-wrapper" style="width: 3900px;">
+
+            <div ng-show="vm.decisionsSpinner" class="app-loader-small"><span class="glyphicon glyphicon-refresh app-loader-animation"></span>LOADING...</div>
+
+            <div class="scroll-wrapper" style="width: 3917px;">
                 <!-- TODO: set width for all cols -->
                 <!-- TODO: generate in JS -->
                 <!-- Content -->
-                <div id="matrix-table-content" class="matrix-table-content">
 
-                    <div ng-show="vm.decisionsSpinner" class="app-loader-small"><span class="glyphicon glyphicon-refresh app-loader-animation"></span>LOADING...</div>
+                <div id="matrix-table-content" class="matrix-table-content">
 
                     <div class="matrix-table-item" ng-repeat="item in vm.decisionMatrixList.decisionMatrixs track by item.decision.decisionId">
                         <div class="matrix-table-row" id="decision-row-{{item.decision.decisionId}}">

@@ -551,7 +551,7 @@ body .app-main-panel .panels-2 .app-panel-right {
   -o-transition: transform 0.2s ease-in-out;
   transition: transform 0.2s ease-in-out;
 }
-.panel.panel-open .glyphicon {
+.panel.panel-open .panel-title .glyphicon {
   -webkit-transform: rotate(90deg);
   -moz-transform: rotate(90deg);
   -o-transform: rotate(90deg);
@@ -578,6 +578,17 @@ h6,
   top: 0;
   height: 100%;
   padding-right: 6px;
+}
+.matrix .app-item-comments {
+  text-align: right;
+  display: block;
+  margin: 5px 0;
+  color: #7f8c8d;
+  font-size: 13px;
+}
+.matrix .app-item-comments span {
+  display: inline-block;
+  margin: 0 4px;
 }
 .matrix .pagination {
   margin: 5px 0;
@@ -658,6 +669,7 @@ h6,
 }
 .matrix-table-col-content {
   padding: 4px 8px;
+  width: 120px;
 }
 .matrix-content-name {
   width: 200px;
@@ -667,7 +679,6 @@ h6,
   display: table-cell;
   min-width: 105px;
   height: 100%;
-  width: 120px;
 }
 .matrix-table-header {
   font-weight: 500;
@@ -690,7 +701,6 @@ h6,
 }
 .matrix-table-header .matrix-table-row .matrix-table-col .app-sorter-wrapper {
   padding-right: 20px;
-  width: 100%;
 }
 .matrix-table-group-title {
   font-size: 18px;
@@ -702,6 +712,7 @@ h6,
   line-height: 1.2;
   font-weight: 600;
   font-size: 14px;
+  width: 120px;
 }
 .app-sorter-wrapper {
   position: relative;

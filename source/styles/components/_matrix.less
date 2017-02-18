@@ -13,7 +13,12 @@
         text-align: right;
         display: block;
         margin: 5px 0;
+        color: @icon-color;
         font-size: 13px;
+        span {
+            display: inline-block;
+            margin: 0 4px;
+        }
     }
     .pagination {
         margin: 5px 0;
@@ -111,6 +116,7 @@
 
 .matrix-table-col-content {
     padding: 4px 8px;
+     width: 120px; // TODO: avoid
 }
 
 // Width for cols
@@ -123,7 +129,6 @@
     display: table-cell;
     min-width: 105px;
     height: 100%;
-    width: 120px; // TODO: avoid
 }
 
 .matrix-table-header {
@@ -146,7 +151,6 @@
             }
             .app-sorter-wrapper {
                 padding-right: 20px;
-                width: 100%;
             }
         }
     }
@@ -166,6 +170,7 @@
     line-height: 1.2;
     font-weight: 600;
     font-size: 14px;
+    width: 120px; // TODO: avoid
 }
 
 // Sorter
