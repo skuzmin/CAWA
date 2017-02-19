@@ -30,7 +30,7 @@
                                 <!-- Empty Header -->
                             </div>
                             <div class="matrix-table-row">
-                                <div class="matrix-table-col">
+                                <div class="matrix-table-col" data-col-id="col-name">
                                     <div class="matrix-table-title app-sorter-wrapper matrix-content-name">Name
                                         <div class="app-sorter">
                                             <span class="app-sorter-top glyphicon glyphicon-triangle-top" ng-click="vm.orderByDecisionProperty('name', 'ASC')"></span>
@@ -47,9 +47,8 @@
                                 {{group.name}}
                             </div>
                             <div class="matrix-table-row">
-                                <div class="matrix-table-col" ng-repeat="criteria in group.criteria | orderBy:'criterionId'">
+                                <div class="matrix-table-col" ng-repeat="criteria in group.criteria | orderBy:'criterionId'" data-col-id="criteria-{{criteria.criterionId}}">
                                     <div class="matrix-table-title app-sorter-wrapper">
-                                        <!--                                     {{criteria.criterionId}} |  -->
                                         {{criteria.name}}
                                         <div class="app-sorter">
                                             <span class="app-sorter-top glyphicon glyphicon-triangle-top"></span>
@@ -66,7 +65,7 @@
                                 {{group.name}}
                             </div>
                             <div class="matrix-table-row">
-                                <div class="matrix-table-col" ng-repeat="characteristic in group.characteristics track by $index">
+                                <div class="matrix-table-col" ng-repeat="characteristic in group.characteristics track by $index" data-col-id="characteristic-{{characteristic.characteristicId}}">
                                     <div class="matrix-table-title app-sorter-wrapper">{{characteristic.name}}
                                         <div class="app-sorter">
                                             <span class="app-sorter-top glyphicon glyphicon-triangle-top"></span>
@@ -86,14 +85,12 @@
 
             <div class="scroll-wrapper" style="width: 3917px;">
                 <!-- TODO: set width for all cols -->
-                <!-- TODO: generate in JS -->
-                <!-- Content -->
-
+                <!-- Table Content -->
                 <div id="matrix-table-content" class="matrix-table-content">
 
                     <div class="matrix-table-item" ng-repeat="item in vm.decisionMatrixList.decisionMatrixs track by item.decision.decisionId">
                         <div class="matrix-table-row" id="decision-row-{{item.decision.decisionId}}">
-                            <div class="matrix-table-col matrix-table-col-name">
+                            <div class="matrix-table-col matrix-table-col-name"  data-col-id="col-name">
                                 <div class="matrix-table-col-content matrix-content-name">{{item.decision.name}}</div>
                             </div>
                             <!-- Criteria Content -->
@@ -117,7 +114,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- End Content -->
+                <!-- End Table Content -->
             </div>
         </div>
     </div>

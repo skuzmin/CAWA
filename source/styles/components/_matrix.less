@@ -67,7 +67,7 @@
             width: auto;
         }
          .scroll-wrapper {
-            top: 76px; //TODO: use variable
+            top: 70px; //TODO: use variable
         }
     }
     &.decision .main-panel > div,
@@ -77,7 +77,9 @@
     }
 }
 
-.matrix-table {
+.matrix .matrix-table-col.matrix-table-group {
+    border-right: 0;
+    border-left: 0;
 }
 
 .matrix-table-content {
@@ -198,6 +200,7 @@
     font-weight: 500;
     color: @title-color;
     border: 1px solid transparent;
+    border-bottom: 0;
 
     .matrix-table-row {
         height: calc(~"100% - 36px"); // TODO: not use it!!!

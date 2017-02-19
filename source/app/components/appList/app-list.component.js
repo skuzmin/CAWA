@@ -69,14 +69,16 @@
 
         // Move elements under resizeble el
         function reRangeList(currentList, index) {
-            var el, elStyle, newTop, currentTop, offset;
+            var elStyle, newTop, currentTop, offset;
 
             for (var i = 0; i < currentList.length; i++) {
-                el = document.getElementById('decision-' + currentList[i].id);
+                var el = document.getElementById('decision-' + currentList[i].id);
+
+                if (!el) return;
+
                 offset = i * AppListConstant.OFFSET_Y_BOTTOM;
                 newTop = sumArrayIndex(currentList, i) + offset + 'px';
-
-                elStyle = getComputedStyle(el);
+                elStyle = window.getComputedStyle(el, null);
 
                 if (elStyle) {
                     currentTop = elStyle.getPropertyValue('top');
@@ -87,15 +89,14 @@
 
         // Resize
         function updateResizeElement(event) {
-            if (event.rect.height <= AppListConstant.ELEMENT_HEIGHT) return false;
             var
                 target = event.target,
-                y = (parseFloat(target.getAttribute('data-y')) || 0);
+                y;
 
-            if ($('#' + target.id) && $('#' + target.id).hasClass('item-loading')) {
-                return false;
-            }
+            target = event.target
+            if (event.rect.height <= AppListConstant.ELEMENT_HEIGHT) return;
 
+            y = (parseFloat(target.getAttribute('data-y')) || 0);
             target.style.height = event.rect.height + 'px';
 
             // TODO: avoid jQuery and move only index from current index
@@ -114,7 +115,7 @@
                     left: false,
                     right: false,
                     bottom: true,
-                    top: true
+                    top: false
                 }
             })
             .on('resizemove', updateResizeElement)

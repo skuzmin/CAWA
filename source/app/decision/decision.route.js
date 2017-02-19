@@ -59,7 +59,7 @@
                 controller: 'DecisionController',
                 controllerAs: 'vm',
                 resolve: {
-                    // decisionAnalysisInfo: DecisionAanalysisResolver
+                    decisionAnalysisInfo: DecisionAanalysisResolver
                 },
             });
     }
@@ -72,17 +72,17 @@
             var stateListener = $rootScope.$on('$stateChangeSuccess',
                 function(event, toState, toParams, fromState, fromParams) {
                     // TODO: share data with Criteria and Characteristics Avoid additional API calls
-                    var path,
+                    var
                         currentState,
                         criteria = '',
-                        analysisId = '',
-                        analysisSlug = '';
+                        decisionSlug;
 
                     currentState = $state.current.name;
-                    path = $location.path();
 
                     //SLUG for Decision page
                     //Always set correct slug from server
+                    decisionSlug = result.nameSlug ? result.nameSlug : '';
+
                     $stateParams.slug = result.nameSlug;
                     //set criteria ( addtional user parameters)
                     if (toParams.criteria && (!fromParams.id || toParams.id === fromParams.id)) {
@@ -90,20 +90,14 @@
                     }
 
                     // TODO: remove
-                    // console.log('path: ' + path);
-                    // console.log('State current: ' + $state.current.name);
-                    // console.log($stateParams);
-
+                    var decisionStateParams = {
+                        'id': toParams.id,
+                        'slug': decisionSlug,
+                        'criteria': criteria
+                    };
                     if (currentState === 'decisions.matrix' || currentState === 'decisions.view') {
                         // Just added new slug
-                        var decisionStateParams = {
-                            'id': toParams.id,
-                            'slug': result.nameSlug,
-                            'criteria': criteria
-                        };
-                        $state.go(currentState, decisionStateParams);
-                    } else if (currentState === 'decisions.view.analysis') {
-                        console.log(toParams.analysisId);
+                        $state.transitionTo(currentState, decisionStateParams);
                     }
 
                     //unsubscribe event listener
@@ -116,9 +110,32 @@
     }
 
     // Analysis
-    DecisionAanalysisResolver.$inject = [];
+    DecisionAanalysisResolver.$inject = ['$state', '$rootScope', '$stateParams'];
 
-    function DecisionAanalysisResolver() {}
+    function DecisionAanalysisResolver($state, $rootScope, $stateParams) {
+        var stateListener = $rootScope.$on('$stateChangeSuccess', function() {
+            var currentState,
+                analysisId = '';
+
+            currentState = $state.current.name;
+
+            var decisionAnalysisStateParams = {
+                'id': $stateParams.id,
+                'slug': $stateParams.slug,
+                'criteria': $stateParams.criteria
+            };
+
+            if ($stateParams.analysisId) {
+                analysisId = $stateParams.analysisId;
+                console.log(analysisId);
+                // decisionAnalysisStateParams.analysisId = analysisId;
+                // console.log(decisionAnalysisStateParams, $stateParams);
+            }
+
+            stateListener();
+        });
+
+    }
 
 
 })();

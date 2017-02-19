@@ -12,7 +12,7 @@
 			var
 				decisionUrl = Config.endpointUrl + 'decisions/:id',
 
-				decisions = $resource(decisionUrl + '/decisions', {id: '@id'},
+				decisions = $resource(decisionUrl + '/decisions', {id: '@id', decisionAnalysisId: '@decisionAnalysisId'},
 				{
 					searchDecisionById: {method: 'POST', isArray: false}
 				}),
