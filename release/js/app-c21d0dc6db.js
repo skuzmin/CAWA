@@ -27,13 +27,6 @@
 })();
 
 (function() {
-
-	'use strict';
-
-	angular.module('app.components', []);
-
-})();
-(function() {
 	'use strict';
 
 	angular
@@ -78,6 +71,13 @@
 	'use strict';
 
 	angular.module('app.login', ['app.core']);
+
+})();
+(function() {
+
+	'use strict';
+
+	angular.module('app.components', []);
 
 })();
 (function() {
@@ -563,10 +563,6 @@
                     criteria: {
                         value: null,
                         squash: true
-                    },
-                    view: {
-                        value: null,
-                        squash: true
                     }
                 }
             })
@@ -589,7 +585,8 @@
             var stateListener = $rootScope.$on('$stateChangeSuccess',
                 function(event, toState, toParams, fromState, fromParams) {
                     // TODO: share data with Criteria and Characteristics Avoid additional API calls
-                    var path, currentState,
+                    var path,
+                        currentState,
                         criteria = '',
                         analysisId = '',
                         analysisSlug = '';
@@ -610,16 +607,14 @@
                     // console.log('State current: ' + $state.current.name);
                     // console.log($stateParams);
 
-                    var decisionStateParams = {
-                        'id': toParams.id,
-                        'slug': result.nameSlug,
-                        'criteria': criteria
-                    };
-
-                    if (currentState === 'decisions.matrix') {
-                        $state.go('decisions.matrix', decisionStateParams);
-                    } else if (currentState === 'decisions.view') {
-                        $state.go('decisions.view', decisionStateParams);
+                    if (currentState === 'decisions.matrix' || currentState === 'decisions.view') {
+                        // Just added new slug
+                        var decisionStateParams = {
+                            'id': toParams.id,
+                            'slug': result.nameSlug,
+                            'criteria': criteria
+                        };
+                        $state.go(currentState, decisionStateParams);
                     } else if (currentState === 'decisions.view.analysis') {
                         console.log(toParams.analysisId);
                     }
@@ -1093,8 +1088,8 @@
 
     angular
         .module('app.components')
-        .component('appHeader', {
-            templateUrl: 'app/components/appHeader/app-header.html'
+        .component('appFooter', {
+            templateUrl: 'app/components/appFooter/app-footer.html'
         });
 
 })();
@@ -1105,8 +1100,8 @@
 
     angular
         .module('app.components')
-        .component('appFooter', {
-            templateUrl: 'app/components/appFooter/app-footer.html'
+        .component('appHeader', {
+            templateUrl: 'app/components/appHeader/app-header.html'
         });
 
 })();
@@ -1354,56 +1349,6 @@
         }
     }
 
-})();
-
-(function() {
-
-    'use strict';
-
-    angular
-        .module('app.components')
-        .controller('CriteriaCoefficientIndicatorController', CriteriaCoefficientIndicatorController)
-        .component('criteriaCoefficientIndicator', {
-            templateUrl: 'app/components/criteriaCoefficientIndicator/criteria-coefficient-indicator.html',
-            bindings: {
-                coefficient: '='
-            },
-            controller: 'CriteriaCoefficientIndicatorController',
-            controllerAs: 'vm'
-        });
-
-
-    CriteriaCoefficientIndicatorController.$inject = ['DecisionCriteriaConstant'];
-
-    function CriteriaCoefficientIndicatorController(DecisionCriteriaConstant) {
-        var vm = this;
-
-        vm.$doCheck = doCheck;
-
-        init();
-
-        function setCoefficientIndicator(coefficient) {
-            if (!coefficient) return;
-            // set color of indicator
-            _.forEach(vm.coefficientList, function(c) {
-                c.class = '';
-                if(c.value <= coefficient.value) {
-                    c.class = coefficient.name.toLowerCase();
-                }
-            });
-        }
-
-        function init() {
-            if(!vm.coefficient) {
-                vm.coefficient = DecisionCriteriaConstant.coefficientDefault;
-            }
-            vm.coefficientList = angular.copy(DecisionCriteriaConstant.coefficientList);
-        }
-
-        function doCheck() {
-            setCoefficientIndicator(vm.coefficient);
-        }
-    }
 })();
 
 (function() {
@@ -1922,6 +1867,56 @@
         }
     }
 
+})();
+
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.components')
+        .controller('CriteriaCoefficientIndicatorController', CriteriaCoefficientIndicatorController)
+        .component('criteriaCoefficientIndicator', {
+            templateUrl: 'app/components/criteriaCoefficientIndicator/criteria-coefficient-indicator.html',
+            bindings: {
+                coefficient: '='
+            },
+            controller: 'CriteriaCoefficientIndicatorController',
+            controllerAs: 'vm'
+        });
+
+
+    CriteriaCoefficientIndicatorController.$inject = ['DecisionCriteriaConstant'];
+
+    function CriteriaCoefficientIndicatorController(DecisionCriteriaConstant) {
+        var vm = this;
+
+        vm.$doCheck = doCheck;
+
+        init();
+
+        function setCoefficientIndicator(coefficient) {
+            if (!coefficient) return;
+            // set color of indicator
+            _.forEach(vm.coefficientList, function(c) {
+                c.class = '';
+                if(c.value <= coefficient.value) {
+                    c.class = coefficient.name.toLowerCase();
+                }
+            });
+        }
+
+        function init() {
+            if(!vm.coefficient) {
+                vm.coefficient = DecisionCriteriaConstant.coefficientDefault;
+            }
+            vm.coefficientList = angular.copy(DecisionCriteriaConstant.coefficientList);
+        }
+
+        function doCheck() {
+            setCoefficientIndicator(vm.coefficient);
+        }
+    }
 })();
 
 angular.module('app.core').run(['$templateCache', function($templateCache) {$templateCache.put('app/core/404.html','<div class=container><div class=app-content><div class=header-text><h1>Error 404</h1><h3>Page Not Found!</h3><a ui-sref=home>Home</a></div></div></div>');
