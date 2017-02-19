@@ -144,7 +144,7 @@
                 '</div>' +
                 '<div class="app-rating-votes">' +
                 '<span><span class="glyphicon glyphicon-thumbs-up"></span> ' + totalVotes + '</span>' +
-                '</div>';;
+                '</div>';
             return ratingHtml;
         }
 
@@ -198,7 +198,7 @@
             mouseenter: function() {
                 var colId = $(this).data('col-id');
                 if (!colId) return;
-                $('.matrix-table-col[data-col-id="' + colId + '"]').addClass('matrix-col-selected');;
+                $('.matrix-table-col[data-col-id="' + colId + '"]').addClass('matrix-col-selected');
             },
             mouseleave: function() {
                 $('.matrix-table-col.matrix-col-selected').removeClass('matrix-col-selected');
