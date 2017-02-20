@@ -172,7 +172,6 @@
 
                 });
 
-                // $compile(criteriaEl.find('[data-criterion-id]'))($scope);
             });
 
 
@@ -187,6 +186,14 @@
                     // console.log(obj);
                     $('#decision-row-' + el.decision.decisionId).find('.matrix-table-col-content[data-characteristic-id="' + obj.characteristicId + '"]').html(html);
                     // $('#decision-row-' + el.decision.decisionId).find('.matrix-table-col-content[data-characteristic-id="' + obj.characteristicId + '"]').html($compile(html)($scope));
+                });
+            });
+
+            // Set Aside row height
+            $('#matrix-table-content .matrix-table-item').each(function(index) {
+                var elH = $(this).outerHeight();
+                $('.matrix-table-aside .matrix-table-item').eq(index).css({
+                    'height': elH + 'px'
                 });
             });
 
@@ -214,6 +221,26 @@
         //     });
 
         // });
+
+
+        var
+            tableBody,
+            tableHeader,
+            tableAside;
+
+        tableBody = $('#matrix-table').find('.matrix-table-body');
+        tableAside = $('#matrix-table').find('.matrix-table-aside');
+        tableHeader = $('#matrix-table').find('.matrix-table-header');
+
+        $(tableBody).scroll(function() {
+            $(tableAside).css({
+                'margin-top': -$(tableBody).scrollTop()
+            });
+            $(tableHeader).css({
+                'margin-left': -$(tableBody).scrollLeft()
+            });
+        });
+
 
     }
 })();

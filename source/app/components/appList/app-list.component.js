@@ -93,7 +93,7 @@
                 target = event.target,
                 y;
 
-            target = event.target
+            target = event.target;
             if (event.rect.height <= AppListConstant.ELEMENT_HEIGHT) return;
 
             y = (parseFloat(target.getAttribute('data-y')) || 0);

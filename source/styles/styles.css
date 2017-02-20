@@ -631,11 +631,6 @@ h6,
 .matrix.decision .scroll-wrapper {
   top: 70px;
 }
-.matrix.decision .main-panel > div,
-.matrix .app-panel {
-  overflow-x: scroll;
-  overflow-y: auto;
-}
 .matrix .matrix-table-col.matrix-table-group {
   border-right: 0;
   border-left: 0;
@@ -800,6 +795,34 @@ h6,
 }
 .app-sorter .app-sorter-top.selected {
   color: #000;
+}
+.matrix-table-aside {
+  float: left;
+  width: 202px;
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+  background-color: #fff;
+  border-right: 1px solid #ebebeb;
+}
+.matrix-table-panel {
+  height: 100%;
+}
+.matrix-table-header {
+  overflow-x: hidden;
+  position: relative;
+  z-index: 3;
+  background-color: #fff;
+  border-bottom: 1px solid #ebebeb;
+  box-shadow: 0 0 11px rgba(0, 0, 0, 0.2);
+}
+.matrix-table-body {
+  float: left;
+  width: calc(100% - 202px);
+  overflow: scroll;
+  height: calc(100vh - 250px);
+  position: relative;
+  z-index: 1;
 }
 .col-sm-padding {
   padding-left: 3px !important;
