@@ -192,6 +192,10 @@
             // Set Aside row height
             $('#matrix-table-content .matrix-table-item').each(function(index) {
                 var elH = $(this).outerHeight();
+
+                $(this).css({
+                    'height': elH + 'px'
+                });
                 $('.matrix-table-aside .matrix-table-item').eq(index).css({
                     'height': elH + 'px'
                 });
@@ -213,33 +217,31 @@
         }, ".matrix-table-col");
 
 
-        // // Set table as col depend of table content
-        // $('.js-matrix-table .matrix-table-content > .matrix-table-item:first() .matrix-table-col').each(function(index, val) {
-        //     var colWidth = $(this).outerWidth() + 'px';
-        //     $('.js-matrix-table .matrix-table-header .matrix-table-col').eq(index).css({
-        //         'width': colWidth
-        //     });
-
-        // });
-
-
+        // TODO: Mozilla FF has warning about scroll event
+        // Table scroll
         var
             tableBody,
             tableHeader,
             tableAside;
 
-        tableBody = $('#matrix-table').find('.matrix-table-body');
+        tableBody = $('#matrix-table-body');
+        tableContent = $('#matrix-table-content');
         tableAside = $('#matrix-table').find('.matrix-table-aside');
-        tableHeader = $('#matrix-table').find('.matrix-table-header');
+        tableHeader = $('#matrix-table').find('.matrix-table-header .scroll-group');
 
-        $(tableBody).scroll(function() {
+        function scrollHandler() {
+            // $(tableAside).css({
+            //     'margin-top': -$(tableBody).scrollTop()
+            // });
             $(tableAside).css({
-                'margin-top': -$(tableBody).scrollTop()
+                'margin-left': $(tableBody).scrollLeft()
             });
             $(tableHeader).css({
                 'margin-left': -$(tableBody).scrollLeft()
             });
-        });
+        }
+
+        $(tableBody).on('scroll', scrollHandler);
 
 
     }

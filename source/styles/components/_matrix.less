@@ -97,17 +97,19 @@
 
 .matrix-table-item {
     display: block;
-    border: 1px solid transparent;
-    border-bottom: 1px solid @gray-light;
-    margin: 0 0 -1px 0;
     position: relative;
     z-index: 1;
-    &:hover {
-        border-color: @basic-active;
-        z-index: 2;
-    }
     &.selcted {
         border-color: @basic-active;
+    }
+    & > .matrix-table-row {
+        border: 1px solid transparent;
+        border-bottom: 1px solid @gray-light;
+        margin: 0 0 -1px 0;
+        &:hover {
+            border-color: @basic-active;
+            z-index: 2;
+        }
     }
 }
 
@@ -229,6 +231,7 @@
     font-weight: 600;
     font-size: 14px;
     width: 120px; // TODO: avoid
+    max-width: 120px;
 }
 
 // Sorter
@@ -277,7 +280,7 @@
 // Scrollable table
 .matrix-table-aside {
     float: left;
-    width: 202px;
+    width: 203px;
     // box-shadow: 0px 0 11px rgba(0, 0, 0, 0.2);
     overflow: hidden;
     position: relative;
@@ -304,9 +307,38 @@
 
 .matrix-table-body {
     float: left;
-    width: calc(~"100% - 202px");
+    width: 100%;
     overflow: scroll;
     height: calc(~"100vh - 250px");
     position: relative;
     z-index: 1;
+    // .matrix-table-content {
+        padding-left: 202px;
+        .matrix-table-aside {
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 2;
+            width: 202px;
+            // height: 100%;
+        }        
+    // }
+}
+
+.matrix-table-header {
+    & > .matrix-table-row {
+        position: relative;
+        padding-left: 202px;
+    }
+    .matrix-table-group-name {
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 2;
+        width: 202px;
+    }
+    .scroll-group {
+        position: relative;
+        z-index: 1;
+    }
 }

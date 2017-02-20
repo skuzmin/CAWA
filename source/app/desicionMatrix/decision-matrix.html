@@ -25,7 +25,7 @@
             <div class="matrix-table-header">
                 <div class="matrix-table-row">
                     <!-- TODO: Make Sticky -->
-                    <div class="matrix-table-col matrix-table-group">
+                    <div class="matrix-table-col matrix-table-group matrix-table-group-name">
                         <div class="matrix-table-group-title">
                             <!-- Empty Header -->
                         </div>
@@ -42,46 +42,48 @@
                     </div>
                     <!-- End Make Sticky -->
                     <!-- Criteria Header -->
-                    <div class="matrix-table-col matrix-table-group" ng-repeat="group in vm.criteriaGroups track by $index">
-                        <div class="matrix-table-group-title">
-                            {{group.name}}
-                        </div>
-                        <div class="matrix-table-row">
-                            <div class="matrix-table-col" ng-repeat="criteria in group.criteria | orderBy:'criterionId'" data-col-id="criteria-{{criteria.criterionId}}">
-                                <div class="matrix-table-title app-sorter-wrapper">
-                                    {{criteria.name}}
-                                    <div class="app-sorter">
-                                        <span class="app-sorter-top glyphicon glyphicon-triangle-top"></span>
-                                        <span class="app-sorter-bottom glyphicon glyphicon-triangle-bottom"></span>
+                    <div class="scroll-group">
+                        <div class="matrix-table-col matrix-table-group" ng-repeat="group in vm.criteriaGroups track by $index">
+                            <div class="matrix-table-group-title">
+                                {{group.name}}
+                            </div>
+                            <div class="matrix-table-row">
+                                <div class="matrix-table-col" ng-repeat="criteria in group.criteria | orderBy:'criterionId'" data-col-id="criteria-{{criteria.criterionId}}">
+                                    <div class="matrix-table-title app-sorter-wrapper">
+                                        {{criteria.name}}
+                                        <div class="app-sorter">
+                                            <span class="app-sorter-top glyphicon glyphicon-triangle-top"></span>
+                                            <span class="app-sorter-bottom glyphicon glyphicon-triangle-bottom"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- End Criteria Header -->
-                    <!-- characteristic Header -->
-                    <div class="matrix-table-col matrix-table-group" ng-repeat="group in vm.characteristicGroups track by $index">
-                        <div class="matrix-table-group-title">
-                            {{group.name}}
-                        </div>
-                        <div class="matrix-table-row">
-                            <div class="matrix-table-col" ng-repeat="characteristic in group.characteristics track by $index" data-col-id="characteristic-{{characteristic.characteristicId}}">
-                                <div class="matrix-table-title app-sorter-wrapper">{{characteristic.name}}
-                                    <div class="app-sorter">
-                                        <span class="app-sorter-top glyphicon glyphicon-triangle-top"></span>
-                                        <span class="app-sorter-bottom glyphicon glyphicon-triangle-bottom"></span>
+                        <!-- End Criteria Header -->
+                        <!-- characteristic Header -->
+                        <div class="matrix-table-col matrix-table-group" ng-repeat="group in vm.characteristicGroups track by $index">
+                            <div class="matrix-table-group-title">
+                                {{group.name}}
+                            </div>
+                            <div class="matrix-table-row">
+                                <div class="matrix-table-col" ng-repeat="characteristic in group.characteristics track by $index" data-col-id="characteristic-{{characteristic.characteristicId}}">
+                                    <div class="matrix-table-title app-sorter-wrapper">{{characteristic.name}}
+                                        <div class="app-sorter">
+                                            <span class="app-sorter-top glyphicon glyphicon-triangle-top"></span>
+                                            <span class="app-sorter-bottom glyphicon glyphicon-triangle-bottom"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <!-- End characteristic Header -->
                     </div>
-                    <!-- End characteristic Header -->
                 </div>
             </div>
             <!-- End Header -->
 
             <!-- Table Aside -->
-            <div class="matrix-table-aside">
+<!--             <div class="matrix-table-aside">
                 <div class="matrix-table-item" ng-repeat="item in vm.decisionMatrixList.decisionMatrixs track by item.decision.decisionId">
                     <div class="matrix-table-row" id="decision-name-row-{{item.decision.decisionId}}">
                         <div class="matrix-table-col matrix-table-col-name" data-col-id="col-name">
@@ -89,12 +91,25 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <!-- End Table Aside -->
 
             <!-- Table Body -->
-            <div class="matrix-table-body">
+            <div id="matrix-table-body" class="matrix-table-body">
                 <!-- TODO: set width for all cols -->
+
+                <!-- Table Aside -->
+                <div class="matrix-table-aside">
+                    <div class="matrix-table-item" ng-repeat="item in vm.decisionMatrixList.decisionMatrixs track by item.decision.decisionId">
+                        <div class="matrix-table-row" id="decision-name-row-{{item.decision.decisionId}}">
+                            <div class="matrix-table-col matrix-table-col-name" data-col-id="col-name">
+                                <div class="matrix-table-col-content matrix-content-name">{{item.decision.name}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Table Aside -->
+
                 <!-- Table Content -->
                 <div id="matrix-table-content" class="matrix-table-content">
 
