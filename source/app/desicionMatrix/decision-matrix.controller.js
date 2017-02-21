@@ -201,6 +201,7 @@
                 });
             });
 
+            cloneTable();
         }
 
 
@@ -229,19 +230,56 @@
         tableAside = $('#matrix-table').find('.matrix-table-aside');
         tableHeader = $('#matrix-table').find('.matrix-table-header .scroll-group');
 
-        function scrollHandler() {
-            // $(tableAside).css({
-            //     'margin-top': -$(tableBody).scrollTop()
-            // });
+        function scrollHandler(scrollTop, scrollLeft) {
+            $(tableContent).css({
+                'margin-top': -scrollTop,
+                'margin-left': -scrollLeft
+            });
             $(tableAside).css({
-                'margin-top': -$(tableBody).scrollTop()
+                'margin-top': -scrollTop,
+                // 'margin-left': scrollLeft
             });
             $(tableHeader).css({
-                'margin-left': -$(tableBody).scrollLeft()
+                'margin-left': -scrollLeft
             });
         }
 
-        $(tableBody).scroll(scrollHandler);
+        // TODO: move table content outside this block
+        function cloneTable() {
+
+            // $('#matrix-table-content').css({
+            //     'position': 'fixed'
+            // });
+
+            $('#matrix-table-content-copy').css({
+                'width': tableBody.outerWidth(),
+                'height': tableContent.outerHeight()
+            });
+
+            $('#matrix-table-content').css({
+                'position': 'absolute'
+            });
+
+            $(tableContent).appendTo("#panel");
+        }
+        // $(tableBody).scroll(scrollHandler);
+        //
+        var ticking = false;
+        document.getElementById('matrix-table-body').addEventListener('scroll', function(e) {
+
+            var _this = this;
+            if (!ticking) {
+                var elScrollTop, elScrollLeft;
+                elScrollTop = _this.scrollTop;
+                elScrollLeft = _this.scrollLeft;
+
+                window.requestAnimationFrame(function() {
+                    scrollHandler(elScrollTop, elScrollLeft);
+                    ticking = false;
+                });
+            }
+            ticking = true;
+        });
 
 
     }

@@ -278,7 +278,7 @@
 
 
 // Scrollable table
-@matrix-aside-width: 203px;
+@matrix-aside-width: 202px;
 .matrix-table-aside {
     float: left;
     width: @matrix-aside-width;
@@ -306,35 +306,52 @@
     box-shadow: 0 0 11px rgba(0,0,0,0.2);
 }
 
+.matrix-table-body-wrapper {
+    // overflow-x: auto;
+}
+
 .matrix-table-body {
     float: left;
     width: 100%;
-    overflow: scroll;
+    // overflow: scroll;
+    // overflow: hidden;
     height: calc(~"100vh - 250px");
     width: calc(~"100% - @{matrix-aside-width}");
     position: relative;
     z-index: 1;
-//     padding-left: 202px;
-//     .matrix-table-aside {
-//         position: absolute;
-//         left: 0;
-//         top: 0;
-//         z-index: 2;
-//         width: 202px;
-//     }
+    // margin-left: @matrix-aside-width;
+    .matrix-table-aside {
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 2;
+        width: @matrix-aside-width;
+        margin-left: 0;
+    }
+    .matrix-table-content {
+        // left: @matrix-aside-width;
+        top: 0;
+    }
 }
+
+.matrix-table-body-scroll {
+    overflow: scroll;
+    width: 100%;
+    height: 100%;
+}
+
 
 .matrix-table-header {
     & > .matrix-table-row {
         position: relative;
-        padding-left: 202px;
+        padding-left: @matrix-aside-width;
     }
     .matrix-table-group-name {
         position: absolute;
         left: 0;
         top: 0;
         z-index: 2;
-        width: 202px;
+        width: @matrix-aside-width;
     }
     .scroll-group {
         position: relative;
