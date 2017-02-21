@@ -278,15 +278,16 @@
 
 
 // Scrollable table
+@matrix-aside-width: 203px;
 .matrix-table-aside {
     float: left;
-    width: 203px;
+    width: @matrix-aside-width;
     // box-shadow: 0px 0 11px rgba(0, 0, 0, 0.2);
     overflow: hidden;
     position: relative;
     z-index: 2;
     background-color: #fff;
-     border-right: 1px solid @gray-light;
+    border-right: 1px solid @gray-light;
 }
 
 .matrix-table-content {
@@ -310,19 +311,17 @@
     width: 100%;
     overflow: scroll;
     height: calc(~"100vh - 250px");
+    width: calc(~"100% - @{matrix-aside-width}");
     position: relative;
     z-index: 1;
-    // .matrix-table-content {
-        padding-left: 202px;
-        .matrix-table-aside {
-            position: absolute;
-            left: 0;
-            top: 0;
-            z-index: 2;
-            width: 202px;
-            // height: 100%;
-        }        
-    // }
+//     padding-left: 202px;
+//     .matrix-table-aside {
+//         position: absolute;
+//         left: 0;
+//         top: 0;
+//         z-index: 2;
+//         width: 202px;
+//     }
 }
 
 .matrix-table-header {

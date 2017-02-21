@@ -234,14 +234,14 @@
             //     'margin-top': -$(tableBody).scrollTop()
             // });
             $(tableAside).css({
-                'margin-left': $(tableBody).scrollLeft()
+                'margin-top': -$(tableBody).scrollTop()
             });
             $(tableHeader).css({
                 'margin-left': -$(tableBody).scrollLeft()
             });
         }
 
-        $(tableBody).on('scroll', scrollHandler);
+        $(tableBody).scroll(scrollHandler);
 
 
     }
