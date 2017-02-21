@@ -19,6 +19,7 @@
 
         vm.decisionId = $stateParams.id;
         vm.decision = decisionBasicInfo || {};
+        vm.tableWidth = '100%';
         $rootScope.pageTitle = vm.decision.name + ' Matrix | DecisionWanted';
 
         vm.orderByDecisionProperty = orderByDecisionProperty;
@@ -189,21 +190,43 @@
                 });
             });
 
-            // Set Aside row height
-            $('#matrix-table-content .matrix-table-item').each(function(index) {
-                var elH = $(this).outerHeight();
+            // TODO: optimize | Set Aside row height
+            // JS version
+            var matrixCols = document.getElementsByClassName('matrix-table-item-content');
+            for (var i = 0; i < matrixCols.length; i++) {
+                var el = matrixCols[i];
+                var elH = parseFloat(el.clientHeight); // Get wrong height
 
-                $(this).css({
+                el.style.height = elH + 'px';
+
+                $('.matrix-table-aside .matrix-table-item').eq(i).css({
                     'height': elH + 'px'
                 });
-                $('.matrix-table-aside .matrix-table-item').eq(index).css({
-                    'height': elH + 'px'
-                });
-            });
+            }
+            // Jquery version
+            // $('#matrix-table-content .matrix-table-item').each(function(index) {
+            //     var elH = $(this).outerHeight();
 
-            cloneTable();
+            //     $(this).css({
+            //         'height': elH + 'px'
+            //     });
+            //     $('.matrix-table-aside .matrix-table-item').eq(index).css({
+            //         'height': elH + 'px'
+            //     });
+            // });
+
+            // TODO: count all columns
+            // console.log(vm.characteristicGroups[0].characteristics);
+            vm.tableWidth = (vm.criteriaGroups[0].criteria.length + vm.characteristicGroups[0].characteristics.length)*120 + 'px';
+            martrixScroll.refresh();
+            martrixScroll.on('scroll', updatePosition);
         }
 
+        function updatePosition() {
+            var _this = this;
+            // console.log(this.y, this.x);
+            scrollHandler(_this.y, _this.x);
+        }
 
         // Hover for vertical lines
         $(document).on({
@@ -225,62 +248,40 @@
             tableHeader,
             tableAside;
 
-        tableBody = $('#matrix-table-body');
-        tableContent = $('#matrix-table-content');
+        // tableBody = $('#matrix-table-body');
+        // tableContent = $('#matrix-table-content');
         tableAside = $('#matrix-table').find('.matrix-table-aside');
         tableHeader = $('#matrix-table').find('.matrix-table-header .scroll-group');
 
         function scrollHandler(scrollTop, scrollLeft) {
-            $(tableContent).css({
-                'margin-top': -scrollTop,
-                'margin-left': -scrollLeft
-            });
             $(tableAside).css({
-                'margin-top': -scrollTop,
-                // 'margin-left': scrollLeft
+                'top': scrollTop,
+                // 'left': scrollLeft
             });
-            $(tableHeader).css({
-                'margin-left': -scrollLeft
-            });
-        }
-
-        // TODO: move table content outside this block
-        function cloneTable() {
-
-            // $('#matrix-table-content').css({
-            //     'position': 'fixed'
+            // $(tableContent).css({
+            //     // 'top': -scrollTop,
+            //     // 'left': -scrollLeft
             // });
-
-            $('#matrix-table-content-copy').css({
-                'width': tableBody.outerWidth(),
-                'height': tableContent.outerHeight()
+            $(tableHeader).css({
+                'left': scrollLeft
             });
-
-            $('#matrix-table-content').css({
-                'position': 'absolute'
-            });
-
-            $(tableContent).appendTo("#panel");
         }
-        // $(tableBody).scroll(scrollHandler);
-        //
-        var ticking = false;
-        document.getElementById('matrix-table-body').addEventListener('scroll', function(e) {
 
-            var _this = this;
-            if (!ticking) {
-                var elScrollTop, elScrollLeft;
-                elScrollTop = _this.scrollTop;
-                elScrollLeft = _this.scrollLeft;
-
-                window.requestAnimationFrame(function() {
-                    scrollHandler(elScrollTop, elScrollLeft);
-                    ticking = false;
-                });
-            }
-            ticking = true;
+        // Custom scroll
+        var wrapper = document.getElementById('matrix-table-body');
+        var martrixScroll = new IScroll(wrapper, {
+            scrollbars: true,
+            scrollX: true,
+            scrollY: true,
+            mouseWheel: true,
+            interactiveScrollbars: true,
+            shrinkScrollbars: 'scale',
+            fadeScrollbars: false,
+            probeType: 3,
+            // momentum: true,
+            useTransition: false,
+            disablePointer: true
         });
-
 
     }
 })();

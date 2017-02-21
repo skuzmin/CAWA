@@ -1,16 +1,19 @@
 <div class="home">
-	<div class="row search-box">
-		<div class="col-md-offset-2 col-md-6">
-			<input class="form-control" type="text" ng-model="vm.searchText"/>
-		</div>
-		<div class="col-md-4">
-			<a href class="btn btn-default" ng-click="vm.search()">Search</a>
-		</div>
-	</div>
-	<div class="row search-results" ng-show="vm.showTrigger">
-		<div class="col-md-offset-2 col-md-8 col-md-offset-2">RESULTS for {{vm.searchText}}</div>
-		<div class="col-md-offset-2 col-md-8 col-md-offset-2"><a href ui-sref="decisions.view({id: vm.searchText || 2512})">DECISION</a> 
-		| <a href ui-sref="decisions.matrix({id: vm.searchText || 2512})">DECISION Matrix</a>
-		</div>
-	</div>
+    <div class="row search-box">
+        <div class="col-md-offset-3 col-md-6">
+            <div class="input-group">
+                <input class="form-control" type="text" ng-model="vm.searchText" />
+                <span class="input-group-btn">
+        					<a href class="btn btn-default" ng-click="vm.search()">
+        					<span class="glyphicon glyphicon-search"></span> Search</a>
+                </span>
+            </div>
+            <div class="search-results text-left" ng-show="vm.showTrigger">
+                <h3>RESULTS for {{vm.searchText}}</h3>
+                <ul class="list-group">
+                    <li class="list-group-item"><a href ui-sref="decisions.view({id: vm.searchText || 4825})">DECISION</a> | <a href ui-sref="decisions.matrix({id: vm.searchText || 4825})">DECISION Matrix</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
