@@ -9,7 +9,10 @@
             <app-paginator></app-paginator>
         </div>
         <div class="col-sm-1">
-            <a ui-sref="decisions.view({id: vm.decisionId})" class="btn pull-right"><span class="glyphicon glyphicon-th-list"></span> List view</a>
+            <div class="btn-group btn-group-sm btns-view">
+                    <a ui-sref="decisions.view({id: vm.decisionId})" ui-sref-active="btn-primary" class="btn btn-default"><span class="glyphicon glyphicon-th-list"></span> List</a>
+                    <a ui-sref="decisions.matrix({id: vm.decisionId})" ui-sref-active="btn-primary" class="btn btn-default"><span class="glyphicon glyphicon-th"></span> Matrix</a>
+            </div>
         </div>
         <div class="col-md-3 col-sm-3">
             <input class="form-control search-input" type="text" />
@@ -131,7 +134,7 @@
                 <!-- End Table Content -->
                 <div id="matrix-table-content-copy"></div>
             </div>
-        <!-- End Table Body -->
+            <!-- End Table Body -->
+        </div>
     </div>
-</div>
 </div>

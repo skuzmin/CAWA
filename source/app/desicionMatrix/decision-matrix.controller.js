@@ -279,7 +279,7 @@
             fadeScrollbars: false,
             probeType: 3,
             // momentum: true,
-            useTransition: false,
+            // useTransition: false,
             disablePointer: true
         });
 

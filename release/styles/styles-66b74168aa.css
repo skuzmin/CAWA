@@ -579,6 +579,9 @@ h6,
   height: 100%;
   padding-right: 6px;
 }
+.btns-view {
+  margin: 5px 0;
+}
 .app-rating-votes {
   display: block;
   margin-right: 10px;
