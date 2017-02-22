@@ -21,6 +21,32 @@
         vm.decision = decisionBasicInfo || {};
         $rootScope.pageTitle = vm.decision.name + ' Matrix | DecisionWanted';
 
+        vm.toggleTargetHover = toggleTargetHover;
+
+        vm.toggleTargetHoverFlag = false;
+
+        function toggleTargetHover() {
+            // Hover for vertical lines
+            vm.toggleTargetHoverFlag = !vm.toggleTargetHoverFlag;
+            if (vm.toggleTargetHoverFlag) {
+                $('.matrix-table-col').on({
+                    mouseenter: function() {
+                        var colId = $(this).data('col-id');
+                        if (!colId) return;
+                        $('.matrix-table-col[data-col-id="' + colId + '"]').addClass('matrix-col-selected');
+                    },
+                    mouseleave: function() {
+                        $('.matrix-table-col.matrix-col-selected').removeClass('matrix-col-selected');
+                    }
+                });
+                $('body').addClass('target-hover');
+
+            } else {
+                $('.matrix-table-col').unbind('mouseenter').unbind('mouseleave');
+                $('body').removeClass('target-hover');
+            }
+        }
+
         vm.orderByDecisionProperty = orderByDecisionProperty;
 
         init();
@@ -184,8 +210,10 @@
                     // Pure JS
                     var comments = '<div class="app-item-additional-wrapper"><div class="app-item-comments">' + '<span class="glyphicon glyphicon-comment"></span> 0' + '</div></div>';
                     html = ratingDirective(obj.weight, obj.totalVotes) + comments;
-                    criteriaEl.find('.matrix-table-col-content[data-criterion-id="' + obj.criterionId + '"]').html(html);
-                    criteriaEl.find('.matrix-table-col-content[data-criterion-id="' + obj.criterionId + '"]').parent().removeClass('empty');
+
+                    var elCol = criteriaEl.find('.matrix-table-col-content[data-criterion-id="' + obj.criterionId + '"]');
+                    elCol.html(html);
+                    elCol.parent().removeClass('empty');
 
                 });
 
@@ -200,8 +228,10 @@
                 _.map(characteristics, function(obj, index) {
                     var comments = '<div class="app-item-additional-wrapper"><div class="app-item-comments">' + '<span class="glyphicon glyphicon-comment"></span> 0' + '</div></div>';
                     var html = obj.value + comments;
-                    $('#decision-row-' + el.decision.decisionId).find('.matrix-table-col-content[data-characteristic-id="' + obj.characteristicId + '"]').html(html);
-                    $('#decision-row-' + el.decision.decisionId).find('.matrix-table-col-content[data-characteristic-id="' + obj.characteristicId + '"]').parent().removeClass('empty');
+
+                    var elCol = $('#decision-row-' + el.decision.decisionId).find('.matrix-table-col-content[data-characteristic-id="' + obj.characteristicId + '"]');
+                    elCol.html(html);
+                    elCol.parent().removeClass('empty');
                     // $('#decision-row-' + el.decision.decisionId).find('.matrix-table-col-content[data-characteristic-id="' + obj.characteristicId + '"]').html($compile(html)($scope));
                 });
             });
@@ -236,18 +266,6 @@
             var _this = this;
             scrollHandler(_this.y, _this.x);
         }
-
-        // Hover for vertical lines
-        $(document).on({
-            mouseenter: function() {
-                var colId = $(this).data('col-id');
-                if (!colId) return;
-                $('.matrix-table-col[data-col-id="' + colId + '"]').addClass('matrix-col-selected');
-            },
-            mouseleave: function() {
-                $('.matrix-table-col.matrix-col-selected').removeClass('matrix-col-selected');
-            }
-        }, ".matrix-table-col");
 
 
         // TODO: Mozilla FF has warning about scroll event

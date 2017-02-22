@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('app')
+        .module('app.core')
         .config(function($httpProvider) {
             $httpProvider.interceptors.push(appInterceptor);
         });

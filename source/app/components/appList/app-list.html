@@ -1,7 +1,7 @@
 <div class="app-list-wrapper">
     <div class="app-list-container">
         <!-- TODO: change ng-mouseover or disable event when loading data; disable when scroll to avoid alot of calls -->
-        <div id="decision-{{ item.decisionId }}" ng-repeat="item in vm.list track by item.decisionId" class="list-item-sort app-resize-h" ng-class="{'selected' : item.isSelected, 'item-loading' : data.detailsSpinner}" ng-mouseover="vm.getDetails(item, $event)">
+        <div id="decision-{{ item.decisionId }}" ng-repeat="item in vm.list track by item.decisionId" class="list-item-sort app-resize-h angular-animate" ng-class="{'selected' : item.isSelected, 'item-loading' : data.detailsSpinner}" ng-mouseover="vm.getDetails(item, $event)">
             <!-- TODO: have bug when resize selected item unselect -->
             <div class="list-item-sort-content" ng-click="vm.selectDecision(item)">
                 <strong>{{ item.decisionId }}</strong>
