@@ -176,15 +176,14 @@
                 var criteriaEl = $('#decision-row-' + el.decision.decisionId);
 
                 _.map(criteria, function(obj, index) {
-                    var criteriaStore = obj;
 
                     // Angular
                     // var html = '<rating-star value="' + obj.weight + '" total-votes="' + obj.totalVotes + '" ng-show="true"></rating-star>';
                     // criteriaEl.find('.matrix-table-col-content[data-criterion-id="' + obj.criterionId + '"]').html(html); //.addClass('color-' + obj.weight);
 
                     // Pure JS
-                    var comments = '<div class="app-item-comments">' + '<span class="glyphicon glyphicon-comment"></span> 0' + '<div>';
-                    var html = ratingDirective(obj.weight, obj.totalVotes) + comments;
+                    var comments = '<div class="app-item-comments">' + '<span class="glyphicon glyphicon-comment"></span> 0' + '<div>',
+                        html = ratingDirective(obj.weight, obj.totalVotes) + comments;
                     criteriaEl.find('.matrix-table-col-content[data-criterion-id="' + obj.criterionId + '"]').html(html);
 
                 });
@@ -198,9 +197,7 @@
                 var characteristics = el.characteristics;
 
                 _.map(characteristics, function(obj, index) {
-                    var criteriaStore = obj;
                     var html = obj.value;
-                    // console.log(obj);
                     $('#decision-row-' + el.decision.decisionId).find('.matrix-table-col-content[data-characteristic-id="' + obj.characteristicId + '"]').html(html);
                     // $('#decision-row-' + el.decision.decisionId).find('.matrix-table-col-content[data-characteristic-id="' + obj.characteristicId + '"]').html($compile(html)($scope));
                 });
@@ -234,7 +231,6 @@
 
         function updatePosition() {
             var _this = this;
-            // console.log(this.y, this.x);
             scrollHandler(_this.y, _this.x);
         }
 
@@ -258,20 +254,13 @@
             tableHeader,
             tableAside;
 
-        // tableBody = $('#matrix-table-body');
-        // tableContent = $('#matrix-table-content');
-        tableAside = $('#matrix-table').find('.matrix-table-aside');
-        tableHeader = $('#matrix-table').find('.matrix-table-header .scroll-group');
+        tableAside = $('#matrix-table .matrix-table-aside');
+        tableHeader = $('#matrix-table .matrix-table-header .scroll-group');
 
         function scrollHandler(scrollTop, scrollLeft) {
             $(tableAside).css({
                 'top': scrollTop,
-                // 'left': scrollLeft
             });
-            // $(tableContent).css({
-            //     // 'top': -scrollTop,
-            //     // 'left': -scrollLeft
-            // });
             $(tableHeader).css({
                 'left': scrollLeft
             });
@@ -289,7 +278,7 @@
             fadeScrollbars: false,
             probeType: 3,
             // momentum: true,
-            useTransition: false,
+            useTransition: true,
             disablePointer: true
         });
 
