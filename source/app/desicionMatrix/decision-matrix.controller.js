@@ -182,9 +182,10 @@
                     // criteriaEl.find('.matrix-table-col-content[data-criterion-id="' + obj.criterionId + '"]').html(html); //.addClass('color-' + obj.weight);
 
                     // Pure JS
-                    var comments = '<div class="app-item-comments">' + '<span class="glyphicon glyphicon-comment"></span> 0' + '<div>',
-                        html = ratingDirective(obj.weight, obj.totalVotes) + comments;
+                    var comments = '<div class="app-item-additional-wrapper"><div class="app-item-comments">' + '<span class="glyphicon glyphicon-comment"></span> 0' + '</div></div>';
+                    html = ratingDirective(obj.weight, obj.totalVotes) + comments;
                     criteriaEl.find('.matrix-table-col-content[data-criterion-id="' + obj.criterionId + '"]').html(html);
+                    criteriaEl.find('.matrix-table-col-content[data-criterion-id="' + obj.criterionId + '"]').parent().removeClass('empty');
 
                 });
 
@@ -197,8 +198,10 @@
                 var characteristics = el.characteristics;
 
                 _.map(characteristics, function(obj, index) {
-                    var html = obj.value;
+                    var comments = '<div class="app-item-additional-wrapper"><div class="app-item-comments">' + '<span class="glyphicon glyphicon-comment"></span> 0' + '</div></div>';
+                    var html = obj.value + comments;
                     $('#decision-row-' + el.decision.decisionId).find('.matrix-table-col-content[data-characteristic-id="' + obj.characteristicId + '"]').html(html);
+                    $('#decision-row-' + el.decision.decisionId).find('.matrix-table-col-content[data-characteristic-id="' + obj.characteristicId + '"]').parent().removeClass('empty');
                     // $('#decision-row-' + el.decision.decisionId).find('.matrix-table-col-content[data-characteristic-id="' + obj.characteristicId + '"]').html($compile(html)($scope));
                 });
             });

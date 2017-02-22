@@ -69,6 +69,10 @@
 
     function DecisionResolver(DecisionDataService, $stateParams, $state, $rootScope, $location) {
         return DecisionDataService.getDecisionInfo($stateParams.id).then(function(result) {
+            if (result.error && result.error.code === 404) {
+                console.log(result.error);
+                $state.go('404');
+            }
             var stateListener = $rootScope.$on('$stateChangeSuccess',
                 function(event, toState, toParams, fromState, fromParams) {
                     // TODO: share data with Criteria and Characteristics Avoid additional API calls
@@ -81,6 +85,7 @@
 
                     //SLUG for Decision page
                     //Always set correct slug from server
+
                     decisionSlug = result.nameSlug ? result.nameSlug : '';
 
                     $stateParams.slug = result.nameSlug;

@@ -72,6 +72,22 @@ a:focus {
   margin-left: 15px;
   font-size: 17px;
 }
+.navbar-brand a {
+  -webkit-transition: color 0.3s ease;
+  -moz-transition: color 0.3s ease;
+  -ms-transition: color 0.3s ease;
+  -o-transition: color 0.3s ease;
+  transition: color 0.3s ease;
+}
+.navbar-brand a .app-light {
+  color: #ebebeb;
+}
+.navbar-brand a:hover {
+  color: #ebebeb;
+}
+.navbar-brand a:hover .app-light {
+  color: #ebebeb;
+}
 .app-footer {
   height: 50px;
   background-color: #FFF;
@@ -582,16 +598,19 @@ h6,
 .btns-view {
   margin: 5px 0;
 }
-.app-rating-votes {
-  display: block;
-  margin-right: 10px;
-  margin: 0;
-  padding: 0 4px;
-}
-.app-rating-votes .glyphicon {
+.matrix .app-rating-star-wrapper {
   display: inline-block;
-  margin: 0 3px;
-  color: #7f8c8d;
+}
+.matrix .app-rating-votes {
+  display: inline-block;
+  margin: 0;
+}
+.matrix .app-rating-votes.empty {
+  margin-top: 20px;
+}
+.matrix .app-rating-votes .glyphicon {
+  display: inline-block;
+  margin: 0 2px;
 }
 .matrix-table-col-name {
   background: #FFF;
@@ -601,10 +620,13 @@ h6,
 }
 .matrix.decision .app-rating-votes {
   display: inline-block;
-  margin-right: 10px;
   margin: 0;
-  border-right: 1px solid #ebebeb;
-  padding: 4px 8px;
+  float: right;
+  padding: 0;
+  color: #7f8c8d;
+}
+.matrix.decision .app-rating-votes:hover {
+  color: #226eb1;
 }
 .matrix .app-item-comments {
   text-align: right;
@@ -612,7 +634,13 @@ h6,
   margin: 0;
   color: #7f8c8d;
   font-size: 13px;
-  padding: 4px 8px;
+  padding: 0;
+}
+.matrix .app-item-comments:hover {
+  color: #226eb1;
+}
+.matrix .app-item-comments.empty {
+  margin-top: 20px;
 }
 .matrix .app-item-comments span {
   display: inline-block;
@@ -682,8 +710,7 @@ h6,
 }
 .matrix-table-row .glyphicon {
   display: inline-block;
-  margin: 0 3px;
-  color: #7f8c8d;
+  margin: 0 2px;
 }
 .matrix-table-col-content {
   font-size: 13px;
@@ -709,9 +736,19 @@ h6,
 .matrix-table-col-content.color-7 {
   background-color: #fc0d1b;
 }
+.app-item-additional-wrapper {
+  display: inline-block;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 12;
+}
 .matrix-table-col-content {
-  padding: 4px 8px;
+  padding: 2px 4px 24px 4px;
   width: 120px;
+  position: relative;
+  height: 100%;
 }
 .matrix-content-name {
   width: 200px;
@@ -724,6 +761,7 @@ h6,
   border-left: 1px solid transparent;
   border-right: 1px solid #ebebeb;
   background: #FFF;
+  vertical-align: top;
 }
 .matrix-table-col.matrix-col-selected {
   border-left-color: #226eb1;

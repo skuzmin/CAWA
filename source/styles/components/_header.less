@@ -36,7 +36,7 @@
         }
         .link {
             padding: 15px 15px;
-            display: block;            
+            display: block;
             &:hover {
                 background-color: darken(@header-background, 20%);
             }
@@ -49,4 +49,23 @@
     margin-left: 15px;
     font-size: 17px;
     // font-weight: 600;
+}
+
+.navbar-brand {
+    a {
+        -webkit-transition: color 0.3s ease;
+           -moz-transition: color 0.3s ease;
+            -ms-transition: color 0.3s ease;
+             -o-transition: color 0.3s ease;
+                transition: color 0.3s ease;
+        .app-light {
+            color: @gray-light;
+        }
+        &:hover {
+            color: @gray-light;
+            .app-light {
+                color: @gray-light;
+            }
+        }        
+    }
 }
