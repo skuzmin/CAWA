@@ -6,9 +6,9 @@
         .module('app.decision')
         .controller('DecisionMatrixController', DecisionMatrixController);
 
-    DecisionMatrixController.$inject = ['DecisionDataService', 'DecisionSharedService', '$stateParams', 'DecisionNotificationService', 'decisionBasicInfo', '$rootScope', '$compile', '$scope'];
+    DecisionMatrixController.$inject = ['DecisionDataService', 'DecisionSharedService', '$stateParams', 'DecisionNotificationService', 'decisionBasicInfo', '$rootScope', '$compile', '$scope', '$q'];
 
-    function DecisionMatrixController(DecisionDataService, DecisionSharedService, $stateParams, DecisionNotificationService, decisionBasicInfo, $rootScope, $compile, $scope) {
+    function DecisionMatrixController(DecisionDataService, DecisionSharedService, $stateParams, DecisionNotificationService, decisionBasicInfo, $rootScope, $compile, $scope, $q) {
         var
             vm = this,
             isInitedSorters = false,
@@ -19,33 +19,48 @@
 
         vm.decisionId = $stateParams.id;
         vm.decision = decisionBasicInfo || {};
-        vm.tableWidth = '100%';
         $rootScope.pageTitle = vm.decision.name + ' Matrix | DecisionWanted';
 
         vm.orderByDecisionProperty = orderByDecisionProperty;
 
         init();
 
-        function init() {
-            console.log('Decision Matrix Controller');
-
-            // TODO: merge to one array with titles
+        function getCriteriaGroupsById() {
             // Criteria
-            DecisionDataService.getCriteriaGroupsById(vm.decisionId).then(function(result) {
+            return DecisionDataService.getCriteriaGroupsById(vm.decisionId).then(function(result) {
                 vm.criteriaGroups = result;
                 criteriaIds = _.map(result["0"].criteria, function(el) {
                     return el.name;
                 });
             });
+        }
 
+        function getCharacteristictsGroupsById() {
             // Characteristicts
-            DecisionDataService.getCharacteristictsGroupsById(vm.decisionId).then(function(result) {
+            return DecisionDataService.getCharacteristictsGroupsById(vm.decisionId).then(function(result) {
                 vm.characteristicGroups = result;
             });
+        }
+
+
+        function init() {
+            console.log('Decision Matrix Controller');
+
+            // TODO: merge to one array with titles
+
+
 
             //Get data for decision panel (main)
             vm.decisionsSpinner = true;
-            searchDecisionMatrix(vm.decisionId);
+
+
+            // Get criteria and characteristic
+            $q.all([getCriteriaGroupsById(), getCharacteristictsGroupsById()])
+                .then(function(values) {
+                    setMatrixTableWidth();
+                    searchDecisionMatrix(vm.decisionId);
+                });
+
 
             //Subscribe to notification events
             DecisionNotificationService.subscribeSelectCriterion(function(event, data) {
@@ -108,8 +123,9 @@
                 // console.log(result);
                 vm.decisionsSpinner = false;
                 setTimeout(function() {
-                    prepareDisplayMatrix(vm.decisionMatrixList);
                     initSorters();
+                    prepareDisplayMatrix(vm.decisionMatrixList);
+                    reinitMatrixScroller();
                 }, 0);
 
                 DecisionSharedService.filterObject.pagination.totalDecisions = result.totalDecisionMatrixs;
@@ -214,12 +230,6 @@
             //         'height': elH + 'px'
             //     });
             // });
-
-            // TODO: count all columns
-            // console.log(vm.characteristicGroups[0].characteristics);
-            vm.tableWidth = (vm.criteriaGroups[0].criteria.length + vm.characteristicGroups[0].characteristics.length)*120 + 'px';
-            martrixScroll.refresh();
-            martrixScroll.on('scroll', updatePosition);
         }
 
         function updatePosition() {
@@ -279,9 +289,23 @@
             fadeScrollbars: false,
             probeType: 3,
             // momentum: true,
-            // useTransition: false,
+            useTransition: false,
             disablePointer: true
         });
+
+        function reinitMatrixScroller() {
+            martrixScroll.refresh();
+            martrixScroll.on('scroll', updatePosition);
+        }
+
+        function setMatrixTableWidth() {
+            var criteriaGroupsCount,
+                characteristicGroupsCount;
+
+            criteriaGroupsCount = vm.criteriaGroups[0].criteria.length || 0;
+            characteristicGroupsCount = vm.characteristicGroups[0].characteristics.length || 0;
+            vm.tableWidth = (criteriaGroupsCount + characteristicGroupsCount) * 120 + 'px';
+        }
 
     }
 })();
