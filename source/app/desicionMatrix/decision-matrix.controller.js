@@ -146,12 +146,13 @@
         function searchDecisionMatrix(id) {
             DecisionDataService.searchDecisionMatrix(id, DecisionSharedService.getFilterObject()).then(function(result) {
                 vm.decisionMatrixList = result;
-                // console.log(result);
-                vm.decisionsSpinner = false;
+                initSorters();
                 setTimeout(function() {
-                    initSorters();
                     prepareDisplayMatrix(vm.decisionMatrixList);
                     reinitMatrixScroller();
+                    vm.decisionsSpinner = false;
+
+                    $scope.$apply();
                 }, 0);
 
                 DecisionSharedService.filterObject.pagination.totalDecisions = result.totalDecisionMatrixs;
@@ -238,15 +239,16 @@
 
             // TODO: optimize | Set Aside row height
             // JS version
+            //
+            var matrixAside = document.getElementsByClassName('matrix-table-aside');
             var matrixCols = document.getElementsByClassName('matrix-table-item-content');
             for (var i = 0; i < matrixCols.length; i++) {
-                var el = matrixCols[i];
-                var elH = parseFloat(el.clientHeight); // Get wrong height
+                var el = matrixCols[i],
+                    elH = parseFloat(el.clientHeight) + 'px';
 
-                el.style.height = elH + 'px';
-
+                el.style.height = elH;
                 $('.matrix-table-aside .matrix-table-item').eq(i).css({
-                    'height': elH + 'px'
+                    'height': elH
                 });
             }
             // Jquery version
@@ -298,9 +300,10 @@
             shrinkScrollbars: 'scale',
             fadeScrollbars: false,
             probeType: 3,
-            // momentum: true,
             useTransition: true,
-            disablePointer: true
+            disablePointer: true,
+            disableTouch: false,
+            disableMouse: false
         });
 
         function reinitMatrixScroller() {

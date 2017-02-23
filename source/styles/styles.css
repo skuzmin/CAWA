@@ -663,7 +663,6 @@ h6,
   border-left: 0;
 }
 .matrix-table-content {
-  min-width: 2000px;
   position: relative;
 }
 .matrix-table-content .matrix-table-col:hover {
@@ -846,6 +845,7 @@ h6,
   z-index: 2;
   background-color: #fff;
   border-right: 1px solid #ebebeb;
+  height: 100%;
 }
 .matrix-table-panel {
   height: 100%;
