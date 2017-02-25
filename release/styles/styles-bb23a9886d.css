@@ -15,6 +15,8 @@ a:focus {
   margin-top: 5px;
   padding-left: 25px;
   height: 30px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
 }
 .search-input-icon {
   position: absolute;
@@ -25,6 +27,7 @@ a:focus {
   line-height: 30px;
   padding: 0px;
   padding-left: 7px;
+  color: #7f8c8d;
 }
 .add-createria-btn {
   float: right;
@@ -402,7 +405,7 @@ a:focus {
 .decision .main-panel {
   position: relative;
   z-index: 2;
-  height: calc(100vh - 140px);
+  height: calc(100vh - 150px);
 }
 .decision .main-panel .divider {
   height: 100%;
@@ -546,15 +549,33 @@ body .app-main-panel .panels-2 .app-panel-right {
 .btn {
   -webkit-border-radius: 2px;
   border-radius: 2px;
+  -webkit-box-shadow: none;
+  box-shadow: none;
 }
 .btn-sm,
 .btn-group-sm > .btn {
   -webkit-border-radius: 2px;
   border-radius: 2px;
 }
+.btn-primary {
+  background-color: #226eb1;
+  border-color: #226eb1;
+}
+.pagination > li > a {
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+}
 .form-control {
   -webkit-border-radius: 2px;
   border-radius: 2px;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.form-control:focus,
+.form-control:hover {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  border-color: #226eb1;
 }
 .panel-group .panel {
   border-radius: 0;
@@ -612,6 +633,15 @@ h6,
   display: inline-block;
   margin: 0 2px;
 }
+.matrix-table-group-criteria .matrix-table-col {
+  cursor: pointer;
+}
+.matrix-table-group-criteria .matrix-table-col:hover {
+  background-color: #ebebeb;
+}
+.matrix-table-group-criteria .matrix-table-col.selected {
+  background-color: #d2d2d2;
+}
 .matrix-table-col-name {
   background: #FFF;
 }
@@ -646,7 +676,7 @@ h6,
   margin: 5px 0;
 }
 .matrix .main-panel {
-  height: calc(100vh - 145px);
+  height: calc(100vh - 195px);
   margin: 0 10px;
 }
 .matrix.decision .scroll-wrapper-header {
@@ -657,6 +687,11 @@ h6,
 }
 .matrix.decision .scroll-wrapper {
   top: 70px;
+}
+.martix-footer {
+  border-top: 1px solid #ebebeb;
+  padding: 7px 0;
+  height: 46px;
 }
 .matrix .matrix-table-col.matrix-table-group {
   border-right: 0;
@@ -861,7 +896,7 @@ h6,
   float: left;
   width: 100%;
   overflow: hidden;
-  height: calc(100vh - 216px);
+  height: calc(100vh - 266px);
   width: calc(100% - 203px);
   position: relative;
   z-index: 1;

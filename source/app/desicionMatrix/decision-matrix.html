@@ -5,27 +5,20 @@
                 {{vm.decision.name}}
             </h4>
         </div>
-        <div class="col-md-5 col-sm-5">
-            <app-paginator></app-paginator>
-        </div>
-        <div class="col-sm-1">
-            <div class="btn-group btn-group-sm btns-view">
-                <a ui-sref="decisions.view({id: vm.decisionId})" ui-sref-active="btn-primary" class="btn btn-default"><span class="glyphicon glyphicon-th-list"></span> List</a>
-                <a ui-sref="decisions.matrix({id: vm.decisionId})" ui-sref-active="btn-primary" class="btn btn-default"><span class="glyphicon glyphicon-th"></span> Matrix</a>
+        <div class="col-md-6 col-sm-6">
+            <div class="pull-right">
+                <div class="btn-group btn-group-sm btns-view">
+                    <a ng-click="vm.toggleTargetHover()" ng-class="{'btn-primary': vm.toggleTargetHoverFlag}" class="btn"><span class="glyphicon glyphicon-screenshot"></span> Target</a>
+                </div>
+                <div class="btn-group btn-group-sm btns-view">
+                    <a ui-sref="decisions.view({id: vm.decisionId})" ui-sref-active="btn-primary" class="btn btn-default"><span class="glyphicon glyphicon-th-list"></span> List</a>
+                    <a ui-sref="decisions.matrix({id: vm.decisionId})" ui-sref-active="btn-primary" class="btn btn-default"><span class="glyphicon glyphicon-th"></span> Matrix</a>
+                </div>
             </div>
         </div>
         <div class="col-md-3 col-sm-3">
-            <div class="row">
-                <div class="col-sm-4">
-                    <div class="btn-group btn-group-sm btns-view">
-                        <a ng-click="vm.toggleTargetHover()" ng-class="{'btn-primary': vm.toggleTargetHoverFlag}" class="btn btn-default"><span class="glyphicon glyphicon-screenshot"></span> Target</a>
-                    </div>
-                </div>
-                <div class="col-sm-8">
-                    <input class="form-control search-input" type="text" />
-                    <span class="glyphicon glyphicon-search search-input-icon"></span>
-                </div>
-            </div>
+            <input class="form-control search-input" type="text" />
+            <span class="glyphicon glyphicon-search search-input-icon"></span>
         </div>
     </div>
     <div id="matrix-table" class="main-panel matrix-table js-matrix-table">
@@ -53,14 +46,17 @@
                     <!-- End Make Sticky -->
                     <!-- Criteria Header -->
                     <div class="scroll-group">
-                        <div class="matrix-table-col matrix-table-group" ng-repeat="group in vm.criteriaGroups track by $index">
+                        <div class="matrix-table-col matrix-table-group matrix-table-group-criteria" ng-repeat="group in vm.criteriaGroups track by $index">
                             <div class="matrix-table-group-title">
                                 {{group.name}}
                             </div>
                             <div class="matrix-table-row">
-                                <div class="matrix-table-col" ng-repeat="criteria in group.criteria | orderBy:'criterionId'" data-col-id="criteria-{{criteria.criterionId}}">
+                                <div class="matrix-table-col" ng-repeat="criteria in group.criteria | orderBy:'criterionId'" data-col-id="criteria-{{criteria.criterionId}}" ng-click="vm.selectCriterion(criteria)" ng-class="{'selected' : criteria.isSelected}">
                                     <div class="matrix-table-title app-sorter-wrapper">
                                         {{criteria.name}}
+                                        <button class="hide btn btn-sm btn-default pull-right" ng-click="vm.editCriteriaCoefficient($event, criteria)">
+                                            <criteria-coefficient-indicator coefficient="criteria.coefficient"></criteria-coefficient-indicator>
+                                        </button>
                                         <div class="app-sorter">
                                             <span class="app-sorter-top glyphicon glyphicon-triangle-top"></span>
                                             <span class="app-sorter-bottom glyphicon glyphicon-triangle-bottom"></span>
@@ -93,10 +89,16 @@
             <!-- End Header -->
             <!-- Table Aside -->
             <div class="matrix-table-aside">
-                <div class="matrix-table-item" ng-repeat="item in vm.decisionMatrixList.decisionMatrixs track by item.decision.decisionId">
+                <div class="matrix-table-item" ng-repeat="item in vm.decisionMatrixList track by item.decision.decisionId">
                     <div class="matrix-table-row" id="decision-name-row-{{item.decision.decisionId}}">
                         <div class="matrix-table-col matrix-table-col-name" data-col-id="col-name">
-                            <div class="matrix-table-col-content matrix-content-name">{{item.decision.name}}</div>
+                            <div class="matrix-table-col-content matrix-content-name">
+                                {{item.decision.name}}
+                                <small class="pull-right hide" ng-show="item.criteriaCompliancePercentage">
+                                    Criteria compliance: 
+                                    {{item.criteriaCompliancePercentage}}
+                                </small>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -106,7 +108,7 @@
             <div id="matrix-table-body" class="matrix-table-body">
                 <!-- Table Content -->
                 <div id="matrix-table-content" class="matrix-table-content" style="width: {{vm.tableWidth}}">
-                    <div class="matrix-table-item matrix-table-item-content" ng-repeat="item in vm.decisionMatrixList.decisionMatrixs track by item.decision.decisionId">
+                    <div class="matrix-table-item matrix-table-item-content" ng-repeat="item in vm.decisionMatrixList track by item.decision.decisionId">
                         <div class="matrix-table-row" id="decision-row-{{item.decision.decisionId}}">
                             <!-- Criteria Content -->
                             <div class="matrix-table-col matrix-table-group matrix-criteria-group" ng-repeat="group in vm.criteriaGroups track by $index">
@@ -148,6 +150,13 @@
                 <div id="matrix-table-content-copy"></div>
             </div>
             <!-- End Table Body -->
+        </div>
+    </div>
+    <div class="martix-footer">
+        <div class="row">
+            <div class="col-sm-offset-3 col-sm-6">
+                <app-paginator></app-paginator>
+            </div>
         </div>
     </div>
 </div>
