@@ -280,8 +280,8 @@
 
         }
 
-        function updatePosition() {
-            var _this = this;
+        function updatePosition(martrixScroll) {
+            var _this = martrixScroll || this;
             scrollHandler(_this.y, _this.x);
         }
 
@@ -323,8 +323,11 @@
         });
 
         function reinitMatrixScroller() {
-            martrixScroll.refresh();
-            martrixScroll.on('scroll', updatePosition);
+            if (martrixScroll) {
+                martrixScroll.refresh();
+                martrixScroll.on('scroll', updatePosition);
+                updatePosition(martrixScroll);
+            }
         }
 
         function setMatrixTableWidth() {
