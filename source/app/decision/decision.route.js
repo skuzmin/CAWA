@@ -34,6 +34,15 @@
                     }
                 }
             })
+            .state('decisions.matrix.analysis', {
+                url: '/analysis/:analysisId',
+                templateUrl: 'app/decision/decision.html',
+                controller: 'DecisionController',
+                controllerAs: 'vm',
+                resolve: {
+                    decisionAnalysisInfo: DecisionAanalysisResolver
+                },
+            })
             .state('decisions.view', {
                 url: '/:id/{slug}/{criteria}',
                 templateUrl: 'app/decision/decision.html',
@@ -132,7 +141,7 @@
 
             if ($stateParams.analysisId) {
                 analysisId = $stateParams.analysisId;
-                console.log(analysisId);
+                // console.log(analysisId);
                 // decisionAnalysisStateParams.analysisId = analysisId;
                 // console.log(decisionAnalysisStateParams, $stateParams);
             }

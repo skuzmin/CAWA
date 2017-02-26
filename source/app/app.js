@@ -8,6 +8,7 @@
         'app.login',
         'app.decision',
         'app.decisionMatrix',
+        'app.discussions'
     ]);
 
     $.get({
