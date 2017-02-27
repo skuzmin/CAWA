@@ -1,15 +1,21 @@
 <header class="app-header">
-	<div class="row">
-		<div class="col-md-3 header-menu-btn">
-			<div class="navbar-brand">
-			<a ui-sref="home"><strong>Decision</strong><span class="app-light">Wanted</span></a>
-			</div>
-		</div>
-		<div class="col-md-6 text-center">
-			<span class="header-text">Millions of lemmings can't be wrong!</span>
-		</div>
-		<div class="col-md-3 header-login">
-			<app-login></app-login>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-sm-5 header-menu-btn clearfix">
+            <div class="navbar-brand">
+                <a ui-sref="home"><strong>Decision</strong><span class="app-light">Wanted</span></a>
+            </div>
+
+            <div class="app-panel-search">
+                <input class="form-control search-input" type="text" />
+                <span class="glyphicon glyphicon-search search-input-icon"></span>
+            </div>
+
+        </div>
+        <div class="col-sm-3 text-center">
+            <span class="header-text">Millions of lemmings can't be wrong!</span>
+        </div>
+        <div class="col-sm-4 header-login">
+            <app-login></app-login>
+        </div>
+    </div>
 </header>
