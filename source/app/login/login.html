@@ -1,16 +1,27 @@
-<div class="login-btn pull-right">
-	<div ng-if="vm.loginService.getLoginStatus()" class="app-user-info">
-		<label>Username:</label>
-		<span>{{vm.user.user_name}}</span>
-	</div>
-	<ul class="nav navbar-nav">
-		<li>
-			<a ng-if="!vm.loginService.getLoginStatus()" ng-click="vm.loginService.login()">Login</a>
-		</li>
-		<li>
-			<form ng-if="vm.loginService.getLoginStatus()" name="logoutForm" action="{{vm.loginService.getLogoutUrl()}}" method="POST" novalidate>
-				<a href class="link" ng-click="vm.logout()">Logout</a>
-			</form>
-		</li>
-	</ul>
+<div class="login-btn clearfix">
+
+		<!-- Logged user -->
+    <div ng-if="vm.loginService.getLoginStatus()">
+        <div class="pull-right app-user-info" uib-dropdown>
+            <a class="usermame dropdown-menu-btn" uib-dropdown-toggle>
+                <span>Username:</span>
+                <span>{{vm.user.user_name}}</span>
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                <li>
+                    <form name="logoutForm" action="{{vm.loginService.getLogoutUrl()}}" method="POST" novalidate>
+                        <a href class="link" ng-click="vm.logout()">Logout</a>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- New user -->
+    <ul class="nav navbar-nav pull-right" ng-if="!vm.loginService.getLoginStatus()">
+        <li>
+            <a ng-click="vm.loginService.login()">Login</a>
+        </li>
+    </ul>
 </div>

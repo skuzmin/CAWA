@@ -41,7 +41,6 @@ a:focus {
   padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
-  overflow: hidden;
   letter-spacing: 0.02em;
 }
 .app-header a {
@@ -52,6 +51,7 @@ a:focus {
 }
 .app-header .header-text {
   text-align: center;
+  font-size: 13px;
 }
 .app-header .header-login {
   text-align: right;
@@ -119,6 +119,47 @@ a:focus {
 .app-panel-search .search-input-icon {
   left: 3px;
   color: #fff;
+}
+.app-header .dropdown-menu-btn {
+  color: #FFF;
+  display: block;
+  padding: 15px 10px 14px;
+}
+.app-header .dropdown-menu {
+  left: auto;
+  right: 0;
+  margin: 0 -3px 0;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+}
+.app-header .dropdown-menu a {
+  padding-left: 10px;
+  display: block;
+  color: #4784e8;
+}
+.app-header .dropdown-menu a:hover {
+  color: #3075e5;
+}
+.app-header .dropdown-menu:before {
+  position: absolute;
+  top: -7px;
+  right: 9px;
+  display: inline-block;
+  border-right: 7px solid transparent;
+  border-bottom: 7px solid #ccc;
+  border-left: 7px solid transparent;
+  border-bottom-color: rgba(0, 0, 0, 0.2);
+  content: '';
+}
+.app-header .dropdown-menu:after {
+  position: absolute;
+  top: -6px;
+  right: 10px;
+  display: inline-block;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid #ffffff;
+  border-left: 6px solid transparent;
+  content: '';
 }
 .app-footer {
   height: 50px;
@@ -834,8 +875,8 @@ body {
   display: inline-block;
   width: 100%;
   position: absolute;
-  bottom: 0;
-  left: 0;
+  bottom: 5px;
+  left: 3px;
   z-index: 12;
 }
 .matrix-table-col-content {
@@ -980,7 +1021,7 @@ body {
 }
 .matrix-table-body .matrix-table-content {
   top: 0;
-  padding: 0 10px 20px 0;
+  padding: 0 10px 8px 0;
 }
 .matrix-table-aside-content {
   position: relative;
@@ -1177,8 +1218,4 @@ body {
 }
 .app-row-content {
   margin-bottom: 10px;
-}
-.app-user-info {
-  float: left;
-  margin: 15px 5px;
 }

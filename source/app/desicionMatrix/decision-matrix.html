@@ -93,10 +93,11 @@
                                 <div class="matrix-table-col matrix-table-col-name" data-col-id="col-name">
                                     <div class="matrix-table-col-content matrix-content-name">
                                         {{item.decision.name}}
-                                        <small class="pull-right hide" ng-show="item.criteriaCompliancePercentage">
-                                        Criteria compliance:
-                                        {{item.criteriaCompliancePercentage}}
-                                        </small>
+                                        <div ng-show="item.criteriaCompliancePercentage" class="hide">
+                                            <small>
+                                                Criteria compliance: {{item.criteriaCompliancePercentage}}
+                                            </small>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
