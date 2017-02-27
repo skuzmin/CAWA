@@ -1,11 +1,15 @@
 <div class="decision matrix">
     <div class="row top-panel">
+<<<<<<< HEAD
         <div class="col-md-6 col-sm-6">
+=======
+        <div class="col-sm-3">
+>>>>>>> ca33ece083e0cf03afca946fe935ac3c9f12d15e
             <h4 class="app-header-sub-title">
                 {{vm.decision.name}}
             </h4>
         </div>
-        <div class="col-md-6 col-sm-6">
+        <div class="col-sm-9">
             <div class="pull-right">
                 <div class="btn-group btn-group-sm btns-view">
                     <a ng-click="vm.toggleTargetHover()" ng-class="{'btn-primary': vm.toggleTargetHoverFlag}" class="btn"><span class="glyphicon glyphicon-screenshot"></span> Target</a>
@@ -96,9 +100,15 @@
                                 <div class="matrix-table-col-content matrix-content-name">
                                     {{item.decision.name}}
                                     <small class="pull-right hide" ng-show="item.criteriaCompliancePercentage">
+<<<<<<< HEAD
                                     Criteria compliance:
                                     {{item.criteriaCompliancePercentage}}
                                 </small>
+=======
+                                        Criteria compliance:
+                                        {{item.criteriaCompliancePercentage}}
+                                    </small>
+>>>>>>> ca33ece083e0cf03afca946fe935ac3c9f12d15e
                                 </div>
                             </div>
                         </div>
@@ -155,6 +165,15 @@
         </div>
     </div>
     <div class="martix-footer">
+<<<<<<< HEAD
         <app-paginator></app-paginator>
     </div>  </div>
+=======
+        <div class="row">
+            <div class="col-sm-12">
+                <app-paginator></app-paginator>
+            </div>
+        </div>
+    </div>
+>>>>>>> ca33ece083e0cf03afca946fe935ac3c9f12d15e
 </div>

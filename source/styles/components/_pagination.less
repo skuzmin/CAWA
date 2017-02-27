@@ -2,8 +2,28 @@
     .paginator, .counter {
         padding: 0 16px;
     }
+<<<<<<< HEAD
     .pagination {
       display: inline-block;
       width: auto;
     }
+=======
+}
+
+.pagination {
+	width: auto;
+}
+.pagination > li {
+  display: inline-block;
+  margin: 0 2px;
+  & > a{
+  -webkit-border-radius: @border-radius;
+          border-radius: @border-radius;
+  }
+}
+
+.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+  background-color: @basic-active;
+  background-color: @basic-active;
+>>>>>>> ca33ece083e0cf03afca946fe935ac3c9f12d15e
 }
