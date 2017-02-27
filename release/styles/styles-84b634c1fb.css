@@ -944,6 +944,9 @@ body {
   border-right: 1px solid #ebebeb;
   height: 100%;
 }
+.matrix-table-aside-content {
+  position: relative;
+}
 .matrix-table-panel {
   height: 100%;
 }
@@ -959,7 +962,7 @@ body {
   float: left;
   width: 100%;
   overflow: hidden;
-  height: calc(100vh - 266px);
+  height: calc(100% - 73px);
   width: calc(100% - 203px);
   position: relative;
   z-index: 1;

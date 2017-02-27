@@ -336,7 +336,7 @@
 
             criteriaGroupsCount = vm.criteriaGroups[0].criteria.length || 0;
             characteristicGroupsCount = vm.characteristicGroups[0].characteristics.length || 0;
-            vm.tableWidth = (criteriaGroupsCount + characteristicGroupsCount) * 120 + 'px';
+            vm.tableWidth = (criteriaGroupsCount + characteristicGroupsCount) * 120 + 60 + 'px';
         }
 
         // TODO: make as separeted component
