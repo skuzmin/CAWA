@@ -22,8 +22,8 @@
         </div>
     </div>
     <div id="matrix-table" class="main-panel matrix-table js-matrix-table">
+        <div ng-show="vm.decisionsSpinner" class="app-loader-small"><span class="glyphicon glyphicon-refresh app-loader-animation"></span>LOADING...</div>
         <div id="panel" class="app-panel matrix-table-panel clearfix">
-            <div ng-show="vm.decisionsSpinner" class="app-loader-small"><span class="glyphicon glyphicon-refresh app-loader-animation"></span>LOADING...</div>
             <!-- Header -->
             <div class="matrix-table-header">
                 <div class="matrix-table-row">
@@ -153,10 +153,6 @@
         </div>
     </div>
     <div class="martix-footer">
-        <div class="row">
-            <div class="col-sm-offset-3 col-sm-6">
-                <app-paginator></app-paginator>
-            </div>
-        </div>
+        <app-paginator></app-paginator>
     </div>
 </div>

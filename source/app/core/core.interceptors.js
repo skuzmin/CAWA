@@ -16,13 +16,15 @@
                 return config;
             },
             response: function(resp) {
-                // TODO: optimize move to routes 
+                // TODO: optimize move to routes
                 // check if decisionAnalysis in response
                 var $state, $stateParams, currentState;
 
                 $state = $injector.get('$state');
                 $stateParams = $injector.get('$stateParams');
+
                 currentState = $state.current.name;
+
                 if (currentState === 'decisions.matrix' || currentState === 'decisions.matrix.analysis')
                     if (resp.data && resp.data.decisionAnalysisId) {
                         var decisionAnalysisId = resp.data.decisionAnalysisId;
@@ -31,9 +33,12 @@
                             'id': $stateParams.id,
                             'slug': $stateParams.slug,
                             'criteria': $stateParams.criteria,
-                            analysisId: decisionAnalysisId
+                            'analysisId': decisionAnalysisId
                         };
                         // console.log(decisionAnalysisId);
+
+                        console.log($stateParams.analysisId);
+                        // if ($stateParams && $stateParams.analysisId) return;
                         $state.transitionTo('decisions.matrix.analysis', decisionAnalysisStateParams);
                     }
                 return resp;

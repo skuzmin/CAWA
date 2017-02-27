@@ -12,6 +12,15 @@
 }
 
 .matrix {
+    .app-panel {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        top: 0;
+        height: 100%;
+        padding: 0;
+    }    
+    padding: 0 10px;
     .app-rating-star-wrapper {
         display: inline-block;
     }
@@ -87,7 +96,8 @@
 
     .main-panel {
         height: calc(~"100vh - 195px");
-        margin: 0 10px;
+        width: 100%;
+        overflow: hidden;
     }
     &.decision {
         .scroll-wrapper-header {
@@ -104,8 +114,9 @@
 
 .martix-footer {
     border-top: 1px solid @gray-light;
-    padding: 7px 0;
+    padding: 7px 0 7px @matrix-aside-width;
     height: 46px;
+    
 }
 
 .matrix .matrix-table-col.matrix-table-group {
@@ -400,13 +411,11 @@
 .matrix-table-body {
     float: left;
     width: 100%;
-    // overflow: scroll;
     overflow: hidden;
     height: calc(~"100vh - 266px");
     width: calc(~"100% - @{matrix-aside-width}");
     position: relative;
     z-index: 1;
-    // margin-left: @matrix-aside-width;
     .matrix-table-aside {
         position: absolute;
         left: 0;
@@ -418,6 +427,7 @@
     .matrix-table-content {
         // left: @matrix-aside-width;
         top: 0;
+        padding: 0 10px 20px 0;
     }
 }
 
@@ -476,7 +486,7 @@
         left: 0;
         top: 0;
         z-index: 2;
-        width: @matrix-aside-width;
+        width: @matrix-aside-width - 1px;
     }
     .scroll-group {
         position: relative;

@@ -410,16 +410,6 @@ a:focus {
 .decision .main-panel .divider {
   height: 100%;
 }
-.decision .main-panel > div {
-  padding: 0;
-  position: relative;
-  height: 100%;
-  overflow: hidden;
-}
-.decision .main-panel > div.app-divider-wrapper {
-  margin-right: -8px;
-  padding-right: 8px;
-}
 .decision .main-panel .grid-stack-decision {
   background-color: rgba(128, 128, 128, 0.2);
 }
@@ -494,12 +484,13 @@ body .app-main-panel .panels-2 .app-panel-right {
   margin-top: 5px;
   margin-bottom: 0;
 }
-.app-pagination {
-  margin: 0;
-}
 .app-pagination .paginator,
 .app-pagination .counter {
   padding: 0 16px;
+}
+.app-pagination .pagination {
+  display: inline-block;
+  width: auto;
 }
 .app-loader-small {
   position: absolute;
@@ -619,6 +610,17 @@ h6,
 .btns-view {
   margin: 5px 0;
 }
+.matrix {
+  padding: 0 10px;
+}
+.matrix .app-panel {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  top: 0;
+  height: 100%;
+  padding: 0;
+}
 .matrix .app-rating-star-wrapper {
   display: inline-block;
 }
@@ -677,7 +679,8 @@ h6,
 }
 .matrix .main-panel {
   height: calc(100vh - 195px);
-  margin: 0 10px;
+  width: 100%;
+  overflow: hidden;
 }
 .matrix.decision .scroll-wrapper-header {
   min-height: 40px;
@@ -690,7 +693,7 @@ h6,
 }
 .martix-footer {
   border-top: 1px solid #ebebeb;
-  padding: 7px 0;
+  padding: 7px 0 7px 203px;
   height: 46px;
 }
 .matrix .matrix-table-col.matrix-table-group {
@@ -911,6 +914,7 @@ h6,
 }
 .matrix-table-body .matrix-table-content {
   top: 0;
+  padding: 0 10px 20px 0;
 }
 .matrix-table-body-scroll {
   overflow: scroll;
@@ -963,7 +967,7 @@ h6,
   left: 0;
   top: 0;
   z-index: 2;
-  width: 203px;
+  width: 202px;
 }
 .matrix-table-header .scroll-group {
   position: relative;
@@ -1092,6 +1096,9 @@ h6,
   background-color: #FFF;
   min-height: calc(100vh - 100px);
   overflow: hidden;
+}
+body {
+  font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
 }
 .app-row-content-label {
   display: inline-block;
