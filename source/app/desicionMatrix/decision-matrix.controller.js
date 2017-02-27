@@ -293,7 +293,7 @@
             tableHeader,
             tableAside;
 
-        tableAside = $('#matrix-table .matrix-table-aside');
+        tableAside = $('#matrix-table .matrix-table-aside-content');
         tableHeader = $('#matrix-table .matrix-table-header .scroll-group');
 
         function scrollHandler(scrollTop, scrollLeft) {

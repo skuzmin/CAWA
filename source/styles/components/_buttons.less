@@ -14,13 +14,13 @@
 .btn-primary {
   background-color: @basic-active;
   border-color: @basic-active;
+  &:hover {
+    background-color: @basic-active-hover;
+    border-color: @basic-active-hover;
+  }
 }
 
-.pagination > li {
-  // display: inline-block;
-  // margin: 0 2px;
-  & > a{
-  -webkit-border-radius: @border-radius;
-          border-radius: @border-radius;    
-  }
+.btn-primary:hover, .btn-primary:focus, .btn-primary.focus, .btn-primary:active, .btn-primary.active, .open > .dropdown-toggle.btn-primary {
+    background-color: @basic-active-hover;
+    border-color: @basic-active-hover;
 }
