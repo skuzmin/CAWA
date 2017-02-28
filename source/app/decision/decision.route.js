@@ -43,8 +43,8 @@
                     decisionAnalysisInfo: DecisionAanalysisResolver
                 },
             })
-            .state('decisions.view', {
-                url: '/:id/{slug}/{criteria}',
+            .state('decisions.list', {
+                url: '/:id/{slug}/{criteria}/list',
                 templateUrl: 'app/decision/decision.html',
                 controller: 'DecisionController',
                 controllerAs: 'vm',
@@ -62,7 +62,7 @@
                     }
                 }
             })
-            .state('decisions.view.analysis', {
+            .state('decisions.list.analysis', {
                 url: '/analysis/:analysisId',
                 templateUrl: 'app/decision/decision.html',
                 controller: 'DecisionController',
@@ -109,7 +109,7 @@
                         'slug': decisionSlug,
                         'criteria': criteria
                     };
-                    if (currentState === 'decisions.matrix' || currentState === 'decisions.view') {
+                    if (currentState === 'decisions.matrix' || currentState === 'decisions.list') {
                         // Just added new slug
                         $state.transitionTo(currentState, decisionStateParams);
                     }

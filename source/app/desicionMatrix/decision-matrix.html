@@ -11,7 +11,7 @@
                     <a ng-click="vm.toggleTargetHover()" ng-class="{'btn-primary': vm.toggleTargetHoverFlag}" class="btn"><span class="glyphicon glyphicon-screenshot"></span> Target</a>
                 </div>
                 <div class="btn-group btn-group-sm btns-view">
-                    <a ui-sref="decisions.view({id: vm.decisionId})" ui-sref-active="btn-primary" class="btn btn-default"><span class="glyphicon glyphicon-th-list"></span> List</a>
+                    <a ui-sref="decisions.list({id: vm.decisionId})" ui-sref-active="btn-primary" class="btn btn-default"><span class="glyphicon glyphicon-th-list"></span> List</a>
                     <a ui-sref="decisions.matrix({id: vm.decisionId})" ui-sref-active="btn-primary" class="btn btn-default"><span class="glyphicon glyphicon-th"></span> Matrix</a>
                 </div>
             </div>
