@@ -826,7 +826,6 @@ body {
 .matrix-table-item > .matrix-table-row {
   border: 1px solid transparent;
   border-bottom: 1px solid #ebebeb;
-  margin: 0 0 -1px 0;
 }
 .target-hover .matrix-table-item > .matrix-table-row:hover {
   border-color: #4784e8;
@@ -978,11 +977,11 @@ body {
   color: #000;
 }
 .matrix-table-aside {
-  float: left;
+  left: 0;
   width: 203px;
   box-shadow: 0px 0 11px rgba(0, 0, 0, 0.2);
   overflow: hidden;
-  position: relative;
+  position: absolute;
   z-index: 2;
   background-color: #fff;
   border-right: 1px solid #ebebeb;
@@ -996,19 +995,28 @@ body {
 }
 .matrix-table-header {
   overflow-x: hidden;
-  position: relative;
+  position: absolute;
+  z-index: 2;
+  height: 74px;
+  top: 0;
   z-index: 3;
   background-color: #fff;
   border-bottom: 1px solid #ebebeb;
   box-shadow: 0 0 11px rgba(0, 0, 0, 0.2);
 }
-.matrix-table-body {
-  float: left;
+.matrix-table-body-wrapper {
+  position: absolute;
+  top: 74px;
+  bottom: -1px;
   width: 100%;
+  z-index: 1;
+}
+.matrix-table-body {
+  left: 203px;
+  right: 0;
   overflow: hidden;
-  height: calc(100% - 73px);
-  width: calc(100% - 203px);
-  position: relative;
+  height: 100%;
+  position: absolute;
   z-index: 1;
 }
 .matrix-table-body .matrix-table-aside {
@@ -1021,7 +1029,7 @@ body {
 }
 .matrix-table-body .matrix-table-content {
   top: 0;
-  padding: 0 10px 8px 0;
+  padding: 0 10px 0 0;
 }
 .matrix-table-aside-content {
   position: relative;
@@ -1103,12 +1111,12 @@ body {
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 .search-bar .form-control {
-  padding: 11px 12px;
-  height: 46px;
+  padding: 10px 12px;
+  height: 42px;
 }
 .search-bar .btn {
-  height: 46px;
-  padding: 13px 15px;
+  height: 42px;
+  padding: 12px 15px;
 }
 .search-box {
   max-width: 700px;

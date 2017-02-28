@@ -158,12 +158,21 @@
             var matrixCols = document.getElementsByClassName('matrix-table-item-content');
             for (var i = 0; i < matrixCols.length; i++) {
                 var el = matrixCols[i],
-                    elH = parseFloat(el.clientHeight) + 'px';
+                    elH = parseFloat(el.clientHeight),
+                    asideEl,
+                    asideElH,
+                    newH;
 
-                el.style.height = elH;
-                $('.matrix-table-aside .matrix-table-item').eq(i).css({
-                    'height': elH
+                asideEl = $('.matrix-table-aside .matrix-table-item').eq(i);
+                asideElH = parseInt(asideEl.outerHeight());
+                newH = (asideElH > elH) ? asideElH : elH;
+
+                // Set new height
+                el.style.height = newH + 'px';
+                asideEl.css({
+                    'height': newH + 'px'
                 });
+
             }
         }
 
@@ -173,9 +182,9 @@
 
             setTimeout(function() {
                 prepareDisplayMatrix(decisionMatrixList);
-                reinitMatrixScroller();
                 calcMatrixRowHeight();
                 $scope.$apply(function() {
+                    reinitMatrixScroller();
                     vm.decisionsSpinner = false;
                 });
             }, 0);

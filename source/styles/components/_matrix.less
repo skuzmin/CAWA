@@ -23,7 +23,7 @@ body {
         top: 0;
         height: 100%;
         padding: 0;
-    }    
+    }
     padding: 0 10px;
     .app-rating-star-wrapper {
         display: inline-block;
@@ -163,11 +163,6 @@ body {
     & > .matrix-table-row {
         border: 1px solid transparent;
         border-bottom: 1px solid @gray-light;
-        margin: 0 0 -1px 0;
-        // &:hover {
-        //     border-color: @basic-active;
-        //     z-index: 2;
-        // }
     }
 }
 
@@ -384,11 +379,12 @@ body {
 // Scrollable table
 @matrix-aside-width: 203px;
 .matrix-table-aside {
-    float: left;
+    // float: left;
+    left: 0;
     width: @matrix-aside-width;
     box-shadow: 0px 0 11px rgba(0, 0, 0, 0.2);
     overflow: hidden;
-    position: relative;
+    position: absolute;
     z-index: 2;
     background-color: #fff;
     border-right: 1px solid @gray-light;
@@ -406,9 +402,14 @@ body {
     height: 100%;
 }
 
+
+@matrix-table-header: 74px;
 .matrix-table-header {
     overflow-x: hidden;
-    position: relative;
+    position: absolute;
+    z-index: 2;
+    height: @matrix-table-header;
+    top: 0;
     z-index: 3;
     background-color: #fff;
     border-bottom: 1px solid @gray-light;
@@ -416,16 +417,20 @@ body {
 }
 
 .matrix-table-body-wrapper {
-    // overflow-x: auto;
+    position: absolute;
+    top: @matrix-table-header;
+    bottom: -1px;
+    width: 100%;
+    z-index: 1;
 }
 
 .matrix-table-body {
-    float: left;
-    width: 100%;
+    left:  @matrix-aside-width;
+    right: 0;
     overflow: hidden;
-    height: calc(~"100% - 73px");
-    width: calc(~"100% - @{matrix-aside-width}");
-    position: relative;
+    height: 100%;
+    // width: calc(~"100% - @{matrix-aside-width}");
+    position: absolute;
     z-index: 1;
     .matrix-table-aside {
         position: absolute;
@@ -438,7 +443,7 @@ body {
     .matrix-table-content {
         // left: @matrix-aside-width;
         top: 0;
-        padding: 0 10px 8px 0;
+        padding: 0 10px 0 0;
     }
 }
 
