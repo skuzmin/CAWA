@@ -832,7 +832,6 @@ body {
   border-color: #4784e8;
 }
 .matrix-table-item > .matrix-table-row {
-  border: 1px solid transparent;
   border-bottom: 1px solid #ebebeb;
 }
 .target-hover .matrix-table-item > .matrix-table-row:hover {
@@ -910,29 +909,6 @@ body {
   border-left-color: #4784e8;
   border-right-color: #4784e8;
 }
-.matrix-table-header {
-  font-weight: 500;
-  color: #333;
-  border: 1px solid transparent;
-  border-bottom: 0;
-}
-.matrix-table-header .matrix-table-row {
-  height: 36px;
-}
-.matrix-table-header .matrix-table-row .matrix-table-col {
-  padding: 0;
-  vertical-align: middle;
-}
-.matrix-table-header .matrix-table-row .matrix-table-col > .matrix-table-group-title {
-  padding: 4px 4px;
-  min-height: 36px;
-}
-.matrix-table-header .matrix-table-row .matrix-table-col > .matrix-table-title {
-  padding: 4px 4px;
-}
-.matrix-table-header .matrix-table-row .matrix-table-col .app-sorter-wrapper {
-  padding-right: 20px;
-}
 .matrix-table-group-title {
   font-size: 18px;
   border-bottom: 1px solid #ebebeb;
@@ -960,6 +936,10 @@ body {
   margin: -10px 5px;
   color: #7f8c8d;
   width: 10px;
+  z-index: 10;
+}
+.app-sorter > span:hover {
+  color: #000;
 }
 .app-sorter .app-sorter-bottom {
   position: absolute;
@@ -971,7 +951,7 @@ body {
   top: auto;
 }
 .app-sorter .app-sorter-bottom.selected {
-  color: #000;
+  color: #4784e8;
 }
 .app-sorter .app-sorter-top {
   position: absolute;
@@ -982,7 +962,7 @@ body {
   cursor: pointer;
 }
 .app-sorter .app-sorter-top.selected {
-  color: #000;
+  color: #4784e8;
 }
 .matrix-table-aside {
   left: 0;
@@ -1002,15 +982,61 @@ body {
   height: 100%;
 }
 .matrix-table-header {
-  overflow-x: hidden;
   position: absolute;
   z-index: 2;
   height: 73px;
   top: 0;
+  overflow: visible;
   z-index: 3;
   background-color: #fff;
   border-bottom: 1px solid #ebebeb;
   box-shadow: 0 0 11px rgba(0, 0, 0, 0.2);
+  font-weight: 500;
+  color: #333;
+  border-bottom: 0;
+}
+.matrix-table-header .matrix-table-row {
+  vertical-align: top;
+}
+.matrix-table-header .matrix-table-row .matrix-table-col {
+  padding: 0;
+  vertical-align: middle;
+}
+.matrix-table-header .matrix-table-row .matrix-table-col > .matrix-table-group-title {
+  padding: 4px 4px;
+  min-height: 36px;
+}
+.matrix-table-header .matrix-table-row .matrix-table-col > .matrix-table-title {
+  padding: 4px 4px;
+}
+.matrix-table-header .matrix-table-row .matrix-table-col .app-sorter-wrapper {
+  padding-right: 20px;
+}
+.matrix-table-header > .matrix-table-row {
+  position: relative;
+  padding-left: 203px;
+}
+.matrix-table-header > .matrix-table-row .matrix-table-col {
+  vertical-align: top;
+}
+.matrix-table-header .matrix-table-group-name {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  width: 202px;
+  overflow: hidden;
+  height: 73px;
+  box-shadow: 0px 0 11px rgba(0, 0, 0, 0.2);
+}
+.matrix-table-header .matrix-table-group-name .matrix-table-title-wrapper {
+  max-width: 202px;
+}
+.matrix-table-header .scroll-group {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  height: 73px;
 }
 .matrix-table-body-wrapper {
   position: absolute;
@@ -1088,21 +1114,6 @@ body {
   background-color: #fafafa;
   font-size: 14px;
 }
-.matrix-table-header > .matrix-table-row {
-  position: relative;
-  padding-left: 203px;
-}
-.matrix-table-header .matrix-table-group-name {
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: 2;
-  width: 202px;
-}
-.matrix-table-header .scroll-group {
-  position: relative;
-  z-index: 1;
-}
 .btn.matrix-criteria-coefficient {
   display: inline-block;
   padding: 0;
@@ -1111,14 +1122,19 @@ body {
   position: absolute;
   left: 0;
   bottom: 0;
-  margin: 0 1px;
+  margin: 0;
+  padding: 0 1px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  border: 1px solid transparent;
   z-index: 111;
   z-index: 12;
   top: 3px;
-  border: 0;
   font-size: 0;
   line-height: 1;
-  height: 100%;
+}
+.btn.matrix-criteria-coefficient:hover {
+  border-color: #4784e8;
 }
 .btn.matrix-criteria-coefficient .criteria-coefficient-indicator {
   padding: 0;
@@ -1139,7 +1155,7 @@ body {
   line-height: 32px;
   overflow: hidden;
   height: 36px;
-  padding-left: 10px;
+  padding-left: 11px;
   max-width: 120px;
 }
 .col-sm-padding {
@@ -1286,4 +1302,13 @@ body {
 }
 .app-row-content {
   margin-bottom: 10px;
+}
+.app-container-sm {
+  width: 100%;
+  margin: 0 auto;
+}
+@media (min-width: 768px) {
+  .app-container-sm {
+    width: 600px;
+  }
 }

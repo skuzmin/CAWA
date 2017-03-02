@@ -26,13 +26,15 @@
                 <div class="matrix-table-header">
                     <div class="matrix-table-row">
                         <!-- TODO: Make Sticky -->
-                        <div class="matrix-table-col matrix-table-group matrix-table-group-name">
+                        <div class="matrix-table-col matrix-table-group-name">
                             <div class="matrix-table-group-title">
                                 <!-- Empty Header -->
                             </div>
                             <div class="matrix-table-row">
-                                <div class="matrix-table-col" data-col-id="col-name">
-                                    <div class="matrix-table-title app-sorter-wrapper matrix-content-name">Name
+                                <div class="matrix-table-col matrix-table-group" data-col-id="col-name">
+                                    <div class="matrix-table-title-wrapper">
+                                        <div class="matrix-table-title app-sorter-wrapper matrix-content-name">Name
+                                        </div>
                                         <div class="app-sorter">
                                             <span class="app-sorter-top glyphicon glyphicon-triangle-top" ng-click="vm.orderByDecisionProperty('name', 'ASC')"></span>
                                             <span class="app-sorter-bottom glyphicon glyphicon-triangle-bottom" ng-click="vm.orderByDecisionProperty('name', 'DESC')"></span>
@@ -73,7 +75,10 @@
                                 </div>
                                 <div class="matrix-table-row">
                                     <div class="matrix-table-col" ng-repeat="characteristic in group.characteristics track by $index" data-col-id="characteristic-{{characteristic.characteristicId}}">
-                                        <div class="matrix-table-title app-sorter-wrapper">{{characteristic.name}}
+                                        <div class="matrix-table-title-wrapper">
+                                            <div class="matrix-table-title app-sorter-wrapper">
+                                                {{characteristic.name}}
+                                            </div>
                                             <div class="app-sorter">
                                                 <span class="app-sorter-top glyphicon glyphicon-triangle-top"></span>
                                                 <span class="app-sorter-bottom glyphicon glyphicon-triangle-bottom"></span>

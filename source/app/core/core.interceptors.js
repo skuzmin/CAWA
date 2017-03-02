@@ -37,7 +37,7 @@
                         };
                         // console.log(decisionAnalysisId);
 
-                        console.log($stateParams.analysisId);
+                        // console.log($stateParams.analysisId);
                         // if ($stateParams && $stateParams.analysisId) return;
                         $state.transitionTo('decisions.matrix.analysis', decisionAnalysisStateParams);
                     }
