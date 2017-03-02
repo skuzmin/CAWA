@@ -50,8 +50,10 @@
                                 </div>
                                 <div class="matrix-table-row">
                                     <div class="matrix-table-col" ng-repeat="criteria in group.criteria | orderBy:'criterionId'" data-col-id="criteria-{{criteria.criterionId}}" ng-click="vm.selectCriterion(criteria)" ng-class="{'selected' : criteria.isSelected}">
-                                        <div class="matrix-table-title app-sorter-wrapper">
-                                            {{criteria.name}}
+                                        <div class="matrix-table-title-wrapper">
+                                            <div class="matrix-table-title app-sorter-wrapper">
+                                                {{criteria.name}}
+                                            </div>
                                             <div class="btn matrix-criteria-coefficient pull-right" ng-click="vm.editCriteriaCoefficient($event, criteria)">
                                                 <criteria-coefficient-indicator coefficient="criteria.coefficient"></criteria-coefficient-indicator>
                                             </div>
@@ -84,7 +86,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="matrix-table-body-wrapper">
                     <!-- End Header -->
                     <!-- Table Aside -->
@@ -95,9 +96,9 @@
                                     <div class="matrix-table-col matrix-table-col-name" data-col-id="col-name">
                                         <div class="matrix-table-col-content matrix-content-name">
                                             {{item.decision.name}}
-                                            <div ng-show="item.criteriaCompliancePercentage">
+                                            <div ng-show="item.decision.criteriaCompliancePercentage">
                                                 <small>
-                                                    Criteria compliance: {{item.criteriaCompliancePercentage}}
+                                                    Criteria compliance: <strong>{{item.decision.criteriaCompliancePercentage | number:0}}</strong>%
                                                 </small>
                                             </div>
                                         </div>

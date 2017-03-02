@@ -917,7 +917,7 @@ body {
   border-bottom: 0;
 }
 .matrix-table-header .matrix-table-row {
-  height: calc(100% - 36px);
+  height: 36px;
 }
 .matrix-table-header .matrix-table-row .matrix-table-col {
   padding: 0;
@@ -1109,16 +1109,15 @@ body {
   outline: none;
   cursor: pointer;
   position: absolute;
-  left: 0;
+  right: 15px;
   bottom: 0;
   margin: 0;
-  background-color: transparent;
   z-index: 111;
-  width: 100%;
+  top: 3px;
   border: 0;
   font-size: 0;
   line-height: 1;
-  height: 5px;
+  height: 100%;
 }
 .btn.matrix-criteria-coefficient .criteria-coefficient-indicator {
   padding: 0;
@@ -1126,11 +1125,19 @@ body {
   text-align: left;
 }
 .btn.matrix-criteria-coefficient .criteria-coefficient-indicator .criteria-coefficient-item {
-  display: inline-block;
+  display: block;
   width: 5px;
-  margin: 0 1px;
-  height: 5px;
+  margin: 1px 1px;
+  height: 3px;
   padding: 0;
+}
+.matrix-table-title-wrapper {
+  height: 100%;
+  position: relative;
+  display: inline-block;
+  line-height: 32px;
+  overflow: hidden;
+  height: 36px;
 }
 .col-sm-padding {
   padding-left: 3px !important;

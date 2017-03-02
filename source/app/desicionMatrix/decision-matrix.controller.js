@@ -359,6 +359,7 @@
                 controller: 'CriteriaCoefficientPopupController',
                 controllerAs: 'vm',
                 backdrop: 'static',
+                animation: false,
                 resolve: {
                     criteria: function() {
                         return criteria;
