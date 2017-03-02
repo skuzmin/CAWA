@@ -6,9 +6,9 @@
         .module('app.decision')
         .controller('DecisionMatrixController', DecisionMatrixController);
 
-    DecisionMatrixController.$inject = ['DecisionDataService', 'DecisionSharedService', '$stateParams', 'DecisionNotificationService', 'decisionBasicInfo', '$rootScope', '$compile', '$scope', '$q', 'DecisionCriteriaConstant'];
+    DecisionMatrixController.$inject = ['DecisionDataService', 'DecisionSharedService', '$stateParams', 'DecisionNotificationService', 'decisionBasicInfo', '$rootScope', '$compile', '$scope', '$q', 'DecisionCriteriaConstant', '$uibModal'];
 
-    function DecisionMatrixController(DecisionDataService, DecisionSharedService, $stateParams, DecisionNotificationService, decisionBasicInfo, $rootScope, $compile, $scope, $q, DecisionCriteriaConstant) {
+    function DecisionMatrixController(DecisionDataService, DecisionSharedService, $stateParams, DecisionNotificationService, decisionBasicInfo, $rootScope, $compile, $scope, $q, DecisionCriteriaConstant, $uibModal) {
         var
             vm = this,
             isInitedSorters = false,
@@ -295,7 +295,6 @@
         }
 
 
-        // TODO: Mozilla FF has warning about scroll event
         // Table scroll
         var
             tableBody,
@@ -349,6 +348,36 @@
         }
 
         // TODO: make as separeted component
+        // Criteria header
+        vm.editCriteriaCoefficient = editCriteriaCoefficient;
+
+        function editCriteriaCoefficient(event, criteria) {
+            event.preventDefault();
+            event.stopPropagation();
+            var modalInstance = $uibModal.open({
+                templateUrl: 'app/components/decisionCriteria/criteria-coefficient-popup.html',
+                controller: 'CriteriaCoefficientPopupController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                resolve: {
+                    criteria: function() {
+                        return criteria;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function(result) {
+                var groupIndex = _.findIndex(vm.criteriaGroups, {
+                    criterionGroupId: result.criterionGroupId
+                });
+                var criteriaIndex = _.findIndex(vm.criteriaGroups[groupIndex].criteria, {
+                    criterionId: result.criterionId
+                });
+                vm.criteriaGroups[groupIndex].criteria[criteriaIndex] = result;
+                selectCriterion(result, true);
+                vm.decisionsSpinner = false;
+            });
+        }
 
         var _fo = DecisionSharedService.filterObject.selectedCriteria;
         vm.selectCriterion = selectCriterion;

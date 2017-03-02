@@ -403,7 +403,7 @@ body {
 }
 
 
-@matrix-table-header: 74px;
+@matrix-table-header: 73px;
 .matrix-table-header {
     overflow-x: hidden;
     position: absolute;
@@ -518,3 +518,35 @@ body {
         z-index: 1;
     }
 }
+
+
+.btn.matrix-criteria-coefficient {
+    display: inline-block;
+    padding: 0;
+    outline: none;
+    cursor: pointer;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    margin: 0;
+    background-color: transparent;
+    z-index: 111;
+    width: 100%;
+    border: 0;
+    font-size: 0;
+    line-height: 1;
+    height: 5px;
+    .criteria-coefficient-indicator {
+        padding: 0;
+        margin: 0;
+        text-align: left;
+        .criteria-coefficient-item {
+            display: inline-block;
+            width: 5px;
+            margin: 0 1px;
+            height: 5px;
+            padding: 0;
+        }
+    }
+}
+

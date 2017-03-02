@@ -52,9 +52,9 @@
                                     <div class="matrix-table-col" ng-repeat="criteria in group.criteria | orderBy:'criterionId'" data-col-id="criteria-{{criteria.criterionId}}" ng-click="vm.selectCriterion(criteria)" ng-class="{'selected' : criteria.isSelected}">
                                         <div class="matrix-table-title app-sorter-wrapper">
                                             {{criteria.name}}
-                                            <button class="hide btn btn-sm btn-default pull-right" ng-click="vm.editCriteriaCoefficient($event, criteria)">
+                                            <div class="btn matrix-criteria-coefficient pull-right" ng-click="vm.editCriteriaCoefficient($event, criteria)">
                                                 <criteria-coefficient-indicator coefficient="criteria.coefficient"></criteria-coefficient-indicator>
-                                            </button>
+                                            </div>
                                             <div class="app-sorter">
                                                 <span class="app-sorter-top glyphicon glyphicon-triangle-top"></span>
                                                 <span class="app-sorter-bottom glyphicon glyphicon-triangle-bottom"></span>
@@ -95,7 +95,7 @@
                                     <div class="matrix-table-col matrix-table-col-name" data-col-id="col-name">
                                         <div class="matrix-table-col-content matrix-content-name">
                                             {{item.decision.name}}
-                                            <div ng-show="item.criteriaCompliancePercentage" class="hide">
+                                            <div ng-show="item.criteriaCompliancePercentage">
                                                 <small>
                                                     Criteria compliance: {{item.criteriaCompliancePercentage}}
                                                 </small>
