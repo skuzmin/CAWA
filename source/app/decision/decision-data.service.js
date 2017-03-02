@@ -24,7 +24,7 @@
 
 				decisionInfo = $resource(decisionUrl),
 				decisionCharacteristics = $resource(decisionUrl + '/decisions/:childId/characteristics', {id: '@id', childId: '@childId'}, {}),
-				criteriasGroups = $resource(decisionUrl + '/criteria/groups'),
+				criteriasGroups = $resource(decisionUrl + '/criteriongroups'),
         characteristictsGroups = $resource(decisionUrl + '/characteristics/groups'),
 				criteriaByDecision = $resource(decisionUrl + '/:decisionId/decisions/:criterionId/criteria', {criterionId: '@criterionId', decisionId: '@decisionId'}, {});
 
