@@ -69,19 +69,25 @@
                             </div>
                             <!-- End Criteria Header -->
                             <!-- characteristic Header -->
-                            <div class="matrix-table-col matrix-table-group" ng-repeat="group in vm.characteristicGroups track by $index">
+                            <div class="matrix-table-col matrix-table-group matrix-table-group-characteristics" ng-repeat="group in vm.characteristicGroups track by $index">
                                 <div class="matrix-table-group-title">
                                     {{group.name}}
                                 </div>
                                 <div class="matrix-table-row">
                                     <div class="matrix-table-col" ng-repeat="characteristic in group.characteristics track by $index" data-col-id="characteristic-{{characteristic.characteristicId}}">
                                         <div class="matrix-table-title-wrapper">
-                                            <div class="matrix-table-title app-sorter-wrapper">
-                                                {{characteristic.name}}
-                                            </div>
-                                            <div class="app-sorter">
-                                                <span class="app-sorter-top glyphicon glyphicon-triangle-top"></span>
-                                                <span class="app-sorter-bottom glyphicon glyphicon-triangle-bottom"></span>
+                                            <div class="matrix-table-title-wrapper">
+                                                <div class="matrix-table-title app-sorter-wrapper">
+                                                    {{characteristic.name}}
+
+                                                    <div class="app-control app-sm-filter" uib-popover='Ssss' popover-placement='bottom' popover-append-to-body='true'>
+                                                        <i class="glyphicon glyphicon-filter"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="app-sorter">
+                                                    <span class="app-sorter-top glyphicon glyphicon-triangle-top"></span>
+                                                    <span class="app-sorter-bottom glyphicon glyphicon-triangle-bottom"></span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -103,7 +109,7 @@
                                             {{item.decision.name}}
                                             <div ng-show="item.decision.criteriaCompliancePercentage">
                                                 <small>
-                                                    Criteria compliance: <strong>{{item.decision.criteriaCompliancePercentage | number:0}}</strong>% | 
+                                                    Criteria compliance: <strong>{{item.decision.criteriaCompliancePercentage | number:0}}</strong>% |
                                                     <span class="app-icon glyphicon glyphicon-thumbs-up"></span> {{item.decision.totalVotes}}
                                                 </small>
                                             </div>
@@ -117,7 +123,7 @@
                     <!-- Table Body -->
                     <div id="matrix-table-body" class="matrix-table-body">
                         <!-- Table Content -->
-                        <div id="matrix-table-content" class="matrix-table-content" style="width: {{vm.tableWidth}}">
+                        <div id="matrix-table-content" class="matrix-table-content" ng-style="{'width':vm.tableWidth}">
                             <div class="matrix-table-item matrix-table-item-content" ng-repeat="item in vm.decisionMatrixList track by item.decision.decisionId">
                                 <div class="matrix-table-row" id="decision-row-{{item.decision.decisionId}}">
                                     <!-- Criteria Content -->

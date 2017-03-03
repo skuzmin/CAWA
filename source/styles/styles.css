@@ -173,7 +173,9 @@ a:focus {
 }
 .modal-content {
   border-radius: 2px;
-  box-shadow: 0 27px 24px 0 rgba(0, 0, 0, 0.2), 0 40px 77px 0 rgba(0, 0, 0, 0.22);
+  box-shadow: none;
+  overflow: hidden;
+  padding: 8px 16px;
 }
 .modal-content .close {
   position: absolute;
@@ -1155,8 +1157,27 @@ body {
   line-height: 32px;
   overflow: hidden;
   height: 36px;
-  padding-left: 11px;
   max-width: 120px;
+}
+.matrix-table-group-criteria .matrix-table-title-wrapper {
+  padding-left: 11px;
+}
+.app-control {
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+.app-control:hover {
+  border-color: #4784e8;
+}
+.app-sm-filter {
+  display: inline-block;
+  padding: 2px;
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  margin: -10px 0;
 }
 .col-sm-padding {
   padding-left: 3px !important;
