@@ -16,7 +16,6 @@
 
         var criteriaIds = [];
         var characteristicsIds = [];
-        vm.displayMatrix = [];
 
         vm.decisionId = $stateParams.id;
         vm.decision = decisionBasicInfo || {};
@@ -53,8 +52,6 @@
                 $('body').removeClass('target-hover');
             }
         }
-
-        vm.orderByDecisionProperty = orderByDecisionProperty;
 
         init();
 
@@ -121,11 +118,11 @@
             DecisionNotificationService.subscribeSelectSorter(function(event, data) {
                 vm.decisionsSpinner = true;
                 DecisionSharedService.filterObject.sorters[data.mode] = data.sort;
+                vm.sorterData = DecisionSharedService.filterObject.sorters;
                 searchDecisionMatrix(vm.decisionId);
             });
 
         }
-
 
         var emptyCriterianData = {
             // "criterionId": null,
@@ -270,7 +267,7 @@
             vm.decisionsSpinner = true;
             DecisionDataService.searchDecisionMatrix(id, DecisionSharedService.getFilterObject()).then(function(result) {
                 var resultdecisionMatrixs = result.decisionMatrixs;
-                // initSorters();
+                initSorters();
 
                 DecisionSharedService.filterObject.pagination.totalDecisions = result.totalDecisionMatrixs;
 
@@ -282,7 +279,9 @@
         }
 
         // TODO: make as in sorter directive
-
+        vm.orderByDecisionProperty = orderByDecisionProperty;
+        vm.orderByCharacteristicProperty = orderByCharacteristicProperty;
+        vm.orderByCriteriaProperty = orderByCriteriaProperty;
         function orderByDecisionProperty(field, order) {
             if (!field) return;
             order = order || 'DESC';
@@ -296,6 +295,32 @@
             };
             $scope.$emit('selectSorter', sortObj);
         }
+
+        function orderByCriteriaProperty(order) {
+            order = order || 'DESC';
+
+            sortObj = {
+                sort: {
+                    order: order
+                },
+                mode: "sortByCriteria"
+            };
+            $scope.$emit('selectSorter', sortObj);
+        }        
+
+        function orderByCharacteristicProperty(field, order) {
+            if (!field) return;
+            order = order || 'DESC';
+
+            sortObj = {
+                sort: {
+                    id: field,
+                    order: order
+                },
+                mode: "sortByCharacteristic"
+            };
+            $scope.$emit('selectSorter', sortObj);
+        }   
 
         function updatePosition(martrixScroll) {
             var _this = martrixScroll || this;
