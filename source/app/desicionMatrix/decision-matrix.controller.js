@@ -199,32 +199,33 @@
 
         //Init sorters, when directives loaded
         function initSorters() {
-            if (!isInitedSorters) {
-                DecisionNotificationService.notifyInitSorter({
-                    list: [{
-                        name: 'Weight',
-                        order: 'DESC',
-                        isSelected: true
-                    }],
-                    type: 'sortByCriteria',
-                    mode: 'twoStep'
-                });
-                DecisionNotificationService.notifyInitSorter({
-                    list: [{
-                        name: 'Create Date',
-                        propertyId: 'createDate'
-                    }, {
-                        name: 'Update Date',
-                        propertyId: 'updateDate'
-                    }, {
-                        name: 'Name',
-                        propertyId: 'name'
-                    }],
-                    type: 'sortByDecisionProperty',
-                    mode: 'threeStep'
-                });
-                isInitedSorters = true;
-            }
+            // if (!isInitedSorters) {
+            //     DecisionNotificationService.notifyInitSorter({
+            //         list: [{
+            //             name: 'Weight',
+            //             order: 'DESC',
+            //             isSelected: true
+            //         }],
+            //         type: 'sortByCriteria',
+            //         mode: 'twoStep'
+            //     });
+            //     DecisionNotificationService.notifyInitSorter({
+            //         list: [{
+            //             name: 'Create Date',
+            //             propertyId: 'createDate'
+            //         }, {
+            //             name: 'Update Date',
+            //             propertyId: 'updateDate'
+            //         }, {
+            //             name: 'Name',
+            //             propertyId: 'name'
+            //         }],
+            //         type: 'sortByDecisionProperty',
+            //         mode: 'threeStep'
+            //     });
+            //     isInitedSorters = true;
+            // }
+            vm.sorterData = DecisionSharedService.filterObject.sorters;
         }
 
         function calcMatrixRowHeight() {

@@ -952,24 +952,33 @@ body {
   display: inline-block;
   position: absolute;
   right: 0;
-  top: 50%;
-  height: 20px;
-  margin: -10px 5px;
+  top: 0;
+  height: 100%;
+  margin: 0;
   color: #7f8c8d;
-  width: 10px;
+  width: 20px;
   z-index: 10;
+  overflow: hidden;
+}
+.app-sorter > span {
+  padding: 5px;
 }
 .app-sorter > span:hover {
   color: #000;
 }
+.app-sorter .glyphicon {
+  margin: 0;
+}
 .app-sorter .app-sorter-bottom {
   position: absolute;
   bottom: 0;
-  height: 50%;
   left: 0;
   font-size: 9px;
   cursor: pointer;
   top: auto;
+  height: 50%;
+  padding: 1px 5px 9px 5px;
+  overflow: hidden;
 }
 .app-sorter .app-sorter-bottom.selected {
   color: #4784e8;
@@ -977,31 +986,39 @@ body {
 .app-sorter .app-sorter-top {
   position: absolute;
   top: 0;
-  height: 50%;
   left: 0;
   font-size: 9px;
   cursor: pointer;
+  height: 50%;
+  padding: 9px 5px 1px 5px;
+  overflow: hidden;
 }
 .app-sorter .app-sorter-top.selected {
   color: #4784e8;
 }
-.criteria-col .app-sorter span {
-  pointer-events: none;
-}
-.criteria-col.selected .app-sorter span {
-  pointer-events: auto;
-}
 .criteria-col.selected .app-sorter .app-sorter-bottom.selected {
   color: #4784e8;
+}
+.criteria-col.selected .app-sorter .app-sorter-bottom.selected:hover {
+  color: #000;
 }
 .criteria-col.selected .app-sorter .app-sorter-top.selected {
   color: #4784e8;
 }
+.criteria-col.selected .app-sorter .app-sorter-top.selected:hover {
+  color: #000;
+}
 .criteria-col .app-sorter .app-sorter-bottom.selected {
   color: #7f8c8d;
 }
+.criteria-col .app-sorter .app-sorter-bottom.selected:hover {
+  color: #000;
+}
 .criteria-col .app-sorter .app-sorter-top.selected {
   color: #7f8c8d;
+}
+.criteria-col .app-sorter .app-sorter-top.selected:hover {
+  color: #000;
 }
 .matrix-table-aside {
   left: 0;

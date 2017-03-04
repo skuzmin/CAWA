@@ -315,16 +315,21 @@ body {
     display: inline-block;
     position: absolute;
     right: 0;
-    top: 50%;
-    height: 20px;
-    margin: -10px 5px;
+    top: 0;
+    height: 100%;
+    margin: 0;
     color: @gray-mid;
-    width: 10px;
+    width: 20px;
     z-index: 10;
+    overflow: hidden;
     & > span {
+        padding: 5px;
         &:hover {
             color: @default-text;
         }
+    }
+    .glyphicon {
+        margin: 0;
     }
     .app-sorter-bottom {
         position: absolute;
@@ -334,6 +339,9 @@ body {
         font-size: 9px;
         cursor: pointer;
         top: auto;
+        height: 50%;
+        padding: 1px 5px 9px 5px;
+        overflow: hidden;
         &.selected {
             color: @basic-active;
         }
@@ -345,6 +353,9 @@ body {
         left: 0;
         font-size: 9px;
         cursor: pointer;
+        height: 50%;
+        padding: 9px 5px 1px 5px;
+        overflow: hidden;
         &.selected {
             color: @basic-active;
         }
@@ -355,22 +366,28 @@ body {
 .criteria-col {
     .app-sorter {
         span {
-            pointer-events: none;
+            // pointer-events: none;
         }
     }
     &.selected {
        .app-sorter {
             span {
-                pointer-events: auto;
+                // pointer-events: auto;
             }
             .app-sorter-bottom {
                 &.selected {
                     color: @basic-active;
+                    &:hover {
+                        color: @default-text;
+                    }                      
                 }
             }
             .app-sorter-top {
                 &.selected {
                     color: @basic-active;
+                    &:hover {
+                        color: @default-text;
+                    }                      
                 }
             }
         }
@@ -379,11 +396,17 @@ body {
         .app-sorter-bottom {
             &.selected {
                 color: @gray-mid;
+                &:hover {
+                    color: @default-text;
+                }                
             }
         }
         .app-sorter-top {
             &.selected {
                 color: @gray-mid;
+                &:hover {
+                    color: @default-text;
+                }                
             }
         }
    }
