@@ -192,7 +192,7 @@
 
             // console.log(criteriaIds);
             // console.log(characteristicsIds);
-            // console.log(vm.decisionMatrixList);  
+            // console.log(vm.decisionMatrixList);
 
             return matrixContent;
         }
@@ -296,7 +296,7 @@
             $scope.$emit('selectSorter', sortObj);
         }
 
-        function orderByCriteriaProperty(order) {
+        function orderByCriteriaProperty(order, $event) {
             order = order || 'DESC';
 
             sortObj = {
@@ -306,7 +306,9 @@
                 mode: "sortByCriteria"
             };
             $scope.$emit('selectSorter', sortObj);
-        }        
+
+            $event.stopPropagation();
+        }
 
         function orderByCharacteristicProperty(field, order) {
             if (!field) return;
@@ -320,7 +322,7 @@
                 mode: "sortByCharacteristic"
             };
             $scope.$emit('selectSorter', sortObj);
-        }   
+        }
 
         function updatePosition(martrixScroll) {
             var _this = martrixScroll || this;

@@ -773,7 +773,7 @@ body {
   background-color: #ebebeb;
 }
 .matrix-table-group-criteria .matrix-table-col.selected {
-  background-color: #d2d2d2;
+  background-color: #e6eefc;
 }
 .matrix-table-col-name {
   background: #FFF;
@@ -985,6 +985,24 @@ body {
 .app-sorter .app-sorter-top.selected {
   color: #4784e8;
 }
+.criteria-col .app-sorter span {
+  pointer-events: none;
+}
+.criteria-col.selected .app-sorter span {
+  pointer-events: auto;
+}
+.criteria-col.selected .app-sorter .app-sorter-bottom.selected {
+  color: #4784e8;
+}
+.criteria-col.selected .app-sorter .app-sorter-top.selected {
+  color: #4784e8;
+}
+.criteria-col .app-sorter .app-sorter-bottom.selected {
+  color: #7f8c8d;
+}
+.criteria-col .app-sorter .app-sorter-top.selected {
+  color: #7f8c8d;
+}
 .matrix-table-aside {
   left: 0;
   width: 203px;
@@ -1142,14 +1160,12 @@ body {
   cursor: pointer;
   position: absolute;
   left: 0;
-  bottom: 0;
   margin: 0;
   padding: 0 1px;
   -webkit-border-radius: 2px;
   border-radius: 2px;
   border: 1px solid transparent;
   z-index: 111;
-  z-index: 12;
   top: 3px;
   font-size: 0;
   line-height: 1;

@@ -23,7 +23,7 @@
             },
             selectedCharacteristics: {},
             sorters: {
-                sortByCriteria: { order: 'DESC' },
+                sortByCriteria: { order: null },
                 sortByCharacteristic: { id: null, order: null },
                 sortByDecisionProperty: { id: null, order: null }
             },

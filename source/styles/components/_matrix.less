@@ -58,7 +58,7 @@ body {
             background-color: @gray-light;
         }
         &.selected {
-            background-color: darken(@gray-light, 10%);
+            background-color: @basic-active-light;
         }
     }
 }
@@ -351,6 +351,44 @@ body {
     }
 }
 
+// Criteria App sorters
+.criteria-col {
+    .app-sorter {
+        span {
+            pointer-events: none;
+        }
+    }
+    &.selected {
+       .app-sorter {
+            span {
+                pointer-events: auto;
+            }
+            .app-sorter-bottom {
+                &.selected {
+                    color: @basic-active;
+                }
+            }
+            .app-sorter-top {
+                &.selected {
+                    color: @basic-active;
+                }
+            }
+        }
+    }
+   .app-sorter {
+        .app-sorter-bottom {
+            &.selected {
+                color: @gray-mid;
+            }
+        }
+        .app-sorter-top {
+            &.selected {
+                color: @gray-mid;
+            }
+        }
+   }
+}
+
 
 // Scrollable table
 @matrix-aside-width: 203px;
@@ -531,14 +569,13 @@ body {
     cursor: pointer;
     position: absolute;
     left: 0;
-    bottom: 0;
     margin: 0;
     padding: 0 1px;
     -webkit-border-radius: @border-radius;
             border-radius: @border-radius;
     border: 1px solid transparent;
     z-index: 111;
-    z-index: 12;
+    // background-color: #FFF;
     top: 3px;
     font-size: 0;
     line-height: 1;
