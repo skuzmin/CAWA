@@ -308,7 +308,10 @@
             };
             $scope.$emit('selectSorter', sortObj);
 
-            $event.stopPropagation();
+            var parentCriteria = $($event.target).parents('.criteria-col');
+            if(parentCriteria.hasClass('selected')) {
+                $event.stopPropagation();
+            }
         }
 
         function orderByCharacteristicProperty(field, order) {
