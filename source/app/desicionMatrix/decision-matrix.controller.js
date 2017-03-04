@@ -101,8 +101,9 @@
             //Subscribe to notification events
             DecisionNotificationService.subscribeSelectCriterion(function(event, data) {
                 setDecisionMatchPercent(data);
-                vm.decisionMatrixList = data;
-                renderMatrix(vm.decisionMatrixList);
+                var resultdecisionMatrixs = data;
+                vm.decisionMatrixList = createMatrixContent(criteriaIds, characteristicsIds, resultdecisionMatrixs);
+                renderMatrix();
 
             });
             DecisionNotificationService.subscribePageChanged(function() {
@@ -170,7 +171,7 @@
                 });
 
                 // console.log(el);
-                // console.log(newEL.criteria);
+                // console.log(criteriaIds);
                 // var merge = _.merge(newEL, el);
                 // console.log(merge.criteria);
 
@@ -268,12 +269,12 @@
         function searchDecisionMatrix(id) {
             vm.decisionsSpinner = true;
             DecisionDataService.searchDecisionMatrix(id, DecisionSharedService.getFilterObject()).then(function(result) {
-                vm.decisionMatrixList = result.decisionMatrixs;
+                var resultdecisionMatrixs = result.decisionMatrixs;
                 // initSorters();
 
                 DecisionSharedService.filterObject.pagination.totalDecisions = result.totalDecisionMatrixs;
 
-                vm.decisionMatrixListNew = createMatrixContent(criteriaIds, characteristicsIds, vm.decisionMatrixList);
+                vm.decisionMatrixList = createMatrixContent(criteriaIds, characteristicsIds, resultdecisionMatrixs);
 
                 renderMatrix();
 

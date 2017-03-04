@@ -750,11 +750,14 @@ body {
   padding: 0;
 }
 .matrix .app-rating-star-wrapper {
-  display: inline-block;
+  display: block;
 }
 .matrix .app-rating-votes {
-  display: inline-block;
+  display: block;
   margin: 0;
+}
+.matrix .app-rating-votes .app-rating-votes-weight {
+  display: none;
 }
 .matrix .app-rating-votes.empty {
   margin-top: 20px;
