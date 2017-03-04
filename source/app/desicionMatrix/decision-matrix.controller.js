@@ -14,7 +14,8 @@
             isInitedSorters = false,
             defaultDecisionCount = 10;
 
-        criteriaIds = [];
+        var criteriaIds = [];
+        var characteristicsIds = [];
         vm.displayMatrix = [];
 
         vm.decisionId = $stateParams.id;
@@ -62,7 +63,7 @@
             return DecisionDataService.getCriteriaGroupsById(vm.decisionId).then(function(result) {
                 vm.criteriaGroups = result;
                 criteriaIds = _.map(result["0"].criteria, function(el) {
-                    return el.name;
+                    return el.criterionId;
                 });
             });
         }
@@ -71,6 +72,10 @@
             // Characteristicts
             return DecisionDataService.getCharacteristictsGroupsById(vm.decisionId).then(function(result) {
                 vm.characteristicGroups = result;
+
+                characteristicsIds = _.map(result["0"].characteristics, function(el) {
+                    return el.characteristicId;
+                });
             });
         }
 
@@ -80,8 +85,6 @@
 
             // TODO: merge to one array with titles
 
-
-
             //Get data for decision panel (main)
             vm.decisionsSpinner = true;
 
@@ -89,6 +92,7 @@
             // Get criteria and characteristic
             $q.all([getCriteriaGroupsById(), getCharacteristictsGroupsById()])
                 .then(function(values) {
+
                     setMatrixTableWidth();
                     searchDecisionMatrix(vm.decisionId);
                 });
@@ -119,6 +123,80 @@
                 searchDecisionMatrix(vm.decisionId);
             });
 
+        }
+
+
+        var emptyCriterianData = {
+            // "criterionId": null,
+            "weight": null,
+            "totalVotes": null
+        };
+
+        var emptyCharacteristicData = {
+            // "characteristicId": null,
+            "valueType": null,
+            "visualMode": null,
+            "sortable": false,
+            "filterable": false,
+            "value": null,
+            "options": []
+        };
+
+
+        // TODO: optimize it
+        function createMatrixContent(criteriaIds, characteristicsIds, decisionMatrixList) {
+
+            var matrixContent = [];
+
+            var i = 0;
+            matrixContent = _.map(decisionMatrixList, function(el) {
+                // if (i >= 1) return false;
+                // New element with empty characteristics and criteria
+                var newEL = _.clone(el);
+                newEL.criteria = [];
+                newEL.characteristics = [];
+
+                // Fill empty criteria
+                newEL.criteria = _.map(criteriaIds, function(criterionId) {
+                    var emptyCriterianDataNew = _.clone(emptyCriterianData);
+                    emptyCriterianDataNew.criterionId = criterionId;
+                    _.map(el.criteria, function(elCriterionIdObj) {
+                        if (elCriterionIdObj.criterionId === criterionId) {
+                            emptyCriterianDataNew = elCriterionIdObj;
+                        }
+                    });
+
+                    return emptyCriterianDataNew;
+                });
+
+                // console.log(el);
+                // console.log(newEL.criteria);
+                // var merge = _.merge(newEL, el);
+                // console.log(merge.criteria);
+
+                // Fill empty characteristics
+                newEL.characteristics = _.map(characteristicsIds, function(characteristicId) {
+                    var emptyCharacteristicDataNew = _.clone(emptyCharacteristicData);
+                    emptyCharacteristicDataNew.characteristicId = characteristicId;
+                    _.map(el.characteristics, function(elCharacteristicObj) {
+                        if (elCharacteristicObj.characteristicId === characteristicId) {
+                            emptyCharacteristicDataNew = elCharacteristicObj;
+                        }
+                    });
+
+                    return emptyCharacteristicDataNew;
+                });
+                // return i++;
+                return newEL;
+                // console.log(el);
+            });
+
+
+            // console.log(criteriaIds);
+            // console.log(characteristicsIds);
+            // console.log(vm.decisionMatrixList);  
+
+            return matrixContent;
         }
 
         //Init sorters, when directives loaded
@@ -152,20 +230,22 @@
         }
 
         function calcMatrixRowHeight() {
-            // TODO: optimize | Set Aside row height
-            // JS version
-            var matrixAside = document.getElementsByClassName('matrix-table-aside');
-            var matrixCols = document.getElementsByClassName('matrix-table-item-content');
+            // TODO: optimize
+            var matrixAside,
+                matrixCols;
+
+            matrixAside = document.getElementsByClassName('matrix-table-aside');
+            matrixCols = document.getElementsByClassName('matrix-table-item-content');
             for (var i = 0; i < matrixCols.length; i++) {
-                var el = matrixCols[i],
-                    elH = parseFloat(el.clientHeight),
+                var el,
                     asideEl,
                     asideElH,
                     newH;
 
+                el = matrixCols[i];
                 asideEl = $('.matrix-table-aside .matrix-table-item').eq(i);
                 asideElH = parseInt(asideEl.outerHeight());
-                newH = (asideElH > elH) ? asideElH : elH;
+                newH = (asideElH > el.clientHeight) ? asideElH : el.clientHeight;
 
                 // Set new height
                 el.style.height = newH + 'px';
@@ -177,19 +257,12 @@
         }
 
         // TODO: drop settimeout
-        function renderMatrix(decisionMatrixList) {
-            // vm.decisionsSpinner = true;
-
+        function renderMatrix() {
             setTimeout(function() {
-                prepareDisplayMatrix(decisionMatrixList);
                 calcMatrixRowHeight();
-                $scope.$apply(function() {
-                    reinitMatrixScroller();
-                    vm.decisionsSpinner = false;
-                });
+                reinitMatrixScroller();
+                vm.decisionsSpinner = false;
             }, 0);
-
-
         }
 
         function searchDecisionMatrix(id) {
@@ -198,13 +271,17 @@
                 vm.decisionMatrixList = result.decisionMatrixs;
                 // initSorters();
 
-                renderMatrix(vm.decisionMatrixList);
-
                 DecisionSharedService.filterObject.pagination.totalDecisions = result.totalDecisionMatrixs;
+
+                vm.decisionMatrixListNew = createMatrixContent(criteriaIds, characteristicsIds, vm.decisionMatrixList);
+
+                renderMatrix();
+
             });
         }
 
         // TODO: make as in sorter directive
+
         function orderByDecisionProperty(field, order) {
             if (!field) return;
             order = order || 'DESC';
@@ -219,79 +296,13 @@
             $scope.$emit('selectSorter', sortObj);
         }
 
-        // TODO: for test $compile vs pure JS
-        function ratingDirective(value, totalVotes) {
-            var ratingHtml,
-                rating;
-
-            rating = parseFloat(value) / 5 * 100 + '%' || 0;
-            ratingHtml = '<div class="app-rating-star-wrapper">' +
-                '<div class="app-rating-star">' +
-                '<span class="bar" style="width: ' + rating + '"></span>' +
-                '</div>' +
-                '</div>' +
-                '<div class="app-rating-votes">' +
-                '<span><span class="glyphicon glyphicon-thumbs-up"></span> ' + totalVotes + '</span>' +
-                '</div>';
-            return ratingHtml;
-        }
-
-        // TODO: find better solution, optimize $compile maybe render whole row in js
-        function prepareDisplayMatrix(decisionMatrix) {
-            var matrix = decisionMatrix;
-
-            // Criteria insert in table
-            _.map(matrix, function(el, index) {
-                var criteria = el.criteria;
-
-                var criteriaEl = $('#decision-row-' + el.decision.decisionId);
-
-                _.map(criteria, function(obj, index) {
-
-                    // Angular
-                    // var html = '<rating-star value="' + obj.weight + '" total-votes="' + obj.totalVotes + '" ng-show="true"></rating-star>';
-                    // criteriaEl.find('.matrix-table-col-content[data-criterion-id="' + obj.criterionId + '"]').html(html); //.addClass('color-' + obj.weight);
-
-                    // Pure JS
-                    var comments = '<div class="app-item-additional-wrapper"><div class="app-item-comments">' + '<span class="glyphicon glyphicon-comment"></span> 0' + '</div></div>';
-                    html = ratingDirective(obj.weight, obj.totalVotes) + comments;
-
-                    var elCol = criteriaEl.find('.matrix-table-col-content[data-criterion-id="' + obj.criterionId + '"]');
-                    elCol.html(html);
-                    elCol.parent().removeClass('empty');
-
-                });
-
-            });
-
-
-            // Characteristic insert in table
-            _.map(matrix, function(el, index) {
-                var characteristics = el.characteristics;
-
-                _.map(characteristics, function(obj, index) {
-                    var comments = '<div class="app-item-additional-wrapper"><div class="app-item-comments">' + '<span class="glyphicon glyphicon-comment"></span> 0' + '</div></div>';
-
-                    var displayValue = obj.value;
-
-                    // TODO: format date
-                    // if (isDate(displayValue)) displayValue = new Date(displayValue);
-                    var html = displayValue + comments;
-
-
-
-                    var elCol = $('#decision-row-' + el.decision.decisionId).find('.matrix-table-col-content[data-characteristic-id="' + obj.characteristicId + '"]');
-                    elCol.html(html);
-                    elCol.parent().removeClass('empty');
-                    // $('#decision-row-' + el.decision.decisionId).find('.matrix-table-col-content[data-characteristic-id="' + obj.characteristicId + '"]').html($compile(html)($scope));
-                });
-            });
-
-        }
-
         function updatePosition(martrixScroll) {
             var _this = martrixScroll || this;
             scrollHandler(_this.y, _this.x);
+
+            // TODO: avoid JQuery
+            $('.matrix-table-group .app-control').toggleClass('selected', false);
+            $('.app-pop-over-content').toggleClass('hide', true);
         }
 
 

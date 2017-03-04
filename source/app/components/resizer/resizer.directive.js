@@ -10,9 +10,9 @@
         var directive = {
             restrict: 'A',
             scope: {
-                resizerMax: '=',
-                resizerMin: '='
-            }
+                resizerMax: '<',
+                resizerMin: '<'
+            },
             link: link
         };
 

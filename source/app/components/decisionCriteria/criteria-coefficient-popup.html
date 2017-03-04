@@ -1,38 +1,30 @@
 <div class="criteria-coefficient-popup">
-
-	<div class="modal-header">
-	<!-- <div class="col-md-12 col-sm-12 modal-drag-handler"></div> -->
-		<h4>Choose Criterion Factor of Importance</h4>
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="vm.close()">×</button>
-	</div>
-	<div class="modal-body">
-			<form class="form-horizontal" name="criteriaCoefficientForm" ng-submit="vm.apply()">
-				<div class="row form-group">
-					<div class="col-md-6 col-sm-6">
-						<label class="control-label">Criterion name:</label>
-					</div>
-					<div class="col-md-6 col-sm-6">
-						{{vm.criteria.name}}
-					</div>
-				</div>
-				<div class="row form-group">
-					<div class="col-md-6 col-sm-6">
-						<label class="control-label">Factor of Importance:</label>
-					</div>
-					<div class="col-md-6 col-sm-6">
-						<select class="form-control" ng-model="vm.criteria.coefficient" ng-options="coefficient as coefficient.name for coefficient in vm.coefficientList track by coefficient.value"></select>
-					</div>
-				</div>
-
-				<div class="form-group row">
-					<div class="col-sm-12">
-						<button class="btn btn-default btn-primary pull-right" type="submit">Apply</button>
-					</div>
-				</div>
-			</form>
-	</div>
-
-<!-- <div class="modal-footer">
-</div>
- -->
+    <div class="modal-header">
+        <!-- <div class="col-md-12 col-sm-12 modal-drag-handler"></div> -->
+        <h4 class="modal-title">Choose Criterion Factor of Importance</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="vm.close()">×</button>
+    </div>
+    <form class="form-horizontal" name="criteriaCoefficientForm" ng-submit="vm.apply()">
+        <div class="modal-body">
+            <div class="row form-group">
+                <div class="col-md-6 col-sm-6">
+                    <label class="control-label">Criterion name:</label>
+                </div>
+                <div class="col-md-6 col-sm-6">
+                    {{vm.criteria.name}}
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-6 col-sm-6">
+                    <label class="control-label">Factor of Importance:</label>
+                </div>
+                <div class="col-md-6 col-sm-6">
+                    <select class="form-control" ng-model="vm.criteria.coefficient" ng-options="coefficient as coefficient.name for coefficient in vm.coefficientList track by coefficient.value"></select>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-default btn-primary pull-right" type="submit">Apply</button>
+        </div>
+    </form>
 </div>
