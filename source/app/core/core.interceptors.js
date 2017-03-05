@@ -28,10 +28,10 @@
                 
 
                 if (currentState === 'decisions.matrix' || currentState === 'decisions.matrix.analysis')
-                    if (resp.data && resp.data.decisionMatrixs && resp.data.decisionAnalysisId) {
+                    if (resp.data && (resp.data.decisionMatrixs || resp.data.decisions) && resp.data.decisionAnalysisId) {
 
                         var decisionAnalysisId = resp.data.decisionAnalysisId;
-                        if (analysisCallsArr.length !== 0) {
+                        if (!$stateParams.analysisId || analysisCallsArr.length !== 0) {
                             
                             var decisionAnalysisStateParams = {
                                 'id': $stateParams.id,
@@ -43,7 +43,7 @@
                         }
 
                         // Save only second call to avoid big array
-                        if (analysisCallsArr.length === 0) analysisCallsArr.push(decisionAnalysisId);
+                        if (analysisCallsArr.length === 0 && $stateParams.analysisId) analysisCallsArr.push(decisionAnalysisId);
                     }
                 return resp;
             },

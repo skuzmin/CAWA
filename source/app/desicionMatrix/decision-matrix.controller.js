@@ -481,7 +481,7 @@
 
         console.log(decisionAnalysisInfo);
         // vm.sorterData = initAnalysis(decisionAnalysisInfo);
-        initAnalysis(decisionAnalysisInfo);
+        if(decisionAnalysisInfo) initAnalysis(decisionAnalysisInfo);
 
         function initAnalysis(data) {
             var filterObjectEmpty = {
