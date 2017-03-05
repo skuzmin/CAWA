@@ -261,8 +261,7 @@ a:focus {
   height: 100%;
   width: 100%;
   min-height: 920px;
-  -ms-overflow-x: hidden;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 .criteria-item-footer {
   font-size: 11px;

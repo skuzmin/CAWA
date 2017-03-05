@@ -6,9 +6,9 @@
         .module('app.decision')
         .controller('DecisionMatrixController', DecisionMatrixController);
 
-    DecisionMatrixController.$inject = ['DecisionDataService', 'DecisionSharedService', '$stateParams', 'DecisionNotificationService', 'decisionBasicInfo', '$rootScope', '$compile', '$scope', '$q', 'DecisionCriteriaConstant', '$uibModal'];
+    DecisionMatrixController.$inject = ['DecisionDataService', 'DecisionSharedService', '$stateParams', 'DecisionNotificationService', 'decisionBasicInfo', '$rootScope', '$compile', '$scope', '$q', 'DecisionCriteriaConstant', '$uibModal', 'decisionAnalysisInfo'];
 
-    function DecisionMatrixController(DecisionDataService, DecisionSharedService, $stateParams, DecisionNotificationService, decisionBasicInfo, $rootScope, $compile, $scope, $q, DecisionCriteriaConstant, $uibModal) {
+    function DecisionMatrixController(DecisionDataService, DecisionSharedService, $stateParams, DecisionNotificationService, decisionBasicInfo, $rootScope, $compile, $scope, $q, DecisionCriteriaConstant, $uibModal, decisionAnalysisInfo) {
         var
             vm = this,
             isInitedSorters = false,
@@ -255,12 +255,14 @@
             }
         }
 
-        // TODO: drop settimeout
+        // TODO: drop settimeout and apply
         function renderMatrix() {
             setTimeout(function() {
                 calcMatrixRowHeight();
                 reinitMatrixScroller();
-                vm.decisionsSpinner = false;
+                $scope.$apply(function() {
+                    vm.decisionsSpinner = false;
+                });
             }, 0);
         }
 
@@ -283,6 +285,7 @@
         vm.orderByDecisionProperty = orderByDecisionProperty;
         vm.orderByCharacteristicProperty = orderByCharacteristicProperty;
         vm.orderByCriteriaProperty = orderByCriteriaProperty;
+
         function orderByDecisionProperty(field, order) {
             if (!field) return;
             order = order || 'DESC';
@@ -309,7 +312,7 @@
             $scope.$emit('selectSorter', sortObj);
 
             var parentCriteria = $($event.target).parents('.criteria-col');
-            if(parentCriteria.hasClass('selected')) {
+            if (parentCriteria.hasClass('selected')) {
                 $event.stopPropagation();
             }
         }
@@ -472,6 +475,56 @@
                 _fo.sortCriteriaIds.splice(position, 1);
                 delete _fo.sortCriteriaCoefficients[criterion.criterionId];
             }
+        }
+
+        // Analysis
+
+        console.log(decisionAnalysisInfo);
+        // vm.sorterData = initAnalysis(decisionAnalysisInfo);
+        initAnalysis(decisionAnalysisInfo);
+
+        function initAnalysis(data) {
+            var filterObjectEmpty = {
+                selectedCriteria: {
+                    sortCriteriaIds: [],
+                    sortCriteriaCoefficients: {}
+                },
+                pagination: {
+                    pageNumber: 1,
+                    pageSize: 10,
+                    totalDecisions: 0
+                },
+                selectedCharacteristics: {},
+                sorters: {
+                    sortByCriteria: {
+                        order: 'DESC'
+                    },
+                    sortByCharacteristic: {
+                        id: null,
+                        order: null
+                    },
+                    sortByDecisionProperty: {
+                        id: null,
+                        order: null
+                    }
+                },
+                selectedDecision: {
+                    decisionsIds: []
+                }
+            };
+
+            // Set new values
+            var sortObj = filterObjectEmpty;
+            sortObj.selectedCriteria.sortCriteriaCoefficients = data.sortCriteriaCoefficients;
+            sortObj.selectedCriteria.sortCriteriaIds = data.sortCriteriaIds;
+            sortObj.sorters.sortByCriteria.order = data.sortWeightCriteriaDirection;
+
+            sortObj.sorters.sortByCharacteristic.order = data.sortCharacteristicDirection;
+
+            sortObj.pagination.pageSize = data.pageSize;
+            console.log(sortObj);
+            // return sortObj;
+            // DecisionSharedService.setFilterObject(sortObj);
         }
 
     }

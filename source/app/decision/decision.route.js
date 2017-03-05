@@ -21,7 +21,8 @@
                 controller: 'DecisionMatrixController',
                 controllerAs: 'vm',
                 resolve: {
-                    decisionBasicInfo: DecisionResolver
+                    decisionBasicInfo: DecisionResolver,
+                    decisionAnalysisInfo: DecisionAanalysisResolver
                 },
                 params: {
                     slug: {
@@ -40,7 +41,7 @@
                 controller: 'DecisionController',
                 controllerAs: 'vm',
                 resolve: {
-                    decisionAnalysisInfo: DecisionAanalysisResolver
+                    // decisionAnalysisInfo: DecisionAanalysisResolver
                 },
             })
             .state('decisions.list', {
@@ -68,7 +69,7 @@
                 controller: 'DecisionController',
                 controllerAs: 'vm',
                 resolve: {
-                    decisionAnalysisInfo: DecisionAanalysisResolver
+                    // decisionAnalysisInfo: DecisionAanalysisResolver
                 },
             });
     }
@@ -124,31 +125,30 @@
     }
 
     // Analysis
-    DecisionAanalysisResolver.$inject = ['$state', '$rootScope', '$stateParams'];
+    DecisionAanalysisResolver.$inject = ['DecisionDataService', '$state', '$rootScope', '$stateParams', '$location'];
 
-    function DecisionAanalysisResolver($state, $rootScope, $stateParams) {
-        var stateListener = $rootScope.$on('$stateChangeSuccess', function() {
-            var currentState,
-                analysisId = '';
+    function DecisionAanalysisResolver(DecisionDataService, $state, $rootScope, $stateParams, $location) {
 
-            currentState = $state.current.name;
+        // TODO: find better way
+        var path,
+            urlParams,
+            analysisId,
+            currentState;
 
-            var decisionAnalysisStateParams = {
-                'id': $stateParams.id,
-                'slug': $stateParams.slug,
-                'criteria': $stateParams.criteria
-            };
+        path = $location.path();
+        urlParams = path.split('/');
+        analysisId = urlParams[urlParams.length - 1];
+        currentState = $state.current.name;
 
-            if ($stateParams.analysisId) {
-                analysisId = $stateParams.analysisId;
-                // console.log(analysisId);
-                // decisionAnalysisStateParams.analysisId = analysisId;
-                // console.log(decisionAnalysisStateParams, $stateParams);
+        return DecisionDataService.getDecisionAnalysis(analysisId).then(function(resp) {
+            if(resp.error) {
+                console.log(resp.error);
+                return;
             }
-
-            stateListener();
+            return resp;
+        }, function(req) {
+            console.log(req);
         });
-
     }
 
 

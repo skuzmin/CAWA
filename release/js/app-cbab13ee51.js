@@ -143,6 +143,7 @@
     appInterceptor.$inject = ['$injector'];
 
     function appInterceptor($injector) {
+        var analysisCallsArr = [];
         return {
             request: function(config) {
                 // console.log(config);
@@ -157,22 +158,25 @@
                 $stateParams = $injector.get('$stateParams');
 
                 currentState = $state.current.name;
+                
 
                 if (currentState === 'decisions.matrix' || currentState === 'decisions.matrix.analysis')
-                    if (resp.data && resp.data.decisionAnalysisId) {
+                    if (resp.data && resp.data.decisionMatrixs && resp.data.decisionAnalysisId) {
+
                         var decisionAnalysisId = resp.data.decisionAnalysisId;
+                        if (analysisCallsArr.length !== 0) {
+                            
+                            var decisionAnalysisStateParams = {
+                                'id': $stateParams.id,
+                                'slug': $stateParams.slug,
+                                'criteria': $stateParams.criteria,
+                                'analysisId': decisionAnalysisId
+                            };
+                            $state.transitionTo('decisions.matrix.analysis', decisionAnalysisStateParams);
+                        }
 
-                        var decisionAnalysisStateParams = {
-                            'id': $stateParams.id,
-                            'slug': $stateParams.slug,
-                            'criteria': $stateParams.criteria,
-                            'analysisId': decisionAnalysisId
-                        };
-                        // console.log(decisionAnalysisId);
-
-                        // console.log($stateParams.analysisId);
-                        // if ($stateParams && $stateParams.analysisId) return;
-                        $state.transitionTo('decisions.matrix.analysis', decisionAnalysisStateParams);
+                        // Save only second call to avoid big array
+                        if (analysisCallsArr.length === 0) analysisCallsArr.push(decisionAnalysisId);
                     }
                 return resp;
             },
@@ -220,68 +224,114 @@
         .module('app.decision')
         .factory('DecisionDataService', DecisionDataService);
 
-        DecisionDataService.$inject = ['$resource', 'Config'];
+    DecisionDataService.$inject = ['$resource', 'Config'];
 
-        function DecisionDataService($resource, Config) {
-            var
-                decisionUrl = Config.endpointUrl + 'decisions/:id',
+    function DecisionDataService($resource, Config) {
+        var
+            decisionUrl = Config.endpointUrl + 'decisions/:id',
 
-                decisions = $resource(decisionUrl + '/decisions', {id: '@id', decisionAnalysisId: '@decisionAnalysisId'},
-                {
-                    searchDecisionById: {method: 'POST', isArray: false}
-                }),
+            decisions = $resource(decisionUrl + '/decisions', {
+                id: '@id'
+            }, {
+                searchDecisionById: {
+                    method: 'POST',
+                    isArray: false
+                }
+            }),
 
-                decisionsMatrix = $resource(decisionUrl + '/decisions/matrix', {id: '@id'},
-                {
-                    searchDecisionById: {method: 'POST', isArray: false}
-                }),
+            decisionsMatrix = $resource(decisionUrl + '/decisions/matrix', {
+                id: '@id'
+            }, {
+                searchDecisionById: {
+                    method: 'POST',
+                    isArray: false
+                }
+            }),
 
-                decisionInfo = $resource(decisionUrl),
-                decisionCharacteristics = $resource(decisionUrl + '/decisions/:childId/characteristics', {id: '@id', childId: '@childId'}, {}),
-                criteriasGroups = $resource(decisionUrl + '/criteriongroups'),
-                characteristictsGroups = $resource(decisionUrl + '/characteristicgroups'),
-                criteriaByDecision = $resource(decisionUrl + '/:decisionId/decisions/:criterionId/criteria', {criterionId: '@criterionId', decisionId: '@decisionId'}, {});
+            decisionsAnalysis = $resource(Config.endpointUrl + 'decisions/analysis/:id', {
+                id: '@id'
+            }, {
+                getDecisionAnalysis: {
+                    method: 'POST',
+                    isArray: false
+                }
+            }),
 
-            var service = {
-                searchDecision: searchDecision,
-                searchDecisionMatrix: searchDecisionMatrix,
-                getCriteriaGroupsById: getCriteriaGroupsById,
-                getCharacteristictsGroupsById: getCharacteristictsGroupsById,
-                getDecisionInfo: getDecisionInfo,
-                getDecisionCharacteristics: getDecisionCharacteristics,
-                getCriteriaByDecision: getCriteriaByDecision
-            };
+            decisionInfo = $resource(decisionUrl),
+            decisionCharacteristics = $resource(decisionUrl + '/decisions/:childId/characteristics', {
+                id: '@id',
+                childId: '@childId'
+            }, {}),
+            criteriasGroups = $resource(decisionUrl + '/criteriongroups'),
+            characteristictsGroups = $resource(decisionUrl + '/characteristicgroups'),
+            criteriaByDecision = $resource(decisionUrl + '/:decisionId/decisions/:criterionId/criteria', {
+                criterionId: '@criterionId',
+                decisionId: '@decisionId'
+            }, {});
 
-            return service;
+        var service = {
+            searchDecision: searchDecision,
+            searchDecisionMatrix: searchDecisionMatrix,
+            getCriteriaGroupsById: getCriteriaGroupsById,
+            getCharacteristictsGroupsById: getCharacteristictsGroupsById,
+            getDecisionInfo: getDecisionInfo,
+            getDecisionCharacteristics: getDecisionCharacteristics,
+            getCriteriaByDecision: getCriteriaByDecision,
+            getDecisionAnalysis: getDecisionAnalysis
+        };
 
-            function searchDecision(id, data) {
-                return decisions.searchDecisionById({id: id}, data).$promise;
-            }
+        return service;
 
-            function searchDecisionMatrix(id, data) {
-                return decisionsMatrix.searchDecisionById({id: id}, data).$promise;
-            }
-
-            function getCriteriaGroupsById(id) {
-                return criteriasGroups.query({id: id}).$promise;
-            }
-
-            function getCharacteristictsGroupsById(id) {
-                return characteristictsGroups.query({id: id}).$promise;
-            }
-
-            function getDecisionInfo(id) {
-                return decisionInfo.get({id: id}).$promise;
-            }
-
-            function getDecisionCharacteristics(id, childId) {
-                return decisionCharacteristics.query({id: id, childId: childId}).$promise;
-            }
-
-      function getCriteriaByDecision(criterionId, decisionId) {
-        return criteriaByDecision.query({criterionId: criterionId, decisionId: decisionId}).$promise;
-      }
+        function searchDecision(id, data) {
+            return decisions.searchDecisionById({
+                id: id
+            }, data).$promise;
         }
+
+        function searchDecisionMatrix(id, data) {
+            return decisionsMatrix.searchDecisionById({
+                id: id
+            }, data).$promise;
+        }
+
+        function getCriteriaGroupsById(id) {
+            return criteriasGroups.query({
+                id: id
+            }).$promise;
+        }
+
+        function getCharacteristictsGroupsById(id) {
+            return characteristictsGroups.query({
+                id: id
+            }).$promise;
+        }
+
+        function getDecisionInfo(id) {
+            return decisionInfo.get({
+                id: id
+            }).$promise;
+        }
+
+        function getDecisionCharacteristics(id, childId) {
+            return decisionCharacteristics.query({
+                id: id,
+                childId: childId
+            }).$promise;
+        }
+
+        function getDecisionAnalysis(id) {
+            return decisionsAnalysis.get({
+                id: id
+            }).$promise;
+        }
+
+        function getCriteriaByDecision(criterionId, decisionId) {
+            return criteriaByDecision.query({
+                criterionId: criterionId,
+                decisionId: decisionId
+            }).$promise;
+        }
+    }
 })();
 (function() {
 
@@ -613,7 +663,8 @@
                 controller: 'DecisionMatrixController',
                 controllerAs: 'vm',
                 resolve: {
-                    decisionBasicInfo: DecisionResolver
+                    decisionBasicInfo: DecisionResolver,
+                    decisionAnalysisInfo: DecisionAanalysisResolver
                 },
                 params: {
                     slug: {
@@ -632,7 +683,7 @@
                 controller: 'DecisionController',
                 controllerAs: 'vm',
                 resolve: {
-                    decisionAnalysisInfo: DecisionAanalysisResolver
+                    // decisionAnalysisInfo: DecisionAanalysisResolver
                 },
             })
             .state('decisions.list', {
@@ -660,7 +711,7 @@
                 controller: 'DecisionController',
                 controllerAs: 'vm',
                 resolve: {
-                    decisionAnalysisInfo: DecisionAanalysisResolver
+                    // decisionAnalysisInfo: DecisionAanalysisResolver
                 },
             });
     }
@@ -716,31 +767,30 @@
     }
 
     // Analysis
-    DecisionAanalysisResolver.$inject = ['$state', '$rootScope', '$stateParams'];
+    DecisionAanalysisResolver.$inject = ['DecisionDataService', '$state', '$rootScope', '$stateParams', '$location'];
 
-    function DecisionAanalysisResolver($state, $rootScope, $stateParams) {
-        var stateListener = $rootScope.$on('$stateChangeSuccess', function() {
-            var currentState,
-                analysisId = '';
+    function DecisionAanalysisResolver(DecisionDataService, $state, $rootScope, $stateParams, $location) {
 
-            currentState = $state.current.name;
+        // TODO: find better way
+        var path,
+            urlParams,
+            analysisId,
+            currentState;
 
-            var decisionAnalysisStateParams = {
-                'id': $stateParams.id,
-                'slug': $stateParams.slug,
-                'criteria': $stateParams.criteria
-            };
+        path = $location.path();
+        urlParams = path.split('/');
+        analysisId = urlParams[urlParams.length - 1];
+        currentState = $state.current.name;
 
-            if ($stateParams.analysisId) {
-                analysisId = $stateParams.analysisId;
-                // console.log(analysisId);
-                // decisionAnalysisStateParams.analysisId = analysisId;
-                // console.log(decisionAnalysisStateParams, $stateParams);
+        return DecisionDataService.getDecisionAnalysis(analysisId).then(function(resp) {
+            if(resp.error) {
+                console.log(resp.error);
+                return;
             }
-
-            stateListener();
+            return resp;
+        }, function(req) {
+            console.log(req);
         });
-
     }
 
 
@@ -753,9 +803,9 @@
         .module('app.decision')
         .controller('DecisionMatrixController', DecisionMatrixController);
 
-    DecisionMatrixController.$inject = ['DecisionDataService', 'DecisionSharedService', '$stateParams', 'DecisionNotificationService', 'decisionBasicInfo', '$rootScope', '$compile', '$scope', '$q', 'DecisionCriteriaConstant', '$uibModal'];
+    DecisionMatrixController.$inject = ['DecisionDataService', 'DecisionSharedService', '$stateParams', 'DecisionNotificationService', 'decisionBasicInfo', '$rootScope', '$compile', '$scope', '$q', 'DecisionCriteriaConstant', '$uibModal', 'decisionAnalysisInfo'];
 
-    function DecisionMatrixController(DecisionDataService, DecisionSharedService, $stateParams, DecisionNotificationService, decisionBasicInfo, $rootScope, $compile, $scope, $q, DecisionCriteriaConstant, $uibModal) {
+    function DecisionMatrixController(DecisionDataService, DecisionSharedService, $stateParams, DecisionNotificationService, decisionBasicInfo, $rootScope, $compile, $scope, $q, DecisionCriteriaConstant, $uibModal, decisionAnalysisInfo) {
         var
             vm = this,
             isInitedSorters = false,
@@ -1002,12 +1052,14 @@
             }
         }
 
-        // TODO: drop settimeout
+        // TODO: drop settimeout and apply
         function renderMatrix() {
             setTimeout(function() {
                 calcMatrixRowHeight();
                 reinitMatrixScroller();
-                vm.decisionsSpinner = false;
+                $scope.$apply(function() {
+                    vm.decisionsSpinner = false;
+                });
             }, 0);
         }
 
@@ -1030,6 +1082,7 @@
         vm.orderByDecisionProperty = orderByDecisionProperty;
         vm.orderByCharacteristicProperty = orderByCharacteristicProperty;
         vm.orderByCriteriaProperty = orderByCriteriaProperty;
+
         function orderByDecisionProperty(field, order) {
             if (!field) return;
             order = order || 'DESC';
@@ -1056,7 +1109,7 @@
             $scope.$emit('selectSorter', sortObj);
 
             var parentCriteria = $($event.target).parents('.criteria-col');
-            if(parentCriteria.hasClass('selected')) {
+            if (parentCriteria.hasClass('selected')) {
                 $event.stopPropagation();
             }
         }
@@ -1219,6 +1272,56 @@
                 _fo.sortCriteriaIds.splice(position, 1);
                 delete _fo.sortCriteriaCoefficients[criterion.criterionId];
             }
+        }
+
+        // Analysis
+
+        console.log(decisionAnalysisInfo);
+        // vm.sorterData = initAnalysis(decisionAnalysisInfo);
+        initAnalysis(decisionAnalysisInfo);
+
+        function initAnalysis(data) {
+            var filterObjectEmpty = {
+                selectedCriteria: {
+                    sortCriteriaIds: [],
+                    sortCriteriaCoefficients: {}
+                },
+                pagination: {
+                    pageNumber: 1,
+                    pageSize: 10,
+                    totalDecisions: 0
+                },
+                selectedCharacteristics: {},
+                sorters: {
+                    sortByCriteria: {
+                        order: 'DESC'
+                    },
+                    sortByCharacteristic: {
+                        id: null,
+                        order: null
+                    },
+                    sortByDecisionProperty: {
+                        id: null,
+                        order: null
+                    }
+                },
+                selectedDecision: {
+                    decisionsIds: []
+                }
+            };
+
+            // Set new values
+            var sortObj = filterObjectEmpty;
+            sortObj.selectedCriteria.sortCriteriaCoefficients = data.sortCriteriaCoefficients;
+            sortObj.selectedCriteria.sortCriteriaIds = data.sortCriteriaIds;
+            sortObj.sorters.sortByCriteria.order = data.sortWeightCriteriaDirection;
+
+            sortObj.sorters.sortByCharacteristic.order = data.sortCharacteristicDirection;
+
+            sortObj.pagination.pageSize = data.pageSize;
+            console.log(sortObj);
+            // return sortObj;
+            // DecisionSharedService.setFilterObject(sortObj);
         }
 
     }
@@ -1821,92 +1924,6 @@
 
     angular
         .module('app.components')
-        .controller('DecisionCharacteristicsController', DecisionCharacteristicsController)
-        .component('decisionCharacteristics', {
-            templateUrl: 'app/components/decisionCharacteristics/decision-characteristics.html',
-            bindings: {
-                decisionId: '='
-            },
-            controller: 'DecisionCharacteristicsController',
-            controllerAs: 'vm'
-        });
-
-    DecisionCharacteristicsController.$inject = ['DecisionDataService', 'DecisionNotificationService'];
-
-    function DecisionCharacteristicsController(DecisionDataService, DecisionNotificationService) {
-        var
-            vm = this,
-            controls = {
-                CHECKBOX: '',
-                SLIDER: '',
-                SELECT: 'app/components/decisionCharacteristics/decision-characteristics-select-partial.html',
-                RADIOGROUP: '',
-                YEARPICKER: 'app/components/decisionCharacteristics/decision-characteristics-yearpicker-partial.html'
-            };
-
-        vm.characteristicGroups = [];
-        vm.sorterList = [];
-
-        vm.getControl = getControl;
-        vm.selectCharacteristic = selectCharacteristic;
-
-        init();
-
-        function selectCharacteristic(characteristic) {
-            DecisionNotificationService.notifySelectCharacteristic(characteristic);
-        }
-
-        function getControl(characteristic) {
-            return controls[characteristic.visualMode];
-        }
-
-        function prepareCharacteristicsToDisplay(data) {
-            vm.characteristicGroups = data;
-            _.forEach(vm.characteristicGroups, function(group) {
-                _.forEachRight(group.characteristics, function(characteristic, index) {
-                    if (characteristic.sortable) {
-                        vm.sorterList.push(characteristic);
-                    }
-                    if (!characteristic.filterable) {
-                        group.characteristics.splice(index, 1);
-                    }
-                });
-            });
-            DecisionNotificationService.notifyInitSorter({
-                list: vm.sorterList,
-                type: 'sortByCharacteristic',
-                mode: 'threeStep'
-            });
-        }
-
-        function init() {
-            vm.characteristicSpinner = true;
-            DecisionDataService.getCharacteristictsGroupsById(vm.decisionId).then(function(result) {
-                var temp;
-                var characteristicGroupNames = _.map(result, function(group) {
-                    return {
-                        characteristicGroupId: group.characteristicGroupId,
-                        name: group.name
-                    };
-                });
-                DecisionNotificationService.notifyCharacteristicsGroups(characteristicGroupNames);
-                prepareCharacteristicsToDisplay(result);
-            }).finally(function() {
-                if (vm.characteristicGroups.length > 0) {
-                    vm.characteristicGroups[0].isOpen = true;
-                }
-                vm.characteristicSpinner = false;
-            });
-        }
-    }
-})();
-
-(function() {
-
-    'use strict';
-
-    angular
-        .module('app.components')
         .controller('CriteriaCoefficientPopupController', CriteriaCoefficientPopupController);
 
     CriteriaCoefficientPopupController.$inject = ['$uibModalInstance', 'criteria', 'DecisionCriteriaConstant'];
@@ -2128,6 +2145,92 @@
                 value: 1
             }
         });
+})();
+
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.components')
+        .controller('DecisionCharacteristicsController', DecisionCharacteristicsController)
+        .component('decisionCharacteristics', {
+            templateUrl: 'app/components/decisionCharacteristics/decision-characteristics.html',
+            bindings: {
+                decisionId: '='
+            },
+            controller: 'DecisionCharacteristicsController',
+            controllerAs: 'vm'
+        });
+
+    DecisionCharacteristicsController.$inject = ['DecisionDataService', 'DecisionNotificationService'];
+
+    function DecisionCharacteristicsController(DecisionDataService, DecisionNotificationService) {
+        var
+            vm = this,
+            controls = {
+                CHECKBOX: '',
+                SLIDER: '',
+                SELECT: 'app/components/decisionCharacteristics/decision-characteristics-select-partial.html',
+                RADIOGROUP: '',
+                YEARPICKER: 'app/components/decisionCharacteristics/decision-characteristics-yearpicker-partial.html'
+            };
+
+        vm.characteristicGroups = [];
+        vm.sorterList = [];
+
+        vm.getControl = getControl;
+        vm.selectCharacteristic = selectCharacteristic;
+
+        init();
+
+        function selectCharacteristic(characteristic) {
+            DecisionNotificationService.notifySelectCharacteristic(characteristic);
+        }
+
+        function getControl(characteristic) {
+            return controls[characteristic.visualMode];
+        }
+
+        function prepareCharacteristicsToDisplay(data) {
+            vm.characteristicGroups = data;
+            _.forEach(vm.characteristicGroups, function(group) {
+                _.forEachRight(group.characteristics, function(characteristic, index) {
+                    if (characteristic.sortable) {
+                        vm.sorterList.push(characteristic);
+                    }
+                    if (!characteristic.filterable) {
+                        group.characteristics.splice(index, 1);
+                    }
+                });
+            });
+            DecisionNotificationService.notifyInitSorter({
+                list: vm.sorterList,
+                type: 'sortByCharacteristic',
+                mode: 'threeStep'
+            });
+        }
+
+        function init() {
+            vm.characteristicSpinner = true;
+            DecisionDataService.getCharacteristictsGroupsById(vm.decisionId).then(function(result) {
+                var temp;
+                var characteristicGroupNames = _.map(result, function(group) {
+                    return {
+                        characteristicGroupId: group.characteristicGroupId,
+                        name: group.name
+                    };
+                });
+                DecisionNotificationService.notifyCharacteristicsGroups(characteristicGroupNames);
+                prepareCharacteristicsToDisplay(result);
+            }).finally(function() {
+                if (vm.characteristicGroups.length > 0) {
+                    vm.characteristicGroups[0].isOpen = true;
+                }
+                vm.characteristicSpinner = false;
+            });
+        }
+    }
 })();
 
 (function() {
@@ -2397,8 +2500,8 @@ $templateCache.put('app/desicionMatrix/decision-matrix.html','<div class="decisi
 $templateCache.put('app/discussions/discussions.html','<div class=container><div class=row><div class=col-sm-8><div class="panel panel-white post panel-shadow"><div class=post-heading><div class="pull-left image"><img src=http://bootdey.com/img/Content/user_1.jpg class="img-circle avatar" alt="user profile image"></div><div class="pull-left meta"><div class="title h5"><a href=#><b>Ryan Haywood</b></a> made a post.</div><h6 class="text-muted time">1 minute ago</h6></div></div><div class=post-description><p>Bootdey is a gallery of free snippets resources templates and utilities for bootstrap css hmtl js framework. Codes for developers and web designers</p><div class=stats><a href=# class="btn btn-default stat-item"><i class="glyphicon glyphicon-arrow-up icon"></i>2</a> <a href=# class="btn btn-default stat-item"><i class="glyphicon glyphicon-arrow-down icon"></i>12</a></div></div></div></div><div class=col-sm-8><div class="panel panel-white post panel-shadow"><div class=post-heading><div class="pull-left image"><img src=http://bootdey.com/img/Content/user_1.jpg class="img-circle avatar" alt="user profile image"></div><div class="pull-left meta"><div class="title h5"><a href=#><b>Ryan Haywood</b></a> made a post.</div><h6 class="text-muted time">1 minute ago</h6></div></div><div class=post-description><p>Bootdey is a gallery of free snippets resources templates and utilities for bootstrap css hmtl js framework. Codes for developers and web designers</p><div class=stats><a href=# class="btn btn-default stat-item"><i class="glyphicon glyphicon-arrow-up icon"></i>2</a> <a href=# class="btn btn-default stat-item"><i class="glyphicon glyphicon-arrow-down icon"></i>12</a></div></div></div></div></div><div class=comment-form><textarea name id cols=30 rows=10 class=form-control></textarea> <button class="btn btn-primary">Send</button></div></div>');
 $templateCache.put('app/home/home.html','<div class=home><div class=row><div class="col-md-offset-3 col-md-6"><div class=search-box><div class="input-group search-bar"><input class=form-control type=text ng-model=vm.searchText placeholder=Search...> <span class=input-group-btn><a href class="btn btn-default btn-primary" ng-click=vm.search()><span class="glyphicon glyphicon-search"></span></a></span></div><div class="search-results text-left" ng-show=vm.showTrigger><h3>RESULTS for {{vm.searchText}}</h3><ul class="list-group search-results-list"><li class=list-group-item><a href ui-sref="decisions.list({id: vm.searchText || 11479})">DECISION</a> | <a href ui-sref="decisions.matrix({id: vm.searchText || 11479})">DECISION Matrix</a></li></ul></div></div></div></div></div>');
 $templateCache.put('app/login/login.html','<div class="login-btn clearfix"><div ng-if=vm.loginService.getLoginStatus()><div class="pull-right app-user-info" uib-dropdown><a class="usermame dropdown-menu-btn" uib-dropdown-toggle><span>Username:</span> <span>{{vm.user.user_name}}</span> <span class=caret></span></a><ul class=dropdown-menu uib-dropdown-menu role=menu aria-labelledby=split-button><li><form name=logoutForm action={{vm.loginService.getLogoutUrl()}} method=POST novalidate><a href class=link ng-click=vm.logout()>Logout</a></form></li></ul></div></div><ul class="nav navbar-nav pull-right" ng-if=!vm.loginService.getLoginStatus()><li><a ng-click=vm.loginService.login()>Login</a></li></ul></div>');
-$templateCache.put('app/components/appFooter/app-footer.html','<footer class=app-footer><div class="app-footer-info text-center">&copy; DecisionWanted - 2017</div></footer>');
 $templateCache.put('app/components/appHeader/app-header.html','<header class=app-header><div class=row><div class="col-sm-5 header-menu-btn clearfix"><div class=navbar-brand><a ui-sref=home><strong>Decision</strong><span class=app-light>Wanted</span></a></div><div class=app-panel-search><input class="form-control search-input" type=text> <span class="glyphicon glyphicon-search search-input-icon"></span></div></div><div class="col-sm-2 text-center"></div><div class="col-md-5 header-login"><app-login></app-login></div></div></header>');
+$templateCache.put('app/components/appFooter/app-footer.html','<footer class=app-footer><div class="app-footer-info text-center">&copy; DecisionWanted - 2017</div></footer>');
 $templateCache.put('app/components/appList/app-list.html','<div class=app-list-wrapper><div class=app-list-container><div id="decision-{{ item.decisionId }}" ng-repeat="item in vm.list track by item.decisionId" class="list-item-sort app-resize-h angular-animate" ng-class="{\'selected\' : item.isSelected, \'item-loading\' : data.detailsSpinner}" ng-mouseover="vm.getDetails(item, $event)"><div class=list-item-sort-content ng-click=vm.selectDecision(item)><strong>{{ item.decisionId }}</strong><div class="pull-right text-right" ng-show=vm.showPercentage><h5>Criteria compliance:<rating-star class=text-left value=item.criteriaCompliancePercentage total-votes=item.totalVotes ng-show=item.criteriaCompliancePercentage></rating-star></h5></div><h4 class=list-item-sort-title><a href ng-click="vm.goToDecision($event, item.decisionId)">{{item.name}}</a></h4><div class=list-item-sort-detail-wrapper><div class=app-loader-small ng-show=item.detailsSpinner><span class="glyphicon glyphicon-refresh app-loader-animation"></span>LOADING...</div><ng-include src=vm.innerTemplate></ng-include></div></div></div></div></div>');
 $templateCache.put('app/components/appList/decision-partial.html','<div class=list-item-sort-details><div class=decision-detailed-chars><div ng-if=item.characteristics><h4>Characteristics</h4><div ng-repeat="(key, value) in item.characteristics track by key"><div class=chars-group-name><label>{{vm.getGroupNameById(key)}}</label></div><div class=app-row-content ng-repeat="characteristic in value track by $index"><div class=app-row-content-label>{{characteristic.name}}:</div><span ng-show=characteristic.value>{{characteristic.value}}</span> <span ng-show=!characteristic.value class=not-set>Not set</span></div></div></div></div></div>');
 $templateCache.put('app/components/appPaginator/app-paginator.html','<div class="row app-pagination clearfix"><div class="col-md-10 col-sm-10 paginator"><div uib-pagination ng-model=vm.pagination.pageNumber boundary-links=true boundary-link-numbers=true total-items=vm.pagination.totalDecisions items-per-page=vm.pagination.pageSize ng-change=vm.changePage() class=pagination-sm previous-text=&lsaquo; next-text=&rsaquo; first-text=&laquo; last-text=&raquo;></div></div><div class="col-md-2 col-sm-2 counter"><select class="pagination form-control input-sm pull-right" ng-model=vm.pagination.pageSize ng-options="item for item in vm.itemsPerPage" ng-change=vm.changePageSize()></select></div></div>');

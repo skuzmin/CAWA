@@ -10,6 +10,7 @@
     appInterceptor.$inject = ['$injector'];
 
     function appInterceptor($injector) {
+        var analysisCallsArr = [];
         return {
             request: function(config) {
                 // console.log(config);
@@ -24,22 +25,25 @@
                 $stateParams = $injector.get('$stateParams');
 
                 currentState = $state.current.name;
+                
 
                 if (currentState === 'decisions.matrix' || currentState === 'decisions.matrix.analysis')
-                    if (resp.data && resp.data.decisionAnalysisId) {
+                    if (resp.data && resp.data.decisionMatrixs && resp.data.decisionAnalysisId) {
+
                         var decisionAnalysisId = resp.data.decisionAnalysisId;
+                        if (analysisCallsArr.length !== 0) {
+                            
+                            var decisionAnalysisStateParams = {
+                                'id': $stateParams.id,
+                                'slug': $stateParams.slug,
+                                'criteria': $stateParams.criteria,
+                                'analysisId': decisionAnalysisId
+                            };
+                            $state.transitionTo('decisions.matrix.analysis', decisionAnalysisStateParams);
+                        }
 
-                        var decisionAnalysisStateParams = {
-                            'id': $stateParams.id,
-                            'slug': $stateParams.slug,
-                            'criteria': $stateParams.criteria,
-                            'analysisId': decisionAnalysisId
-                        };
-                        // console.log(decisionAnalysisId);
-
-                        // console.log($stateParams.analysisId);
-                        // if ($stateParams && $stateParams.analysisId) return;
-                        $state.transitionTo('decisions.matrix.analysis', decisionAnalysisStateParams);
+                        // Save only second call to avoid big array
+                        if (analysisCallsArr.length === 0) analysisCallsArr.push(decisionAnalysisId);
                     }
                 return resp;
             },
