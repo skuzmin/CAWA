@@ -233,7 +233,7 @@
             var matrixAside,
                 matrixCols;
 
-            matrixAside = document.getElementsByClassName('matrix-table-aside');
+            matrixAside = document.getElementById('matrix-table-aside');
             matrixCols = document.getElementsByClassName('matrix-table-item-content');
             for (var i = 0; i < matrixCols.length; i++) {
                 var el,
@@ -242,15 +242,13 @@
                     newH;
 
                 el = matrixCols[i];
-                asideEl = $('.matrix-table-aside .matrix-table-item').eq(i);
+                asideEl = $('#matrix-table-aside .matrix-table-item').eq(i);
                 asideElH = parseInt(asideEl.outerHeight());
                 newH = (asideElH > el.clientHeight) ? asideElH : el.clientHeight;
 
                 // Set new height
                 el.style.height = newH + 'px';
-                asideEl.css({
-                    'height': newH + 'px'
-                });
+                asideEl.get(0).style.height = newH + 'px';
 
             }
         }
@@ -260,7 +258,7 @@
             setTimeout(function() {
                 calcMatrixRowHeight();
                 reinitMatrixScroller();
-                $scope.$apply(function() {
+                $scope.$applyAsync(function() {
                     vm.decisionsSpinner = false;
                 });
             }, 0);
@@ -347,8 +345,8 @@
             tableHeader,
             tableAside;
 
-        tableAside = $('#matrix-table .matrix-table-aside-content');
-        tableHeader = $('#matrix-table .matrix-table-header .scroll-group');
+        tableAside = $('#matrix-table-aside-content');
+        tableHeader = $('#matrix-table-scroll-group');
 
         function scrollHandler(scrollTop, scrollLeft) {
             $(tableAside).css({

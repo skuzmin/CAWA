@@ -46,7 +46,7 @@
                         </div>
                         <!-- End Make Sticky -->
                         <!-- Criteria Header -->
-                        <div class="scroll-group">
+                        <div id="matrix-table-scroll-group" class="scroll-group">
                             <div class="matrix-table-col matrix-table-group matrix-table-group-criteria" ng-repeat="group in vm.criteriaGroups track by $index">
                                 <div class="matrix-table-group-title">
                                     {{group.name}}
@@ -110,8 +110,8 @@
                 <div class="matrix-table-body-wrapper">
                     <!-- End Header -->
                     <!-- Table Aside -->
-                    <div class="matrix-table-aside">
-                        <div class="matrix-table-aside-content">
+                    <div id="matrix-table-aside" class="matrix-table-aside">
+                        <div id="matrix-table-aside-content" class="matrix-table-aside-content">
                             <div class="matrix-table-item" ng-repeat="item in vm.decisionMatrixList track by item.decision.decisionId">
                                 <div class="matrix-table-row" id="decision-name-row-{{item.decision.decisionId}}">
                                     <div class="matrix-table-col matrix-table-col-name" data-col-id="col-name">
