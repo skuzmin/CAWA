@@ -6,9 +6,9 @@
         .module('app.decision')
         .service('DecisionSharedService', DecisionSharedService);
 
-    DecisionSharedService.$inject = [];
+    DecisionSharedService.$inject = ['$rootScope'];
 
-    function DecisionSharedService() {
+    function DecisionSharedService($rootScope) {
         var service = this;
 
         service.filterObject = {
@@ -23,9 +23,17 @@
             },
             selectedCharacteristics: {},
             sorters: {
-                sortByCriteria: { order: 'DESC' },
-                sortByCharacteristic: { id: null, order: null },
-                sortByDecisionProperty: { id: null, order: null }
+                sortByCriteria: {
+                    order: 'DESC'
+                },
+                sortByCharacteristic: {
+                    id: null,
+                    order: null
+                },
+                sortByDecisionProperty: {
+                    id: null,
+                    order: null
+                }
             },
             selectedDecision: {
                 decisionsIds: []
@@ -33,9 +41,9 @@
         };
 
         //allias
-        var _fo = service.filterObject;
 
         service.getFilterObject = function() {
+            var _fo = service.filterObject;
             return {
                 //selected criteria
                 sortCriteriaIds: _fo.selectedCriteria.sortCriteriaIds,
@@ -57,6 +65,14 @@
                 decisionsIds: _fo.selectedDecision.decisionsIds
             };
         };
+
+        service.setFilterObject = function(obj) {
+            if (!obj) return;
+            service.filterObject = obj;
+            // console.log(service.filterObject);
+            $rootScope.$broadcast(service.filterObject);
+        };
+
 
     }
 })();

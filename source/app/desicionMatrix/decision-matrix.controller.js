@@ -190,7 +190,16 @@
             //     });
             //     isInitedSorters = true;
             // }
+
             vm.sorterData = DecisionSharedService.filterObject.sorters;
+
+            // Set Criteria
+            _.map(vm.criteriaGroups[0].criteria, function(el) {
+                if (_.includes(DecisionSharedService.filterObject.selectedCriteria.sortCriteriaIds, el.criterionId)) {
+                    el.isSelected = true;
+                }
+            });
+
         }
 
         function calcMatrixRowHeight() {
@@ -442,7 +451,7 @@
         // Analysis
         console.log(decisionAnalysisInfo);
         // vm.sorterData = initAnalysis(decisionAnalysisInfo);
-        if(decisionAnalysisInfo) initAnalysis(decisionAnalysisInfo);
+        if (decisionAnalysisInfo) initAnalysis(decisionAnalysisInfo);
 
         function initAnalysis(data) {
             var filterObjectEmpty = {
@@ -483,9 +492,13 @@
             sortObj.sorters.sortByCharacteristic.order = data.sortCharacteristicDirection;
 
             sortObj.pagination.pageSize = data.pageSize;
-            console.log(sortObj);
+            // console.log(sortObj);
             // return sortObj;
-            // DecisionSharedService.setFilterObject(sortObj);
+            DecisionSharedService.setFilterObject(sortObj);
+            // DecisionSharedService.getFilterObject(sortObj);
+            _fo = DecisionSharedService.filterObject.selectedCriteria;
+
+            return _fo;
         }
 
     }
