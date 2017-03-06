@@ -21,38 +21,6 @@
         vm.decision = decisionBasicInfo || {};
         $rootScope.pageTitle = vm.decision.name + ' Matrix | DecisionWanted';
 
-        vm.toggleTargetHover = toggleTargetHover;
-
-        vm.toggleTargetHoverFlag = false;
-
-        // TODO: move to utils
-        function isDate(date) {
-            var isValueDate = (new Date(date) !== "Invalid Date") && !isNaN(new Date(date));
-            return isValueDate;
-        }
-
-        function toggleTargetHover() {
-            // Hover for vertical lines
-            vm.toggleTargetHoverFlag = !vm.toggleTargetHoverFlag;
-            if (vm.toggleTargetHoverFlag) {
-                $('.matrix-table-col').on({
-                    mouseenter: function() {
-                        var colId = $(this).data('col-id');
-                        if (!colId) return;
-                        $('.matrix-table-col[data-col-id="' + colId + '"]').addClass('matrix-col-selected');
-                    },
-                    mouseleave: function() {
-                        $('.matrix-table-col.matrix-col-selected').removeClass('matrix-col-selected');
-                    }
-                });
-                $('body').addClass('target-hover');
-
-            } else {
-                $('.matrix-table-col').unbind('mouseenter').unbind('mouseleave');
-                $('body').removeClass('target-hover');
-            }
-        }
-
         init();
 
         function getCriteriaGroupsById() {
@@ -124,6 +92,14 @@
 
         }
 
+
+        // TODO: move to utils
+        function isDate(date) {
+            var isValueDate = (new Date(date) !== "Invalid Date") && !isNaN(new Date(date));
+            return isValueDate;
+        }
+
+        // Fill matrix data for View
         var emptyCriterianData = {
             // "criterionId": null,
             "weight": null,
@@ -141,14 +117,13 @@
         };
 
 
-        // TODO: optimize it
+        // TODO: try to optimize it
         function createMatrixContent(criteriaIds, characteristicsIds, decisionMatrixList) {
 
             var matrixContent = [];
 
             var i = 0;
             matrixContent = _.map(decisionMatrixList, function(el) {
-                // if (i >= 1) return false;
                 // New element with empty characteristics and criteria
                 var newEL = _.clone(el);
                 newEL.criteria = [];
@@ -167,11 +142,6 @@
                     return emptyCriterianDataNew;
                 });
 
-                // console.log(el);
-                // console.log(criteriaIds);
-                // var merge = _.merge(newEL, el);
-                // console.log(merge.criteria);
-
                 // Fill empty characteristics
                 newEL.characteristics = _.map(characteristicsIds, function(characteristicId) {
                     var emptyCharacteristicDataNew = _.clone(emptyCharacteristicData);
@@ -184,15 +154,10 @@
 
                     return emptyCharacteristicDataNew;
                 });
-                // return i++;
+
                 return newEL;
-                // console.log(el);
             });
 
-
-            // console.log(criteriaIds);
-            // console.log(characteristicsIds);
-            // console.log(vm.decisionMatrixList);
 
             return matrixContent;
         }
@@ -391,7 +356,7 @@
             vm.tableWidth = (criteriaGroupsCount + characteristicGroupsCount) * 120 + 60 + 'px';
         }
 
-        // TODO: make as separeted component
+        // TODO: make as a separeted component
         // Criteria header
         vm.editCriteriaCoefficient = editCriteriaCoefficient;
 
@@ -449,8 +414,7 @@
                 criterion.isSelected = !criterion.isSelected;
             }
             formDataForSearchRequest(criterion, coefCall);
-            // console.log(criterion);
-            // console.log(DecisionSharedService.getFilterObject());
+
             DecisionDataService.searchDecisionMatrix(vm.decisionId, DecisionSharedService.getFilterObject()).then(function(result) {
                 DecisionNotificationService.notifySelectCriterion(result.decisionMatrixs);
             });
@@ -476,7 +440,6 @@
         }
 
         // Analysis
-
         console.log(decisionAnalysisInfo);
         // vm.sorterData = initAnalysis(decisionAnalysisInfo);
         if(decisionAnalysisInfo) initAnalysis(decisionAnalysisInfo);
