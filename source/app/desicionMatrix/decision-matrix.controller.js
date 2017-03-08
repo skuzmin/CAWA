@@ -86,7 +86,7 @@
             DecisionNotificationService.subscribeSelectSorter(function(event, data) {
                 vm.decisionsSpinner = true;
                 DecisionSharedService.filterObject.sorters[data.mode] = data.sort;
-                vm.sorterData = DecisionSharedService.filterObject.sorters;
+                vm.fo = DecisionSharedService.filterObject.sorters;
                 searchDecisionMatrix(vm.decisionId);
             });
 
@@ -191,7 +191,7 @@
             //     isInitedSorters = true;
             // }
 
-            vm.sorterData = DecisionSharedService.filterObject.sorters;
+            vm.fo = DecisionSharedService.filterObject.sorters;
 
             // Set Criteria
             _.map(vm.criteriaGroups[0].criteria, function(el) {
@@ -398,7 +398,7 @@
             });
         }
 
-        var _fo = DecisionSharedService.filterObject.selectedCriteria;
+        var foSelectedCriteria = DecisionSharedService.filterObject.selectedCriteria;
         vm.selectCriterion = selectCriterion;
         //Set decions percent(% criterion match)
         function setDecisionMatchPercent(list) {
@@ -430,52 +430,53 @@
         }
 
         function formDataForSearchRequest(criterion, coefCall) {
-            var position = _fo.sortCriteriaIds.indexOf(criterion.criterionId);
+            var position = foSelectedCriteria.sortCriteriaIds.indexOf(criterion.criterionId);
             //select criterion
             if (position === -1) {
-                _fo.sortCriteriaIds.push(criterion.criterionId);
+                foSelectedCriteria.sortCriteriaIds.push(criterion.criterionId);
                 //don't add default coefficient
                 if (criterion.coefficient && criterion.coefficient.value !== DecisionCriteriaConstant.coefficientDefault.value) {
-                    _fo.sortCriteriaCoefficients[criterion.criterionId] = criterion.coefficient.value;
+                    foSelectedCriteria.sortCriteriaCoefficients[criterion.criterionId] = criterion.coefficient.value;
                 }
                 //add only coefficient (but not default)
             } else if (coefCall && criterion.coefficient.value !== DecisionCriteriaConstant.coefficientDefault.value) {
-                _fo.sortCriteriaCoefficients[criterion.criterionId] = criterion.coefficient.value;
+                foSelectedCriteria.sortCriteriaCoefficients[criterion.criterionId] = criterion.coefficient.value;
                 //unselect criterion
             } else {
-                _fo.sortCriteriaIds.splice(position, 1);
-                delete _fo.sortCriteriaCoefficients[criterion.criterionId];
+                foSelectedCriteria.sortCriteriaIds.splice(position, 1);
+                delete foSelectedCriteria.sortCriteriaCoefficients[criterion.criterionId];
             }
         }
 
         // Analysis
         console.log(decisionAnalysisInfo);
-        // vm.sorterData = initAnalysis(decisionAnalysisInfo);
         if (decisionAnalysisInfo) initAnalysis(decisionAnalysisInfo);
 
         function initAnalysis(data) {
-            var filterObjectEmpty = {
+
+            // Set new values
+            var sortObjAnalysis = {
                 selectedCriteria: {
-                    sortCriteriaIds: [],
-                    sortCriteriaCoefficients: {}
+                    sortCriteriaIds: data.sortCriteriaIds || [],
+                    sortCriteriaCoefficients: data.sortCriteriaCoefficients || {}
                 },
                 pagination: {
-                    pageNumber: 1,
-                    pageSize: 10,
+                    pageNumber: data.pageNumber ? data.pageNumber + 1 : 1,
+                    pageSize: data.pageSize || 10,
                     totalDecisions: 0
                 },
                 selectedCharacteristics: {},
                 sorters: {
                     sortByCriteria: {
-                        order: 'DESC'
+                        order: data.sortWeightCriteriaDirection || 'DESC'
                     },
                     sortByCharacteristic: {
                         id: null,
-                        order: null
+                        order: data.sortCharacteristicDirection || null
                     },
                     sortByDecisionProperty: {
-                        id: null,
-                        order: null
+                        id: data.sortDecisionPropertyName || null,
+                        order: data.sortDecisionPropertyDirection || null
                     }
                 },
                 selectedDecision: {
@@ -483,22 +484,12 @@
                 }
             };
 
-            // Set new values
-            var sortObj = filterObjectEmpty;
-            sortObj.selectedCriteria.sortCriteriaCoefficients = data.sortCriteriaCoefficients;
-            sortObj.selectedCriteria.sortCriteriaIds = data.sortCriteriaIds;
-            sortObj.sorters.sortByCriteria.order = data.sortWeightCriteriaDirection;
+            // console.log(sortObjAnalysis);
 
-            sortObj.sorters.sortByCharacteristic.order = data.sortCharacteristicDirection;
+            DecisionSharedService.setFilterObject(sortObjAnalysis);
+            foSelectedCriteria = sortObjAnalysis.selectedCriteria;
 
-            sortObj.pagination.pageSize = data.pageSize;
-            // console.log(sortObj);
-            // return sortObj;
-            DecisionSharedService.setFilterObject(sortObj);
-            // DecisionSharedService.getFilterObject(sortObj);
-            _fo = DecisionSharedService.filterObject.selectedCriteria;
-
-            return _fo;
+            return foSelectedCriteria;
         }
 
     }

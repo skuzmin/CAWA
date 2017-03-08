@@ -34,8 +34,8 @@
                                         <div class="matrix-table-title app-sorter-wrapper matrix-content-name">Name
                                         </div>
                                         <div class="app-sorter">
-                                            <span class="app-sorter-top glyphicon glyphicon-triangle-top" ng-click="vm.orderByDecisionProperty('name', 'ASC')" ng-class="{'selected': vm.sorterData.sortByDecisionProperty.id === 'name' && vm.sorterData.sortByDecisionProperty.order === 'ASC'}"></span>
-                                            <span class="app-sorter-bottom glyphicon glyphicon-triangle-bottom" ng-click="vm.orderByDecisionProperty('name', 'DESC')" ng-class="{'selected': vm.sorterData.sortByDecisionProperty.id === 'name' && vm.sorterData.sortByDecisionProperty.order === 'DESC'}"></span>
+                                            <span class="app-sorter-top glyphicon glyphicon-triangle-top" ng-click="vm.orderByDecisionProperty('name', 'ASC')" ng-class="{'selected': vm.fo.sortByDecisionProperty.id === 'name' && vm.fo.sortByDecisionProperty.order === 'ASC'}"></span>
+                                            <span class="app-sorter-bottom glyphicon glyphicon-triangle-bottom" ng-click="vm.orderByDecisionProperty('name', 'DESC')" ng-class="{'selected': vm.fo.sortByDecisionProperty.id === 'name' && vm.fo.sortByDecisionProperty.order === 'DESC'}"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -61,11 +61,11 @@
                                                 <span
                                                     ng-click="vm.orderByCriteriaProperty('ASC', $event)"
                                                     class="app-sorter-top glyphicon glyphicon-triangle-top"
-                                                    ng-class="{'selected': vm.sorterData.sortByCriteria.order === 'ASC'}"></span>
+                                                    ng-class="{'selected': vm.fo.sortByCriteria.order === 'ASC'}"></span>
                                                 <span
                                                     ng-click="vm.orderByCriteriaProperty('DESC', $event)"
                                                     class="app-sorter-bottom glyphicon glyphicon-triangle-bottom"
-                                                    ng-class="{'selected': vm.sorterData.sortByCriteria.order === 'DESC'}"></span>
+                                                    ng-class="{'selected': vm.fo.sortByCriteria.order === 'DESC'}"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -90,11 +90,11 @@
                                                 <span
                                                     ng-click="vm.orderByCharacteristicProperty(characteristic.characteristicId, 'ASC')"
                                                     class="app-sorter-top glyphicon glyphicon-triangle-top"
-                                                    ng-class="{'selected': vm.sorterData.sortByCharacteristic.id === characteristic.characteristicId && vm.sorterData.sortByCharacteristic.order === 'ASC'}"></span>
+                                                    ng-class="{'selected': vm.fo.sortByCharacteristic.id === characteristic.characteristicId && vm.fo.sortByCharacteristic.order === 'ASC'}"></span>
                                                 <span
                                                     ng-click="vm.orderByCharacteristicProperty(characteristic.characteristicId, 'DESC')"
                                                     class="app-sorter-bottom glyphicon glyphicon-triangle-bottom"
-                                                    ng-class="{'selected': vm.sorterData.sortByCharacteristic.id === characteristic.characteristicId && vm.sorterData.sortByCharacteristic.order === 'DESC'}"></span>
+                                                    ng-class="{'selected': vm.fo.sortByCharacteristic.id === characteristic.characteristicId && vm.fo.sortByCharacteristic.order === 'DESC'}"></span>
                                             </div>
                                         </div>
                                     </div>

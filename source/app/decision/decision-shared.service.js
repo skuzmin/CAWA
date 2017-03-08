@@ -70,7 +70,6 @@
             if (!obj) return;
             service.filterObject = obj;
             // console.log(service.filterObject);
-            $rootScope.$broadcast(service.filterObject);
         };
 
 
