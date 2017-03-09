@@ -138,7 +138,7 @@
         urlParams = path.split('/');
         analysisId = urlParams[urlParams.length - 1];
 
-        if(!$state.is('decisions.list')) { // TODO: temp fix 
+        if($state.is('decisions.matrix.analysis')) { // TODO: temp fix 
 
             return DecisionDataService.getDecisionAnalysis(analysisId).then(function(resp) {
                 if(resp.error) {
