@@ -110,7 +110,7 @@
                         'slug': decisionSlug,
                         'criteria': criteria
                     };
-                    if (currentState === 'decisions.matrix' || currentState === 'decisions.list') {
+                    if ($state.is('decisions.matrix') || $state.is('decisions.list')) {
                         // Just added new slug
                         $state.transitionTo(currentState, decisionStateParams);
                     }
@@ -132,23 +132,25 @@
         // TODO: find better way
         var path,
             urlParams,
-            analysisId,
-            currentState;
+            analysisId;
 
         path = $location.path();
         urlParams = path.split('/');
         analysisId = urlParams[urlParams.length - 1];
-        currentState = $state.current.name;
 
-        return DecisionDataService.getDecisionAnalysis(analysisId).then(function(resp) {
-            if(resp.error) {
-                console.log(resp.error);
-                return;
-            }
-            return resp;
-        }, function(req) {
-            console.log(req);
-        });
+        if(!$state.is('decisions.list')) { // TODO: temp fix 
+
+            return DecisionDataService.getDecisionAnalysis(analysisId).then(function(resp) {
+                if(resp.error) {
+                    console.log(resp.error);
+                    return;
+                }
+                return resp;
+            }, function(req) {
+                console.log(req);
+            });
+
+        }
     }
 
 

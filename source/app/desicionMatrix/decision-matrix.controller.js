@@ -449,8 +449,10 @@
         }
 
         // Analysis
-        console.log(decisionAnalysisInfo);
-        if (decisionAnalysisInfo) initAnalysis(decisionAnalysisInfo);
+        if (decisionAnalysisInfo) {
+            initAnalysis(decisionAnalysisInfo);
+            console.log(decisionAnalysisInfo);
+        }
 
         function initAnalysis(data) {
 
