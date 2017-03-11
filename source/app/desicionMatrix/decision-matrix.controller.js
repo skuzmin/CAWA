@@ -451,7 +451,7 @@
         // Analysis
         if (decisionAnalysisInfo) {
             initAnalysis(decisionAnalysisInfo);
-            console.log(decisionAnalysisInfo);
+            // console.log(decisionAnalysisInfo);
         }
 
         function initAnalysis(data) {
@@ -473,7 +473,7 @@
                         order: data.sortWeightCriteriaDirection || 'DESC'
                     },
                     sortByCharacteristic: {
-                        id: null,
+                        id: data.sortCharacteristicId || null,
                         order: data.sortCharacteristicDirection || null
                     },
                     sortByDecisionProperty: {
@@ -487,7 +487,7 @@
             };
 
             // console.log(sortObjAnalysis);
-
+            console.log(sortObjAnalysis);
             DecisionSharedService.setFilterObject(sortObjAnalysis);
             foSelectedCriteria = sortObjAnalysis.selectedCriteria;
 

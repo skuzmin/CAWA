@@ -19,6 +19,7 @@
             response: function(resp) {
                 // TODO: optimize move to routes
                 // check if decisionAnalysis in response
+                // in each API call
                 var $state, $stateParams;
 
                 $state = $injector.get('$state');
@@ -38,7 +39,7 @@
                             'criteria': $stateParams.criteria,
                             'analysisId': decisionAnalysisId
                         };
-                        $state.transitionTo('decisions.matrix.analysis', decisionAnalysisStateParams);
+                        $state.go('decisions.matrix.analysis', decisionAnalysisStateParams);
                     }
 
                     // Save only second call to avoid big array

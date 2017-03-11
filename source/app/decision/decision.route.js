@@ -21,8 +21,8 @@
                 controller: 'DecisionMatrixController',
                 controllerAs: 'vm',
                 resolve: {
-                    decisionBasicInfo: DecisionResolver,
-                    decisionAnalysisInfo: DecisionAanalysisResolver
+                    decisionAnalysisInfo: DecisionAanalysisResolver,
+                    decisionBasicInfo: DecisionResolver
                 },
                 params: {
                     slug: {
@@ -110,9 +110,9 @@
                         'slug': decisionSlug,
                         'criteria': criteria
                     };
-                    if ($state.is('decisions.matrix') || $state.is('decisions.list')) {
+                    if (toState.name === 'decisions.matrix' || toState.name === 'decisions.list') {
                         // Just added new slug
-                        $state.transitionTo(currentState, decisionStateParams);
+                        $state.go(currentState, decisionStateParams);
                     }
 
                     //unsubscribe event listener
@@ -125,32 +125,40 @@
     }
 
     // Analysis
-    DecisionAanalysisResolver.$inject = ['DecisionDataService', '$state', '$rootScope', '$stateParams', '$location'];
+    DecisionAanalysisResolver.$inject = ['$q', '$stateParams','DecisionDataService', '$state', '$rootScope',  '$location'];
 
-    function DecisionAanalysisResolver(DecisionDataService, $state, $rootScope, $stateParams, $location) {
+    function DecisionAanalysisResolver($q, $stateParams,DecisionDataService, $state, $rootScope,  $location) {
 
         // TODO: find better way
+        // UI route bug https://github.com/angular-ui/ui-router/issues/1856#issuecomment-93025037
+        // resolves will only get the parameters for the state on which it is defined
         var path,
             urlParams,
-            analysisId;
+            analysisId,
+            analysisSlug;
 
         path = $location.path();
         urlParams = path.split('/');
         analysisId = urlParams[urlParams.length - 1];
+        analysisSlug = urlParams[urlParams.length - 2];
 
-        if($state.is('decisions.matrix.analysis')) { // TODO: temp fix 
+        if(analysisSlug !== 'analysis' && !analysisId) return;
 
-            return DecisionDataService.getDecisionAnalysis(analysisId).then(function(resp) {
-                if(resp.error) {
-                    console.log(resp.error);
-                    return;
-                }
-                return resp;
-            }, function(req) {
-                console.log(req);
-            });
+        var deferred = $q.defer();
 
-        }
+        DecisionDataService.getDecisionAnalysis(analysisId).then(function(resp) {
+            if (resp.error) {
+                console.log(resp.error);
+                return;
+            }
+            deferred.resolve(resp);
+            // return resp;
+        }, function(req) {
+            console.log(req);
+        });
+
+        return deferred.promise;
+
     }
 
 

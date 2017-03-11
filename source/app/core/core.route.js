@@ -23,10 +23,12 @@
 
         $compileProvider.debugInfoEnabled(Config.mode === 'dev');
 
-        // $locationProvider.html5Mode({
-        //     enabled: true,
-        //     requireBase: false
-        // });
+        $locationProvider.html5Mode({
+            enabled: true,
+            // requireBase: false
+        });
+
+        $locationProvider.hashPrefix('!');
     }
 
 })();

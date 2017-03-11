@@ -44,6 +44,8 @@
 
         service.getFilterObject = function() {
             var _fo = service.filterObject;
+            // console.log(_fo);
+            // console.log(_fo.pagination.pageNumber);
             return {
                 //selected criteria
                 sortCriteriaIds: _fo.selectedCriteria.sortCriteriaIds,
@@ -69,6 +71,7 @@
         service.setFilterObject = function(obj) {
             if (!obj) return;
             service.filterObject = obj;
+            // console.log(obj);
             // console.log(service.filterObject);
         };
 
