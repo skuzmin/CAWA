@@ -125,9 +125,9 @@
     }
 
     // Analysis
-    DecisionAanalysisResolver.$inject = ['$q', '$stateParams','DecisionDataService', '$state', '$rootScope',  '$location'];
+    DecisionAanalysisResolver.$inject = ['$stateParams', 'DecisionDataService', '$state', '$rootScope', '$location'];
 
-    function DecisionAanalysisResolver($q, $stateParams,DecisionDataService, $state, $rootScope,  $location) {
+    function DecisionAanalysisResolver($stateParams, DecisionDataService, $state, $rootScope, $location) {
 
         // TODO: find better way
         // UI route bug https://github.com/angular-ui/ui-router/issues/1856#issuecomment-93025037
@@ -142,23 +142,18 @@
         analysisId = urlParams[urlParams.length - 1];
         analysisSlug = urlParams[urlParams.length - 2];
 
-        if(analysisSlug !== 'analysis' && !analysisId) return;
-
-        var deferred = $q.defer();
-
-        DecisionDataService.getDecisionAnalysis(analysisId).then(function(resp) {
-            if (resp.error) {
-                console.log(resp.error);
-                return;
-            }
-            deferred.resolve(resp);
-            // return resp;
-        }, function(req) {
-            console.log(req);
-        });
-
-        return deferred.promise;
-
+        // console.log(analysisSlug, analysisId);
+        if (analysisSlug === 'analysis' && analysisId) {
+            return DecisionDataService.getDecisionAnalysis(analysisId).then(function(resp) {
+                if (resp.error) {
+                    console.log(resp.error);
+                    return;
+                }
+                return resp;
+            }, function(req) {
+                console.log(req);
+            });
+        }
     }
 
 
