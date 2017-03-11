@@ -190,16 +190,31 @@
             //     });
             //     isInitedSorters = true;
             // }
-
-            vm.fo = DecisionSharedService.filterObject.sorters;
+            var _fo = DecisionSharedService.filterObject;
+            vm.fo = _fo.sorters;
 
             // Set Criteria
             _.map(vm.criteriaGroups[0].criteria, function(el) {
-                if (_.includes(DecisionSharedService.filterObject.selectedCriteria.sortCriteriaIds, el.criterionId)) {
+
+                if (_.includes(_fo.selectedCriteria.sortCriteriaIds, el.criterionId)) {
                     el.isSelected = true;
+
+                    // Set criterion coefficient el.coefficient.
+                    _.map(_fo.selectedCriteria.sortCriteriaCoefficients, function(value, key) {
+                        if (el.isSelected && parseInt(key) === el.criterionId) {
+                            var coefficientNew = findCoefNameByValue(value);
+                            el.coefficient = coefficientNew;
+                        }
+                    });
                 }
             });
+        }
 
+        function findCoefNameByValue(valueSearch) {
+            valueSearch = parseInt(valueSearch);
+            return _.find(DecisionCriteriaConstant.coefficientList, function(record) {
+                return record.value == valueSearch;
+            });
         }
 
         function calcMatrixRowHeight() {
@@ -487,6 +502,7 @@
             };
 
             // console.log(sortObjAnalysis);
+            console.log(data);
             console.log(sortObjAnalysis);
             DecisionSharedService.setFilterObject(sortObjAnalysis);
             foSelectedCriteria = sortObjAnalysis.selectedCriteria;
