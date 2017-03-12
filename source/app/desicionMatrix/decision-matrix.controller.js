@@ -190,11 +190,10 @@
             //     });
             //     isInitedSorters = true;
             // }
-            DecisionSharedService.filterObject.pagination.totalDecisions = total;
-            var _fo = DecisionSharedService.filterObject;
-            vm.fo = _fo.sorters;
 
-            // console.log(_fo);
+            var _fo = DecisionSharedService.filterObject;
+            _fo.pagination.totalDecisions = total;
+            vm.fo = _fo.sorters;
 
             // Set Criteria
             _.map(vm.criteriaGroups[0].criteria, function(el) {

@@ -18,7 +18,7 @@
             },
             pagination: {
                 pageNumber: 1,
-                pageSize: 59,
+                pageSize: 10,
                 totalDecisions: 0
             },
             selectedCharacteristics: {},
@@ -80,7 +80,7 @@
                 pagination: {
                     pageNumber: obj.pageNumber ? obj.pageNumber + 1 : 1,
                     pageSize: obj.pageSize || 10,
-                    totalDecisions: obj.totalDecisions || 59 //Need to be sended in analysis or in endpoint api/v1.0/decisions/16003
+                    totalDecisions: obj.totalDecisions || (obj.pageNumber + 1)*obj.pageSize //Need to be sended in analysis or in endpoint api/v1.0/decisions/16003
                 },
                 selectedCharacteristics: {},
                 sorters: {

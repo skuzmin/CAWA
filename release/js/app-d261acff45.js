@@ -471,7 +471,7 @@
             },
             pagination: {
                 pageNumber: 1,
-                pageSize: 59,
+                pageSize: 10,
                 totalDecisions: 0
             },
             selectedCharacteristics: {},
@@ -533,7 +533,7 @@
                 pagination: {
                     pageNumber: obj.pageNumber ? obj.pageNumber + 1 : 1,
                     pageSize: obj.pageSize || 10,
-                    totalDecisions: obj.totalDecisions || 59 //Need to be sended in analysis or in endpoint api/v1.0/decisions/16003
+                    totalDecisions: obj.totalDecisions || (obj.pageNumber + 1)*obj.pageSize //Need to be sended in analysis or in endpoint api/v1.0/decisions/16003
                 },
                 selectedCharacteristics: {},
                 sorters: {
@@ -1049,11 +1049,10 @@
             //     });
             //     isInitedSorters = true;
             // }
-            DecisionSharedService.filterObject.pagination.totalDecisions = total;
-            var _fo = DecisionSharedService.filterObject;
-            vm.fo = _fo.sorters;
 
-            // console.log(_fo);
+            var _fo = DecisionSharedService.filterObject;
+            _fo.pagination.totalDecisions = total;
+            vm.fo = _fo.sorters;
 
             // Set Criteria
             _.map(vm.criteriaGroups[0].criteria, function(el) {
