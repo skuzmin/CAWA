@@ -69,7 +69,6 @@
                 var resultdecisionMatrixs = data;
                 vm.decisionMatrixList = createMatrixContent(criteriaIds, characteristicsIds, resultdecisionMatrixs);
                 renderMatrix();
-
             });
             DecisionNotificationService.subscribePageChanged(function() {
                 vm.decisionsSpinner = true;
@@ -461,5 +460,31 @@
             }
         }
 
+        // TODO: dontrepit yourself!!!
+        // Characteristics
+            controls = {
+                CHECKBOX: '',
+                SLIDER: '',
+                SELECT: 'app/components/decisionCharacteristics/decision-characteristics-select-partial.html',
+                RADIOGROUP: '',
+                YEARPICKER: 'app/components/decisionCharacteristics/decision-characteristics-yearpicker-partial.html'
+            };
+
+
+        vm.getControl = getControl;
+        vm.selectCharacteristic = selectCharacteristic;
+        function getControl(characteristic) {
+            return controls[characteristic.visualMode];
+        }
+
+        function selectCharacteristic(characteristic) {
+            DecisionNotificationService.notifySelectCharacteristic(characteristic);
+        }
+
+        DecisionNotificationService.subscribeSelectCharacteristic(function(event, data) {
+            console.log(data);
+            // vm.decisionsSpinner = true;
+            // searchDecisionMatrix(vm.decisionId);            
+        });        
     }
 })();

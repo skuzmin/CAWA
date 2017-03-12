@@ -10,11 +10,17 @@
     -webkit-border-radius: @border-radius-modal;
             border-radius: @border-radius-modal;
     border: 1px solid darken(@gray-light, 20%);
-    padding: 8px 16px;
+    padding: 8px 8px;
     -webkit-box-shadow: 0px 4px 11px rgba(0, 0, 0, 0.2);
             box-shadow: 0px 4px 11px rgba(0, 0, 0, 0.2);
     font-size: 13px;
-
+    .input-group {
+        max-width: 200px;
+    }
+    .form-control {
+        height: 28px;
+        padding: 4px 7px        
+    }
     &:before {
         position: absolute;
         right: 18px;

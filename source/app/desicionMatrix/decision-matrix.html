@@ -182,13 +182,14 @@
 <!-- Characteristics Filters -->
 <div ng-repeat="group in vm.characteristicGroups track by $index">
     <div ng-repeat="characteristic in group.characteristics track by $index" data-pop-over-content-id="{{characteristic.characteristicId}}" class="hide app-pop-over-content">
-        {{characteristic.valueType}} {{characteristic.visualMode}}
+        <!-- {{characteristic.valueType}} {{characteristic.visualMode}} -->
         <!--         <div class="form-group">
             <input type="text" class="form-control input-sm">
         </div> -->
         <!--     <div class="clearfix">
             <button class="btn-primary btn btn-sm pull-right">Save</button>
         </div> -->
+        <ng-include src="vm.getControl(characteristic)"></ng-include>
     </div>
 </div>
 <!-- End Characteristics Filters -->
