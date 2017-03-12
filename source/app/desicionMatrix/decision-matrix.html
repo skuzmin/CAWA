@@ -54,7 +54,8 @@
                                             <div class="matrix-table-title app-sorter-wrapper">
                                                 {{criteria.name}}
                                             </div>
-                                            <div class="btn matrix-criteria-coefficient" ng-click="vm.editCriteriaCoefficient($event, criteria)">
+                                            <div class="btn matrix-criteria-coefficient" ng-click="vm.editCriteriaCoefficient($event, criteria);">
+                                            {{criteria.isSelected}}
                                                 <criteria-coefficient-indicator coefficient="criteria.coefficient"></criteria-coefficient-indicator>
                                             </div>
                                             <div class="app-sorter">

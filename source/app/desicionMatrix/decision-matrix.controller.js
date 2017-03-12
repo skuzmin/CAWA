@@ -163,7 +163,7 @@
         }
 
         //Init sorters, when directives loaded
-        function initSorters() {
+        function initSorters(total) {
             // if (!isInitedSorters) {
             //     DecisionNotificationService.notifyInitSorter({
             //         list: [{
@@ -190,8 +190,11 @@
             //     });
             //     isInitedSorters = true;
             // }
+            DecisionSharedService.filterObject.pagination.totalDecisions = total;
             var _fo = DecisionSharedService.filterObject;
             vm.fo = _fo.sorters;
+
+            // console.log(_fo);
 
             // Set Criteria
             _.map(vm.criteriaGroups[0].criteria, function(el) {
@@ -211,7 +214,7 @@
         }
 
         function findCoefNameByValue(valueSearch) {
-            valueSearch = parseInt(valueSearch);
+            valueSearch = valueSearch;
             return _.find(DecisionCriteriaConstant.coefficientList, function(record) {
                 return record.value == valueSearch;
             });
@@ -257,14 +260,10 @@
             vm.decisionsSpinner = true;
             DecisionDataService.searchDecisionMatrix(id, DecisionSharedService.getFilterObject()).then(function(result) {
                 var resultdecisionMatrixs = result.decisionMatrixs;
-                initSorters();
-
-                DecisionSharedService.filterObject.pagination.totalDecisions = result.totalDecisionMatrixs;
-
+                initSorters(result.totalDecisionMatrixs);
                 vm.decisionMatrixList = createMatrixContent(criteriaIds, characteristicsIds, resultdecisionMatrixs);
 
                 renderMatrix();
-
             });
         }
 
@@ -408,7 +407,7 @@
                     criterionId: result.criterionId
                 });
                 vm.criteriaGroups[groupIndex].criteria[criteriaIndex] = result;
-                selectCriterion(result, true);
+                selectCriterion(result, criteria.isSelected);
                 vm.decisionsSpinner = false;
             });
         }
@@ -461,53 +460,6 @@
                 foSelectedCriteria.sortCriteriaIds.splice(position, 1);
                 delete foSelectedCriteria.sortCriteriaCoefficients[criterion.criterionId];
             }
-        }
-
-        // Analysis
-        if (decisionAnalysisInfo) {
-            initAnalysis(decisionAnalysisInfo);
-            // console.log(decisionAnalysisInfo);
-        }
-
-        function initAnalysis(data) {
-
-            // Set new values
-            var sortObjAnalysis = {
-                selectedCriteria: {
-                    sortCriteriaIds: data.sortCriteriaIds || [],
-                    sortCriteriaCoefficients: data.sortCriteriaCoefficients || {}
-                },
-                pagination: {
-                    pageNumber: data.pageNumber ? data.pageNumber + 1 : 1,
-                    pageSize: data.pageSize || 10,
-                    totalDecisions: 0
-                },
-                selectedCharacteristics: {},
-                sorters: {
-                    sortByCriteria: {
-                        order: data.sortWeightCriteriaDirection || 'DESC'
-                    },
-                    sortByCharacteristic: {
-                        id: data.sortCharacteristicId || null,
-                        order: data.sortCharacteristicDirection || null
-                    },
-                    sortByDecisionProperty: {
-                        id: data.sortDecisionPropertyName || null,
-                        order: data.sortDecisionPropertyDirection || null
-                    }
-                },
-                selectedDecision: {
-                    decisionsIds: []
-                }
-            };
-
-            // console.log(sortObjAnalysis);
-            console.log(data);
-            console.log(sortObjAnalysis);
-            DecisionSharedService.setFilterObject(sortObjAnalysis);
-            foSelectedCriteria = sortObjAnalysis.selectedCriteria;
-
-            return foSelectedCriteria;
         }
 
     }

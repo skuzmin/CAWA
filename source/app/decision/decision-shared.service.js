@@ -18,7 +18,7 @@
             },
             pagination: {
                 pageNumber: 1,
-                pageSize: 10,
+                pageSize: 59,
                 totalDecisions: 0
             },
             selectedCharacteristics: {},
@@ -70,9 +70,38 @@
 
         service.setFilterObject = function(obj) {
             if (!obj) return;
-            service.filterObject = obj;
-            // console.log(obj);
-            // console.log(service.filterObject);
+
+            // Set new values
+            var sortObjAnalysis = {
+                selectedCriteria: {
+                    sortCriteriaIds: obj.sortCriteriaIds || [],
+                    sortCriteriaCoefficients: obj.sortCriteriaCoefficients || {}
+                },
+                pagination: {
+                    pageNumber: obj.pageNumber ? obj.pageNumber + 1 : 1,
+                    pageSize: obj.pageSize || 10,
+                    totalDecisions: obj.totalDecisions || 59 //Need to be sended in analysis or in endpoint api/v1.0/decisions/16003
+                },
+                selectedCharacteristics: {},
+                sorters: {
+                    sortByCriteria: {
+                        order: obj.sortWeightCriteriaDirection || 'DESC'
+                    },
+                    sortByCharacteristic: {
+                        id: obj.sortCharacteristicId || null,
+                        order: obj.sortCharacteristicDirection || null
+                    },
+                    sortByDecisionProperty: {
+                        id: obj.sortDecisionPropertyName || null,
+                        order: obj.sortDecisionPropertyDirection || null
+                    }
+                },
+                selectedDecision: {
+                    decisionsIds: []
+                }
+            };
+
+            service.filterObject = sortObjAnalysis;
         };
 
 

@@ -21,8 +21,8 @@
                 controller: 'DecisionMatrixController',
                 controllerAs: 'vm',
                 resolve: {
-                    decisionAnalysisInfo: DecisionAanalysisResolver,
-                    decisionBasicInfo: DecisionResolver
+                    decisionBasicInfo: DecisionResolver,
+                    decisionAnalysisInfo: DecisionAanalysisResolver
                 },
                 params: {
                     slug: {
@@ -125,9 +125,9 @@
     }
 
     // Analysis
-    DecisionAanalysisResolver.$inject = ['$stateParams', 'DecisionDataService', '$state', '$rootScope', '$location'];
+    DecisionAanalysisResolver.$inject = ['$stateParams', 'DecisionDataService', '$location', 'DecisionSharedService'];
 
-    function DecisionAanalysisResolver($stateParams, DecisionDataService, $state, $rootScope, $location) {
+    function DecisionAanalysisResolver($stateParams, DecisionDataService, $location, DecisionSharedService) {
 
         // TODO: find better way
         // UI route bug https://github.com/angular-ui/ui-router/issues/1856#issuecomment-93025037
@@ -148,12 +148,15 @@
                 if (resp.error) {
                     console.log(resp.error);
                     return;
-                }
+                } 
+                // Set analysis obj
+                DecisionSharedService.setFilterObject(resp);
                 return resp;
             }, function(req) {
                 console.log(req);
             });
         }
+
     }
 
 
