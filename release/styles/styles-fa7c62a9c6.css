@@ -35,17 +35,18 @@ a:focus {
 .app-header {
   min-height: 50px;
   height: 50px;
-  background-color: #4784e8;
-  color: #fff;
+  background-color: #f1f1f1;
+  color: #FFFFFF;
   padding-right: 15px;
   padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
   letter-spacing: 0.02em;
   z-index: 1002;
+  border-bottom: 1px solid #ebebeb;
 }
 .app-header a {
-  color: #fff;
+  color: #4784e8;
 }
 .app-header .header-menu-btn {
   text-align: left;
@@ -75,25 +76,30 @@ a:focus {
 .app-header-sub-title {
   margin-left: 5px;
   font-size: 17px;
-  font-weight: 600;
+  font-weight: 500;
 }
 .navbar-brand {
   margin-right: 15px;
   min-width: 200px;
+  font-weight: 600;
 }
 .navbar-brand a {
+  color: #4784e8;
   -webkit-transition: color 0.3s ease;
   -o-transition: color 0.3s ease;
   transition: color 0.3s ease;
 }
 .navbar-brand a .app-light {
-  color: #ebebeb;
+  color: #333;
+  -webkit-transition: color 0.3s ease;
+  -o-transition: color 0.3s ease;
+  transition: color 0.3s ease;
 }
 .navbar-brand a:hover {
-  color: #ebebeb;
+  color: #333;
 }
 .navbar-brand a:hover .app-light {
-  color: #ebebeb;
+  color: #4784e8;
 }
 .app-panel-search {
   float: left;
@@ -101,8 +107,8 @@ a:focus {
   margin: 5px 0;
 }
 .app-panel-search input {
-  background-color: #3075e5;
-  border-color: #3075e5;
+  background-color: #e4e4e4;
+  border-color: #e4e4e4;
   width: 150px;
   -webkit-transition: all 0.2s ease-in-out;
   -o-transition: all 0.2s ease-in-out;
@@ -122,7 +128,7 @@ a:focus {
   color: #fff;
 }
 .app-header .dropdown-menu-btn {
-  color: #FFF;
+  color: #333;
   display: block;
   padding: 15px 10px 14px;
 }
@@ -398,7 +404,7 @@ a:focus {
   cursor: pointer;
   border: 1px solid #c0c0c0;
   border-radius: 3px;
-  background-color: #fff;
+  background-color: #FFFFFF;
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
   margin-bottom: 10px;
   -webkit-transition: border 0.2s ease-in-out;
@@ -736,6 +742,9 @@ body {
 }
 .btns-view {
   margin: 5px 0;
+}
+.btns-view + .btn {
+  margin-left: 10px;
 }
 .matrix {
   padding: 0 10px;

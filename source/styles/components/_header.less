@@ -9,8 +9,9 @@
     margin-left: auto;
     letter-spacing: 0.02em;
     z-index: @z-index-page-navbar;
+    border-bottom: 1px solid @gray-light;
     a {
-        color: @white-text;
+        color: @basic-active;
     }
     .header-menu-btn {
         text-align: left;
@@ -49,21 +50,24 @@
 .app-header-sub-title {
     margin-left: 5px;
     font-size: 17px;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .navbar-brand {
     margin-right: 15px;
     min-width: 200px;
+    font-weight: 600;
     a {
+        color: @basic-active;
         .transition( color 0.3s ease);
         .app-light {
-            color: @gray-light;
+            color: #333;
+            .transition( color 0.3s ease);
         }
         &:hover {
-            color: @gray-light;
+            color: #333;
             .app-light {
-                color: @gray-light;
+                color: @basic-active;
             }
         }
     }
@@ -75,8 +79,8 @@
 
     margin: 5px 0;
     input {
-        background-color: @basic-active-hover;
-        border-color: @basic-active-hover;
+        background-color: darken(@header-background, 5%);
+        border-color: darken(@header-background, 5%);
         width: 150px;
         .transition(all 0.2s ease-in-out);
         color: #fff;
@@ -102,7 +106,7 @@
 
 .app-header {
     .dropdown-menu-btn {
-        color: #FFF;
+        color: #333;
         display: block;
         padding: 15px 10px 14px;
     }
@@ -119,8 +123,8 @@
             &:hover {
                 color: @basic-active-hover;
             }
-        }        
-    }    
+        }
+    }
     .dropdown-menu:before {
       position: absolute;
       top: -7px;
