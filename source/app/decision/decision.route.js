@@ -71,6 +71,51 @@
                 resolve: {
                     // decisionAnalysisInfo: DecisionAanalysisResolver
                 },
+            }) 
+            .state('decisions.discussions', {
+                url: '/:id/{slug}/{criteria}/discussions',
+                templateUrl: 'app/discussions/discussion-list.html',
+                controller: 'DiscussionList',
+                controllerAs: 'vm',
+                resolve: {
+                    decisionBasicInfo: DecisionResolver
+                },
+                params: {
+                    slug: {
+                        value: null,
+                        squash: true
+                    },
+                    criteria: {
+                        value: null,
+                        squash: true
+                    }
+                }
+            }).state('decisions.discussionSingle', {
+                url: '/:id/{slug}/{criteria}/discussions/:discussionId/:discussionSlug',
+                templateUrl: 'app/discussions/discussions-single.html',
+                controller: 'DiscussionSingle',
+                controllerAs: 'vm',
+                resolve: {
+                    // decisionBasicInfo: DecisionResolver
+                },
+                params: {
+                    slug: {
+                        value: null,
+                        squash: true
+                    },
+                    criteria: {
+                        value: null,
+                        squash: true
+                    },
+                    discussionId: {
+                        value: null,
+                        squash: true
+                    },
+                    discussionSlug: {
+                        value: null,
+                        squash: true
+                    }
+                }
             });
     }
 

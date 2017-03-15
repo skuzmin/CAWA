@@ -6,10 +6,12 @@
 a {
   cursor: pointer;
   text-decoration: none;
+  color: #4784e8;
 }
 a:hover,
 a:focus {
   text-decoration: none;
+  color: #195cc9;
 }
 .search-input {
   margin-top: 5px;
@@ -64,14 +66,14 @@ a:focus {
 }
 .app-header .navbar-nav > li > a:hover {
   color: #FFF;
-  background-color: #3075e5;
+  background-color: #195cc9;
 }
 .app-header .navbar-nav .link {
   padding: 15px 15px;
   display: block;
 }
 .app-header .navbar-nav .link:hover {
-  background-color: #3075e5;
+  background-color: #195cc9;
 }
 .app-header-sub-title {
   margin-left: 5px;
@@ -145,7 +147,7 @@ a:focus {
   color: #4784e8;
 }
 .app-header .dropdown-menu a:hover {
-  color: #3075e5;
+  color: #195cc9;
 }
 .app-header .dropdown-menu:before {
   position: absolute;
@@ -674,8 +676,8 @@ body .app-main-panel .panels-2 .app-panel-right {
   border-color: #4784e8;
 }
 .btn-primary:hover {
-  background-color: #3075e5;
-  border-color: #3075e5;
+  background-color: #195cc9;
+  border-color: #195cc9;
 }
 .btn-primary:hover,
 .btn-primary:focus,
@@ -683,8 +685,8 @@ body .app-main-panel .panels-2 .app-panel-right {
 .btn-primary:active,
 .btn-primary.active,
 .open > .dropdown-toggle.btn-primary {
-  background-color: #3075e5;
-  border-color: #3075e5;
+  background-color: #195cc9;
+  border-color: #195cc9;
 }
 .form-control {
   -webkit-border-radius: 2px;
@@ -1289,6 +1291,25 @@ body {
   border-color: transparent transparent #FFF transparent;
   z-index: 2;
 }
+.discussions-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px 0;
+}
+.discussions-list li a {
+  border-bottom: 1px solid #ebebeb;
+  padding: 8px 16px;
+  display: block;
+}
+.discussions-list .sub-list li a {
+  padding-left: 24px;
+  padding-right: 24px;
+}
+.app-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
 .col-sm-padding {
   padding-left: 3px !important;
   padding-right: 3px !important;
@@ -1434,12 +1455,16 @@ body {
 .app-row-content {
   margin-bottom: 10px;
 }
+.app-title {
+  font-size: 21px;
+}
 .app-container-sm {
   width: 100%;
   margin: 0 auto;
 }
 @media (min-width: 768px) {
   .app-container-sm {
-    width: 600px;
+    width: auto;
+    margin: 0 215px;
   }
 }
