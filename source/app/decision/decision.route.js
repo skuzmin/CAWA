@@ -71,7 +71,7 @@
                 resolve: {
                     // decisionAnalysisInfo: DecisionAanalysisResolver
                 },
-            }) 
+            })
             .state('decisions.discussions', {
                 url: '/:id/{slug}/{criteria}/discussions',
                 templateUrl: 'app/discussions/discussion-list.html',
@@ -89,6 +89,15 @@
                         value: null,
                         squash: true
                     }
+                },
+                data: {
+                    breadcrumbs: [{
+                        title: 'Home',
+                        link: 'home'
+                    }, {
+                        title: 'Discussion',
+                        link: null
+                    }]
                 }
             }).state('decisions.discussionSingle', {
                 url: '/:id/{slug}/{criteria}/discussions/:discussionId/:discussionSlug',
@@ -193,7 +202,7 @@
                 if (resp.error) {
                     console.log(resp.error);
                     return;
-                } 
+                }
                 // Set analysis obj
                 DecisionSharedService.setFilterObject(resp);
                 return resp;

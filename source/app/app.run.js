@@ -12,12 +12,15 @@
         // Page title
         var pageTitle = 'DecisionWanted';
         $rootScope.pageTitle = pageTitle;
+        $rootScope.breadcrumbs = false;
 
         $rootScope.$on('$stateChangeSuccess', function($state, $stateParams) {
             if (angular.isDefined($stateParams.data)) {
                 if ($stateParams.data.pageTitle) {
                     $rootScope.pageTitle = $stateParams.data.pageTitle + ' | ' + pageTitle;
                 }
+
+                $rootScope.breadcrumbs = $stateParams.data.breadcrumbs;
             }
         });
     }
