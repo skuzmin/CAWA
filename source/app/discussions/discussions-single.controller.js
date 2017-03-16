@@ -6,13 +6,16 @@
         .module('app.discussions')
         .controller('DiscussionSingle', DiscussionSingle);
 
-        DiscussionSingle.$inject = [];
+        DiscussionSingle.$inject = ['DiscussionsDataService'];
 
-        function DiscussionSingle() {
+        function DiscussionSingle(DiscussionsDataService) {
             var vm = this;
 
+            init();
 
-            console.log('Discussion Single controller');
+            function init() {
+            	console.log('Discussion Single controller');
+            }
 
         }
 })();

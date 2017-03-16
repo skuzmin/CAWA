@@ -99,32 +99,6 @@
                         link: null
                     }]
                 }
-            }).state('decisions.discussionSingle', {
-                url: '/:id/{slug}/{criteria}/discussions/:discussionId/:discussionSlug',
-                templateUrl: 'app/discussions/discussions-single.html',
-                controller: 'DiscussionSingle',
-                controllerAs: 'vm',
-                resolve: {
-                    // decisionBasicInfo: DecisionResolver
-                },
-                params: {
-                    slug: {
-                        value: null,
-                        squash: true
-                    },
-                    criteria: {
-                        value: null,
-                        squash: true
-                    },
-                    discussionId: {
-                        value: null,
-                        squash: true
-                    },
-                    discussionSlug: {
-                        value: null,
-                        squash: true
-                    }
-                }
             });
     }
 
