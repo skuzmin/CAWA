@@ -19,13 +19,19 @@
             searchCommentableDiscussionUrl = $resource(Config.endpointUrl + 'decisions/:discussionId/commentable/:critOrCharId', {
                 discussionId: '@discussionId',
                 critOrCharId: '@critOrCharId',
+            }),
+
+            searchCommentableVotesWeightUrl = $resource(Config.endpointUrl + 'votes/forentity/:discussionId/onentity/:critOrCharId/weighted', {
+                discussionId: '@discussionId',
+                critOrCharId: '@critOrCharId',
             });
         // decisions/35444/commentable/34817
 
         // votes/forentity/35444/onentity/34817/weighted
         var service = {
             searchDiscussions: searchDiscussions,
-            searchCommentableDiscussion: searchCommentableDiscussion
+            searchCommentableDiscussion: searchCommentableDiscussion,
+            searchCommentableVotesWeight: searchCommentableVotesWeight
         };
 
         return service;
@@ -41,6 +47,16 @@
 
             // if (!discussionId && !critOrCharId) return;
             return searchCommentableDiscussionUrl.get({
+                discussionId: discussionId,
+                critOrCharId: critOrCharId
+            }).$promise;
+        }
+
+        function searchCommentableVotesWeight(discussionId, critOrCharId) {
+            console.log(discussionId, critOrCharId);
+
+            // if (!discussionId && !critOrCharId) return;
+            return searchCommentableVotesWeightUrl.get({
                 discussionId: discussionId,
                 critOrCharId: critOrCharId
             }).$promise;

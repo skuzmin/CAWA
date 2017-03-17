@@ -1,32 +1,42 @@
 (function() {
 
-    'user strict';
+	'user strict';
 
-    angular
-        .module('app.discussions')
-        .controller('DiscussionSingle', DiscussionSingle);
+	angular
+		.module('app.discussions')
+		.controller('DiscussionSingle', DiscussionSingle);
 
-    DiscussionSingle.$inject = ['decisionDiscussionInfo', '$rootScope'];
+	DiscussionSingle.$inject = ['decisionDiscussionInfo', 'DiscussionsDataService', '$rootScope', '$stateParams'];
 
-    function DiscussionSingle(decisionDiscussionInfo, $rootScope) {
-        var vm = this;
+	function DiscussionSingle(decisionDiscussionInfo, DiscussionsDataService, $rootScope, $stateParams) {
+		var vm = this;
 
-        init();
+		init();
 
-        vm.discussion = decisionDiscussionInfo || {};
+		vm.discussion = decisionDiscussionInfo || {};
 
-        $rootScope.pageTitle = vm.discussion.name + ' Discussion | DecisionWanted';
-        $rootScope.breadcrumbs = [{
-            title: 'Discussion',
-            link: null
-        }, {
-            title: vm.discussion.decision.name + ' ' + vm.discussion.childDecision.name + ' ' + vm.discussion.childCriterion.name,
-            link: null
-        }];
+		var pageTitle = vm.discussion.decision.name + ' ' + vm.discussion.childDecision.name + ' ' + vm.discussion.childCriterion.name;
 
-        function init() {
-            console.log('Discussion Single controller');
-        }
+		$rootScope.pageTitle = 'Discussion ' + pageTitle + ' | DecisionWanted';
+		$rootScope.breadcrumbs = [{
+			title: 'Discussion',
+			link: null
+		}, {
+			title: pageTitle,
+			link: null
+		}];
 
-    }
+		// TODO: avoid $stateParams
+		DiscussionsDataService.searchCommentableVotesWeight($stateParams.discussionId, $stateParams.critOrCharId)
+			.then(function(resp) {
+				console.log(resp);
+
+				vm.discussion.votes = resp;
+			});
+
+		function init() {
+			console.log('Discussion Single controller');
+		}
+
+	}
 })();

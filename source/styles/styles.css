@@ -44,8 +44,12 @@ a:focus {
   margin-right: auto;
   margin-left: auto;
   letter-spacing: 0.02em;
-  z-index: 1002;
+  z-index: 1100;
   border-bottom: 1px solid #ebebeb;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
 }
 .app-header a {
   color: #4784e8;
@@ -1473,6 +1477,7 @@ body {
   background-color: #FFF;
   min-height: calc(100vh - 100px);
   overflow: hidden;
+  margin-top: 50px;
 }
 .app-row-content-label {
   display: inline-block;

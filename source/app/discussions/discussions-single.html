@@ -1,7 +1,7 @@
 <div class="app-container-sm">
     <breadcrumbs items="breadcrumbs"></breadcrumbs>
 
-    
+
     <h3 class="app-title">
         {{vm.discussion.decision.name}} {{vm.discussion.childDecision.name}} {{vm.discussion.childCriterion.name}}
     </h3>
@@ -10,6 +10,7 @@
         <div class="col-sm-8">
             <!-- Comments list -->
 
+            <pre>{{vm.discussion.votes | json}}</pre>
 
             <div class="panel panel-white post panel-shadow">
                 <div class="post-heading">

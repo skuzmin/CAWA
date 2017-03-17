@@ -141,9 +141,9 @@
                                     </div>
                                     <!-- End Criteria Content -->
                                     <!-- Characteristics Content -->
-                                    <div class="matrix-table-col " ng-repeat="group in item.characteristics track by $index" ng-click="vm.goToDiscussion(item.decision.decisionId, characteristic.characteristicId)">
+                                    <div class="matrix-table-col" ng-repeat="characteristic in item.characteristics track by $index" ng-click="vm.goToDiscussion(item.decision.decisionId, characteristic.characteristicId)">
                                         <div class="matrix-table-col-content" data-characteristic-id="{{characteristic.characteristicId}}">
-                                            {{group.value}}
+                                            {{characteristic.value}}
                                             <div class="app-item-additional-wrapper">
                                                 <div class="app-item-comments">
                                                     <span class="glyphicon glyphicon-comment"></span>0
