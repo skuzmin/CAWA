@@ -11,13 +11,10 @@
                     <a ui-sref="decisions.list({id: vm.decisionId})" ui-sref-active="btn-primary" class="btn btn-default"><span class="glyphicon glyphicon-th-list"></span> List</a>
                     <a ui-sref="decisions.matrix({id: vm.decisionId})" ui-sref-active="btn-primary" class="btn btn-default"><span class="glyphicon glyphicon-th"></span> Matrix</a>
                 </div>
-
                 <a href class="btn btn-primary btn-sm">Ask for Decision</a>
             </div>
-
         </div>
     </div>
-
     <div class="matrix-table-wrapper">
         <div ng-show="vm.decisionsSpinner" class="app-loader-small"><span class="glyphicon glyphicon-refresh app-loader-animation"></span>LOADING...</div>
         <div id="matrix-table" class="main-panel matrix-table js-matrix-table">
@@ -57,18 +54,12 @@
                                                 {{criteria.name}}
                                             </div>
                                             <div class="btn matrix-criteria-coefficient" ng-click="vm.editCriteriaCoefficient($event, criteria);">
-                                            {{criteria.isSelected}}
+                                                {{criteria.isSelected}}
                                                 <criteria-coefficient-indicator coefficient="criteria.coefficient"></criteria-coefficient-indicator>
                                             </div>
                                             <div class="app-sorter">
-                                                <span
-                                                    ng-click="vm.orderByCriteriaProperty('ASC', $event)"
-                                                    class="app-sorter-top glyphicon glyphicon-triangle-top"
-                                                    ng-class="{'selected': vm.fo.sortByCriteria.order === 'ASC'}"></span>
-                                                <span
-                                                    ng-click="vm.orderByCriteriaProperty('DESC', $event)"
-                                                    class="app-sorter-bottom glyphicon glyphicon-triangle-bottom"
-                                                    ng-class="{'selected': vm.fo.sortByCriteria.order === 'DESC'}"></span>
+                                                <span ng-click="vm.orderByCriteriaProperty('ASC', $event)" class="app-sorter-top glyphicon glyphicon-triangle-top" ng-class="{'selected': vm.fo.sortByCriteria.order === 'ASC'}"></span>
+                                                <span ng-click="vm.orderByCriteriaProperty('DESC', $event)" class="app-sorter-bottom glyphicon glyphicon-triangle-bottom" ng-class="{'selected': vm.fo.sortByCriteria.order === 'DESC'}"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -90,14 +81,8 @@
                                                 </div>
                                             </div>
                                             <div class="app-sorter">
-                                                <span
-                                                    ng-click="vm.orderByCharacteristicProperty(characteristic.characteristicId, 'ASC')"
-                                                    class="app-sorter-top glyphicon glyphicon-triangle-top"
-                                                    ng-class="{'selected': vm.fo.sortByCharacteristic.id === characteristic.characteristicId && vm.fo.sortByCharacteristic.order === 'ASC'}"></span>
-                                                <span
-                                                    ng-click="vm.orderByCharacteristicProperty(characteristic.characteristicId, 'DESC')"
-                                                    class="app-sorter-bottom glyphicon glyphicon-triangle-bottom"
-                                                    ng-class="{'selected': vm.fo.sortByCharacteristic.id === characteristic.characteristicId && vm.fo.sortByCharacteristic.order === 'DESC'}"></span>
+                                                <span ng-click="vm.orderByCharacteristicProperty(characteristic.characteristicId, 'ASC')" class="app-sorter-top glyphicon glyphicon-triangle-top" ng-class="{'selected': vm.fo.sortByCharacteristic.id === characteristic.characteristicId && vm.fo.sortByCharacteristic.order === 'ASC'}"></span>
+                                                <span ng-click="vm.orderByCharacteristicProperty(characteristic.characteristicId, 'DESC')" class="app-sorter-bottom glyphicon glyphicon-triangle-bottom" ng-class="{'selected': vm.fo.sortByCharacteristic.id === characteristic.characteristicId && vm.fo.sortByCharacteristic.order === 'DESC'}"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -137,7 +122,7 @@
                             <div class="matrix-table-item matrix-table-item-content" ng-repeat="item in vm.decisionMatrixList track by item.decision.decisionId">
                                 <div class="matrix-table-row" id="decision-row-{{item.decision.decisionId}}">
                                     <!-- Criteria Content -->
-                                    <div class="matrix-table-col matrix-criteria-group" ng-repeat="criteria_item in item.criteria | orderBy:'criterionId'">
+                                    <div class="matrix-table-col matrix-criteria-group" ng-repeat="criteria_item in item.criteria | orderBy:'criterionId'"  ng-click="vm.goToDiscussion(item.decision.decisionId, criteria_item.criterionId)">
                                         <div class="matrix-table-col-content">
                                             <div ng-if="criteria_item.totalVotes">
                                                 <rating-star class="text-left" value="criteria_item.weight" total-votes="criteria_item.totalVotes" ng-show="criteria_item.weight"></rating-star>
@@ -156,7 +141,7 @@
                                     </div>
                                     <!-- End Criteria Content -->
                                     <!-- Characteristics Content -->
-                                    <div class="matrix-table-col " ng-repeat="group in item.characteristics track by $index">
+                                    <div class="matrix-table-col " ng-repeat="group in item.characteristics track by $index" ng-click="vm.goToDiscussion(item.decision.decisionId, characteristic.characteristicId)">
                                         <div class="matrix-table-col-content" data-characteristic-id="{{characteristic.characteristicId}}">
                                             {{group.value}}
                                             <div class="app-item-additional-wrapper">

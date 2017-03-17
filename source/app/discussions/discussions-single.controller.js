@@ -6,16 +6,27 @@
         .module('app.discussions')
         .controller('DiscussionSingle', DiscussionSingle);
 
-        DiscussionSingle.$inject = ['DiscussionsDataService'];
+    DiscussionSingle.$inject = ['decisionDiscussionInfo', '$rootScope'];
 
-        function DiscussionSingle(DiscussionsDataService) {
-            var vm = this;
+    function DiscussionSingle(decisionDiscussionInfo, $rootScope) {
+        var vm = this;
 
-            init();
+        init();
 
-            function init() {
-            	console.log('Discussion Single controller');
-            }
+        vm.discussion = decisionDiscussionInfo || {};
 
+        $rootScope.pageTitle = vm.discussion.name + ' Discussion | DecisionWanted';
+        $rootScope.breadcrumbs = [{
+            title: 'Discussion',
+            link: null
+        }, {
+            title: vm.discussion.decision.name + ' ' + vm.discussion.childDecision.name + ' ' + vm.discussion.childCriterion.name,
+            link: null
+        }];
+
+        function init() {
+            console.log('Discussion Single controller');
         }
+
+    }
 })();

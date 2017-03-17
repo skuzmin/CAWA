@@ -844,6 +844,9 @@ body {
 .matrix-table-content {
   position: relative;
 }
+.matrix-table-content .matrix-table-col {
+  cursor: pointer;
+}
 .matrix-table-content .matrix-table-col:hover {
   background-color: #ebebeb;
 }

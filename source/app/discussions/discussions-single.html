@@ -1,8 +1,16 @@
 <div class="app-container-sm">
     <breadcrumbs items="breadcrumbs"></breadcrumbs>
+
+    
+    <h3 class="app-title">
+        {{vm.discussion.decision.name}} {{vm.discussion.childDecision.name}} {{vm.discussion.childCriterion.name}}
+    </h3>
+
     <div class="row">
         <div class="col-sm-8">
             <!-- Comments list -->
+
+
             <div class="panel panel-white post panel-shadow">
                 <div class="post-heading">
                     <div class="pull-left image">
@@ -16,7 +24,7 @@
                     </div>
                 </div>
                 <div class="post-description">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatum illo nesciunt hic expedita consectetur pariatur ullam. Fugiat voluptatem rem voluptatibus, necessitatibus aut nostrum, magnam velit optio? Esse quaerat quae mollitia!</p>
+                    <pre>{{ vm.discussion | json}}</pre>
                     <div class="stats">
                         <a href="#" class="btn btn-default stat-item">
                             <i class="glyphicon glyphicon-arrow-up icon"></i>2
@@ -29,10 +37,10 @@
             </div>
             <!-- End Comments list -->
             <!-- Comment form -->
-            <div class="comment-form">
+<!--             <div class="comment-form">
                 <textarea name="" id="" cols="30" rows="10" class="form-control"></textarea>
                 <button class="btn btn-primary">Send</button>
-            </div>
+            </div> -->
             <!-- End Comment form -->
         </div>
         <div class="col-sm-4">

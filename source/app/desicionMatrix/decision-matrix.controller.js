@@ -6,9 +6,9 @@
         .module('app.decision')
         .controller('DecisionMatrixController', DecisionMatrixController);
 
-    DecisionMatrixController.$inject = ['DecisionDataService', 'DecisionSharedService', '$stateParams', 'DecisionNotificationService', 'decisionBasicInfo', '$rootScope', '$compile', '$scope', '$q', 'DecisionCriteriaConstant', '$uibModal', 'decisionAnalysisInfo'];
+    DecisionMatrixController.$inject = ['DecisionDataService', 'DecisionSharedService', '$state', '$stateParams', 'DecisionNotificationService', 'decisionBasicInfo', '$rootScope', '$compile', '$scope', '$q', 'DecisionCriteriaConstant', '$uibModal', 'decisionAnalysisInfo'];
 
-    function DecisionMatrixController(DecisionDataService, DecisionSharedService, $stateParams, DecisionNotificationService, decisionBasicInfo, $rootScope, $compile, $scope, $q, DecisionCriteriaConstant, $uibModal, decisionAnalysisInfo) {
+    function DecisionMatrixController(DecisionDataService, DecisionSharedService, $state, $stateParams, DecisionNotificationService, decisionBasicInfo, $rootScope, $compile, $scope, $q, DecisionCriteriaConstant, $uibModal, decisionAnalysisInfo) {
         var
             vm = this,
             isInitedSorters = false,
@@ -163,32 +163,6 @@
 
         //Init sorters, when directives loaded
         function initSorters(total) {
-            // if (!isInitedSorters) {
-            //     DecisionNotificationService.notifyInitSorter({
-            //         list: [{
-            //             name: 'Weight',
-            //             order: 'DESC',
-            //             isSelected: true
-            //         }],
-            //         type: 'sortByCriteria',
-            //         mode: 'twoStep'
-            //     });
-            //     DecisionNotificationService.notifyInitSorter({
-            //         list: [{
-            //             name: 'Create Date',
-            //             propertyId: 'createDate'
-            //         }, {
-            //             name: 'Update Date',
-            //             propertyId: 'updateDate'
-            //         }, {
-            //             name: 'Name',
-            //             propertyId: 'name'
-            //         }],
-            //         type: 'sortByDecisionProperty',
-            //         mode: 'threeStep'
-            //     });
-            //     isInitedSorters = true;
-            // }
 
             var _fo = DecisionSharedService.filterObject;
             _fo.pagination.totalDecisions = total;
@@ -462,17 +436,18 @@
 
         // TODO: dontrepit yourself!!!
         // Characteristics
-            controls = {
-                CHECKBOX: '',
-                SLIDER: '',
-                SELECT: 'app/components/decisionCharacteristics/decision-characteristics-select-partial.html',
-                RADIOGROUP: '',
-                YEARPICKER: 'app/components/decisionCharacteristics/decision-characteristics-yearpicker-partial.html'
-            };
+        controls = {
+            CHECKBOX: '',
+            SLIDER: '',
+            SELECT: 'app/components/decisionCharacteristics/decision-characteristics-select-partial.html',
+            RADIOGROUP: '',
+            YEARPICKER: 'app/components/decisionCharacteristics/decision-characteristics-yearpicker-partial.html'
+        };
 
 
         vm.getControl = getControl;
         vm.selectCharacteristic = selectCharacteristic;
+
         function getControl(characteristic) {
             return controls[characteristic.visualMode];
         }
@@ -484,7 +459,23 @@
         DecisionNotificationService.subscribeSelectCharacteristic(function(event, data) {
             console.log(data);
             // vm.decisionsSpinner = true;
-            // searchDecisionMatrix(vm.decisionId);            
-        });        
+            // searchDecisionMatrix(vm.decisionId);
+        });
+
+
+        vm.goToDiscussion = goToDiscussion;
+
+        function goToDiscussion(discussionId, critOrCharId) {
+            var params = {
+                'id': parseInt($stateParams.id),
+                'slug': $stateParams.slug,
+                'criteria': $stateParams.criteria,
+                'discussionId': discussionId,
+                // 'discussionSlug': null,
+                'critOrCharId': critOrCharId,
+                // 'critOrCharSlug': null
+            };
+            $state.go('decisions.discussions.single', params);
+        }
     }
 })();

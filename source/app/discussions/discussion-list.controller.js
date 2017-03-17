@@ -6,9 +6,9 @@
         .module('app.discussions')
         .controller('DiscussionList', DiscussionList);
 
-        DiscussionList.$inject = ['decisionBasicInfo'];
+        DiscussionList.$inject = ['decisionBasicInfo', 'DiscussionsDataService', '$stateParams'];
 
-        function DiscussionList(decisionBasicInfo) {
+        function DiscussionList(decisionBasicInfo, DiscussionsDataService, $stateParams) {
             var vm = this;
             vm.decision = decisionBasicInfo || {};
 

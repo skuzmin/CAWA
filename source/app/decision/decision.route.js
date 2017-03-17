@@ -77,6 +77,7 @@
                 templateUrl: 'app/discussions/discussion-list.html',
                 controller: 'DiscussionList',
                 controllerAs: 'vm',
+                template: '<ui-view/>',
                 resolve: {
                     decisionBasicInfo: DecisionResolver
                 },
@@ -138,7 +139,10 @@
                         'slug': decisionSlug,
                         'criteria': criteria
                     };
-                    if (toState.name === 'decisions.matrix' || toState.name === 'decisions.list') {
+                    // console.log(toState.name);
+                    if (toState.name === 'decisions.matrix' || 
+                        toState.name === 'decisions.list' ||
+                        toState.name === 'decisions.discussions') {
                         // Just added new slug
                         $state.go(currentState, decisionStateParams);
                     }
