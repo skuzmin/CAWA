@@ -13,9 +13,13 @@
             .state('decisions.discussions.single', {
                 url: '/:discussionId/:critOrCharId',
                 // url: '/:discussionId/{discussionSlug}/:critOrCharId/{critOrCharSlug}',
-                templateUrl: 'app/discussions/discussions-single.html',
-                controller: 'DiscussionSingle',
-                controllerAs: 'vm',
+                views: {
+                    "@": {
+                        templateUrl: 'app/discussions/discussions-single.html',
+                        controller: 'DiscussionSingle',
+                        controllerAs: 'vm',
+                    }
+                },
                 resolve: {
                     decisionDiscussionInfo: DecisionSingleDiscussionResolver
                 },

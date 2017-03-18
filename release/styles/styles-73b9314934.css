@@ -1318,18 +1318,18 @@ body {
   margin: 0;
 }
 .breadcrumbs {
-  margin: 10px 0 20px;
+  margin: 10px 15px 20px;
 }
 .breadcrumbs ul {
   display: inline-block;
   list-style: none;
   padding: 0;
-  margin: 0 -5px;
+  margin: 0 -2px;
 }
 .breadcrumbs ul .breadcrumb-divider {
-  margin: 0 5px 0 0;
+  margin: 0 2px 0 0;
   padding: 0;
-  font-size: 11px;
+  font-size: 9px;
 }
 .breadcrumbs ul li {
   display: inline-block;
@@ -1337,9 +1337,9 @@ body {
 .breadcrumbs ul li span,
 .breadcrumbs ul li a {
   display: inline-block;
-  padding: 6px 5px;
-  font-size: 13px;
+  padding: 3px 2px;
   font-weight: 500;
+  font-size: 11px;
 }
 .col-sm-padding {
   padding-left: 3px !important;
@@ -1387,8 +1387,8 @@ body {
   border-color: #ddd;
 }
 .post .post-heading {
-  height: 95px;
-  padding: 20px 15px;
+  height: 70px;
+  padding: 8px;
 }
 .post .post-heading .avatar {
   width: 60px;
@@ -1420,11 +1420,7 @@ body {
   font-size: 14px;
 }
 .post .post-description .stats {
-  margin-top: 20px;
-}
-.post .post-description .stats .stat-item {
-  display: inline-block;
-  margin-right: 15px;
+  margin-top: 10px;
 }
 .post .post-description .stats .stat-item .icon {
   margin-right: 8px;
@@ -1473,6 +1469,58 @@ body {
 .post .post-footer .comments-list .comment > .comments-list {
   margin-left: 50px;
 }
+.comment {
+  background-color: #FFF;
+  border: 1px solid #ebebeb;
+  padding: 0;
+  margin: 0 0 8px 0;
+}
+.comment .comment-time {
+  margin: 5px 5px;
+  padding: 0 5px;
+  border-left: 1px solid #f5f5f5;
+  font-size: 13px;
+  display: inline-block;
+}
+.comment .comment {
+  margin-left: 20px;
+}
+.comment.lvl-2 {
+  margin-left: 20px;
+}
+.comment.lvl-3 {
+  margin-left: 40px;
+}
+.comment-aside {
+  float: left;
+  padding: 8px;
+  width: 15%;
+}
+.comment-header {
+  padding: 0 8px 4px 8px;
+  font-size: 13px;
+}
+.comment-body {
+  float: left;
+  width: 85%;
+  padding: 8px;
+}
+.comment-votes {
+  text-align: center;
+}
+.comment-footer {
+  padding: 4px 8px 8px 8px;
+  margin-top: 10px;
+}
+.comment-footer a {
+  color: #7f8c8d;
+}
+.comment-footer a:hover {
+  color: #195cc9;
+}
+.comment-form {
+  margin-bottom: 15px;
+}
 .content {
   background-color: #FFF;
   min-height: calc(100vh - 100px);
@@ -1489,6 +1537,7 @@ body {
 }
 .app-title {
   font-size: 21px;
+  margin-bottom: 30px;
 }
 .app-container-sm {
   width: 100%;

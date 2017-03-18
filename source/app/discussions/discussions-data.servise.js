@@ -16,7 +16,7 @@
                 id: '@id'
             }),
 
-            searchCommentableDiscussionUrl = $resource(Config.endpointUrl + 'decisions/:discussionId/commentable/:critOrCharId', {
+            searchCommentableDiscussionUrl = $resource(Config.endpointUrl + 'decisions/:discussionId/commentables/:critOrCharId', {
                 discussionId: '@discussionId',
                 critOrCharId: '@critOrCharId',
             }),

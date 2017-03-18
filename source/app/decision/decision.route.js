@@ -10,16 +10,15 @@
 
     function configuration($stateProvider) {
         $stateProvider
-            .state('decisions', {
-                abstract: true,
-                url: '/decisions',
-                template: '<ui-view/>'
-            })
             .state('decisions.matrix', {
                 url: '/:id/{slug}/{criteria}/matrix', //Url rewrites in resolver
-                templateUrl: 'app/desicionMatrix/decision-matrix.html',
-                controller: 'DecisionMatrixController',
-                controllerAs: 'vm',
+                views: {
+                    "@": {
+                        templateUrl: 'app/desicionMatrix/decision-matrix.html',
+                        controller: 'DecisionMatrixController',
+                        controllerAs: 'vm',
+                    }
+                },
                 resolve: {
                     decisionBasicInfo: DecisionResolver,
                     decisionAnalysisInfo: DecisionAanalysisResolver
@@ -46,9 +45,13 @@
             })
             .state('decisions.list', {
                 url: '/:id/{slug}/{criteria}/list',
-                templateUrl: 'app/decision/decision.html',
-                controller: 'DecisionController',
-                controllerAs: 'vm',
+                views: {
+                    "@": {
+                        templateUrl: 'app/decision/decision.html',
+                        controller: 'DecisionController',
+                        controllerAs: 'vm',
+                    }
+                },
                 resolve: {
                     decisionBasicInfo: DecisionResolver
                 },
@@ -74,10 +77,13 @@
             })
             .state('decisions.discussions', {
                 url: '/:id/{slug}/{criteria}/discussions',
-                templateUrl: 'app/discussions/discussion-list.html',
-                controller: 'DiscussionList',
-                controllerAs: 'vm',
-                template: '<ui-view/>',
+                views: {
+                    "@": {
+                        templateUrl: 'app/discussions/discussion-list.html',
+                        controller: 'DiscussionList',
+                        controllerAs: 'vm',
+                    }
+                },
                 resolve: {
                     decisionBasicInfo: DecisionResolver
                 },
@@ -140,7 +146,7 @@
                         'criteria': criteria
                     };
                     // console.log(toState.name);
-                    if (toState.name === 'decisions.matrix' || 
+                    if (toState.name === 'decisions.matrix' ||
                         toState.name === 'decisions.list' ||
                         toState.name === 'decisions.discussions') {
                         // Just added new slug
