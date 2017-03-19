@@ -1521,6 +1521,13 @@ body {
 .comment-form {
   margin-bottom: 15px;
 }
+.comment-form .form-control {
+  margin-bottom: 10px;
+}
+.app-list-panel {
+  border-bottom: 1px solid #f5f5f5;
+  margin: 0 0 16px;
+}
 .content {
   background-color: #FFF;
   min-height: calc(100vh - 100px);

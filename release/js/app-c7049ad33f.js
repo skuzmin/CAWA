@@ -972,9 +972,9 @@
 
         init();
 
-        function getCriteriaGroupsById() {
+        function getCriteriaGroupsById(decisionId) {
             // Criteria
-            return DecisionDataService.getCriteriaGroupsById(vm.decisionId).then(function(result) {
+            return DecisionDataService.getCriteriaGroupsById(decisionId).then(function(result) {
                 vm.criteriaGroups = result;
                 criteriaIds = _.map(result["0"].criteria, function(el) {
                     return el.criterionId;
@@ -982,9 +982,9 @@
             });
         }
 
-        function getCharacteristictsGroupsById() {
+        function getCharacteristictsGroupsById(decisionId) {
             // Characteristicts
-            return DecisionDataService.getCharacteristictsGroupsById(vm.decisionId).then(function(result) {
+            return DecisionDataService.getCharacteristictsGroupsById(decisionId).then(function(result) {
                 vm.characteristicGroups = result;
 
                 characteristicsIds = _.map(result["0"].characteristics, function(el) {
@@ -1004,7 +1004,7 @@
 
 
             // Get criteria and characteristic
-            $q.all([getCriteriaGroupsById(), getCharacteristictsGroupsById()])
+            $q.all([getCriteriaGroupsById(vm.decisionId), getCharacteristictsGroupsById(vm.decisionId)])
                 .then(function(values) {
 
                     setMatrixTableWidth();
@@ -1532,16 +1532,21 @@
         .module('app.discussions')
         .controller('DiscussionSingle', DiscussionSingle);
 
-    DiscussionSingle.$inject = ['decisionDiscussionInfo', 'DiscussionsDataService', '$rootScope', '$stateParams'];
+    DiscussionSingle.$inject = ['decisionDiscussionInfo', 'DiscussionsDataService', '$rootScope', '$stateParams', 'DecisionDataService', '$state'];
 
-    function DiscussionSingle(decisionDiscussionInfo, DiscussionsDataService, $rootScope, $stateParams) {
+    function DiscussionSingle(decisionDiscussionInfo, DiscussionsDataService, $rootScope, $stateParams, DecisionDataService, $state) {
         var vm = this;
 
-        init();
+
 
         vm.discussion = decisionDiscussionInfo || {};
 
-        var pageTitle = vm.discussion.decision.name + ' ' + vm.discussion.childDecision.name + ' ' + vm.discussion.childCriterion.name;
+        var pageTitle = vm.discussion.childDecision.name;
+        if(vm.discussion.childCharacteristic) {
+            pageTitle += ' ' +  vm.discussion.childCharacteristic.name;
+        } else if(vm.discussion.childCriterion) {
+            pageTitle += ' ' +  vm.discussion.childCriterion.name;
+        }
 
         $rootScope.pageTitle = 'Discussion ' + pageTitle + ' | DecisionWanted';
         $rootScope.breadcrumbs = [{
@@ -1549,7 +1554,7 @@
             link: 'decisions'
         }, {
             title: vm.discussion.decision.name,
-            link: 'decisions.matrix({id: ' + vm.discussion.decision.decisionId + '})'
+            link: 'decisions.matrix'
         }, {
             title: 'Discussions',
             link: 'decisions.discussions'
@@ -1558,48 +1563,96 @@
             link: null
         }];
 
-        // TODO: avoid $stateParams
-        DiscussionsDataService.searchCommentableVotesWeight($stateParams.discussionId, $stateParams.critOrCharId)
-            .then(function(resp) {
-                console.log(resp);
 
-                vm.discussion.votes = resp;
+        init();
+
+        function getCriteriaGroupsById(decisionId) {
+            // Criteria
+            return DecisionDataService.getCriteriaGroupsById(decisionId).then(function(result) {
+                vm.criteriaGroups = result;
+                criteriaIds = _.map(result["0"].criteria, function(el) {
+                    return el.criterionId;
+                });
             });
+        }
+
+        function getCharacteristictsGroupsById(decisionId) {
+            // Characteristicts
+            return DecisionDataService.getCharacteristictsGroupsById(decisionId).then(function(result) {
+                vm.characteristicGroups = result;
+
+                characteristicsIds = _.map(result["0"].characteristics, function(el) {
+                    return el.characteristicId;
+                });
+            });
+        }
+
+        function searchCommentableVotesWeight(discussionId, critOrCharId) {
+            if(!discussionId || !critOrCharId) return;
+            DiscussionsDataService.searchCommentableVotesWeight(discussionId, critOrCharId)
+                .then(function(resp) {
+                    // console.log(resp);
+                    vm.discussion.votes = resp;
+                });
+        }
 
         function init() {
             console.log('Discussion Single controller');
+
+            vm.title = pageTitle;
+
+            getCriteriaGroupsById(vm.discussion.decision.decisionId);
+            getCharacteristictsGroupsById(vm.discussion.decision.decisionId);
+
+            // TODO: avoid $stateParams
+            if(vm.discussion.childCriterion) searchCommentableVotesWeight($stateParams.discussionId, $stateParams.critOrCharId);
+        }
+
+        vm.goToDiscussion = goToDiscussion;
+
+        function goToDiscussion(discussionId, critOrCharId) {
+            var params = {
+                'id': parseInt($stateParams.id),
+                'slug': $stateParams.slug,
+                'criteria': $stateParams.criteria,
+                'discussionId': discussionId,
+                // 'discussionSlug': null,
+                'critOrCharId': critOrCharId,
+                // 'critOrCharSlug': null
+            };
+            $state.go('decisions.discussions.single', params);
         }
 
     }
 })();
 (function() {
 
-    'user strict';
+  'user strict';
 
-    angular
-        .module('app.discussions')
-        .controller('DiscussionsController', DiscussionsController);
+  angular
+    .module('app.discussions')
+    .controller('DiscussionsController', DiscussionsController);
 
-        DiscussionsController.$inject = ['$rootScope', '$stateParams'];
+  DiscussionsController.$inject = ['$rootScope', '$stateParams'];
 
-        function DiscussionsController($rootScope, $stateParams) {
-            var vm = this;
+  function DiscussionsController($rootScope, $stateParams) {
+    var vm = this;
 
-        $rootScope.breadcrumbs = [{
-            title: 'Decisions',
-            link: 'decisions'
-        }, {
-            title: vm.discussion.decision.name,
-            link: 'decisions.matrix({id: ' + $stateParams.id + '})'
-        }, {
-            title: 'Discussions',
-            link: 'decisions.discussions'
-        }];
+    $rootScope.breadcrumbs = [{
+      title: 'Decisions',
+      link: 'decisions'
+    }, {
+      title: vm.discussion.decision.name,
+      link: 'decisions.matrix({id: ' + $stateParams.id + '})'
+    }, {
+      title: 'Discussions',
+      link: 'decisions.discussions'
+    }];
 
 
-            console.log('Discussions controller');
+    console.log('Discussions controller');
 
-        }
+  }
 })();
 (function() {
 
@@ -1644,13 +1697,9 @@
     DecisionSingleDiscussionResolver.$inject = ['DiscussionsDataService', '$stateParams', '$state', '$rootScope', '$location'];
 
     function DecisionSingleDiscussionResolver(DiscussionsDataService, $stateParams, $state, $rootScope, $location) {
-
-        // console.log(DecisionResolver);
-        console.log($stateParams);
-        // console.log($state.current.name);
         return DiscussionsDataService.searchCommentableDiscussion($stateParams.discussionId, $stateParams.critOrCharId)
             .then(function(resp) {
-                console.log(resp);
+                // console.log(resp);
                 return resp;
             })
             .catch(function(err) {
@@ -2811,9 +2860,9 @@
 angular.module('app.core').run(['$templateCache', function($templateCache) {$templateCache.put('app/core/404.html','<div class=app-container-sm><div class=app-content><div class=header-text><h1>Error 404</h1><h3>Page Not Found!</h3><hr>Pelase visit <a ui-sref=home>Home</a></div></div></div>');
 $templateCache.put('app/decision/decision.html','<div class=decision><div class="row top-panel"><div class="col-md-3 col-sm-3"><h4 class=app-header-sub-title>{{vm.decision.name}}</h4></div><div class="col-md-5 col-sm-5"><div class=row ng-show=vm.parentDecisions><div class="col-sm-3 col-md-2"><div class=top-panel-label><label for=decision-parent class=control-label>Parents:</label></div></div><div class="col-sm-5 col-md-6"><div class="input-group top-panel-title"><select id=decision-parent ng-model=vm.parentId class="form-control input-sm" ng-options="parent for parent in vm.parentDecisions"><option value selected>Select parentId</option></select><span class=input-group-btn><a href class="btn btn-default btn-sm" ui-sref="decision({id: vm.parentId})" ng-disabled=!vm.parentId>Go</a></span></div></div></div></div><div class="col-sm-4 colm-md-4"><div class=pull-right><div class="btn-group btn-group-sm btns-view"><a ui-sref="decisions.list({id: vm.decisionId})" ui-sref-active=btn-primary class="btn btn-default"><span class="glyphicon glyphicon-th-list"></span> List</a> <a ui-sref="decisions.matrix({id: vm.decisionId})" ui-sref-active=btn-primary class="btn btn-default"><span class="glyphicon glyphicon-th"></span> Matrix</a></div><a href class="btn btn-primary btn-sm">Ask for Decision</a></div></div></div><div class="app-main-panel main-panel"><div id=panel-left class="app-panel-left app-resizer-horizontal" resizer-right=#panel-center resizer><decision-criteria decision-id=vm.decisionId></decision-criteria><span class=app-resizer></span></div><div id=panel-center class="app-panel-center app-resizer-horizontal" resizer-right=#panel-right resizer><div class="decisions-header scroll-wrapper-header"><div class=col-md-2><h4>Decisions</h4></div><div class="col-md-8 col-sm-padding"><decision-sorter sort-type=sortByCriteria></decision-sorter><decision-sorter sort-type=sortByCharacteristic></decision-sorter><decision-sorter sort-type=sortByDecisionProperty></decision-sorter></div><div class="col-md-2 col-sm-padding"><a href class="btn add-createria-btn"><span class="glyphicon glyphicon-plus" aria-hidden=true></span>Add decision</a></div></div><div class=scroll-wrapper><h1 ng-show=vm.decisionsSpinner class=app-loader-small><span class="glyphicon glyphicon-refresh app-loader-animation"></span>LOADING...</h1><app-paginator></app-paginator><app-list list=vm.decisionsList></app-list></div><span class=app-resizer></span></div><div id=panel-right class=app-panel-right><decision-characteristics decision-id=vm.decisionId></decision-characteristics></div></div></div>');
 $templateCache.put('app/decisions/decisions.html','<breadcrumbs items=breadcrumbs></breadcrumbs><div class=app-container-sm><h3 class=app-title>Decissions</h3></div>');
-$templateCache.put('app/desicionMatrix/decision-matrix.html','<div class="decision matrix"><div class="row top-panel"><div class=col-sm-6><h4 class=app-header-sub-title>{{vm.decision.name}}</h4></div><div class=col-sm-6><div class=pull-right><div class="btn-group btn-group-sm btns-view"><a ui-sref="decisions.list({id: vm.decisionId})" ui-sref-active=btn-primary class="btn btn-default"><span class="glyphicon glyphicon-th-list"></span> List</a> <a ui-sref="decisions.matrix({id: vm.decisionId})" ui-sref-active=btn-primary class="btn btn-default"><span class="glyphicon glyphicon-th"></span> Matrix</a></div><a href class="btn btn-primary btn-sm">Ask for Decision</a></div></div></div><div class=matrix-table-wrapper><div ng-show=vm.decisionsSpinner class=app-loader-small><span class="glyphicon glyphicon-refresh app-loader-animation"></span>LOADING...</div><div id=matrix-table class="main-panel matrix-table js-matrix-table"><div id=panel class="app-panel matrix-table-panel"><div class=matrix-table-header><div class=matrix-table-row><div class="matrix-table-col matrix-table-group-name"><div class=matrix-table-group-title></div><div class=matrix-table-row><div class="matrix-table-col matrix-table-group" data-col-id=col-name><div class=matrix-table-title-wrapper><div class="matrix-table-title app-sorter-wrapper matrix-content-name">Name</div><div class=app-sorter><span class="app-sorter-top glyphicon glyphicon-triangle-top" ng-click="vm.orderByDecisionProperty(\'name\', \'ASC\')" ng-class="{\'selected\': vm.fo.sortByDecisionProperty.id === \'name\' && vm.fo.sortByDecisionProperty.order === \'ASC\'}"></span> <span class="app-sorter-bottom glyphicon glyphicon-triangle-bottom" ng-click="vm.orderByDecisionProperty(\'name\', \'DESC\')" ng-class="{\'selected\': vm.fo.sortByDecisionProperty.id === \'name\' && vm.fo.sortByDecisionProperty.order === \'DESC\'}"></span></div></div></div></div></div><div id=matrix-table-scroll-group class=scroll-group><div class="matrix-table-col matrix-table-group matrix-table-group-criteria" ng-repeat="group in vm.criteriaGroups track by $index"><div class=matrix-table-group-title>{{group.name}}</div><div class=matrix-table-row><div class="matrix-table-col criteria-col" ng-repeat="criteria in group.criteria | orderBy:\'criterionId\'" data-col-id=criteria-{{criteria.criterionId}} ng-click=vm.selectCriterion(criteria) ng-class="{\'selected\' : criteria.isSelected}"><div class=matrix-table-title-wrapper><div class="matrix-table-title app-sorter-wrapper">{{criteria.name}}</div><div class="btn matrix-criteria-coefficient" ng-click="vm.editCriteriaCoefficient($event, criteria);">{{criteria.isSelected}}<criteria-coefficient-indicator coefficient=criteria.coefficient></criteria-coefficient-indicator></div><div class=app-sorter><span ng-click="vm.orderByCriteriaProperty(\'ASC\', $event)" class="app-sorter-top glyphicon glyphicon-triangle-top" ng-class="{\'selected\': vm.fo.sortByCriteria.order === \'ASC\'}"></span> <span ng-click="vm.orderByCriteriaProperty(\'DESC\', $event)" class="app-sorter-bottom glyphicon glyphicon-triangle-bottom" ng-class="{\'selected\': vm.fo.sortByCriteria.order === \'DESC\'}"></span></div></div></div></div></div><div class="matrix-table-col matrix-table-group matrix-table-group-characteristics" ng-repeat="group in vm.characteristicGroups track by $index"><div class=matrix-table-group-title>{{group.name}}</div><div class=matrix-table-row><div class=matrix-table-col ng-repeat="characteristic in group.characteristics track by $index" data-col-id=characteristic-{{characteristic.characteristicId}}><div class=matrix-table-title-wrapper><div class="matrix-table-title app-sorter-wrapper">{{characteristic.name}}<div class="app-control app-sm-filter" content-id=characteristic.characteristicId pop-over><i class="glyphicon glyphicon-filter"></i></div></div><div class=app-sorter><span ng-click="vm.orderByCharacteristicProperty(characteristic.characteristicId, \'ASC\')" class="app-sorter-top glyphicon glyphicon-triangle-top" ng-class="{\'selected\': vm.fo.sortByCharacteristic.id === characteristic.characteristicId && vm.fo.sortByCharacteristic.order === \'ASC\'}"></span> <span ng-click="vm.orderByCharacteristicProperty(characteristic.characteristicId, \'DESC\')" class="app-sorter-bottom glyphicon glyphicon-triangle-bottom" ng-class="{\'selected\': vm.fo.sortByCharacteristic.id === characteristic.characteristicId && vm.fo.sortByCharacteristic.order === \'DESC\'}"></span></div></div></div></div></div></div></div></div><div class=matrix-table-body-wrapper><div id=matrix-table-aside class=matrix-table-aside><div id=matrix-table-aside-content class=matrix-table-aside-content><div class=matrix-table-item ng-repeat="item in vm.decisionMatrixList track by item.decision.decisionId"><div class=matrix-table-row id=decision-name-row-{{item.decision.decisionId}}><div class="matrix-table-col matrix-table-col-name" data-col-id=col-name><div class="matrix-table-col-content matrix-content-name">{{item.decision.name}}<div ng-show="item.decision.criteriaCompliancePercentage >= 0"><small>Criteria compliance: <strong>{{item.decision.criteriaCompliancePercentage | number:0}}</strong>% | <span class="app-icon glyphicon glyphicon-thumbs-up"></span> {{item.decision.totalVotes}}</small></div></div></div></div></div></div></div><div id=matrix-table-body class=matrix-table-body><div id=matrix-table-content class=matrix-table-content ng-style="{\'width\':vm.tableWidth}"><div class="matrix-table-item matrix-table-item-content" ng-repeat="item in vm.decisionMatrixList track by item.decision.decisionId"><div class=matrix-table-row id=decision-row-{{item.decision.decisionId}}><div class="matrix-table-col matrix-criteria-group" ng-repeat="criteria_item in item.criteria | orderBy:\'criterionId\'" ng-click="vm.goToDiscussion(item.decision.decisionId, criteria_item.criterionId)"><div class=matrix-table-col-content><div ng-if=criteria_item.totalVotes><rating-star class=text-left value=criteria_item.weight total-votes=criteria_item.totalVotes ng-show=criteria_item.weight></rating-star></div><div ng-if=!criteria_item.totalVotes><div class=app-rating-votes><span><span class="glyphicon glyphicon-thumbs-up"></span>0</span></div></div><div class=app-item-additional-wrapper><div class=app-item-comments><span class="glyphicon glyphicon-comment"></span>0</div></div></div></div><div class=matrix-table-col ng-repeat="characteristic in item.characteristics track by $index" ng-click="vm.goToDiscussion(item.decision.decisionId, characteristic.characteristicId)"><div class=matrix-table-col-content data-characteristic-id={{characteristic.characteristicId}}>{{characteristic.value}}<div class=app-item-additional-wrapper><div class=app-item-comments><span class="glyphicon glyphicon-comment"></span>0</div></div></div></div></div></div></div></div></div></div></div><div class=martix-footer><app-paginator></app-paginator></div></div></div><div ng-repeat="group in vm.characteristicGroups track by $index"><div ng-repeat="characteristic in group.characteristics track by $index" data-pop-over-content-id={{characteristic.characteristicId}} class="hide app-pop-over-content"><ng-include src=vm.getControl(characteristic)></ng-include></div></div>');
+$templateCache.put('app/desicionMatrix/decision-matrix.html','<div class="decision matrix"><div class="row top-panel"><div class=col-sm-6><h4 class=app-header-sub-title>{{vm.decision.name}}</h4></div><div class=col-sm-6><div class=pull-right><div class="btn-group btn-group-sm btns-view"><a ui-sref="decisions.list({id: vm.decisionId})" ui-sref-active=btn-primary class="btn btn-default"><span class="glyphicon glyphicon-th-list"></span> List</a> <a ui-sref="decisions.matrix({id: vm.decisionId})" ui-sref-active=btn-primary class="btn btn-default"><span class="glyphicon glyphicon-th"></span> Matrix</a></div><a href class="btn btn-primary btn-sm">Ask for Decision</a></div></div></div><div class=matrix-table-wrapper><div ng-show=vm.decisionsSpinner class=app-loader-small><span class="glyphicon glyphicon-refresh app-loader-animation"></span>LOADING...</div><div id=matrix-table class="main-panel matrix-table js-matrix-table"><div id=panel class="app-panel matrix-table-panel"><div class=matrix-table-header><div class=matrix-table-row><div class="matrix-table-col matrix-table-group-name"><div class=matrix-table-group-title></div><div class=matrix-table-row><div class="matrix-table-col matrix-table-group" data-col-id=col-name><div class=matrix-table-title-wrapper><div class="matrix-table-title app-sorter-wrapper matrix-content-name">Name</div><div class=app-sorter><span class="app-sorter-top glyphicon glyphicon-triangle-top" ng-click="vm.orderByDecisionProperty(\'name\', \'ASC\')" ng-class="{\'selected\': vm.fo.sortByDecisionProperty.id === \'name\' && vm.fo.sortByDecisionProperty.order === \'ASC\'}"></span> <span class="app-sorter-bottom glyphicon glyphicon-triangle-bottom" ng-click="vm.orderByDecisionProperty(\'name\', \'DESC\')" ng-class="{\'selected\': vm.fo.sortByDecisionProperty.id === \'name\' && vm.fo.sortByDecisionProperty.order === \'DESC\'}"></span></div></div></div></div></div><div id=matrix-table-scroll-group class=scroll-group><div class="matrix-table-col matrix-table-group matrix-table-group-criteria" ng-repeat="group in vm.criteriaGroups track by $index"><div class=matrix-table-group-title>{{group.name}}</div><div class=matrix-table-row><div class="matrix-table-col criteria-col" ng-repeat="criteria in group.criteria | orderBy:\'criterionId\'" data-col-id=criteria-{{criteria.criterionId}} ng-click=vm.selectCriterion(criteria) ng-class="{\'selected\' : criteria.isSelected}"><div class=matrix-table-title-wrapper><div class="matrix-table-title app-sorter-wrapper">{{criteria.name}}</div><div class="btn matrix-criteria-coefficient" ng-click="vm.editCriteriaCoefficient($event, criteria);"><criteria-coefficient-indicator coefficient=criteria.coefficient></criteria-coefficient-indicator></div><div class=app-sorter><span ng-click="vm.orderByCriteriaProperty(\'ASC\', $event)" class="app-sorter-top glyphicon glyphicon-triangle-top" ng-class="{\'selected\': vm.fo.sortByCriteria.order === \'ASC\'}"></span> <span ng-click="vm.orderByCriteriaProperty(\'DESC\', $event)" class="app-sorter-bottom glyphicon glyphicon-triangle-bottom" ng-class="{\'selected\': vm.fo.sortByCriteria.order === \'DESC\'}"></span></div></div></div></div></div><div class="matrix-table-col matrix-table-group matrix-table-group-characteristics" ng-repeat="group in vm.characteristicGroups track by $index"><div class=matrix-table-group-title>{{group.name}}</div><div class=matrix-table-row><div class=matrix-table-col ng-repeat="characteristic in group.characteristics track by $index" data-col-id=characteristic-{{characteristic.characteristicId}}><div class=matrix-table-title-wrapper><div class="matrix-table-title app-sorter-wrapper">{{characteristic.name}}<div class="app-control app-sm-filter" content-id=characteristic.characteristicId pop-over><i class="glyphicon glyphicon-filter"></i></div></div><div class=app-sorter><span ng-click="vm.orderByCharacteristicProperty(characteristic.characteristicId, \'ASC\')" class="app-sorter-top glyphicon glyphicon-triangle-top" ng-class="{\'selected\': vm.fo.sortByCharacteristic.id === characteristic.characteristicId && vm.fo.sortByCharacteristic.order === \'ASC\'}"></span> <span ng-click="vm.orderByCharacteristicProperty(characteristic.characteristicId, \'DESC\')" class="app-sorter-bottom glyphicon glyphicon-triangle-bottom" ng-class="{\'selected\': vm.fo.sortByCharacteristic.id === characteristic.characteristicId && vm.fo.sortByCharacteristic.order === \'DESC\'}"></span></div></div></div></div></div></div></div></div><div class=matrix-table-body-wrapper><div id=matrix-table-aside class=matrix-table-aside><div id=matrix-table-aside-content class=matrix-table-aside-content><div class=matrix-table-item ng-repeat="item in vm.decisionMatrixList track by item.decision.decisionId"><div class=matrix-table-row id=decision-name-row-{{item.decision.decisionId}}><div class="matrix-table-col matrix-table-col-name" data-col-id=col-name><div class="matrix-table-col-content matrix-content-name">{{item.decision.name}}<div ng-show="item.decision.criteriaCompliancePercentage >= 0"><small>Criteria compliance: <strong>{{item.decision.criteriaCompliancePercentage | number:0}}</strong>% | <span class="app-icon glyphicon glyphicon-thumbs-up"></span> {{item.decision.totalVotes}}</small></div></div></div></div></div></div></div><div id=matrix-table-body class=matrix-table-body><div id=matrix-table-content class=matrix-table-content ng-style="{\'width\':vm.tableWidth}"><div class="matrix-table-item matrix-table-item-content" ng-repeat="item in vm.decisionMatrixList track by item.decision.decisionId"><div class=matrix-table-row id=decision-row-{{item.decision.decisionId}}><div class="matrix-table-col matrix-criteria-group" ng-repeat="criteria_item in item.criteria | orderBy:\'criterionId\'" ng-click="vm.goToDiscussion(item.decision.decisionId, criteria_item.criterionId)"><div class=matrix-table-col-content><div ng-if=criteria_item.totalVotes><rating-star class=text-left value=criteria_item.weight total-votes=criteria_item.totalVotes ng-show=criteria_item.weight></rating-star></div><div ng-if=!criteria_item.totalVotes><div class=app-rating-votes><span><span class="glyphicon glyphicon-thumbs-up"></span>0</span></div></div><div class=app-item-additional-wrapper><div class=app-item-comments><span class="glyphicon glyphicon-comment"></span>0</div></div></div></div><div class=matrix-table-col ng-repeat="characteristic in item.characteristics track by $index" ng-click="vm.goToDiscussion(item.decision.decisionId, characteristic.characteristicId)"><div class=matrix-table-col-content data-characteristic-id={{characteristic.characteristicId}}>{{characteristic.value}}<div class=app-item-additional-wrapper><div class=app-item-comments><span class="glyphicon glyphicon-comment"></span>0</div></div></div></div></div></div></div></div></div></div></div><div class=martix-footer><app-paginator></app-paginator></div></div></div><div ng-repeat="group in vm.characteristicGroups track by $index"><div ng-repeat="characteristic in group.characteristics track by $index" data-pop-over-content-id={{characteristic.characteristicId}} class="hide app-pop-over-content"><ng-include src=vm.getControl(characteristic)></ng-include></div></div>');
 $templateCache.put('app/discussions/discussion-list.html','<breadcrumbs items=breadcrumbs></breadcrumbs><div class=app-container-sm><h3 class=app-title>Discussions for {{vm.decision.name}}</h3><ul class=discussions-list><li><a href=#>Secure Anywhere Internet Security plus and complete</a><ul class="app-list sub-list"><li><a ui-sref=#>Email security</a></li></ul></li><li><a href=#>Link</a></li><li><a href=#>Afsfas</a></li></ul></div>');
-$templateCache.put('app/discussions/discussions-single.html','<breadcrumbs items=breadcrumbs></breadcrumbs><div class=app-container-sm><h3 class=app-title>{{vm.discussion.decision.name}} {{vm.discussion.childDecision.name}} {{vm.discussion.childCriterion.name}}</h3><div class=row><div class=col-sm-8><rating-star class=text-left value=vm.discussion.votes.weight total-votes=vm.discussion.votes.totalVotes ng-show=vm.discussion.votes.weight></rating-star><div class=comment-form><textarea name id cols=30 rows=3 class=form-control></textarea> <button class="btn btn-primary">Send</button></div><div class=comments-list><div class=media><div id=#12 class=comment><div class=clearfix><div class=comment-aside><div class=comment-votes><a href=# class="btn-sm btn btn-default"><i class="glyphicon glyphicon-arrow-up icon"></i></a><div>12</div><a href=# class="btn-sm btn btn-default"><i class="glyphicon glyphicon-arrow-down icon"></i></a></div></div><div class=comment-body><div class=comment-header><span class="label label-info">#12314</span> Author: Xame<div class="comment-time text-muted time">1 minute ago</div></div><div class=comment-content>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas voluptate, nihil culpa accusamus. Ab adipisci, sint magni asperiores deserunt et dicta, facilis, aut rem itaque laborum placeat atque? Dolorem, impedit!</div></div></div><div class=comment-footer><a herf>add a comment</a></div></div><div class="comment lvl-2"><div class=clearfix><div class=comment-aside><div class=comment-votes><a href=# class="btn-sm btn btn-default"><i class="glyphicon glyphicon-arrow-up icon"></i></a><div>12</div><a href=# class="btn-sm btn btn-default"><i class="glyphicon glyphicon-arrow-down icon"></i></a></div></div><div class=comment-body><div class=comment-header><span class="label label-info">#12314</span> Author: Xame<div class="comment-time text-muted time">1 minute ago</div></div><div class=comment-content>Lorem ipsum dolor sit ametfacilis, aut rem itaque laborum placeat atque? Dolorem, impedit!</div></div></div><div class=comment-footer><a herf>add a comment</a></div></div><div class="comment lvl-3"><div class=clearfix><div class=comment-aside><div class=comment-votes><a href=# class="btn-sm btn btn-default"><i class="glyphicon glyphicon-arrow-up icon"></i></a><div>12</div><a href=# class="btn-sm btn btn-default"><i class="glyphicon glyphicon-arrow-down icon"></i></a></div></div><div class=comment-body><div class=comment-header><span class="label label-info">#12314</span> Author: Xame<div class="comment-time text-muted time">1 minute ago</div></div><div class=comment-content>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas voluptate,</div></div></div><div class=comment-footer><a herf>add a comment</a></div></div><div class="comment lvl-3"><div class=clearfix><div class=comment-aside><div class=comment-votes><a href=# class="btn-sm btn btn-default"><i class="glyphicon glyphicon-arrow-up icon"></i></a><div>12</div><a href=# class="btn-sm btn btn-default"><i class="glyphicon glyphicon-arrow-down icon"></i></a></div></div><div class=comment-body><div class=comment-header><span class="label label-info">#12314</span> Author: Xame<div class="comment-time text-muted time">1 minute ago</div></div><div class=comment-content>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas voluptate, nihil culpa accusamus. Ab adipisci, sint magni asperiores deserunt et dicta, facilis, aut rem itaque laborum placeat atque? Dolorem, impedit!</div></div></div><div class=comment-footer><a herf>add a comment</a></div></div></div></div></div><div class=col-sm-4><strong>You also may be interested in:</strong><h4>Criteria</h4><ul class=app-list><li></li></ul><h4>Characteristics</h4><ul class=app-list><li></li></ul></div></div></div>');
+$templateCache.put('app/discussions/discussions-single.html','<breadcrumbs items=breadcrumbs></breadcrumbs><div class=app-container-sm><h3 class=app-title>{{vm.title}}</h3><div class=row><div class=col-sm-8><rating-star class=text-left value=vm.discussion.votes.weight total-votes=vm.discussion.votes.totalVotes ng-show=vm.discussion.votes.weight></rating-star><div class=comment-form><textarea name id cols=30 rows=3 class=form-control></textarea> <button class="btn btn-primary">Send</button></div><div class=comments-list><div class=media><div id=#12 class=comment><div class=clearfix><div class=comment-aside><div class=comment-votes><a href=# class="btn-sm btn btn-default"><i class="glyphicon glyphicon-arrow-up icon"></i></a><div>12</div><a href=# class="btn-sm btn btn-default"><i class="glyphicon glyphicon-arrow-down icon"></i></a></div></div><div class=comment-body><div class=comment-header><span class="label label-info">#12314</span> Author: Xame<div class="comment-time text-muted time">1 minute ago</div></div><div class=comment-content>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas voluptate, nihil culpa accusamus. Ab adipisci, sint magni asperiores deserunt et dicta, facilis, aut rem itaque laborum placeat atque? Dolorem, impedit!</div></div></div><div class=comment-footer><a herf>add a comment</a></div></div><div class="comment lvl-2"><div class=clearfix><div class=comment-aside><div class=comment-votes><a href=# class="btn-sm btn btn-default"><i class="glyphicon glyphicon-arrow-up icon"></i></a><div>12</div><a href=# class="btn-sm btn btn-default"><i class="glyphicon glyphicon-arrow-down icon"></i></a></div></div><div class=comment-body><div class=comment-header><span class="label label-info">#12314</span> Author: Xame<div class="comment-time text-muted time">1 minute ago</div></div><div class=comment-content>Lorem ipsum dolor sit ametfacilis, aut rem itaque laborum placeat atque? Dolorem, impedit!</div></div></div><div class=comment-footer><a herf>add a comment</a></div></div><div class="comment lvl-3"><div class=clearfix><div class=comment-aside><div class=comment-votes><a href=# class="btn-sm btn btn-default"><i class="glyphicon glyphicon-arrow-up icon"></i></a><div>12</div><a href=# class="btn-sm btn btn-default"><i class="glyphicon glyphicon-arrow-down icon"></i></a></div></div><div class=comment-body><div class=comment-header><span class="label label-info">#12314</span> Author: Xame<div class="comment-time text-muted time">1 minute ago</div></div><div class=comment-content>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas voluptate,</div></div></div><div class=comment-footer><a herf>add a comment</a></div></div><div class="comment lvl-3"><div class=clearfix><div class=comment-aside><div class=comment-votes><a href=# class="btn-sm btn btn-default"><i class="glyphicon glyphicon-arrow-up icon"></i></a><div>12</div><a href=# class="btn-sm btn btn-default"><i class="glyphicon glyphicon-arrow-down icon"></i></a></div></div><div class=comment-body><div class=comment-header><span class="label label-info">#12314</span> Author: Xame<div class="comment-time text-muted time">1 minute ago</div></div><div class=comment-content>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas voluptate, nihil culpa accusamus. Ab adipisci, sint magni asperiores deserunt et dicta, facilis, aut rem itaque laborum placeat atque? Dolorem, impedit!</div></div></div><div class=comment-footer><a herf>add a comment</a></div></div></div></div></div><div class=col-sm-4><strong>You also may be interested in:</strong><div class=app-list-panel ng-if=vm.criteriaGroups><h4>Criteria</h4><ul class=app-list ng-repeat="group in vm.criteriaGroups track by $index"><li ng-repeat="criteria in group.criteria | orderBy:\'criterionId\'"><a href ng-click="vm.goToDiscussion(vm.discussion.childDecision.decisionId, criteria.criterionId)">{{vm.discussion.childDecision.name}} {{criteria.name}}</a></li></ul></div><div class=app-list-panel ng-if=vm.characteristicGroups><h4>Characteristics</h4><ul class=app-list ng-repeat="group in vm.characteristicGroups track by $index"><li ng-repeat="characteristic in group.characteristics | orderBy:\'characteristicId\'"><a href ng-click="vm.goToDiscussion(vm.discussion.childDecision.decisionId, characteristic.characteristicId)">{{vm.discussion.childDecision.name}} {{characteristic.name}}</a></li></ul></div></div></div></div>');
 $templateCache.put('app/discussions/discussions.html','<breadcrumbs items=breadcrumbs></breadcrumbs><div class=app-container-sm><div class=row><div class=col-sm-8><div class="panel panel-white post panel-shadow"><div class=post-heading><div class="pull-left image"><img src=http://bootdey.com/img/Content/user_1.jpg class="img-circle avatar" alt="user profile image"></div><div class="pull-left meta"><div class="title h5"><a href=#><b>Ryan Haywood</b></a> made a post.</div><h6 class="text-muted time">1 minute ago</h6></div></div><div class=post-description><p>Bootdey is a gallery of free snippets resources templates and utilities for bootstrap css hmtl js framework. Codes for developers and web designers</p><div class=stats><a href=# class="btn btn-default stat-item"><i class="glyphicon glyphicon-arrow-up icon"></i>2</a> <a href=# class="btn btn-default stat-item"><i class="glyphicon glyphicon-arrow-down icon"></i>12</a></div></div></div></div><div class=col-sm-8><div class="panel panel-white post panel-shadow"><div class=post-heading><div class="pull-left image"><img src=http://bootdey.com/img/Content/user_1.jpg class="img-circle avatar" alt="user profile image"></div><div class="pull-left meta"><div class="title h5"><a href=#><b>Ryan Haywood</b></a> made a post.</div><h6 class="text-muted time">1 minute ago</h6></div></div><div class=post-description><p>Bootdey is a gallery of free snippets resources templates and utilities for bootstrap css hmtl js framework. Codes for developers and web designers</p><div class=stats><a href=# class="btn btn-default stat-item"><i class="glyphicon glyphicon-arrow-up icon"></i>2</a> <a href=# class="btn btn-default stat-item"><i class="glyphicon glyphicon-arrow-down icon"></i>12</a></div></div></div></div></div><div class=comment-form><textarea name id cols=30 rows=10 class=form-control></textarea> <button class="btn btn-primary">Send</button></div></div>');
 $templateCache.put('app/home/home.html','<div class=home><div class=row><div class="col-md-offset-3 col-md-6"><div class=search-box><div class="input-group search-bar"><input class=form-control type=text ng-model=vm.searchText placeholder=Search...> <span class=input-group-btn><a href class="btn btn-default btn-primary" ng-click=vm.search()><span class="glyphicon glyphicon-search"></span></a></span></div><div class="search-results text-left" ng-show=vm.showTrigger><h3>RESULTS for {{vm.searchText}}</h3><ul class="list-group search-results-list"><li class=list-group-item><a href ui-sref="decisions.list({id: vm.searchText || 177})">DECISION</a> | <a href ui-sref="decisions.matrix({id: vm.searchText || 177})">DECISION Matrix</a></li></ul></div></div></div></div></div>');
 $templateCache.put('app/login/login.html','<div class="login-btn clearfix"><div ng-if=vm.loginService.getLoginStatus()><div class="pull-right app-user-info" uib-dropdown><a class="usermame dropdown-menu-btn" uib-dropdown-toggle><span>Username:</span> <span>{{vm.user.user_name}}</span> <span class=caret></span></a><ul class=dropdown-menu uib-dropdown-menu role=menu aria-labelledby=split-button><li><form name=logoutForm action={{vm.loginService.getLogoutUrl()}} method=POST novalidate><a href class=link ng-click=vm.logout()>Logout</a></form></li></ul></div></div><ul class="nav navbar-nav pull-right" ng-if=!vm.loginService.getLoginStatus()><li><a ng-click=vm.loginService.login()>Login</a></li></ul></div>');

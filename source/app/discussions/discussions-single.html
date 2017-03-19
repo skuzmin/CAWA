@@ -1,7 +1,7 @@
 <breadcrumbs items="breadcrumbs"></breadcrumbs>
 <div class="app-container-sm">
     <h3 class="app-title">
-        {{vm.discussion.decision.name}} {{vm.discussion.childDecision.name}} {{vm.discussion.childCriterion.name}}
+        {{vm.title}}
     </h3>
     <div class="row">
         <div class="col-sm-8">
@@ -39,9 +39,7 @@
                         <div class="comment-footer">
                             <a herf>add a comment</a>
                         </div>
-
                     </div>
-
                     <div class="comment lvl-2">
                         <div class="clearfix">
                             <div class="comment-aside">
@@ -69,9 +67,6 @@
                             <a herf>add a comment</a>
                         </div>
                     </div>
-
-
-
                     <div class="comment lvl-3">
                         <div class="clearfix">
                             <div class="comment-aside">
@@ -99,7 +94,6 @@
                             <a herf>add a comment</a>
                         </div>
                     </div>
-
                     <div class="comment lvl-3">
                         <div class="clearfix">
                             <div class="comment-aside">
@@ -127,25 +121,32 @@
                             <a herf>add a comment</a>
                         </div>
                     </div>
-
                 </div>
             </div>
             <!-- End Comments list -->
         </div>
         <div class="col-sm-4">
             <strong>You also may be interested in:</strong>
-            <h4>Criteria</h4>
-            <ul class="app-list">
-                <li>
-                    <!-- <a href="#">Item</a> -->
-                </li>
-            </ul>
-            <h4>Characteristics</h4>
-            <ul class="app-list">
-                <li>
-                    <!-- <a href="#">Item</a> -->
-                </li>
-            </ul>
+            <div class="app-list-panel" ng-if="vm.criteriaGroups">
+                <h4>Criteria</h4>
+                <ul class="app-list" ng-repeat="group in vm.criteriaGroups track by $index">
+                    <li ng-repeat="criteria in group.criteria | orderBy:'criterionId'">
+                        <a href ng-click="vm.goToDiscussion(vm.discussion.childDecision.decisionId, criteria.criterionId)">
+                        {{vm.discussion.childDecision.name}} {{criteria.name}}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="app-list-panel" ng-if="vm.characteristicGroups">
+                <h4>Characteristics</h4>
+                <ul class="app-list" ng-repeat="group in vm.characteristicGroups track by $index">
+                    <li ng-repeat="characteristic in group.characteristics | orderBy:'characteristicId'">
+                        <a href ng-click="vm.goToDiscussion(vm.discussion.childDecision.decisionId, characteristic.characteristicId)">
+                        {{vm.discussion.childDecision.name}} {{characteristic.name}}
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>

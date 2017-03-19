@@ -23,9 +23,9 @@
 
         init();
 
-        function getCriteriaGroupsById() {
+        function getCriteriaGroupsById(decisionId) {
             // Criteria
-            return DecisionDataService.getCriteriaGroupsById(vm.decisionId).then(function(result) {
+            return DecisionDataService.getCriteriaGroupsById(decisionId).then(function(result) {
                 vm.criteriaGroups = result;
                 criteriaIds = _.map(result["0"].criteria, function(el) {
                     return el.criterionId;
@@ -33,9 +33,9 @@
             });
         }
 
-        function getCharacteristictsGroupsById() {
+        function getCharacteristictsGroupsById(decisionId) {
             // Characteristicts
-            return DecisionDataService.getCharacteristictsGroupsById(vm.decisionId).then(function(result) {
+            return DecisionDataService.getCharacteristictsGroupsById(decisionId).then(function(result) {
                 vm.characteristicGroups = result;
 
                 characteristicsIds = _.map(result["0"].characteristics, function(el) {
@@ -55,7 +55,7 @@
 
 
             // Get criteria and characteristic
-            $q.all([getCriteriaGroupsById(), getCharacteristictsGroupsById()])
+            $q.all([getCriteriaGroupsById(vm.decisionId), getCharacteristictsGroupsById(vm.decisionId)])
                 .then(function(values) {
 
                     setMatrixTableWidth();

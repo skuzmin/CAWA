@@ -41,13 +41,9 @@
     DecisionSingleDiscussionResolver.$inject = ['DiscussionsDataService', '$stateParams', '$state', '$rootScope', '$location'];
 
     function DecisionSingleDiscussionResolver(DiscussionsDataService, $stateParams, $state, $rootScope, $location) {
-
-        // console.log(DecisionResolver);
-        console.log($stateParams);
-        // console.log($state.current.name);
         return DiscussionsDataService.searchCommentableDiscussion($stateParams.discussionId, $stateParams.critOrCharId)
             .then(function(resp) {
-                console.log(resp);
+                // console.log(resp);
                 return resp;
             })
             .catch(function(err) {
