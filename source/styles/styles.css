@@ -1059,7 +1059,7 @@ body {
   z-index: 2;
   height: 73px;
   top: 0;
-  overflow: visible;
+  overflow: hidden;
   z-index: 3;
   background-color: #fff;
   border-bottom: 1px solid #ebebeb;

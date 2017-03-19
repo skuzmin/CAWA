@@ -25,9 +25,7 @@
                 discussionId: '@discussionId',
                 critOrCharId: '@critOrCharId',
             });
-        // decisions/35444/commentable/34817
 
-        // votes/forentity/35444/onentity/34817/weighted
         var service = {
             searchDiscussions: searchDiscussions,
             searchCommentableDiscussion: searchCommentableDiscussion,

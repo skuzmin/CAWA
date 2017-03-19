@@ -37,7 +37,8 @@
             },
             selectedDecision: {
                 decisionsIds: []
-            }
+            },
+            persistent: true
         };
 
         //allias
@@ -64,7 +65,8 @@
                 sortDecisionPropertyName: _fo.sorters.sortByDecisionProperty.id,
                 sortDecisionPropertyDirection: _fo.sorters.sortByDecisionProperty.order,
 
-                decisionsIds: _fo.selectedDecision.decisionsIds
+                decisionsIds: _fo.selectedDecision.decisionsIds,
+                persistent: true
             };
         };
 
@@ -98,7 +100,8 @@
                 },
                 selectedDecision: {
                     decisionsIds: []
-                }
+                },
+                persistent: true
             };
 
             service.filterObject = sortObjAnalysis;

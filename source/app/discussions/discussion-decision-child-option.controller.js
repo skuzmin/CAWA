@@ -4,11 +4,11 @@
 
     angular
         .module('app.discussions')
-        .controller('DiscussionSingle', DiscussionSingle);
+        .controller('DiscussionDecisionChildOptionController', DiscussionDecisionChildOptionController);
 
-    DiscussionSingle.$inject = ['decisionDiscussionInfo', 'DiscussionsDataService', '$rootScope', '$stateParams', 'DecisionDataService', '$state'];
+    DiscussionDecisionChildOptionController.$inject = ['decisionDiscussionInfo', 'DiscussionsDataService', '$rootScope', '$stateParams', 'DecisionDataService', '$state'];
 
-    function DiscussionSingle(decisionDiscussionInfo, DiscussionsDataService, $rootScope, $stateParams, DecisionDataService, $state) {
+    function DiscussionDecisionChildOptionController(decisionDiscussionInfo, DiscussionsDataService, $rootScope, $stateParams, DecisionDataService, $state) {
         var vm = this;
 
         var params = {
@@ -64,11 +64,13 @@
                 .then(function(resp) {
                     // console.log(resp);
                     vm.discussion.votes = resp;
+                }).catch(function(err) {
+                    console.log(err);
                 });
         }
 
         function init() {
-            console.log('Discussion Single controller');
+            console.log('Discussion Child Option Controller');
 
             vm.title = pageTitle;
 
@@ -78,33 +80,30 @@
             // TODO: avoid $stateParams
             if (vm.discussion.childCriterion) searchCommentableVotesWeight($stateParams.discussionId, $stateParams.critOrCharId);
 
-        $rootScope.breadcrumbs = [{
-            title: 'Decisions',
-            link: 'decisions'
-        }, {
-            title: vm.discussion.decision.name,
-            link: 'decisions.single.matrix'
-        }, {
-            title: 'Discussions',
-            link: 'decisions.single.discussions'
-        }, {
-            title: vm.discussion.childDecision.name,
-            link: null
-        },  {
-            title: critOrCharTitle,
-            link: null
-        }];            
+            $rootScope.breadcrumbs = [{
+                title: 'Decisions',
+                link: 'decisions'
+            }, {
+                title: vm.discussion.decision.name,
+                link: 'decisions.single'
+            }, {
+                title: 'Discussions',
+                link: 'decisions.single.discussions'
+            }, {
+                title: vm.discussion.childDecision.name,
+                link: 'decisions.single.discussions.child'
+            }, {
+                title: critOrCharTitle,
+                link: null
+            }];
         }
 
         vm.goToDiscussion = goToDiscussion;
-        //         'discussionId': discussionId,
-        // // 'discussionSlug': null,
-        // 'critOrCharId': critOrCharId,
-        // // 'critOrCharSlug': null
+
         function goToDiscussion(discussionId, critOrCharId) {
             params.discussionId = discussionId;
             params.critOrCharId = critOrCharId;
-            $state.go('decisions.single.discussions.single', params);
+            $state.go('decisions.single.discussions.child.option', params);
         }
 
     }

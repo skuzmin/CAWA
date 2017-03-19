@@ -21,7 +21,7 @@
                 },
                 data: {
                     breadcrumbs: [{
-                        title: 'Decissions',
+                        title: 'Decisions',
                         link: null
                     }]
                 }

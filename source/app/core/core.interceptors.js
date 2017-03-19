@@ -39,7 +39,7 @@
                             'criteria': $stateParams.criteria,
                             'analysisId': decisionAnalysisId
                         };
-                        $state.go('decisions.single.matrix.analysis', decisionAnalysisStateParams);
+                        $state.transitionTo('decisions.single.matrix.analysis', decisionAnalysisStateParams);
                     }
 
                     // Save only second call to avoid big array

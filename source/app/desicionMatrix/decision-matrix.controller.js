@@ -21,14 +21,6 @@
         vm.decision = decisionBasicInfo || {};
         $rootScope.pageTitle = vm.decision.name + ' Matrix | DecisionWanted';
 
-        $rootScope.breadcrumbs = [{
-            title: 'Decisions',
-            link: 'decisions'
-        }, {
-            title: vm.decision.name,
-            link: null
-        }];
-
         init();
 
         function getCriteriaGroupsById(decisionId) {
@@ -486,7 +478,7 @@
                 'critOrCharId': critOrCharId,
                 // 'critOrCharSlug': null
             };
-            $state.go('decisions.single.discussions.single', params);
+            $state.go('decisions.single.discussions.child.option', params);
         }
     }
 })();

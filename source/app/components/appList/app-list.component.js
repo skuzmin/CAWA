@@ -48,6 +48,7 @@
 
             _.forEach(arr, function(item) {
                 el = document.getElementById('decision-' + item);
+                if(!el) return;
                 elHeight = el.offsetHeight; //not include bottom margin
                 obj = {
                     id: item,

@@ -10,8 +10,28 @@
 
     function configuration($stateProvider) {
         $stateProvider
+            .state('decisions.single', {
+                url: '/:id/{slug}',
+                abstract: false,
+                views: {
+                    "@": {
+                        templateUrl: 'app/decision/decision-single.html',
+                        controller: 'DecisionSingleController',
+                        controllerAs: 'vm',
+                    }
+                },
+                resolve: {
+                    decisionBasicInfo: DecisionResolver,
+                },
+                params: {
+                    slug: {
+                        value: null,
+                        squash: true
+                    }
+                }
+            })
             .state('decisions.single.matrix', {
-                url: 'matrix', //Url rewrites in resolver
+                url: '/matrix',
                 views: {
                     "@": {
                         templateUrl: 'app/desicionMatrix/decision-matrix.html',
@@ -23,35 +43,15 @@
                     decisionBasicInfo: DecisionResolver,
                     decisionAnalysisInfo: DecisionAanalysisResolver
                 },
-                params: {
-                    slug: {
-                        value: null,
-                        squash: true
-                    },
-                    criteria: {
-                        value: null,
-                        squash: true
-                    }
-                }
-            })
-            .state('decisions.single', {
-                url: '/:id/{slug}/{criteria}',
-                abstract: true,
-                resolve: {
-                    decisionBasicInfo: DecisionResolver,
-                },
             })
             .state('decisions.single.matrix.analysis', {
                 url: '/analysis/:analysisId',
                 templateUrl: 'app/decision/decision.html',
                 controller: 'DecisionController',
                 controllerAs: 'vm',
-                resolve: {
-                    // decisionAnalysisInfo: DecisionAanalysisResolver
-                },
             })
             .state('decisions.single.list', {
-                url: 'list',
+                url: '/list',
                 views: {
                     "@": {
                         templateUrl: 'app/decision/decision.html',
@@ -62,56 +62,13 @@
                 resolve: {
                     decisionBasicInfo: DecisionResolver
                 },
-                params: {
-                    slug: {
-                        value: null,
-                        squash: true
-                    },
-                    criteria: {
-                        value: null,
-                        squash: true
-                    }
-                }
             })
-            .state('decisions.list.analysis', {
+            .state('decisions.single.list.analysis', {
                 url: '/analysis/:analysisId',
-               abstract: true,
-                controllerAs: 'vm',
-                resolve: {
-                    // decisionAnalysisInfo: DecisionAanalysisResolver
-                },
-            })
-            .state('decisions.single.discussions', {
-                url: 'discussions',
-                views: {
-                    "@": {
-                        templateUrl: 'app/discussions/discussion-list.html',
-                        controller: 'DiscussionList',
-                        controllerAs: 'vm',
-                    }
-                },
+                abstract: true,
                 resolve: {
                     decisionBasicInfo: DecisionResolver
                 },
-                params: {
-                    slug: {
-                        value: null,
-                        squash: true
-                    },
-                    criteria: {
-                        value: null,
-                        squash: true
-                    }
-                },
-                data: {
-                    breadcrumbs: [{
-                        title: 'Home',
-                        link: 'home'
-                    }, {
-                        title: 'Discussion',
-                        link: null
-                    }]
-                }
             });
     }
 
@@ -124,12 +81,20 @@
                 console.log(result.error);
                 $state.go('404');
             }
+
+
+            var decisionSlug = result.nameSlug ? result.nameSlug : '';
+
+            if ($stateParams.slug === null ||
+                $stateParams.slug === 'matrix' ||
+                $stateParams.slug === 'list') {
+                $stateParams.slug = result.nameSlug;
+            }
+            // console.log('Resolver decision');
             var stateListener = $rootScope.$on('$stateChangeSuccess',
                 function(event, toState, toParams, fromState, fromParams) {
-                    // TODO: share data with Criteria and Characteristics Avoid additional API calls
                     var
                         currentState,
-                        criteria = '',
                         decisionSlug;
 
                     currentState = $state.current.name;
@@ -137,28 +102,50 @@
                     //SLUG for Decision page
                     //Always set correct slug from server
 
-                    decisionSlug = result.nameSlug ? result.nameSlug : '';
-
-                    $stateParams.slug = result.nameSlug;
-                    //set criteria ( addtional user parameters)
-                    if (toParams.criteria && (!fromParams.id || toParams.id === fromParams.id)) {
-                        criteria = toParams.criteria;
-                    }
-
                     // TODO: remove
-                    var decisionStateParams = {
-                        'id': toParams.id,
-                        'slug': decisionSlug,
-                        'criteria': criteria
-                    };
+                    // var decisionStateParams = {
+                    //     'id': toParams.id,
+                    //     'slug': decisionSlug
+                    // };
                     // console.log(toState.name);
-                    if (toState.name === 'decisions.single.matrix' ||
-                        toState.name === 'decisions.single.list' ||
-                        toState.name === 'decisions.single.discussions') {
+                    if (
+                        // toState.name === 'decisions.single.matrix' ||
+                        // toState.name === 'decisions.single.list' ||
+                        toState.name === 'decisions.single') {
                         // Just added new slug
-                        $state.go(currentState, decisionStateParams);
+                        // console.log(currentState);
+                        $state.go(currentState);
+                        // event.preventDefault();
+
                     }
 
+                    // BreadCrumbs
+                    if ($state.current.name === 'decisions.single.matrix' ||
+                        $state.current.name === 'decisions.single.matrix.analysis') {
+                        $rootScope.breadcrumbs = [{
+                            title: 'Decisions',
+                            link: 'decisions'
+                        }, {
+                            title: result.name,
+                            link: 'decisions.single'
+                        }, {
+                            title: 'Matrix',
+                            link: null
+                        }];
+
+                    } else if ($state.current.name === 'decisions.single.list') {
+                        $rootScope.breadcrumbs = [{
+                            title: 'Decisions',
+                            link: 'decisions'
+                        }, {
+                            title: result.name,
+                            link: 'decisions.single'
+                        }, {
+                            title: 'List',
+                            link: null
+                        }];
+
+                    }
                     //unsubscribe event listener
                     stateListener();
                 });
