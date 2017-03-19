@@ -1,8 +1,23 @@
 <breadcrumbs items="breadcrumbs"></breadcrumbs>
-<div class="app-container-sm">
-    <h3 class="app-title">
-        {{vm.title}}
-    </h3>
+
+<div class="row app-top-panel">
+    <div class="col-sm-6">
+        <h4 class="app-header-sub-title">
+            {{vm.title}}
+        </h4>
+    </div>
+    <div class="col-sm-6">
+        <div class="pull-right">
+            <div class="btn-group btn-group-sm btns-view">
+                <a ui-sref="decisions.single.list({id: vm.decisionId})" ui-sref-active="btn-primary" class="btn btn-default"><span class="glyphicon glyphicon-th-list"></span> List</a>
+                <a ui-sref="decisions.single.matrix({id: vm.decisionId})" ui-sref-active="btn-primary" class="btn btn-default"><span class="glyphicon glyphicon-th"></span> Matrix</a>
+            </div>
+            <a href class="btn btn-primary btn-sm">Ask for Decision</a>
+        </div>
+    </div>
+</div>
+
+<div class="app-container-sm app-content">
     <div class="row">
         <div class="col-sm-8">
             <rating-star class="text-left" value="vm.discussion.votes.weight" total-votes="vm.discussion.votes.totalVotes" ng-show="vm.discussion.votes.weight"></rating-star>
@@ -126,26 +141,32 @@
             <!-- End Comments list -->
         </div>
         <div class="col-sm-4">
-            <strong>You also may be interested in:</strong>
+            <strong>You also may be interested in {{vm.discussion.childDecision.name}} discussions:</strong>
             <div class="app-list-panel" ng-if="vm.criteriaGroups">
                 <h4>Criteria</h4>
-                <ul class="app-list" ng-repeat="group in vm.criteriaGroups track by $index">
-                    <li ng-repeat="criteria in group.criteria | orderBy:'criterionId'">
-                        <a href ng-click="vm.goToDiscussion(vm.discussion.childDecision.decisionId, criteria.criterionId)">
-                        {{vm.discussion.childDecision.name}} {{criteria.name}}
-                        </a>
-                    </li>
-                </ul>
+                <div class="app-list-group" ng-repeat="group in vm.criteriaGroups track by $index">
+                    <h5>{{group.name}}</h5>
+                    <ul class="app-list">
+                        <li ng-repeat="criteria in group.criteria | orderBy:'criterionId'" ng-class="{'selected':vm.discussion.childCriterion.criterionId === criteria.criterionId}">
+                            <a href ng-click="vm.goToDiscussion(vm.discussion.childDecision.decisionId, criteria.criterionId)">
+                             {{criteria.name}}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
             <div class="app-list-panel" ng-if="vm.characteristicGroups">
                 <h4>Characteristics</h4>
-                <ul class="app-list" ng-repeat="group in vm.characteristicGroups track by $index">
-                    <li ng-repeat="characteristic in group.characteristics | orderBy:'characteristicId'">
-                        <a href ng-click="vm.goToDiscussion(vm.discussion.childDecision.decisionId, characteristic.characteristicId)">
-                        {{vm.discussion.childDecision.name}} {{characteristic.name}}
-                        </a>
-                    </li>
-                </ul>
+                <div class="app-list-group" ng-repeat="group in vm.characteristicGroups track by $index">
+                    <h5>{{group.name}}</h5>
+                    <ul class="app-list">
+                        <li ng-repeat="characteristic in group.characteristics | orderBy:'characteristicId'" ng-class="{'selected':vm.discussion.childCharacteristic.characteristicId === characteristic.characteristicId}">
+                            <a href ng-click="vm.goToDiscussion(vm.discussion.childDecision.decisionId, characteristic.characteristicId)">
+                            {{characteristic.name}}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

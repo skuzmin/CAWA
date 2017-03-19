@@ -43,7 +43,7 @@
         }
 
         function searchCommentableDiscussion(discussionId, critOrCharId) {
-            console.log(discussionId, critOrCharId);
+            // console.log(discussionId, critOrCharId);
 
             // if (!discussionId && !critOrCharId) return;
             return searchCommentableDiscussionUrl.get({
@@ -53,8 +53,6 @@
         }
 
         function searchCommentableVotesWeight(discussionId, critOrCharId) {
-            console.log(discussionId, critOrCharId);
-
             // if (!discussionId && !critOrCharId) return;
             return searchCommentableVotesWeightUrl.get({
                 discussionId: discussionId,

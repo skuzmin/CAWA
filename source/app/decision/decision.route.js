@@ -10,8 +10,8 @@
 
     function configuration($stateProvider) {
         $stateProvider
-            .state('decisions.matrix', {
-                url: '/:id/{slug}/{criteria}/matrix', //Url rewrites in resolver
+            .state('decisions.single.matrix', {
+                url: 'matrix', //Url rewrites in resolver
                 views: {
                     "@": {
                         templateUrl: 'app/desicionMatrix/decision-matrix.html',
@@ -34,7 +34,14 @@
                     }
                 }
             })
-            .state('decisions.matrix.analysis', {
+            .state('decisions.single', {
+                url: '/:id/{slug}/{criteria}',
+                abstract: true,
+                resolve: {
+                    decisionBasicInfo: DecisionResolver,
+                },
+            })
+            .state('decisions.single.matrix.analysis', {
                 url: '/analysis/:analysisId',
                 templateUrl: 'app/decision/decision.html',
                 controller: 'DecisionController',
@@ -43,8 +50,8 @@
                     // decisionAnalysisInfo: DecisionAanalysisResolver
                 },
             })
-            .state('decisions.list', {
-                url: '/:id/{slug}/{criteria}/list',
+            .state('decisions.single.list', {
+                url: 'list',
                 views: {
                     "@": {
                         templateUrl: 'app/decision/decision.html',
@@ -68,15 +75,14 @@
             })
             .state('decisions.list.analysis', {
                 url: '/analysis/:analysisId',
-                templateUrl: 'app/decision/decision.html',
-                controller: 'DecisionController',
+               abstract: true,
                 controllerAs: 'vm',
                 resolve: {
                     // decisionAnalysisInfo: DecisionAanalysisResolver
                 },
             })
-            .state('decisions.discussions', {
-                url: '/:id/{slug}/{criteria}/discussions',
+            .state('decisions.single.discussions', {
+                url: 'discussions',
                 views: {
                     "@": {
                         templateUrl: 'app/discussions/discussion-list.html',
@@ -146,9 +152,9 @@
                         'criteria': criteria
                     };
                     // console.log(toState.name);
-                    if (toState.name === 'decisions.matrix' ||
-                        toState.name === 'decisions.list' ||
-                        toState.name === 'decisions.discussions') {
+                    if (toState.name === 'decisions.single.matrix' ||
+                        toState.name === 'decisions.single.list' ||
+                        toState.name === 'decisions.single.discussions') {
                         // Just added new slug
                         $state.go(currentState, decisionStateParams);
                     }

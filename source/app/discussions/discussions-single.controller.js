@@ -11,31 +11,28 @@
     function DiscussionSingle(decisionDiscussionInfo, DiscussionsDataService, $rootScope, $stateParams, DecisionDataService, $state) {
         var vm = this;
 
+        var params = {
+            'id': parseInt($stateParams.id),
+            'slug': $stateParams.slug,
+            'criteria': $stateParams.criteria,
+        };
 
+        vm.params = params;
 
         vm.discussion = decisionDiscussionInfo || {};
 
         var pageTitle = vm.discussion.childDecision.name;
-        if(vm.discussion.childCharacteristic) {
-            pageTitle += ' ' +  vm.discussion.childCharacteristic.name;
-        } else if(vm.discussion.childCriterion) {
-            pageTitle += ' ' +  vm.discussion.childCriterion.name;
+        var critOrCharTitle = '';
+        if (vm.discussion.childCharacteristic) {
+            pageTitle += ' ' + vm.discussion.childCharacteristic.name;
+            critOrCharTitle = vm.discussion.childCharacteristic.name;
+        } else if (vm.discussion.childCriterion) {
+            pageTitle += ' ' + vm.discussion.childCriterion.name;
+            critOrCharTitle = vm.discussion.childCriterion.name;
         }
 
         $rootScope.pageTitle = 'Discussion ' + pageTitle + ' | DecisionWanted';
-        $rootScope.breadcrumbs = [{
-            title: 'Decisions',
-            link: 'decisions'
-        }, {
-            title: vm.discussion.decision.name,
-            link: 'decisions.matrix'
-        }, {
-            title: 'Discussions',
-            link: 'decisions.discussions'
-        }, {
-            title: pageTitle,
-            link: null
-        }];
+
 
 
         init();
@@ -62,7 +59,7 @@
         }
 
         function searchCommentableVotesWeight(discussionId, critOrCharId) {
-            if(!discussionId || !critOrCharId) return;
+            if (!discussionId || !critOrCharId) return;
             DiscussionsDataService.searchCommentableVotesWeight(discussionId, critOrCharId)
                 .then(function(resp) {
                     // console.log(resp);
@@ -79,22 +76,35 @@
             getCharacteristictsGroupsById(vm.discussion.decision.decisionId);
 
             // TODO: avoid $stateParams
-            if(vm.discussion.childCriterion) searchCommentableVotesWeight($stateParams.discussionId, $stateParams.critOrCharId);
+            if (vm.discussion.childCriterion) searchCommentableVotesWeight($stateParams.discussionId, $stateParams.critOrCharId);
+
+        $rootScope.breadcrumbs = [{
+            title: 'Decisions',
+            link: 'decisions'
+        }, {
+            title: vm.discussion.decision.name,
+            link: 'decisions.single.matrix'
+        }, {
+            title: 'Discussions',
+            link: 'decisions.single.discussions'
+        }, {
+            title: vm.discussion.childDecision.name,
+            link: null
+        },  {
+            title: critOrCharTitle,
+            link: null
+        }];            
         }
 
         vm.goToDiscussion = goToDiscussion;
-
+        //         'discussionId': discussionId,
+        // // 'discussionSlug': null,
+        // 'critOrCharId': critOrCharId,
+        // // 'critOrCharSlug': null
         function goToDiscussion(discussionId, critOrCharId) {
-            var params = {
-                'id': parseInt($stateParams.id),
-                'slug': $stateParams.slug,
-                'criteria': $stateParams.criteria,
-                'discussionId': discussionId,
-                // 'discussionSlug': null,
-                'critOrCharId': critOrCharId,
-                // 'critOrCharSlug': null
-            };
-            $state.go('decisions.discussions.single', params);
+            params.discussionId = discussionId;
+            params.critOrCharId = critOrCharId;
+            $state.go('decisions.single.discussions.single', params);
         }
 
     }

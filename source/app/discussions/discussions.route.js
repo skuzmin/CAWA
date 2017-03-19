@@ -10,7 +10,7 @@
 
     function configuration($stateProvider) {
         $stateProvider
-            .state('decisions.discussions.single', {
+            .state('decisions.single.discussions.single', {
                 url: '/:discussionId/:critOrCharId',
                 // url: '/:discussionId/{discussionSlug}/:critOrCharId/{critOrCharSlug}',
                 views: {

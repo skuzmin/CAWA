@@ -20,7 +20,7 @@
             link: 'decisions'
         }, {
             title: vm.decision.name,
-            link: 'decisions.matrix({id: ' + vm.decision.decisionId + '})'
+            link: 'decisions.single.matrix'
         }, {
             title: 'Discussions',
             link: null

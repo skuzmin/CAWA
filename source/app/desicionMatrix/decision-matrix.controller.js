@@ -21,6 +21,14 @@
         vm.decision = decisionBasicInfo || {};
         $rootScope.pageTitle = vm.decision.name + ' Matrix | DecisionWanted';
 
+        $rootScope.breadcrumbs = [{
+            title: 'Decisions',
+            link: 'decisions'
+        }, {
+            title: vm.decision.name,
+            link: null
+        }];
+
         init();
 
         function getCriteriaGroupsById(decisionId) {
@@ -230,7 +238,10 @@
 
         function searchDecisionMatrix(id) {
             vm.decisionsSpinner = true;
-            DecisionDataService.searchDecisionMatrix(id, DecisionSharedService.getFilterObject()).then(function(result) {
+
+            var sendData = DecisionSharedService.getFilterObject();
+            sendData.persistent = true; //Enable analysis
+            DecisionDataService.searchDecisionMatrix(id, sendData).then(function(result) {
                 var resultdecisionMatrixs = result.decisionMatrixs;
                 initSorters(result.totalDecisionMatrixs);
                 vm.decisionMatrixList = createMatrixContent(criteriaIds, characteristicsIds, resultdecisionMatrixs);
@@ -467,15 +478,15 @@
 
         function goToDiscussion(discussionId, critOrCharId) {
             var params = {
-                'id': parseInt($stateParams.id),
-                'slug': $stateParams.slug,
-                'criteria': $stateParams.criteria,
+                // 'id': parseInt($stateParams.id),
+                // 'slug': $stateParams.slug,
+                // 'criteria': $stateParams.criteria,
                 'discussionId': discussionId,
                 // 'discussionSlug': null,
                 'critOrCharId': critOrCharId,
                 // 'critOrCharSlug': null
             };
-            $state.go('decisions.discussions.single', params);
+            $state.go('decisions.single.discussions.single', params);
         }
     }
 })();

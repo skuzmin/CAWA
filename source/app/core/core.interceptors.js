@@ -26,7 +26,7 @@
                 $stateParams = $injector.get('$stateParams');
 
                 // if (currentState === 'decisions.matrix' || currentState === 'decisions.matrix.analysis')
-                if (($state.is('decisions.matrix') || $state.is('decisions.matrix.analysis')) &&
+                if (($state.is('decisions.single.matrix') || $state.is('decisions.single.matrix.analysis')) &&
                     resp.data && (resp.data.decisionMatrixs || resp.data.decisions) &&
                     resp.data.decisionAnalysisId) {
 
@@ -39,7 +39,7 @@
                             'criteria': $stateParams.criteria,
                             'analysisId': decisionAnalysisId
                         };
-                        $state.go('decisions.matrix.analysis', decisionAnalysisStateParams);
+                        $state.go('decisions.single.matrix.analysis', decisionAnalysisStateParams);
                     }
 
                     // Save only second call to avoid big array

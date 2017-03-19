@@ -11,7 +11,10 @@ a {
 a:hover,
 a:focus {
   text-decoration: none;
-  color: #195cc9;
+  color: #1652b3;
+}
+a.seleted {
+  color: #1652b3;
 }
 .search-input {
   margin-top: 5px;
@@ -70,17 +73,16 @@ a:focus {
 }
 .app-header .navbar-nav > li > a:hover {
   color: #FFF;
-  background-color: #195cc9;
+  background-color: #1652b3;
 }
 .app-header .navbar-nav .link {
   padding: 15px 15px;
   display: block;
 }
 .app-header .navbar-nav .link:hover {
-  background-color: #195cc9;
+  background-color: #1652b3;
 }
 .app-header-sub-title {
-  margin-left: 5px;
   font-size: 17px;
   font-weight: 500;
 }
@@ -88,6 +90,7 @@ a:focus {
   margin-right: 15px;
   min-width: 200px;
   font-weight: 600;
+  padding-left: 0;
 }
 .navbar-brand a {
   color: #4784e8;
@@ -151,7 +154,7 @@ a:focus {
   color: #4784e8;
 }
 .app-header .dropdown-menu a:hover {
-  color: #195cc9;
+  color: #1652b3;
 }
 .app-header .dropdown-menu:before {
   position: absolute;
@@ -516,7 +519,7 @@ a:focus {
 .decision .main-panel {
   position: relative;
   z-index: 2;
-  height: calc(100vh - 150px);
+  height: calc(100vh - 170px);
 }
 .decision .main-panel .divider {
   height: 100%;
@@ -680,8 +683,8 @@ body .app-main-panel .panels-2 .app-panel-right {
   border-color: #4784e8;
 }
 .btn-primary:hover {
-  background-color: #195cc9;
-  border-color: #195cc9;
+  background-color: #1652b3;
+  border-color: #1652b3;
 }
 .btn-primary:hover,
 .btn-primary:focus,
@@ -689,8 +692,8 @@ body .app-main-panel .panels-2 .app-panel-right {
 .btn-primary:active,
 .btn-primary.active,
 .open > .dropdown-toggle.btn-primary {
-  background-color: #195cc9;
-  border-color: #195cc9;
+  background-color: #1652b3;
+  border-color: #1652b3;
 }
 .form-control {
   -webkit-border-radius: 2px;
@@ -751,9 +754,6 @@ body {
 }
 .btns-view + .btn {
   margin-left: 10px;
-}
-.matrix {
-  padding: 0 10px;
 }
 .matrix .app-panel {
   position: absolute;
@@ -823,7 +823,7 @@ body {
   margin: 5px 0;
 }
 .matrix .main-panel {
-  height: calc(100vh - 195px);
+  height: calc(100vh - 215px);
   width: 100%;
   overflow: hidden;
 }
@@ -1317,8 +1317,12 @@ body {
   padding: 0;
   margin: 0;
 }
+li.selected a {
+  color: #333;
+}
 .breadcrumbs {
-  margin: 10px 15px 20px;
+  margin: 0;
+  height: 20px;
 }
 .breadcrumbs ul {
   display: inline-block;
@@ -1516,7 +1520,7 @@ body {
   color: #7f8c8d;
 }
 .comment-footer a:hover {
-  color: #195cc9;
+  color: #1652b3;
 }
 .comment-form {
   margin-bottom: 15px;
@@ -1555,4 +1559,14 @@ body {
     width: auto;
     margin: 0 215px;
   }
+}
+.app-top-panel {
+  min-height: 40px;
+  background-color: #fff;
+  border-bottom: 1px solid #ebebeb;
+  overflow: hidden;
+  position: relative;
+}
+.app-content {
+  padding: 20px 0 30px;
 }
