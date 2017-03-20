@@ -20,3 +20,5 @@ report/
 .tmp/
 temp/
 source/index.html
+release
+source/styles/styles.css

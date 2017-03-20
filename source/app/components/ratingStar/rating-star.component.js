@@ -31,17 +31,13 @@
             vm.rating = value;
             if(!vm.totalVotes) vm.totalVotes = 0;
             // calc default rating widthout %
-            if (value && value.indexOf('%') === -1) {
+            if (value && value.indexOf('%') === -1) {          
+
+            function onChanges() {
                 vm.rating = parseFloat(vm.value) / AppRatingStarConstant.MAX_RATING * 100 + '%' || 0;
                 vm.value = vm.value || 0;
                 vm.showRating = parseInt(vm.value) > 0;
             }
-        }
-
-        init();
-
-        function init() {
-
         }
     }
 })();

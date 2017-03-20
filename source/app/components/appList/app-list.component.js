@@ -8,8 +8,7 @@
         .component('appList', {
             templateUrl: 'app/components/appList/app-list.html',
             bindings: {
-                list: '<',
-                template: '@'
+                list: '<'
             },
             controller: 'AppListController',
             controllerAs: 'vm'
@@ -124,14 +123,9 @@
                 $('.list-item-sort').removeClass('app-stop-animation');
             });
 
+        var characteristicGroupNames = [];
 
-        // TODO: refactor it, maybe make as new component
-        var content = {
-                decision: 'app/components/appList/decision-partial.html'
-            },
-            characteristicGroupNames = [];
-
-        vm.innerTemplate = content.decision; //content[vm.template];
+        vm.innerTemplate = 'app/components/appList/decision-partial.html';
 
         vm.selectDecision = selectDecision;
         vm.$onChanges = onChanges;
@@ -140,7 +134,6 @@
         vm.getGroupNameById = getGroupNameById;
 
         init();
-
 
         function getGroupNameById(id) {
             var group = _.find(characteristicGroupNames, function(group) {
@@ -183,8 +176,6 @@
             }
 
             DecisionNotificationService.notifySelectDecision(DecisionSharedService.filterObject.selectedDecision.decisionsIds);
-            // console.log(DecisionSharedService.filterObject.selectedDecision.decisionsIds);
-            // console.log(DecisionSharedService.filterObject);
         }
 
 
