@@ -9,11 +9,13 @@
 @import "components/_index";
 @import "home";
 @import "helpers";
+@import "discussions";
 
 .content {
   background-color: @app-bg;
 	min-height: calc(~"100vh - 100px"); //@footer-height + @header-height
   overflow: hidden;
+  margin-top: @header-height;
 }
 
 .app-row-content-label {
@@ -26,9 +28,27 @@
   margin-bottom: 10px;
 }
 
+.app-title {
+  font-size: 21px;
+  margin-bottom: 30px;
+}
 
-// Login
-.app-user-info {
-	float: left;
-	margin: 15px 5px;
+.app-container-sm {
+  width: 100%;
+  margin: 0 auto;
+  @media (min-width: @screen-sm-min) {
+    width: auto;
+    margin: 0 215px;
+  }
+}
+.app-top-panel {
+  min-height: 40px;
+  background-color: #fff;
+  border-bottom: 1px solid @gray-light;
+  overflow: hidden;
+  position: relative;
+}
+
+.app-content {
+  padding: 20px 0 30px;
 }

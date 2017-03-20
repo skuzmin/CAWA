@@ -1,0 +1,172 @@
+// TODO: move to views folder
+.panel-white {
+    border: 1px solid #dddddd;
+}
+.panel-white  .panel-heading {
+    color: #333;
+    background-color: #fff;
+    border-color: #ddd;
+}
+.panel-white  .panel-footer {
+    background-color: #fff;
+    border-color: #ddd;
+}
+
+.post .post-heading {
+    height: 70px;
+    padding: 8px;
+}
+.post .post-heading .avatar {
+    width: 60px;
+    height: 60px;
+    display: block;
+    margin-right: 15px;
+}
+.post .post-heading .meta .title {
+    margin-bottom: 0;
+}
+.post .post-heading .meta .title a {
+    color: black;
+}
+.post .post-heading .meta .title a:hover {
+    color: #aaaaaa;
+}
+.post .post-heading .meta .time {
+    margin-top: 8px;
+    color: #999;
+}
+.post .post-image .image {
+    width: 100%;
+    height: auto;
+}
+.post .post-description {
+    padding: 15px;
+}
+.post .post-description p {
+    font-size: 14px;
+}
+.post .post-description .stats {
+    margin-top: 10px;
+}
+.post .post-description .stats .stat-item .icon {
+    margin-right: 8px;
+}
+.post .post-footer {
+    border-top: 1px solid #ddd;
+    padding: 15px;
+}
+.post .post-footer .input-group-addon a {
+    color: #454545;
+}
+.post .post-footer .comments-list {
+    padding: 0;
+    margin-top: 20px;
+    list-style-type: none;
+}
+.post .post-footer .comments-list .comment {
+    display: block;
+    width: 100%;
+    margin: 20px 0;
+}
+.post .post-footer .comments-list .comment .avatar {
+    width: 35px;
+    height: 35px;
+}
+.post .post-footer .comments-list .comment .comment-heading {
+    display: block;
+    width: 100%;
+}
+.post .post-footer .comments-list .comment .comment-heading .user {
+    font-size: 14px;
+    font-weight: bold;
+    display: inline;
+    margin-top: 0;
+    margin-right: 10px;
+}
+.post .post-footer .comments-list .comment .comment-heading .time {
+    font-size: 12px;
+    color: #aaa;
+    margin-top: 0;
+    display: inline;
+}
+.post .post-footer .comments-list .comment .comment-body {
+    margin-left: 50px;
+}
+.post .post-footer .comments-list .comment > .comments-list {
+    margin-left: 50px;
+}
+
+
+// 
+.comment {
+    background-color: #FFF;
+    border: 1px solid @gray-light;
+    padding: 0;
+    margin: 0 0 8px 0;
+    .comment-time {
+        margin: 5px 5px;
+        padding: 0 5px;
+        border-left: 1px solid @gray-light-extra;
+        font-size: 13px;
+        display: inline-block;
+    }
+}
+
+// Nested
+.comment {
+    .comment {
+        margin-left: 20px;
+    }
+}
+
+.comment {
+    &.lvl-2 {
+        margin-left: 20px;
+    }
+    &.lvl-3 {
+        margin-left: 40px;
+    }    
+}
+
+.comment-aside {
+    float: left;
+    padding: 8px;
+    width: 15%;
+}
+
+.comment-header {
+    padding: 0 8px 4px 8px;
+    font-size: 13px;
+}
+.comment-body {
+    float: left;
+    width: 85%;
+    padding: 8px;
+}
+
+.comment-votes {
+    text-align: center;
+}
+
+.comment-footer {
+    padding: 4px 8px 8px 8px;
+    margin-top: 10px;
+    a {
+        color: @gray-mid;
+        &:hover {
+            color: @basic-active-hover;
+        }
+    }
+}
+
+.comment-form {
+    margin-bottom: 15px;
+    .form-control {
+        margin-bottom: 10px;
+    }
+}
+
+.app-list-panel {
+    border-bottom: 1px solid @gray-light-extra;
+    margin: 0 0 16px;
+}

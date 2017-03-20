@@ -139,7 +139,7 @@ gulp.task('js', ['jshint', 'templates'], function() {
     return gulp.src(jsSources)
         .pipe(gconcat('app.js'))
         .pipe(rev())
-        .pipe(gulpIf(argv.prod, uglify()))
+        // .pipe(gulpIf(argv.prod, uglify())) // Some problem with uglify
         .pipe(gulp.dest(config.temp));
 });
 

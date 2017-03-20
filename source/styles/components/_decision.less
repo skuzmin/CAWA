@@ -11,6 +11,9 @@
 }
 
 .decision {
+    .app-rating-votes {
+        display: inline-block;
+    }
     .top-panel {
         min-height: 40px;
         background-color: #fff;
@@ -21,6 +24,8 @@
     }
     .scroll-wrapper {
         overflow-y: auto;
+        -ms-overflow-x: hidden;
+            overflow-x: hidden;
         padding-bottom: 10px;
         position: absolute;
         left: 0;
@@ -48,19 +53,9 @@
     .main-panel {
         position: relative;
         z-index: 2;
-        height: calc(~"100vh - 140px");
+        height: calc(~"100vh - 170px");
         .divider {
             height: 100%;
-        }
-        & > div {
-            padding: 0;
-            position: relative;
-            height: 100%;
-            overflow: hidden;
-            &.app-divider-wrapper {
-                margin-right: -8px;
-                padding-right: 8px;
-            }
         }
         .grid-stack-decision {
             background-color: @bg-dark;

@@ -8,6 +8,7 @@
         'app.login',
         'app.decision',
         'app.decisionMatrix',
+        'app.discussions'
     ]);
 
     $.get({
@@ -15,6 +16,7 @@
         url: 'app.config'
     }).done(function(result) {
     	angular.module('app.core').constant('Config', {
+            baseUrl: result.baseUrl,
     		authUrl: result.authUrl,
     		endpointUrl: result.endpointUrl,
             mode: result.mode

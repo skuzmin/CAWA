@@ -9,6 +9,10 @@
     function resizer() {
         var directive = {
             restrict: 'A',
+            scope: {
+                resizerMax: '<',
+                resizerMin: '<'
+            },
             link: link
         };
 
@@ -20,9 +24,9 @@
             function updateResizeElement(event) {
                 var
                     target = event.target,
-                    x = (parseFloat(target.getAttribute('data-x')) || 0),
+                    x = (parseInt(target.getAttribute('data-x')) || 0),
                     el, elMax, elMin,
-                    elW, elLeft,
+                    elW, elLeft, elReactWidth,
                     elNext, elNextW, elNextLeft,
                     totalWidth;
 
@@ -37,26 +41,27 @@
                 }
 
                 elW = el.outerWidth();
+                elReactWidth = parseInt(event.rect.width);
                 elLeft = el.position();
 
                 elNext = $(el.attr('resizer-right'));
                 elNextW = elNext.outerWidth();
                 elNextLeft = elNext.position();
 
-                totalWidth = elW + elNextW;
+                totalWidth =  elW + elNextW;
 
                 if(totalWidth - event.rect.width - 220 < 0) return;
 
                 // Current element
                 el.css({
-                    left: elLeft.left,
-                    width: event.rect.width + 'px'
+                    left: parseInt(elLeft.left),
+                    width: elReactWidth + 'px'
                 });
 
                 // Next element
                 elNext.css({
-                    left: elLeft.left + event.rect.width + 'px',
-                    width: totalWidth - event.rect.width + 'px'
+                    left: parseInt(elLeft.left) + elReactWidth + 'px',
+                    width: totalWidth - elReactWidth + 'px'
                 });
             }
 

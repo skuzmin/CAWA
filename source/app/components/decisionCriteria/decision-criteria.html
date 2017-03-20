@@ -17,23 +17,14 @@
                 </uib-accordion-heading>
                 <div class="criteria-item" ng-repeat="criterion in group.criteria track by $index" ng-click="vm.selectCriterion(criterion)" ng-class="{'selected' : criterion.isSelected}">
                     <div class="criteria-item-left">
-                        {{criterion.criterionId}}
-                        {{criterion.name}}
-
+                        {{criterion.criterionId}} {{criterion.name}}
                         <rating-star value="criterion.weight" total-votes="criterion.totalVotes" ng-show="criterion.weight"></rating-star>
                     </div>
                     <div class="criteria-item-right">
-<!--                         <div class="text-right">
-                            <span>icon1</span>
-                            <span>icon2</span>
-                        </div> -->
-                        <button class="btn btn-default pull-right" ng-click="vm.editCriteriaCoefficient($event, criterion)">
+                        <button class="btn btn-default btn-sm pull-right" ng-click="vm.editCriteriaCoefficient($event, criterion)">
                             <criteria-coefficient-indicator coefficient="criterion.coefficient"></criteria-coefficient-indicator>
                         </button>
                     </div>
-<!--                     <div class="criteria-item-footer text-right">
-
-                    </div> -->
                 </div>
             </div>
         </uib-accordion>

@@ -37,6 +37,7 @@
         }
 
         function selectCriterion(criterion, coefCall) {
+            console.log(criterion);
             if (coefCall && !criterion.isSelected) {
                 return;
             }

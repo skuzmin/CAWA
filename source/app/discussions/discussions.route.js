@@ -1,0 +1,88 @@
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.discussions')
+        .config(configuration);
+
+    configuration.$inject = ['$stateProvider'];
+
+    function configuration($stateProvider) {
+        $stateProvider
+            .state('decisions.single.discussions', {
+                url: '/discussions',
+                views: {
+                    "@": {
+                        templateUrl: 'app/discussions/discussion-decision.html',
+                        controller: 'DiscussionDecisionController',
+                        controllerAs: 'vm',
+                    }
+                },
+            })
+            .state('decisions.single.discussions.child', {
+                url: '/:discussionId',
+                views: {
+                    "@": {
+                        templateUrl: 'app/discussions/discussion-decision-child.html',
+                        controller: 'DiscussionDecisionChildController',
+                        controllerAs: 'vm',
+                    }
+                },
+                resolve: {
+                    // decisionDiscussionInfo: DecisionSingleDiscussionResolver
+                },
+                params: {
+                    discussionSlug: {
+                        value: null,
+                        squash: true
+                    },
+                    critOrCharId: {
+                        value: null,
+                        squash: true
+                    }
+                }
+            })
+            .state('decisions.single.discussions.child.option', {
+                url: '/:critOrCharId',
+                // url: '/:discussionId/{discussionSlug}/:critOrCharId/{critOrCharSlug}',
+                views: {
+                    "@": {
+                        templateUrl: 'app/discussions/discussion-decision-child-option.html',
+                        controller: 'DiscussionDecisionChildOptionController',
+                        controllerAs: 'vm',
+                    }
+                },
+                resolve: {
+                    decisionDiscussionInfo: DecisionSingleDiscussionResolver
+                },
+                params: {
+                    discussionSlug: {
+                        value: null,
+                        squash: true
+                    },
+                    critOrCharId: {
+                        value: null,
+                        squash: true
+                    }
+                }
+            });
+    }
+
+
+    // Decision Data
+    DecisionSingleDiscussionResolver.$inject = ['DiscussionsDataService', '$stateParams', '$state', '$rootScope', '$location'];
+
+    function DecisionSingleDiscussionResolver(DiscussionsDataService, $stateParams, $state, $rootScope, $location) {
+        return DiscussionsDataService.searchCommentableDiscussion($stateParams.discussionId, $stateParams.critOrCharId)
+            .then(function(resp) {
+                // console.log(resp);
+                return resp;
+            })
+            .catch(function(err) {
+                console.log(err);
+            });
+
+    }
+
+})();
