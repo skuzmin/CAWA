@@ -6,9 +6,9 @@
         .module('app.decision')
         .controller('DecisionMatrixController', DecisionMatrixController);
 
-    DecisionMatrixController.$inject = ['DecisionDataService', 'DecisionSharedService', '$state', '$stateParams', 'DecisionNotificationService', 'decisionBasicInfo', '$rootScope', '$compile', '$scope', '$q', 'DecisionCriteriaConstant', '$uibModal', 'decisionAnalysisInfo'];
+    DecisionMatrixController.$inject = ['DecisionDataService', 'DecisionSharedService', '$state', '$stateParams', 'DecisionNotificationService', 'decisionBasicInfo', '$rootScope', '$compile', '$scope', '$q', 'DecisionCriteriaConstant', '$uibModal', 'decisionAnalysisInfo', '$sce'];
 
-    function DecisionMatrixController(DecisionDataService, DecisionSharedService, $state, $stateParams, DecisionNotificationService, decisionBasicInfo, $rootScope, $compile, $scope, $q, DecisionCriteriaConstant, $uibModal, decisionAnalysisInfo) {
+    function DecisionMatrixController(DecisionDataService, DecisionSharedService, $state, $stateParams, DecisionNotificationService, decisionBasicInfo, $rootScope, $compile, $scope, $q, DecisionCriteriaConstant, $uibModal, decisionAnalysisInfo, $sce) {
         var
             vm = this,
             isInitedSorters = false,
@@ -124,12 +124,15 @@
             var i = 0;
             matrixContent = _.map(decisionMatrixList, function(el) {
                 // New element with empty characteristics and criteria
-                var newEL = _.clone(el);
-                newEL.criteria = [];
-                newEL.characteristics = [];
+                var newEl = _.clone(el);
+                newEl.criteria = [];
+                newEl.characteristics = [];
+                // newEl.description = null;
+
+                newEl.decision.description = $sce.trustAsHtml(newEl.decision.description);
 
                 // Fill empty criteria
-                newEL.criteria = _.map(criteriaIds, function(criterionId) {
+                newEl.criteria = _.map(criteriaIds, function(criterionId) {
                     var emptyCriterianDataNew = _.clone(emptyCriterianData);
                     emptyCriterianDataNew.criterionId = criterionId;
                     _.map(el.criteria, function(elCriterionIdObj) {
@@ -142,7 +145,7 @@
                 });
 
                 // Fill empty characteristics
-                newEL.characteristics = _.map(characteristicsIds, function(characteristicId) {
+                newEl.characteristics = _.map(characteristicsIds, function(characteristicId) {
                     var emptyCharacteristicDataNew = _.clone(emptyCharacteristicData);
                     emptyCharacteristicDataNew.characteristicId = characteristicId;
                     _.map(el.characteristics, function(elCharacteristicObj) {
@@ -154,7 +157,7 @@
                     return emptyCharacteristicDataNew;
                 });
 
-                return newEL;
+                return newEl;
             });
 
 

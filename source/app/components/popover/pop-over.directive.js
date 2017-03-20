@@ -31,10 +31,12 @@
                 $('.matrix-table-group .app-control').toggleClass('selected', false);
                 $('.app-pop-over-content').toggleClass('hide', true);
 
+                console.log(el);
+
                 // console.log($uibPosition.position(el));
                 // console.log($uibPosition.position(elParent));
                 // console.log($uibPosition.viewportOffset(elParent));
-                
+
                 var parentViewportOffset = $uibPosition.viewportOffset(elParent);
                 $(this).toggleClass('selected');
                 elContent.toggleClass('hide').css({
