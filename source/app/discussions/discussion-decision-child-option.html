@@ -4,6 +4,8 @@
     <div class="col-sm-6">
         <h4 class="app-header-sub-title">
             {{vm.title}}
+
+            <rating-star class="text-left" value="vm.discussion.votes.weight" total-votes="vm.discussion.votes.totalVotes" ng-show="vm.discussion.votes.weight"></rating-star>            
         </h4>
     </div>
     <div class="col-sm-6">
@@ -20,7 +22,6 @@
 <div class="app-container-sm app-content">
     <div class="row">
         <div class="col-sm-12">
-            <rating-star class="text-left" value="vm.discussion.votes.weight" total-votes="vm.discussion.votes.totalVotes" ng-show="vm.discussion.votes.weight"></rating-star>
             <div class="comment-form clearfix">
                 <textarea name="" id="" cols="30" rows="3" class="form-control"></textarea>
                 <button class="btn btn-primary pull-right">Send</button>
