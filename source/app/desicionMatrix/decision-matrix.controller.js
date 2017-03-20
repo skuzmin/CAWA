@@ -192,7 +192,7 @@
 
         function findCoefNameByValue(valueSearch) {
             valueSearch = valueSearch;
-            return _.find(DecisionCriteriaConstant.coefficientList, function(record) {
+            return _.find(DecisionCriteriaConstant.COEFFICIENT_LIST, function(record) {
                 return record.value == valueSearch;
             });
         }
@@ -429,11 +429,11 @@
             if (position === -1) {
                 foSelectedCriteria.sortCriteriaIds.push(criterion.criterionId);
                 //don't add default coefficient
-                if (criterion.coefficient && criterion.coefficient.value !== DecisionCriteriaConstant.coefficientDefault.value) {
+                if (criterion.coefficient && criterion.coefficient.value !== DecisionCriteriaConstant.COEFFICIENT_DEFAULT.value) {
                     foSelectedCriteria.sortCriteriaCoefficients[criterion.criterionId] = criterion.coefficient.value;
                 }
                 //add only coefficient (but not default)
-            } else if (coefCall && criterion.coefficient.value !== DecisionCriteriaConstant.coefficientDefault.value) {
+            } else if (coefCall && criterion.coefficient.value !== DecisionCriteriaConstant.COEFFICIENT_DEFAULT.value) {
                 foSelectedCriteria.sortCriteriaCoefficients[criterion.criterionId] = criterion.coefficient.value;
                 //unselect criterion
             } else {
@@ -473,9 +473,10 @@
 
         vm.goToDiscussion = goToDiscussion;
 
-        function goToDiscussion(discussionId, critOrCharId) {
+        function goToDiscussion(decision, critOrCharId) {
             var params = {
-                'discussionId': discussionId,
+                'discussionId': decision.decisionId,
+                'discussionSlug': decision.nameSlug,
                 'critOrCharId': critOrCharId
             };
             $state.go('decisions.single.discussions.child.option', params);

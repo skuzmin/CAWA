@@ -6,9 +6,9 @@
         .module('app.discussions')
         .controller('DiscussionDecisionChildController', DiscussionDecisionChildController);
 
-    DiscussionDecisionChildController.$inject = ['decisionBasicInfo', 'DiscussionsDataService', '$stateParams', '$rootScope', 'DecisionDataService', '$q'];
+    DiscussionDecisionChildController.$inject = ['decisionBasicInfo', 'DiscussionsDataService', '$stateParams', '$rootScope', 'DecisionDataService', '$q', '$state'];
 
-    function DiscussionDecisionChildController(decisionBasicInfo, DiscussionsDataService, $stateParams, $rootScope, DecisionDataService, $q) {
+    function DiscussionDecisionChildController(decisionBasicInfo, DiscussionsDataService, $stateParams, $rootScope, DecisionDataService, $q, $state) {
         var vm = this;
         vm.decision = decisionBasicInfo || {}; //Parent Decision
 
@@ -37,13 +37,11 @@
         }
 
         function fillRating(decisionMatrixList) {
-            // vm.criteriaGroups = 
             _.map(vm.criteriaGroups, function(group) {
                 _.map(group.criteria, function(criteria) {
 
                     var criteriaNew = _.clone(criteria);
                     _.map(decisionMatrixList.criteria, function(criteriaMatrix) {
-                        // console.log(criteriaMatrix.criterionId, criteriaNew.criterionId, criteriaMatrix.criterionId === criteriaNew.criterionId);
                         if (criteriaMatrix.criterionId === criteriaNew.criterionId) {
                             criteria.totalDislikes = criteriaMatrix.totalDislikes;
                             criteria.totalLikes = criteriaMatrix.totalLikes;
@@ -53,28 +51,6 @@
                     });
                 });
             });
-
-
-            // // console.log(decisionMatrixList);
-            // _.map(vm.characteristicGroups, function(group) {
-            //     // console.log(group);
-            //     _.map(group.characteristics, function(characteristic) {
-            //         // console.log(characteristic);
-
-            //         var characteristicNew = _.clone(characteristic);
-            //         _.map(decisionMatrixList.characteristics, function(characteristicMatrix) {
-            //             // console.log(characteristicMatrix.criterionId, characteristicNew.criterionId, characteristicMatrix.criterionId === characteristicNew.criterionId);
-            //             if (characteristicMatrix.characteristicId === characteristicNew.characteristicId) {
-            //                 characteristic.totalDislikes = characteristicMatrix.totalDislikes;
-            //                 characteristic.totalLikes = characteristicMatrix.totalLikes;
-            //                 characteristic.totalVotes = characteristicMatrix.totalVotes;
-            //                 characteristic.weight = characteristicMatrix.weight;
-
-            //                 console.log(characteristic);
-            //             }
-            //         });
-            //     });
-            // });
         }
 
         function init() {
@@ -86,14 +62,13 @@
                 ])
                 .then(function(values) {
 
-                    // Get Rating
+                    // Get Rating from Matrix Endpoint
                     var sendData = {
                         includeChildDecisionIds: []
                     };
 
                     sendData.includeChildDecisionIds.push($stateParams.discussionId);
                     DecisionDataService.searchDecisionMatrix(vm.decision.decisionId, sendData).then(function(result) {
-
                         fillRating(result.decisionMatrixs[0]);
                     });
                 });
@@ -101,6 +76,13 @@
             // Child Decision
             DecisionDataService.getDecisionInfo($stateParams.discussionId).then(function(result) {
                 vm.decisionChild = result;
+
+                // Add slug for child decision
+                if($stateParams.discussionId && 
+                    !$stateParams.discussionSlug &&
+                    !$stateParams.critOrCharId) {
+                    $state.go('decisions.single.discussions.child', {discussionId: $stateParams.discussionId, discussionSlug: result.nameSlug}, {notify:false, reload:false});
+                }
 
                 $rootScope.breadcrumbs = [{
                     title: 'Decisions',

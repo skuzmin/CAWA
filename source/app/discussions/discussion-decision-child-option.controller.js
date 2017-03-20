@@ -57,6 +57,14 @@
             // TODO: avoid $stateParams
             if (vm.discussion.childCriterion) searchCommentableVotesWeight($stateParams.discussionId, $stateParams.critOrCharId);
 
+            // TODO: optimize, in resolver some bugs with state
+            // // Add slug for child decision
+            if (vm.discussion.childCriterion && vm.discussion.childCriterion.nameSlug) {
+                $state.go('decisions.single.discussions.child.option', {critOrCharId: $stateParams.critOrCharId, critOrCharSlug: vm.discussion.childCriterion.nameSlug}, {notify:false, reload:false});
+            } else if (vm.discussion.childCharacteristic && vm.discussion.childCharacteristic.nameSlug) {
+                $state.go('decisions.single.discussions.child.option', {critOrCharId: $stateParams.critOrCharId, critOrCharSlug: vm.discussion.childCharacteristic.nameSlug}, {notify:false, reload:false});
+            }
+
             $rootScope.breadcrumbs = [{
                 title: 'Decisions',
                 link: 'decisions'

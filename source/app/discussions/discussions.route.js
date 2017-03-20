@@ -21,7 +21,7 @@
                 },
             })
             .state('decisions.single.discussions.child', {
-                url: '/:discussionId',
+                url: '/:discussionId/{discussionSlug}',
                 views: {
                     "@": {
                         templateUrl: 'app/discussions/discussion-decision-child.html',
@@ -29,23 +29,15 @@
                         controllerAs: 'vm',
                     }
                 },
-                resolve: {
-                    // decisionDiscussionInfo: DecisionSingleDiscussionResolver
-                },
                 params: {
                     discussionSlug: {
-                        value: null,
-                        squash: true
-                    },
-                    critOrCharId: {
                         value: null,
                         squash: true
                     }
                 }
             })
             .state('decisions.single.discussions.child.option', {
-                url: '/:critOrCharId',
-                // url: '/:discussionId/{discussionSlug}/:critOrCharId/{critOrCharSlug}',
+                url: '/:critOrCharId/{critOrCharSlug}',
                 views: {
                     "@": {
                         templateUrl: 'app/discussions/discussion-decision-child-option.html',
@@ -57,10 +49,6 @@
                     decisionDiscussionInfo: DecisionSingleDiscussionResolver
                 },
                 params: {
-                    discussionSlug: {
-                        value: null,
-                        squash: true
-                    },
                     critOrCharId: {
                         value: null,
                         squash: true
@@ -70,19 +58,19 @@
     }
 
 
+
     // Decision Data
     DecisionSingleDiscussionResolver.$inject = ['DiscussionsDataService', '$stateParams', '$state', '$rootScope', '$location'];
 
     function DecisionSingleDiscussionResolver(DiscussionsDataService, $stateParams, $state, $rootScope, $location) {
         return DiscussionsDataService.searchCommentableDiscussion($stateParams.discussionId, $stateParams.critOrCharId)
             .then(function(resp) {
-                // console.log(resp);
                 return resp;
             })
             .catch(function(err) {
                 console.log(err);
+                return err;
             });
-
     }
 
 })();

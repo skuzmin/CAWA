@@ -169,3 +169,61 @@
     border-bottom: 1px solid @gray-light-extra;
     margin: 0 0 16px;
 }
+
+.app-rating-inline {
+    .app-rating-star,
+    .app-rating-votes {
+        display: inline-block;
+    }    
+}
+.app-top-panel {
+    .app-rating-star-wrapper {
+        margin: 8px 10px;
+    }
+    .app-rating-star,
+    .app-rating-votes {
+        display: inline-block;
+    }
+}
+
+
+.discussions-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px 0;
+    
+    li {
+        a {
+            border-bottom: 1px solid @gray-light;
+            padding: 8px 16px;
+            display: block;
+            &:hover {
+                background-color: @basic-active-light;
+            }
+        }
+    }
+
+    .sub-list {
+        li {
+            a {
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+        }
+    }
+}
+
+
+.app-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    &.selected {
+        a {
+            color: #333;
+        }
+    }
+}

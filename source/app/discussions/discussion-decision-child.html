@@ -1,11 +1,8 @@
 <breadcrumbs items="breadcrumbs"></breadcrumbs>
-
 <div class="row app-top-panel">
     <div class="col-sm-6">
-        <h4 class="app-header-sub-title">
+        <h4 class="app-header-sub-title pull-left">
             {{vm.decisionChild.name}} discussions:
-
-            <rating-star class="text-left" value="vm.discussion.votes.weight" total-votes="vm.discussion.votes.totalVotes" ng-show="vm.discussion.votes.weight"></rating-star>            
         </h4>
     </div>
     <div class="col-sm-6">
@@ -18,11 +15,10 @@
         </div>
     </div>
 </div>
-
 <div class="app-container-sm">
     <div class="row">
         <div class="col-sm-12">
-<!--             <strong>{{vm.discussion.childDecision.name}} discussions:</strong> -->
+            <!--             <strong>{{vm.discussion.childDecision.name}} discussions:</strong> -->
             <div class="row">
                 <div class="col-sm-6">
                     <div class="app-list-panel" ng-if="vm.criteriaGroups">
@@ -32,11 +28,11 @@
                             <ul class="discussions-list">
                                 <li ng-repeat="criteria in group.criteria | orderBy:'criterionId'" ng-class="{'selected':vm.discussion.childCriterion.criterionId === criteria.criterionId}">
                                     <a ui-sref="decisions.single.discussions.child.option({critOrCharId:criteria.criterionId})">
-                                        <div class="row">
+                                        <div class="clearfix">
                                             <div class="pull-left">
                                                 {{criteria.name}}
                                             </div>
-                                            <div class="pull-right">
+                                            <div class="pull-right app-rating-inline">
                                                 <rating-star class="text-left" value="criteria.weight" total-votes="criteria.totalVotes" ng-show="criteria.weight"></rating-star>
                                             </div>
                                         </div>
@@ -54,14 +50,7 @@
                             <ul class="discussions-list">
                                 <li ng-repeat="characteristic in group.characteristics | orderBy:'characteristicId'" ng-class="{'selected':vm.discussion.childCharacteristic.characteristicId === characteristic.characteristicId}">
                                     <a ui-sref="decisions.single.discussions.child.option({critOrCharId:characteristic.characteristicId})">
-                                        <div class="row">
-                                            <div class="pull-left">
-                                                {{characteristic.name}}
-                                            </div>
-                                            <div class="pull-right">
-                                                <!-- <rating-star class="text-left" value="criteria.weight" total-votes="criteria.totalVotes" ng-show="criteria.weight"></rating-star> -->
-                                            </div>
-                                        </div>
+                                        {{characteristic.name}}
                                     </a>
                                 </li>
                             </ul>

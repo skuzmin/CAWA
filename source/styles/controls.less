@@ -6,10 +6,20 @@ a {
     &:focus {
         text-decoration: none;
         color: @basic-active-hover;
+        outline: none;
     }
     &.seleted {
         color: @basic-active-hover;
     }
+}
+
+.link-secondary {
+    color: @icon-color;
+    font-size: 13px;
+    padding: 0;
+    &:hover {
+        color: @basic-active;
+    }    
 }
 
 .search-input {
