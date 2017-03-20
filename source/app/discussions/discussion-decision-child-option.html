@@ -21,7 +21,7 @@
     <div class="row">
         <div class="col-sm-8">
             <rating-star class="text-left" value="vm.discussion.votes.weight" total-votes="vm.discussion.votes.totalVotes" ng-show="vm.discussion.votes.weight"></rating-star>
-            <div class="comment-form">
+            <div class="comment-form clearfix">
                 <textarea name="" id="" cols="30" rows="3" class="form-control"></textarea>
                 <button class="btn btn-primary pull-right">Send</button>
             </div>
@@ -52,14 +52,7 @@
                             </div>
                         </div>
                         <div class="comment-footer">
-                            <a herf ng-click="isCollapsedHorizontal = !isCollapsedHorizontal">add a comment</a>
-
-                            <div class="horizontal-collapse" uib-collapse="isCollapsedHorizontal" horizontal>
-                                <div class="comment-form">
-                                    <textarea name="" id="" cols="30" rows="3" class="form-control"></textarea>
-                                    <button class="btn btn-primary pull-right">Send</button>
-                                </div>
-                            </div>
+                            <a herf>add a comment</a>
                         </div>
                     </div>
                     <div class="comment lvl-2">
