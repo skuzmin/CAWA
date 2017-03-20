@@ -12,9 +12,6 @@
         var vm = this;
         vm.decision = decisionBasicInfo || {};
 
-        console.log('Discussion Decision controller');
-
-
         $rootScope.breadcrumbs = [{
             title: 'Decisions',
             link: 'decisions'
@@ -25,5 +22,11 @@
             title: 'Discussions',
             link: null
         }];
+
+        init();
+
+        function init() {
+            console.log('Discussion Decision controller');
+        }
     }
 })();

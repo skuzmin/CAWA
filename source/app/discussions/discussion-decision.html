@@ -1,22 +1,12 @@
-<breadcrumbs items="breadcrumbs"></breadcrumbs> 
+<breadcrumbs items="breadcrumbs"></breadcrumbs>
 <div class="app-container-sm">
     <h3 class="app-title">
       Discussions for {{vm.decision.name}}
     </h3>
+    <!-- TODO: Get child names -->
     <ul class="discussions-list">
-      <li>
-        <a href="#"> Secure Anywhere Internet Security plus and complete </a>
-        <ul class="app-list sub-list">
-            <li>
-              <a ui-sref="#">Email security</a>
-            </li>
-        </ul>
-      </li>
-      <li>
-        <a href="#"> Link </a>
-      </li>
-      <li>
-        <a href="#"> Afsfas </a>
-      </li>
+        <li ng-repeat="childDecision in vm.decision.childDecisionIds track by $index">
+            <a ui-sref="decisions.single.discussions.child({discussionId:childDecision})">#{{childDecision}}</a>
+        </li>
     </ul>
 </div>

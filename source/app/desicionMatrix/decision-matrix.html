@@ -105,15 +105,8 @@
                                             <div class="text-right" ng-if="item.decision.description">
 
                                                 <!-- Ui popover -->
-                                                <a href class="glyphicon glyphicon-question-sign" popover-title="{{item.decision.name}}" uib-popover-html="item.decision.description" popover-placement="right" popover-append-to-body="true" popover-trigger="outsideClick"  tabindex="0"></a>
-
-
-                                                <!-- Custom Tooltip -->
-                                                <!-- <span class="glyphicon glyphicon-question-sign" content-id="'tooltip-' + item.decision.decisionId + '-content'" pop-over></span> -->
-
-                                             <!--    <div data-pop-over-content-id="tooltip-{{item.decision.decisionId}}-content" class="hide app-pop-over-content">
-                                                    {{item.decision.description || item.decision.name}}
-                                                </div> -->
+                                                <a href class="glyphicon glyphicon-question-sign" popover-title="{{item.decision.name}}" uib-popover-html="item.decision.description" popover-placement="right" popover-append-to-body="true" popover-trigger="'outsideClick'"  tabindex="0"></a>
+                                                <!-- End Ui popover -->
 
                                             </div>
                                             <div ng-show="item.decision.criteriaCompliancePercentage >= 0">
@@ -149,6 +142,11 @@
                                             <div class="app-item-additional-wrapper">
                                                 <div class="app-item-comments">
                                                     <span class="glyphicon glyphicon-comment"></span>0
+
+                                                        <!-- Ui popover -->
+                                                        <a href ng-if="criteria_item.description" class="glyphicon glyphicon-question-sign" uib-popover-html="criteria_item.description" popover-placement="top" popover-append-to-body="true" popover-trigger="'outsideClick'"  tabindex="0"></a>
+                                                        <!-- End Ui popover -->
+
                                                 </div>
                                             </div>
                                         </div>
@@ -161,6 +159,10 @@
                                             <div class="app-item-additional-wrapper">
                                                 <div class="app-item-comments">
                                                     <span class="glyphicon glyphicon-comment"></span>0
+
+                                                    <!-- Ui popover -->
+                                                    <a href ng-if="characteristic.description" class="glyphicon glyphicon-question-sign" uib-popover-html="characteristic.description" popover-placement="top" popover-append-to-body="true" popover-trigger="'outsideClick'"  tabindex="0"></a>
+                                                    <!-- End Ui popover -->
                                                 </div>
                                             </div>
                                         </div>

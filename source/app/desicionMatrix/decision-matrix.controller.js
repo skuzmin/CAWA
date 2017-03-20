@@ -135,6 +135,7 @@
                 newEl.criteria = _.map(criteriaIds, function(criterionId) {
                     var emptyCriterianDataNew = _.clone(emptyCriterianData);
                     emptyCriterianDataNew.criterionId = criterionId;
+                    if(emptyCriterianDataNew.description) emptyCriterianDataNew.description = $sce.trustAsHtml(emptyCriterianDataNew.description);
                     _.map(el.criteria, function(elCriterionIdObj) {
                         if (elCriterionIdObj.criterionId === criterionId) {
                             emptyCriterianDataNew = elCriterionIdObj;
@@ -148,6 +149,7 @@
                 newEl.characteristics = _.map(characteristicsIds, function(characteristicId) {
                     var emptyCharacteristicDataNew = _.clone(emptyCharacteristicData);
                     emptyCharacteristicDataNew.characteristicId = characteristicId;
+                    if(emptyCharacteristicDataNew.description) emptyCharacteristicDataNew.description = $sce.trustAsHtml(emptyCharacteristicDataNew.description);
                     _.map(el.characteristics, function(elCharacteristicObj) {
                         if (elCharacteristicObj.characteristicId === characteristicId) {
                             emptyCharacteristicDataNew = elCharacteristicObj;
@@ -473,13 +475,8 @@
 
         function goToDiscussion(discussionId, critOrCharId) {
             var params = {
-                // 'id': parseInt($stateParams.id),
-                // 'slug': $stateParams.slug,
-                // 'criteria': $stateParams.criteria,
                 'discussionId': discussionId,
-                // 'discussionSlug': null,
-                'critOrCharId': critOrCharId,
-                // 'critOrCharSlug': null
+                'critOrCharId': critOrCharId
             };
             $state.go('decisions.single.discussions.child.option', params);
         }
