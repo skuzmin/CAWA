@@ -9,25 +9,27 @@
 		DecisionDataService.$inject = ['$resource', 'Config'];
 
 		function DecisionDataService($resource, Config) {
-			var 
+			var
 				decisionUrl = Config.endpointUrl + 'decisions/:id',
 
 				decisions = $resource(decisionUrl + '/decisions', {id: '@id'},
 				{
-					searchDecisionById: {method: 'POST', isArray: false} 
+					searchDecisionById: {method: 'POST', isArray: false}
 				}),
 
 				decisionInfo = $resource(decisionUrl),
 				decisionCharacteristics = $resource(decisionUrl + '/decisions/:childId/characteristics', {id: '@id', childId: '@childId'}, {}),
 				criteriasGroups = $resource(decisionUrl + '/criteria/groups'),
-				characteristictsGroups = $resource(decisionUrl + '/characteristics/groups');
+        characteristictsGroups = $resource(decisionUrl + '/characteristics/groups'),
+				criteriaByDecision = $resource(decisionUrl + '/:decisionId/decisions/:criterionId/criteria', {criterionId: '@criterionId', decisionId: '@decisionId'}, {});
 
 			var service = {
 				searchDecision: searchDecision,
 				getCriteriaGroupsById: getCriteriaGroupsById,
 				getCharacteristictsGroupsById: getCharacteristictsGroupsById,
 				getDecisionInfo: getDecisionInfo,
-				getDecisionCharacteristics: getDecisionCharacteristics
+				getDecisionCharacteristics: getDecisionCharacteristics,
+        getCriteriaByDecision: getCriteriaByDecision
 			};
 
 			return service;
@@ -51,5 +53,9 @@
 			function getDecisionCharacteristics(id, childId) {
 				return decisionCharacteristics.query({id: id, childId: childId}).$promise;
 			}
+
+      function getCriteriaByDecision(criterionId, decisionId) {
+        return criteriaByDecision.query({criterionId: criterionId, decisionId: decisionId}).$promise;
+      }
 		}
 })();

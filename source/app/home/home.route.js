@@ -15,6 +15,9 @@
                 templateUrl: 'app/home/home.html',
                 controller: 'HomeController',
                 controllerAs: 'vm',
+                data: {
+                    pageTitle: 'Home'
+                }
             });
     }
 

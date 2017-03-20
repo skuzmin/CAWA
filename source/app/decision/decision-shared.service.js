@@ -26,6 +26,9 @@
                 sortByCriteria: { order: 'DESC' },
                 sortByCharacteristic: { id: null, order: null },
                 sortByDecisionProperty: { id: null, order: null }
+            },
+            selectedDecision: {
+                decisionsIds: []
             }
         };
 
@@ -43,13 +46,15 @@
                 pageSize: _fo.pagination.pageSize,
                 //sorting by:
                 //criteria weight (1st level)
-                sortCriteriaDirection: _fo.sorters.sortByCriteria.order,
+                sortWeightCriteriaDirection: _fo.sorters.sortByCriteria.order,
                 //characteristic (2nd level)
                 sortCharacteristicId: _fo.sorters.sortByCharacteristic.id,
                 sortCharacteristicDirection: _fo.sorters.sortByCharacteristic.order,
                 //property (3rd level)
                 sortDecisionPropertyName: _fo.sorters.sortByDecisionProperty.id,
-                sortDecisionPropertyDirection: _fo.sorters.sortByDecisionProperty.order
+                sortDecisionPropertyDirection: _fo.sorters.sortByDecisionProperty.order,
+
+                decisionsIds: _fo.selectedDecision.decisionsIds
             };
         };
 

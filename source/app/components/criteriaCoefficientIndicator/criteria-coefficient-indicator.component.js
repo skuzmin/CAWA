@@ -25,20 +25,23 @@
         init();
 
         function setCoefficientIndicator(coefficient) {
+            if (!coefficient) {
+                return;
+            }
             // set color of indicator
             _.forEach(vm.coefficientList, function(c) {
                 c.class = '';
-                if(c.value <= coefficient.value) {
+                if (c.value <= coefficient.value) {
                     c.class = coefficient.name.toLowerCase();
                 }
             });
         }
 
         function init() {
-            if(!vm.coefficient) {
-                vm.coefficient = DecisionCriteriaConstant.coefficientDefault;
+            if (!vm.coefficient) {
+                vm.coefficient = DecisionCriteriaConstant.COEFFICIENT_DEFAULT;
             }
-            vm.coefficientList = angular.copy(DecisionCriteriaConstant.coefficientList);
+            vm.coefficientList = angular.copy(DecisionCriteriaConstant.COEFFICIENT_LIST);
         }
 
         function doCheck() {

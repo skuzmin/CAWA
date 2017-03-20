@@ -1,0 +1,29 @@
+.panel-group {
+    .panel {
+        border-radius: 0;
+    }    
+}
+.panel-title {
+    .glyphicon {
+        color: @icon-color;
+    }
+}
+
+.panel {
+    .glyphicon {
+        -webkit-transition: transform 0.2s ease-in-out;
+           -moz-transition: transform 0.2s ease-in-out;
+            -ms-transition: transform 0.2s ease-in-out;
+             -o-transition: transform 0.2s ease-in-out;
+                transition: transform 0.2s ease-in-out;
+    }
+    &.panel-open {
+        .glyphicon {
+            -webkit-transform: rotate(90deg);
+               -moz-transform: rotate(90deg);
+                -ms-transform: rotate(90deg);
+                 -o-transform: rotate(90deg);
+                    transform: rotate(90deg);
+        }
+    }
+}

@@ -1,0 +1,179 @@
+.decision-sorter {
+    margin: 3px 20px 0px 0px;
+    padding: 0;
+    // list-style: none;
+    // float: left;
+    // font-size: 0;
+    // margin: 0 3px;
+    // padding: 0;
+    // li {
+    //     color: @default-text;
+    //     display: inline-block;
+    //     float: left;
+    //     padding: 5px 3px;
+    //     border: 1px solid @criteria-items;
+    //     border-right: none;
+    //     margin: 4px 0;
+    //     cursor: pointer;
+    //     font-size: 12px;
+    //     &:last-child {
+    //         border-right: 1px solid @criteria-items;
+    //     }
+    //     &:hover {
+    //         background-color: @basic;
+    //         color: @white-text;
+    //     }
+    //     &.selected {
+    //         background-color: @basic-active;
+    //         color: @white-text;
+    //     }
+    // }
+}
+
+.decision-characteristics {
+    .decision-select,
+    .decision-yearpicker {
+        width: 150px;
+    }
+}
+
+.dicision {
+    .top-panel {
+        min-height: 40px;
+        background-color: #fff;
+        border-bottom: 1px solid @gray-light;
+        overflow: hidden;
+        position: relative;
+        z-index: 3;
+    }
+    .scroll-wrapper {
+        overflow-y: auto;
+        padding-bottom: 10px;
+        position: absolute;
+        left: 0;
+        top: 40px;
+        bottom: 0;
+        z-index: 1;
+        right: 8px;
+    }
+    .scroll-wrapper-header {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        z-index: 2;
+        background-color: @bg-light;
+        border-bottom: 1px solid @gray-light;
+        -ms-overflow-x: hidden;
+            overflow-x: hidden;
+        -webkit-box-shadow: 0 0 11px rgba(0,0,0,0.2);
+                box-shadow: 0 0 11px rgba(0,0,0,0.2);
+        height: 40px;
+        margin-bottom: 10px;
+        z-index: 100;
+    }
+    .main-panel {
+        position: relative;
+        z-index: 2;
+        height: calc(~"100vh - 140px");
+        .divider {
+            height: 100%;
+        }
+        & > div {
+            padding: 0;
+            position: relative;
+            height: 100%;
+            &.app-divider-wrapper {
+                margin-right: -8px;
+                padding-right: 8px;
+            }
+        }
+        .grid-stack-decision {
+            background-color: @bg-dark;
+        }
+    }
+}
+
+// Absolute layout
+@resizer-width: 6px;
+body .app-main-panel {
+    .app-panel-left {
+        position: absolute;
+        // background-color: @gray-mid;
+        left: 0;
+        width: 25%;
+        top: 0;
+        height: 100%;
+        padding-right: @resizer-width;
+    }
+
+    .app-panel-center {
+        position: absolute;
+        background-color: @app-bg-light;
+        left: 25%;
+        width: 50%;
+        top: 0;
+        height: 100%;
+    }
+    .app-panel-right {
+        position: absolute;
+        // background-color: @gray-mid;
+        left: 75%;
+        width: 25%;
+        top: 0;
+        height: 100%;
+    }
+
+    .panels-2 {
+        left: 25%;
+        width: 75%;
+        padding-left: @resizer-width;
+        .app-panel-center {
+            left: 0;
+            width: 66%;
+        }
+        .app-panel-right {
+            left: 66%;
+            width: 33%;
+        }
+    }
+}
+
+body {
+    .decision-item {
+        background-color: #FFF;
+    }
+
+    .app-resizer {
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: @resizer-width;
+        cursor: col-resize;
+        z-index: 111;
+        border-left: 1px solid rgba(0,0,0,0.3);
+        border-right: 1px solid rgba(0,0,0,0.3);
+        background: @app-bg-light;        
+    }
+}
+
+.scroll-wrapper-header {
+    .btn {
+        margin-top: 1px;
+    }
+    h4 {
+        margin-top: 9px;
+        margin-bottom: 5px;
+    }
+}
+
+.top-panel {
+    .top-panel-label {
+        margin-top: 8px;
+    }
+    .top-panel-title {
+        margin-top: 5px;
+        margin-bottom: 0;
+    }
+}

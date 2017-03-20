@@ -5,7 +5,7 @@
     angular
         .module('app.components')
         .constant('DecisionCriteriaConstant', {
-            coefficientList: [{
+            COEFFICIENT_LIST: [{
                 name: 'Lower',
                 value: 0.1
             },{
@@ -27,7 +27,7 @@
                 name: 'Critical',
                 value: 7
             }],
-            coefficientDefault: {
+            COEFFICIENT_DEFAULT: {
                 name: 'Normal',
                 value: 1
             }
