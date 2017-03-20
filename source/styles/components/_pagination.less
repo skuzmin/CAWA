@@ -1,6 +1,23 @@
 .app-pagination {
-    margin: 0;
     .paginator, .counter {
-        padding: 0 10px;
+        padding: 0 16px;
     }
+    .pagination {
+      display: inline-block;
+      width: auto;
+    }
+}
+
+.pagination > li {
+  display: inline-block;
+  margin: 0 2px;
+  & > a{
+  -webkit-border-radius: @border-radius;
+          border-radius: @border-radius;
+  }
+}
+
+.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+  background-color: @basic-active;
+  background-color: @basic-active;
 }

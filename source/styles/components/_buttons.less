@@ -1,9 +1,26 @@
 .btn {
   -webkit-border-radius: @border-radius;
           border-radius: @border-radius;
+    -webkit-box-shadow: none;
+          box-shadow: none;
 }
 
-.btn-sm, .btn-group-sm > .btn {
+.btn-sm,
+.btn-group-sm > .btn {
   -webkit-border-radius: @border-radius;
           border-radius: @border-radius;
+}
+
+.btn-primary {
+  background-color: @basic-active;
+  border-color: @basic-active;
+  &:hover {
+    background-color: @basic-active-hover;
+    border-color: @basic-active-hover;
+  }
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary.focus, .btn-primary:active, .btn-primary.active, .open > .dropdown-toggle.btn-primary {
+    background-color: @basic-active-hover;
+    border-color: @basic-active-hover;
 }

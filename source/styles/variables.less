@@ -1,6 +1,6 @@
 // @header-background: #1d365d;
-@header-background: #226eb1;
-@white-text: #fff;
+@header-background: #f1f1f1;
+@white-text: #FFFFFF;
 @default-text: #000;
 @bg-dark: rgba(128, 128, 128, 0.2);
 @dark: #808080;
@@ -17,23 +17,39 @@
 @criteria-items: #c0c0c0;
 @bg-light: #fff;
 @basic: #245580;
-@basic-active: #226eb1;
+@basic-active: #4784e8;
+@basic-active-hover: darken(@basic-active, 20%);
+@basic-active-light: lighten(@basic-active, 35%);
+
 @notSet: #ff0000;
 
 @gray-mid: #7f8c8d;
 @gray-light: #ebebeb;
+@gray-light-extra: #f5f5f5;
 
 
 @row-label-color: @dark;
 @header-height: 50px;
 @footer-height: 50px;
-@footer-bg: #FFF;
+@footer-bg: @gray-light-extra;
 @app-bg: #FFF;
 @app-bg-light: #f3f5f6;
 @rating-color: @dark;
 @rating-color-active: @coefficientSignificant;
 
 @border-radius: 2px;
+@border-radius-modal: @border-radius;
 
 @icon-color: @gray-mid;
 @title-color: #333;
+@base-font: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+
+
+// Z-index s
+@z-index-pop-over: 100;
+@z-index-page-navbar: 1100;
+@z-index-popup: @z-index-page-navbar + 1;
+
+
+// Sizes
+@breadcrumbs-height: 20px;

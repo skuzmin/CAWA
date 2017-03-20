@@ -1,0 +1,3014 @@
+(function() {
+    'use strict';
+
+    angular.module('app', [
+        'app.core',
+        'app.home',
+        'app.components',
+        'app.login',
+        'app.decision',
+        'app.decisionMatrix',
+        'app.discussions'
+    ]);
+
+    $.get({
+    	dataType: "json",
+        url: 'app.config'
+    }).done(function(result) {
+    	angular.module('app.core').constant('Config', {
+            baseUrl: result.baseUrl,
+    		authUrl: result.authUrl,
+    		endpointUrl: result.endpointUrl,
+            mode: result.mode
+    	});
+    }).always(function() {
+        angular.element(function() {
+	        angular.bootstrap(document, ['app']);
+	    });
+    });
+})();
+
+(function() {
+
+	'use strict';
+
+	angular.module('app.components', []);
+
+})();
+(function() {
+	'use strict';
+
+	angular
+		.module('app.core', [
+			'ui.router',
+			'ngResource',
+			'ui.bootstrap',
+			'ngAnimate',
+			'ngStorage',
+			'angular-jwt'
+		]);
+
+})();
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.decision', ['app.core']);
+
+})();
+
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.decisionMatrix', ['app.core']);
+
+})();
+
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.discussions', ['app.core']);
+
+})();
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.home', ['app.core']);
+
+})();
+
+(function() {
+	'use strict';
+
+	angular.module('app.login', ['app.core']);
+
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app')
+        .run(runBlock);
+
+    runBlock.$inject = ['$rootScope', '$state'];
+
+    function runBlock($rootScope, $state) {
+
+        // Page title
+        var pageTitle = 'DecisionWanted';
+        $rootScope.pageTitle = pageTitle;
+        $rootScope.breadcrumbs = false;
+
+        $rootScope.$on('$stateChangeSuccess', function($state, $stateParams) {
+            if (angular.isDefined($stateParams.data)) {
+                if ($stateParams.data.pageTitle) {
+                    $rootScope.pageTitle = $stateParams.data.pageTitle + ' | ' + pageTitle;
+                }
+                
+                $rootScope.breadcrumbs = $stateParams.data.breadcrumbs;
+            }
+        });
+    }
+
+})();
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.core')
+        .config(configuration);
+
+    configuration.$inject = ['$animateProvider'];
+
+    function configuration($animateProvider) {
+        // Enable ngAnimation for specific class
+        $animateProvider.classNameFilter(/angular-animate/);
+    }
+
+})();
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.core')
+        .config(function($httpProvider) {
+            $httpProvider.interceptors.push(appInterceptor);
+        });
+
+    appInterceptor.$inject = ['$injector'];
+
+    function appInterceptor($injector) {
+        var analysisCallsArr = [];
+        return {
+            request: function(config) {
+                // console.log(config);
+                return config;
+            },
+            response: function(resp) {
+                // TODO: optimize move to routes
+                // check if decisionAnalysis in response
+                // in each API call
+                var $state, $stateParams;
+
+                $state = $injector.get('$state');
+                $stateParams = $injector.get('$stateParams');
+
+                // if (currentState === 'decisions.matrix' || currentState === 'decisions.matrix.analysis')
+                if (($state.is('decisions.single.matrix') || $state.is('decisions.single.matrix.analysis')) &&
+                    resp.data && (resp.data.decisionMatrixs || resp.data.decisions) &&
+                    resp.data.decisionAnalysisId) {
+
+                    var decisionAnalysisId = resp.data.decisionAnalysisId;
+                    if (!$stateParams.analysisId || analysisCallsArr.length !== 0) {
+
+                        var decisionAnalysisStateParams = {
+                            'id': $stateParams.id,
+                            'slug': $stateParams.slug,
+                            'criteria': $stateParams.criteria,
+                            'analysisId': decisionAnalysisId
+                        };
+                        $state.transitionTo('decisions.single.matrix.analysis', decisionAnalysisStateParams);
+                    }
+
+                    // Save only second call to avoid big array
+                    if (analysisCallsArr.length === 0 && $stateParams.analysisId) analysisCallsArr.push(decisionAnalysisId);
+                }
+                return resp;
+            },
+            responseError: function(rejection) {
+                // console.log(rejection);
+                return rejection;
+            }
+        };
+    }
+
+})();
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.core')
+        .config(configuration);
+
+    configuration.$inject = ['$stateProvider', '$urlRouterProvider', '$compileProvider', 'Config', '$locationProvider'];
+
+    function configuration($stateProvider, $urlRouterProvider, $compileProvider, Config, $locationProvider) {
+
+        $stateProvider
+            .state('404', {
+                url: '/404',
+                templateUrl: 'app/core/404.html',
+                data: {
+                  pageTitle : 'Error 404 Not Found!'
+                }
+            });
+
+        $urlRouterProvider.otherwise('/404');
+
+        $compileProvider.debugInfoEnabled(Config.mode === 'dev');
+
+        $locationProvider.html5Mode({
+            enabled: true,
+            // requireBase: false
+        });
+
+        $locationProvider.hashPrefix('!');
+    }
+
+})();
+
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.decision')
+        .factory('DecisionDataService', DecisionDataService);
+
+    DecisionDataService.$inject = ['$resource', 'Config'];
+
+    function DecisionDataService($resource, Config) {
+        var
+            decisionUrl = Config.endpointUrl + 'decisions/:id',
+
+            decisions = $resource(decisionUrl + '/decisions', {
+                id: '@id'
+            }, {
+                searchDecisionById: {
+                    method: 'POST',
+                    isArray: false
+                }
+            }),
+
+            decisionsMatrix = $resource(decisionUrl + '/decisions/matrix', {
+                id: '@id'
+            }, {
+                searchDecisionById: {
+                    method: 'POST',
+                    isArray: false
+                }
+            }),
+
+            decisionsAnalysis = $resource(Config.endpointUrl + 'decisions/analysis/:id', {
+                id: '@id'
+            }, {
+                getDecisionAnalysis: {
+                    method: 'POST',
+                    isArray: false
+                }
+            }),
+
+            decisionInfo = $resource(decisionUrl),
+            decisionCharacteristics = $resource(decisionUrl + '/decisions/:childId/characteristics', {
+                id: '@id',
+                childId: '@childId'
+            }, {}),
+            criteriasGroups = $resource(decisionUrl + '/criteriongroups'),
+            characteristictsGroups = $resource(decisionUrl + '/characteristicgroups'),
+            criteriaByDecision = $resource(decisionUrl + '/:decisionId/decisions/:criterionId/criteria', {
+                criterionId: '@criterionId',
+                decisionId: '@decisionId'
+            }, {});
+
+        var service = {
+            searchDecision: searchDecision,
+            searchDecisionMatrix: searchDecisionMatrix,
+            getCriteriaGroupsById: getCriteriaGroupsById,
+            getCharacteristictsGroupsById: getCharacteristictsGroupsById,
+            getDecisionInfo: getDecisionInfo,
+            getDecisionCharacteristics: getDecisionCharacteristics,
+            getCriteriaByDecision: getCriteriaByDecision,
+            getDecisionAnalysis: getDecisionAnalysis
+        };
+
+        return service;
+
+        function searchDecision(id, data) {
+            return decisions.searchDecisionById({
+                id: id
+            }, data).$promise;
+        }
+
+        function searchDecisionMatrix(id, data) {
+            return decisionsMatrix.searchDecisionById({
+                id: id
+            }, data).$promise;
+        }
+
+        function getCriteriaGroupsById(id) {
+            return criteriasGroups.query({
+                id: id
+            }).$promise;
+        }
+
+        function getCharacteristictsGroupsById(id) {
+            return characteristictsGroups.query({
+                id: id
+            }).$promise;
+        }
+
+        function getDecisionInfo(id) {
+            return decisionInfo.get({
+                id: id
+            }).$promise;
+        }
+
+        function getDecisionCharacteristics(id, childId) {
+            return decisionCharacteristics.query({
+                id: id,
+                childId: childId
+            }).$promise;
+        }
+
+        function getDecisionAnalysis(id) {
+            return decisionsAnalysis.get({
+                id: id
+            }).$promise;
+        }
+
+        function getCriteriaByDecision(criterionId, decisionId) {
+            return criteriaByDecision.query({
+                criterionId: criterionId,
+                decisionId: decisionId
+            }).$promise;
+        }
+    }
+})();
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.decision')
+        .factory('DecisionNotificationService', DecisionNotificationService);
+
+    DecisionNotificationService.$inject = ['$rootScope'];
+
+    function DecisionNotificationService($rootScope) {
+
+        var listeners = {};
+
+        var service = {
+            subscribeSelectSorter: subscribeSelectSorter,
+            subscribeSelectCriterion: subscribeSelectCriterion,
+            subscribeSelectDecision: subscribeSelectDecision,
+            subscribeSelectCharacteristic: subscribeSelectCharacteristic,
+            subscribeGetDetailedCharacteristics: subscribeGetDetailedCharacteristics,
+            subscribeCharacteristicsGroups: subscribeCharacteristicsGroups,
+            subscribePageChanged: subscribePageChanged,
+            notifyGetDetailedCharacteristics: notifyGetDetailedCharacteristics,
+            notifySelectCriterion: notifySelectCriterion,
+            notifySelectDecision: notifySelectDecision,
+            notifySelectCharacteristic: notifySelectCharacteristic,
+            notifyCharacteristicsGroups: notifyCharacteristicsGroups,
+            notifyPageChanged: notifyPageChanged,
+            notifyInitSorter: notifyInitSorter
+        };
+
+        return service;
+
+        //Basic
+        function subscribe(event, callback) {
+            if (listeners[event]) {
+                listeners[event]();
+            }
+            listeners[event] = $rootScope.$on(event, callback);
+        }
+
+        function broadcast(event, data) {
+            $rootScope.$broadcast(event, data);
+        }
+
+        function emit(event, data) {
+            $rootScope.$emit(event, data);
+        }
+
+        //Listeners
+        function subscribeSelectSorter(callback) {
+            subscribe('selectSorter', callback);
+        }
+
+        function subscribeSelectCriterion(callback) {
+            subscribe('selectCriterion', callback);
+        }
+
+        function subscribeSelectDecision(callback) {
+            subscribe('selectDecision', callback);
+        }
+
+        function subscribeSelectCharacteristic(callback) {
+            subscribe('selectCharacteristic', callback);
+        }
+
+        function subscribeGetDetailedCharacteristics(callback) {
+            subscribe('getDetailedCharacteristics', callback);
+        }
+
+        function subscribeCharacteristicsGroups(callback) {
+            subscribe('characteristicsGroups', callback);
+        }
+
+        function subscribePageChanged(callback) {
+            subscribe('pageChanged', callback);
+        }
+
+        //Emitters
+        function notifyGetDetailedCharacteristics(data) {
+            emit('getDetailedCharacteristics', data);
+        }
+
+        function notifySelectCriterion(data) {
+            emit('selectCriterion', data);
+        }
+
+        function notifySelectDecision(data) {
+            emit('selectDecision', data);
+        }
+
+        function notifySelectCharacteristic(data) {
+            emit('selectCharacteristic', data);
+        }
+
+        function notifyCharacteristicsGroups(data) {
+            emit('characteristicsGroups', data);
+        }
+
+        function notifyPageChanged(data) {
+            emit('pageChanged', data);
+        }
+
+        function notifyInitSorter(data) {
+            broadcast('initSorter', data);
+        }
+
+    }
+})();
+
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.decision')
+        .service('DecisionSharedService', DecisionSharedService);
+
+    DecisionSharedService.$inject = ['$rootScope'];
+
+    function DecisionSharedService($rootScope) {
+        var service = this;
+
+        service.filterObject = {
+            selectedCriteria: {
+                sortCriteriaIds: [],
+                sortCriteriaCoefficients: {}
+            },
+            pagination: {
+                pageNumber: 1,
+                pageSize: 10,
+                totalDecisions: 0
+            },
+            selectedCharacteristics: {},
+            sorters: {
+                sortByCriteria: {
+                    order: 'DESC'
+                },
+                sortByCharacteristic: {
+                    id: null,
+                    order: null
+                },
+                sortByDecisionProperty: {
+                    id: null,
+                    order: null
+                }
+            },
+            selectedDecision: {
+                decisionsIds: []
+            },
+            persistent: true
+        };
+
+        //allias
+
+        service.getFilterObject = function() {
+            var _fo = service.filterObject;
+            // console.log(_fo);
+            // console.log(_fo.pagination.pageNumber);
+            return {
+                //selected criteria
+                sortCriteriaIds: _fo.selectedCriteria.sortCriteriaIds,
+                //selected criteria coefficients
+                sortCriteriaCoefficients: _fo.selectedCriteria.sortCriteriaCoefficients,
+                //pagination
+                pageNumber: _fo.pagination.pageNumber - 1,
+                pageSize: _fo.pagination.pageSize,
+                //sorting by:
+                //criteria weight (1st level)
+                sortWeightCriteriaDirection: _fo.sorters.sortByCriteria.order,
+                //characteristic (2nd level)
+                sortCharacteristicId: _fo.sorters.sortByCharacteristic.id,
+                sortCharacteristicDirection: _fo.sorters.sortByCharacteristic.order,
+                //property (3rd level)
+                sortDecisionPropertyName: _fo.sorters.sortByDecisionProperty.id,
+                sortDecisionPropertyDirection: _fo.sorters.sortByDecisionProperty.order,
+
+                decisionsIds: _fo.selectedDecision.decisionsIds,
+                persistent: true
+            };
+        };
+
+        service.setFilterObject = function(obj) {
+            if (!obj) return;
+
+            // Set new values
+            var sortObjAnalysis = {
+                selectedCriteria: {
+                    sortCriteriaIds: obj.sortCriteriaIds || [],
+                    sortCriteriaCoefficients: obj.sortCriteriaCoefficients || {}
+                },
+                pagination: {
+                    pageNumber: obj.pageNumber ? obj.pageNumber + 1 : 1,
+                    pageSize: obj.pageSize || 10,
+                    totalDecisions: obj.totalDecisions || (obj.pageNumber + 1)*obj.pageSize //Need to be sended in analysis or in endpoint api/v1.0/decisions/16003
+                },
+                selectedCharacteristics: {},
+                sorters: {
+                    sortByCriteria: {
+                        order: obj.sortWeightCriteriaDirection || 'DESC'
+                    },
+                    sortByCharacteristic: {
+                        id: obj.sortCharacteristicId || null,
+                        order: obj.sortCharacteristicDirection || null
+                    },
+                    sortByDecisionProperty: {
+                        id: obj.sortDecisionPropertyName || null,
+                        order: obj.sortDecisionPropertyDirection || null
+                    }
+                },
+                selectedDecision: {
+                    decisionsIds: []
+                },
+                persistent: true
+            };
+
+            service.filterObject = sortObjAnalysis;
+        };
+
+
+    }
+})();
+(function() {
+
+    'user strict';
+
+    angular
+        .module('app.decision')
+        .controller('DecisionSingleController', DecisionSingleController);
+
+    DecisionSingleController.$inject = ['$rootScope', 'decisionBasicInfo', 'DecisionDataService', '$stateParams', '$timeout', 'DecisionNotificationService', 'DecisionSharedService'];
+
+    function DecisionSingleController($rootScope, decisionBasicInfo, DecisionDataService, $stateParams, $timeout, DecisionNotificationService, DecisionSharedService) {
+        var
+            vm = this,
+            isInitedSorters = false,
+            defaultDecisionCount = 10;
+
+        console.log('Decision Single Controller');
+
+        vm.decisionId = $stateParams.id;
+        vm.decisionsList = [];
+        vm.updateDecisionList = [];
+        vm.decision = decisionBasicInfo || {};
+        $rootScope.pageTitle = vm.decision.name + ' | DecisionWanted';
+
+        $rootScope.breadcrumbs = [{
+            title: 'Decisions',
+            link: 'decisions'
+        }, {
+            title: vm.decision.name,
+            link: null
+        }];
+
+        init();
+        function init() {
+
+        }
+        
+    }
+})();
+(function() {
+
+    'user strict';
+
+    angular
+        .module('app.decision')
+        .controller('DecisionController', DecisionController);
+
+    DecisionController.$inject = ['$rootScope', 'decisionBasicInfo', 'DecisionDataService', '$stateParams', '$timeout', 'DecisionNotificationService', 'DecisionSharedService'];
+
+    function DecisionController($rootScope, decisionBasicInfo, DecisionDataService, $stateParams, $timeout, DecisionNotificationService, DecisionSharedService) {
+        var
+            vm = this,
+            isInitedSorters = false,
+            defaultDecisionCount = 10;
+
+        console.log('Decision controller');
+
+        vm.decisionId = $stateParams.id;
+        vm.decisionsList = [];
+        vm.updateDecisionList = [];
+        vm.decision = decisionBasicInfo || {};
+        $rootScope.pageTitle = vm.decision.name + ' | DecisionWanted';
+
+        $rootScope.breadcrumbs = [{
+            title: 'Decisions',
+            link: 'decisions'
+        }, {
+            title: vm.decision.name,
+            link: null
+        }];
+
+        init();
+
+        function asyncLoading(result) {
+            //Acync rendering
+            // $timeout(function() {
+                vm.decisionsList = vm.decisionsList.concat(result.splice(0, defaultDecisionCount));
+                if (result.length > 0) {
+                    asyncLoading(result);
+                }
+            // }, 0);
+        }
+
+        function prepareDataToDisplay(characteristics) {
+            var modifiedCharacteristics = {};
+            _.forEach(characteristics, function(item) {
+                if (!modifiedCharacteristics[item.characteristicGroupId]) {
+                    modifiedCharacteristics[item.characteristicGroupId] = [];
+                }
+                modifiedCharacteristics[item.characteristicGroupId].push(item);
+            });
+            return modifiedCharacteristics;
+        }
+
+        function searchDecisions() {
+            return DecisionDataService.searchDecision(vm.decisionId, DecisionSharedService.getFilterObject()).then(function(result) {
+                vm.decisionsList.length = 0;
+                setDecisionMatchPercent(result.decisions);
+                asyncLoading(result.decisions);
+                initSorters();
+                DecisionSharedService.filterObject.pagination.totalDecisions = result.totalDecisions;
+            }).finally(function() {
+                vm.decisionsSpinner = false;
+            });
+        }
+
+        //Set decions percent(% criterion match)
+        function setDecisionMatchPercent(list) {
+            var percent;
+            _.forEach(list, function(initItem) {
+                percent = parseFloat(initItem.criteriaCompliancePercentage);
+                if (_.isNaN(percent)) {
+                    percent = 0;
+                } else if (!_.isInteger(percent)) {
+                    percent = percent.toFixed(2);
+                }
+                initItem.criteriaCompliancePercentage = percent + '%';
+            });
+        }
+
+        //Init sorters, when directives loaded
+        function initSorters() {
+            if (!isInitedSorters) {
+                DecisionNotificationService.notifyInitSorter({
+                    list: [{ name: 'Weight', order: 'DESC', isSelected: true }],
+                    type: 'sortByCriteria',
+                    mode: 'twoStep'
+                });
+                DecisionNotificationService.notifyInitSorter({
+                    list: [
+                        { name: 'Create Date', propertyId: 'createDate' },
+                        { name: 'Update Date', propertyId: 'updateDate' },
+                        { name: 'Name', propertyId: 'name' }
+                    ],
+                    type: 'sortByDecisionProperty',
+                    mode: 'threeStep'
+                });
+                isInitedSorters = true;
+            }
+        }
+
+        function init() {
+            //Check if main decision
+            if (!_.isEmpty(vm.decision.parentDecisionIds)) {
+                vm.parentDecisions = vm.decision.parentDecisionIds;
+            }
+
+            //Get data for decision panel (main)
+            vm.decisionsSpinner = true;
+            searchDecisions();
+
+            //Subscribe to notification events
+            DecisionNotificationService.subscribeSelectCriterion(function(event, data) {
+                setDecisionMatchPercent(data);
+                vm.decisionsList = data;
+            });
+            DecisionNotificationService.subscribePageChanged(function() {
+                vm.decisionsSpinner = true;
+                searchDecisions();
+            });
+            DecisionNotificationService.subscribeGetDetailedCharacteristics(function(event, data) {
+                data.detailsSpinner = true;
+                DecisionDataService.getDecisionCharacteristics(vm.decisionId, data.decisionId).then(function(result) {
+                    data.characteristics = prepareDataToDisplay(result);
+                }).finally(function() {
+                    data.detailsSpinner = false;
+                });
+            });
+            DecisionNotificationService.subscribeSelectSorter(function(event, data) {
+                vm.decisionsSpinner = true;
+                DecisionSharedService.filterObject.sorters[data.mode] = data.sort;
+                searchDecisions();
+            });
+
+            // Not implemented yet
+            DecisionNotificationService.subscribeSelectCharacteristic(function(event, data) {
+                console.log(data);
+            });
+        }
+    }
+})();
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.decision')
+        .config(configuration);
+
+    configuration.$inject = ['$stateProvider'];
+
+    function configuration($stateProvider) {
+        $stateProvider
+            .state('decisions.single', {
+                url: '/:id/{slug}',
+                abstract: false,
+                views: {
+                    "@": {
+                        templateUrl: 'app/decision/decision-single.html',
+                        controller: 'DecisionSingleController',
+                        controllerAs: 'vm',
+                    }
+                },
+                resolve: {
+                    decisionBasicInfo: DecisionResolver,
+                },
+                params: {
+                    slug: {
+                        value: null,
+                        squash: true
+                    }
+                }
+            })
+            .state('decisions.single.matrix', {
+                url: '/matrix',
+                views: {
+                    "@": {
+                        templateUrl: 'app/desicionMatrix/decision-matrix.html',
+                        controller: 'DecisionMatrixController',
+                        controllerAs: 'vm',
+                    }
+                },
+                resolve: {
+                    decisionBasicInfo: DecisionResolver,
+                    decisionAnalysisInfo: DecisionAanalysisResolver
+                },
+            })
+            .state('decisions.single.matrix.analysis', {
+                url: '/analysis/:analysisId',
+                templateUrl: 'app/decision/decision.html',
+                controller: 'DecisionController',
+                controllerAs: 'vm',
+            })
+            .state('decisions.single.list', {
+                url: '/list',
+                views: {
+                    "@": {
+                        templateUrl: 'app/decision/decision.html',
+                        controller: 'DecisionController',
+                        controllerAs: 'vm',
+                    }
+                },
+                resolve: {
+                    decisionBasicInfo: DecisionResolver
+                },
+            })
+            .state('decisions.single.list.analysis', {
+                url: '/analysis/:analysisId',
+                abstract: true,
+                resolve: {
+                    decisionBasicInfo: DecisionResolver
+                },
+            });
+    }
+
+    // Decision Data
+    DecisionResolver.$inject = ['DecisionDataService', '$stateParams', '$state', '$rootScope', '$location'];
+
+    function DecisionResolver(DecisionDataService, $stateParams, $state, $rootScope, $location) {
+        return DecisionDataService.getDecisionInfo($stateParams.id).then(function(result) {
+            if (result.error && result.error.code === 404) {
+                console.log(result.error);
+                $state.go('404');
+            }
+
+
+            var decisionSlug = result.nameSlug ? result.nameSlug : '';
+
+            if ($stateParams.slug === null ||
+                $stateParams.slug === 'matrix' ||
+                $stateParams.slug === 'list') {
+                $stateParams.slug = result.nameSlug;
+            }
+            // console.log('Resolver decision');
+            var stateListener = $rootScope.$on('$stateChangeSuccess',
+                function(event, toState, toParams, fromState, fromParams) {
+                    var
+                        currentState,
+                        decisionSlug;
+
+                    currentState = $state.current.name;
+
+                    //SLUG for Decision page
+                    //Always set correct slug from server
+
+                    // TODO: remove
+                    // var decisionStateParams = {
+                    //     'id': toParams.id,
+                    //     'slug': decisionSlug
+                    // };
+                    // console.log(toState.name);
+                    if (
+                        // toState.name === 'decisions.single.matrix' ||
+                        // toState.name === 'decisions.single.list' ||
+                        toState.name === 'decisions.single') {
+                        // Just added new slug
+                        // console.log(currentState);
+                        $state.go(currentState);
+                        // event.preventDefault();
+
+                    }
+
+                    // BreadCrumbs
+                    if ($state.current.name === 'decisions.single.matrix' ||
+                        $state.current.name === 'decisions.single.matrix.analysis') {
+                        $rootScope.breadcrumbs = [{
+                            title: 'Decisions',
+                            link: 'decisions'
+                        }, {
+                            title: result.name,
+                            link: 'decisions.single'
+                        }, {
+                            title: 'Matrix',
+                            link: null
+                        }];
+
+                    } else if ($state.current.name === 'decisions.single.list') {
+                        $rootScope.breadcrumbs = [{
+                            title: 'Decisions',
+                            link: 'decisions'
+                        }, {
+                            title: result.name,
+                            link: 'decisions.single'
+                        }, {
+                            title: 'List',
+                            link: null
+                        }];
+
+                    }
+                    //unsubscribe event listener
+                    stateListener();
+                });
+            return result;
+        }).catch(function() {
+            $state.go('404');
+        });
+    }
+
+    // Analysis
+    DecisionAanalysisResolver.$inject = ['$stateParams', 'DecisionDataService', '$location', 'DecisionSharedService'];
+
+    function DecisionAanalysisResolver($stateParams, DecisionDataService, $location, DecisionSharedService) {
+
+        // TODO: find better way
+        // UI route bug https://github.com/angular-ui/ui-router/issues/1856#issuecomment-93025037
+        // resolves will only get the parameters for the state on which it is defined
+        var path,
+            urlParams,
+            analysisId,
+            analysisSlug;
+
+        path = $location.path();
+        urlParams = path.split('/');
+        analysisId = urlParams[urlParams.length - 1];
+        analysisSlug = urlParams[urlParams.length - 2];
+
+        // console.log(analysisSlug, analysisId);
+        if (analysisSlug === 'analysis' && analysisId) {
+            return DecisionDataService.getDecisionAnalysis(analysisId).then(function(resp) {
+                if (resp.error) {
+                    console.log(resp.error);
+                    return;
+                }
+                // Set analysis obj
+                DecisionSharedService.setFilterObject(resp);
+                return resp;
+            }, function(req) {
+                console.log(req);
+            });
+        }
+
+    }
+
+
+})();
+(function() {
+
+    'user strict';
+
+    angular
+        .module('app.decision')
+        .controller('DecisionsController', DecisionsController);
+
+    DecisionsController.$inject = [];
+
+    function DecisionsController() {
+        var
+            vm = this;
+
+        console.log('Decisions controller');
+
+        init();
+
+        function init() {
+        }
+    }
+})();
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.decision')
+        .config(configuration);
+
+    configuration.$inject = ['$stateProvider'];
+
+    function configuration($stateProvider) {
+        $stateProvider
+            .state('decisions', {
+                url: '/decisions',
+                views: {
+                    "@": {
+                        templateUrl: 'app/decisions/decisions.html',
+                        controller: 'DecisionsController',
+                        controllerAs: 'vm'
+                    }
+                },
+                data: {
+                    breadcrumbs: [{
+                        title: 'Decisions',
+                        link: null
+                    }]
+                }
+            });
+    }
+
+})();
+(function() {
+
+    'user strict';
+
+    angular
+        .module('app.decision')
+        .controller('DecisionMatrixController', DecisionMatrixController);
+
+    DecisionMatrixController.$inject = ['DecisionDataService', 'DecisionSharedService', '$state', '$stateParams', 'DecisionNotificationService', 'decisionBasicInfo', '$rootScope', '$compile', '$scope', '$q', 'DecisionCriteriaConstant', '$uibModal', 'decisionAnalysisInfo', '$sce'];
+
+    function DecisionMatrixController(DecisionDataService, DecisionSharedService, $state, $stateParams, DecisionNotificationService, decisionBasicInfo, $rootScope, $compile, $scope, $q, DecisionCriteriaConstant, $uibModal, decisionAnalysisInfo, $sce) {
+        var
+            vm = this,
+            isInitedSorters = false,
+            defaultDecisionCount = 10;
+
+        var criteriaIds = [];
+        var characteristicsIds = [];
+
+        vm.decisionId = $stateParams.id;
+        vm.decision = decisionBasicInfo || {};
+        $rootScope.pageTitle = vm.decision.name + ' Matrix | DecisionWanted';
+
+        init();
+
+        function getCriteriaGroupsById(decisionId) {
+            // Criteria
+            return DecisionDataService.getCriteriaGroupsById(decisionId).then(function(result) {
+                vm.criteriaGroups = result;
+                criteriaIds = _.map(result["0"].criteria, function(el) {
+                    return el.criterionId;
+                });
+            });
+        }
+
+        function getCharacteristictsGroupsById(decisionId) {
+            // Characteristicts
+            return DecisionDataService.getCharacteristictsGroupsById(decisionId).then(function(result) {
+                vm.characteristicGroups = result;
+
+                characteristicsIds = _.map(result["0"].characteristics, function(el) {
+                    return el.characteristicId;
+                });
+            });
+        }
+
+
+        function init() {
+            console.log('Decision Matrix Controller');
+
+            // TODO: merge to one array with titles
+
+            //Get data for decision panel (main)
+            vm.decisionsSpinner = true;
+
+
+            // Get criteria and characteristic
+            $q.all([getCriteriaGroupsById(vm.decisionId), getCharacteristictsGroupsById(vm.decisionId)])
+                .then(function(values) {
+
+                    setMatrixTableWidth();
+                    searchDecisionMatrix(vm.decisionId);
+                });
+
+
+            //Subscribe to notification events
+            DecisionNotificationService.subscribeSelectCriterion(function(event, data) {
+                setDecisionMatchPercent(data);
+                var resultdecisionMatrixs = data;
+                vm.decisionMatrixList = createMatrixContent(criteriaIds, characteristicsIds, resultdecisionMatrixs);
+                renderMatrix();
+            });
+            DecisionNotificationService.subscribePageChanged(function() {
+                vm.decisionsSpinner = true;
+                searchDecisionMatrix(vm.decisionId);
+            });
+            DecisionNotificationService.subscribeGetDetailedCharacteristics(function(event, data) {
+                data.detailsSpinner = true;
+                DecisionDataService.getDecisionCharacteristics(vm.decisionId, data.decisionId).then(function(result) {
+                    data.characteristics = prepareDataToDisplay(result);
+                }).finally(function() {
+                    data.detailsSpinner = false;
+                });
+            });
+            DecisionNotificationService.subscribeSelectSorter(function(event, data) {
+                vm.decisionsSpinner = true;
+                DecisionSharedService.filterObject.sorters[data.mode] = data.sort;
+                vm.fo = DecisionSharedService.filterObject.sorters;
+                searchDecisionMatrix(vm.decisionId);
+            });
+
+        }
+
+
+        // TODO: move to utils
+        function isDate(date) {
+            var isValueDate = (new Date(date) !== "Invalid Date") && !isNaN(new Date(date));
+            return isValueDate;
+        }
+
+        // Fill matrix data for View
+        var emptyCriterianData = {
+            // "criterionId": null,
+            "weight": null,
+            "totalVotes": null
+        };
+
+        var emptyCharacteristicData = {
+            // "characteristicId": null,
+            "valueType": null,
+            "visualMode": null,
+            "sortable": false,
+            "filterable": false,
+            "value": null,
+            "options": []
+        };
+
+
+        // TODO: try to optimize it
+        function createMatrixContent(criteriaIds, characteristicsIds, decisionMatrixList) {
+
+            var matrixContent = [];
+
+            var i = 0;
+            matrixContent = _.map(decisionMatrixList, function(el) {
+                // New element with empty characteristics and criteria
+                var newEl = _.clone(el);
+                newEl.criteria = [];
+                newEl.characteristics = [];
+                // newEl.description = null;
+
+                newEl.decision.description = $sce.trustAsHtml(newEl.decision.description);
+
+                // Fill empty criteria
+                newEl.criteria = _.map(criteriaIds, function(criterionId) {
+                    var emptyCriterianDataNew = _.clone(emptyCriterianData);
+                    emptyCriterianDataNew.criterionId = criterionId;
+                    _.map(el.criteria, function(elCriterionIdObj) {
+                        if (elCriterionIdObj.criterionId === criterionId) {
+                            emptyCriterianDataNew = elCriterionIdObj;
+                        }
+                    });
+
+                    return emptyCriterianDataNew;
+                });
+
+                // Fill empty characteristics
+                newEl.characteristics = _.map(characteristicsIds, function(characteristicId) {
+                    var emptyCharacteristicDataNew = _.clone(emptyCharacteristicData);
+                    emptyCharacteristicDataNew.characteristicId = characteristicId;
+                    _.map(el.characteristics, function(elCharacteristicObj) {
+                        if (elCharacteristicObj.characteristicId === characteristicId) {
+                            emptyCharacteristicDataNew = elCharacteristicObj;
+                        }
+                    });
+
+                    return emptyCharacteristicDataNew;
+                });
+
+                return newEl;
+            });
+
+
+            return matrixContent;
+        }
+
+        //Init sorters, when directives loaded
+        function initSorters(total) {
+
+            var _fo = DecisionSharedService.filterObject;
+            _fo.pagination.totalDecisions = total;
+            vm.fo = _fo.sorters;
+
+            // Set Criteria
+            _.map(vm.criteriaGroups[0].criteria, function(el) {
+
+                if (_.includes(_fo.selectedCriteria.sortCriteriaIds, el.criterionId)) {
+                    el.isSelected = true;
+
+                    // Set criterion coefficient el.coefficient.
+                    _.map(_fo.selectedCriteria.sortCriteriaCoefficients, function(value, key) {
+                        if (el.isSelected && parseInt(key) === el.criterionId) {
+                            var coefficientNew = findCoefNameByValue(value);
+                            el.coefficient = coefficientNew;
+                        }
+                    });
+                }
+            });
+        }
+
+        function findCoefNameByValue(valueSearch) {
+            valueSearch = valueSearch;
+            return _.find(DecisionCriteriaConstant.coefficientList, function(record) {
+                return record.value == valueSearch;
+            });
+        }
+
+        function calcMatrixRowHeight() {
+            // TODO: optimize
+            var matrixAside,
+                matrixCols;
+
+            matrixAside = document.getElementById('matrix-table-aside');
+            matrixCols = document.getElementsByClassName('matrix-table-item-content');
+            for (var i = 0; i < matrixCols.length; i++) {
+                var el,
+                    asideEl,
+                    asideElH,
+                    newH;
+
+                el = matrixCols[i];
+                asideEl = $('#matrix-table-aside .matrix-table-item').eq(i);
+                asideElH = parseInt(asideEl.outerHeight());
+                newH = (asideElH > el.clientHeight) ? asideElH : el.clientHeight;
+
+                // Set new height
+                el.style.height = newH + 'px';
+                asideEl.get(0).style.height = newH + 'px';
+
+            }
+        }
+
+        // TODO: drop settimeout and apply
+        function renderMatrix() {
+            setTimeout(function() {
+                calcMatrixRowHeight();
+                reinitMatrixScroller();
+                $scope.$applyAsync(function() {
+                    vm.decisionsSpinner = false;
+                });
+            }, 0);
+        }
+
+        function searchDecisionMatrix(id) {
+            vm.decisionsSpinner = true;
+
+            var sendData = DecisionSharedService.getFilterObject();
+            sendData.persistent = true; //Enable analysis
+            DecisionDataService.searchDecisionMatrix(id, sendData).then(function(result) {
+                var resultdecisionMatrixs = result.decisionMatrixs;
+                initSorters(result.totalDecisionMatrixs);
+                vm.decisionMatrixList = createMatrixContent(criteriaIds, characteristicsIds, resultdecisionMatrixs);
+
+                renderMatrix();
+            });
+        }
+
+        // TODO: make as in sorter directive
+        vm.orderByDecisionProperty = orderByDecisionProperty;
+        vm.orderByCharacteristicProperty = orderByCharacteristicProperty;
+        vm.orderByCriteriaProperty = orderByCriteriaProperty;
+
+        function orderByDecisionProperty(field, order) {
+            if (!field) return;
+            order = order || 'DESC';
+
+            sortObj = {
+                sort: {
+                    id: field,
+                    order: order
+                },
+                mode: "sortByDecisionProperty"
+            };
+            $scope.$emit('selectSorter', sortObj);
+        }
+
+        function orderByCriteriaProperty(order, $event) {
+            order = order || 'DESC';
+
+            sortObj = {
+                sort: {
+                    order: order
+                },
+                mode: "sortByCriteria"
+            };
+            $scope.$emit('selectSorter', sortObj);
+
+            var parentCriteria = $($event.target).parents('.criteria-col');
+            if (parentCriteria.hasClass('selected')) {
+                $event.stopPropagation();
+            }
+        }
+
+        function orderByCharacteristicProperty(field, order) {
+            if (!field) return;
+            order = order || 'DESC';
+
+            sortObj = {
+                sort: {
+                    id: field,
+                    order: order
+                },
+                mode: "sortByCharacteristic"
+            };
+            $scope.$emit('selectSorter', sortObj);
+        }
+
+        function updatePosition(martrixScroll) {
+            var _this = martrixScroll || this;
+            scrollHandler(_this.y, _this.x);
+
+            // TODO: avoid JQuery
+            $('.matrix-table-group .app-control').toggleClass('selected', false);
+            $('.app-pop-over-content').toggleClass('hide', true);
+        }
+
+
+        // Table scroll
+        var
+            tableBody,
+            tableHeader,
+            tableAside;
+
+        tableAside = $('#matrix-table-aside-content');
+        tableHeader = $('#matrix-table-scroll-group');
+
+        function scrollHandler(scrollTop, scrollLeft) {
+            $(tableAside).css({
+                'top': scrollTop,
+            });
+            $(tableHeader).css({
+                'left': scrollLeft
+            });
+        }
+
+        // Custom scroll
+        var wrapper = document.getElementById('matrix-table-body');
+        var martrixScroll = new IScroll(wrapper, {
+            scrollbars: true,
+            scrollX: true,
+            scrollY: true,
+            mouseWheel: true,
+            interactiveScrollbars: true,
+            shrinkScrollbars: 'scale',
+            fadeScrollbars: false,
+            probeType: 3,
+            useTransition: true,
+            disablePointer: true,
+            disableTouch: false,
+            disableMouse: false
+        });
+
+        function reinitMatrixScroller() {
+            if (martrixScroll) {
+                martrixScroll.refresh();
+                martrixScroll.on('scroll', updatePosition);
+                updatePosition(martrixScroll);
+            }
+        }
+
+        function setMatrixTableWidth() {
+            var criteriaGroupsCount,
+                characteristicGroupsCount;
+
+            criteriaGroupsCount = vm.criteriaGroups[0].criteria.length || 0;
+            characteristicGroupsCount = vm.characteristicGroups[0].characteristics.length || 0;
+            vm.tableWidth = (criteriaGroupsCount + characteristicGroupsCount) * 120 + 60 + 'px';
+        }
+
+        // TODO: make as a separeted component
+        // Criteria header
+        vm.editCriteriaCoefficient = editCriteriaCoefficient;
+
+        function editCriteriaCoefficient(event, criteria) {
+            event.preventDefault();
+            event.stopPropagation();
+            var modalInstance = $uibModal.open({
+                templateUrl: 'app/components/decisionCriteria/criteria-coefficient-popup.html',
+                controller: 'CriteriaCoefficientPopupController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                animation: false,
+                resolve: {
+                    criteria: function() {
+                        return criteria;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function(result) {
+                var groupIndex = _.findIndex(vm.criteriaGroups, {
+                    criterionGroupId: result.criterionGroupId
+                });
+                var criteriaIndex = _.findIndex(vm.criteriaGroups[groupIndex].criteria, {
+                    criterionId: result.criterionId
+                });
+                vm.criteriaGroups[groupIndex].criteria[criteriaIndex] = result;
+                selectCriterion(result, criteria.isSelected);
+                vm.decisionsSpinner = false;
+            });
+        }
+
+        var foSelectedCriteria = DecisionSharedService.filterObject.selectedCriteria;
+        vm.selectCriterion = selectCriterion;
+        //Set decions percent(% criterion match)
+        function setDecisionMatchPercent(list) {
+            var percent;
+            _.forEach(list, function(initItem) {
+                percent = parseFloat(initItem.criteriaCompliancePercentage);
+                if (_.isNaN(percent)) {
+                    percent = 0;
+                } else if (!_.isInteger(percent)) {
+                    percent = percent.toFixed(2);
+                }
+                initItem.criteriaCompliancePercentage = percent + '%';
+            });
+        }
+
+        function selectCriterion(criterion, coefCall) {
+            vm.decisionsSpinner = true;
+            if (coefCall && !criterion.isSelected) {
+                return;
+            }
+            if (!coefCall) {
+                criterion.isSelected = !criterion.isSelected;
+            }
+            formDataForSearchRequest(criterion, coefCall);
+
+            DecisionDataService.searchDecisionMatrix(vm.decisionId, DecisionSharedService.getFilterObject()).then(function(result) {
+                DecisionNotificationService.notifySelectCriterion(result.decisionMatrixs);
+            });
+        }
+
+        function formDataForSearchRequest(criterion, coefCall) {
+            var position = foSelectedCriteria.sortCriteriaIds.indexOf(criterion.criterionId);
+            //select criterion
+            if (position === -1) {
+                foSelectedCriteria.sortCriteriaIds.push(criterion.criterionId);
+                //don't add default coefficient
+                if (criterion.coefficient && criterion.coefficient.value !== DecisionCriteriaConstant.coefficientDefault.value) {
+                    foSelectedCriteria.sortCriteriaCoefficients[criterion.criterionId] = criterion.coefficient.value;
+                }
+                //add only coefficient (but not default)
+            } else if (coefCall && criterion.coefficient.value !== DecisionCriteriaConstant.coefficientDefault.value) {
+                foSelectedCriteria.sortCriteriaCoefficients[criterion.criterionId] = criterion.coefficient.value;
+                //unselect criterion
+            } else {
+                foSelectedCriteria.sortCriteriaIds.splice(position, 1);
+                delete foSelectedCriteria.sortCriteriaCoefficients[criterion.criterionId];
+            }
+        }
+
+        // TODO: dontrepit yourself!!!
+        // Characteristics
+        controls = {
+            CHECKBOX: '',
+            SLIDER: '',
+            SELECT: 'app/components/decisionCharacteristics/decision-characteristics-select-partial.html',
+            RADIOGROUP: '',
+            YEARPICKER: 'app/components/decisionCharacteristics/decision-characteristics-yearpicker-partial.html'
+        };
+
+
+        vm.getControl = getControl;
+        vm.selectCharacteristic = selectCharacteristic;
+
+        function getControl(characteristic) {
+            return controls[characteristic.visualMode];
+        }
+
+        function selectCharacteristic(characteristic) {
+            DecisionNotificationService.notifySelectCharacteristic(characteristic);
+        }
+
+        DecisionNotificationService.subscribeSelectCharacteristic(function(event, data) {
+            console.log(data);
+            // vm.decisionsSpinner = true;
+            // searchDecisionMatrix(vm.decisionId);
+        });
+
+
+        vm.goToDiscussion = goToDiscussion;
+
+        function goToDiscussion(discussionId, critOrCharId) {
+            var params = {
+                // 'id': parseInt($stateParams.id),
+                // 'slug': $stateParams.slug,
+                // 'criteria': $stateParams.criteria,
+                'discussionId': discussionId,
+                // 'discussionSlug': null,
+                'critOrCharId': critOrCharId,
+                // 'critOrCharSlug': null
+            };
+            $state.go('decisions.single.discussions.child.option', params);
+        }
+    }
+})();
+// Create row from
+// Criteria
+(function() {
+
+    'user strict';
+
+    angular
+        .module('app.discussions')
+        .controller('DiscussionDecisionChildOptionController', DiscussionDecisionChildOptionController);
+
+    DiscussionDecisionChildOptionController.$inject = ['decisionDiscussionInfo', 'DiscussionsDataService', '$rootScope', '$stateParams', 'DecisionDataService', '$state'];
+
+    function DiscussionDecisionChildOptionController(decisionDiscussionInfo, DiscussionsDataService, $rootScope, $stateParams, DecisionDataService, $state) {
+        var vm = this;
+
+        var params = {
+            'id': parseInt($stateParams.id),
+            'slug': $stateParams.slug,
+            'criteria': $stateParams.criteria,
+        };
+
+        vm.params = params;
+
+        vm.discussion = decisionDiscussionInfo || {};
+
+        var pageTitle = vm.discussion.childDecision.name;
+        var critOrCharTitle = '';
+        if (vm.discussion.childCharacteristic) {
+            pageTitle += ' ' + vm.discussion.childCharacteristic.name;
+            critOrCharTitle = vm.discussion.childCharacteristic.name;
+        } else if (vm.discussion.childCriterion) {
+            pageTitle += ' ' + vm.discussion.childCriterion.name;
+            critOrCharTitle = vm.discussion.childCriterion.name;
+        }
+
+        $rootScope.pageTitle = 'Discussion ' + pageTitle + ' | DecisionWanted';
+
+
+
+        init();
+
+        function getCriteriaGroupsById(decisionId) {
+            // Criteria
+            return DecisionDataService.getCriteriaGroupsById(decisionId).then(function(result) {
+                vm.criteriaGroups = result;
+                criteriaIds = _.map(result["0"].criteria, function(el) {
+                    return el.criterionId;
+                });
+            });
+        }
+
+        function getCharacteristictsGroupsById(decisionId) {
+            // Characteristicts
+            return DecisionDataService.getCharacteristictsGroupsById(decisionId).then(function(result) {
+                vm.characteristicGroups = result;
+
+                characteristicsIds = _.map(result["0"].characteristics, function(el) {
+                    return el.characteristicId;
+                });
+            });
+        }
+
+        function searchCommentableVotesWeight(discussionId, critOrCharId) {
+            if (!discussionId || !critOrCharId) return;
+            DiscussionsDataService.searchCommentableVotesWeight(discussionId, critOrCharId)
+                .then(function(resp) {
+                    // console.log(resp);
+                    vm.discussion.votes = resp;
+                }).catch(function(err) {
+                    console.log(err);
+                });
+        }
+
+        function init() {
+            console.log('Discussion Child Option Controller');
+
+            vm.title = pageTitle;
+
+            getCriteriaGroupsById(vm.discussion.decision.decisionId);
+            getCharacteristictsGroupsById(vm.discussion.decision.decisionId);
+
+            // TODO: avoid $stateParams
+            if (vm.discussion.childCriterion) searchCommentableVotesWeight($stateParams.discussionId, $stateParams.critOrCharId);
+
+            $rootScope.breadcrumbs = [{
+                title: 'Decisions',
+                link: 'decisions'
+            }, {
+                title: vm.discussion.decision.name,
+                link: 'decisions.single'
+            }, {
+                title: 'Discussions',
+                link: 'decisions.single.discussions'
+            }, {
+                title: vm.discussion.childDecision.name,
+                link: 'decisions.single.discussions.child'
+            }, {
+                title: critOrCharTitle,
+                link: null
+            }];
+        }
+
+        vm.goToDiscussion = goToDiscussion;
+
+        function goToDiscussion(discussionId, critOrCharId) {
+            params.discussionId = discussionId;
+            params.critOrCharId = critOrCharId;
+            $state.go('decisions.single.discussions.child.option', params);
+        }
+
+    }
+})();
+(function() {
+
+    'user strict';
+
+    angular
+        .module('app.discussions')
+        .controller('DiscussionDecisionChildController', DiscussionDecisionChildController);
+
+    DiscussionDecisionChildController.$inject = ['decisionBasicInfo', 'DiscussionsDataService', '$stateParams', '$rootScope'];
+
+    function DiscussionDecisionChildController(decisionBasicInfo, DiscussionsDataService, $stateParams, $rootScope) {
+        var vm = this;
+        vm.decision = decisionBasicInfo || {};
+
+        $rootScope.breadcrumbs = [{
+            title: 'Decisions',
+            link: 'decisions'
+        }, {
+            title: vm.decision.name,
+            link: 'decisions.single'
+        }, {
+            title: 'Discussions',
+            link: 'decisions.single.discussions'
+        }, {
+            title: 'Discussion Decision Name',
+            link: null
+        }];
+
+        init();
+
+        function init() {
+            console.log('Discussion Decision controller');
+            console.log(vm.decision);
+        }
+    }
+})();
+(function() {
+
+    'user strict';
+
+    angular
+        .module('app.discussions')
+        .controller('DiscussionDecisionController', DiscussionDecisionController);
+
+    DiscussionDecisionController.$inject = ['decisionBasicInfo', 'DiscussionsDataService', '$stateParams', '$rootScope'];
+
+    function DiscussionDecisionController(decisionBasicInfo, DiscussionsDataService, $stateParams, $rootScope) {
+        var vm = this;
+        vm.decision = decisionBasicInfo || {};
+
+        console.log('Discussion Decision controller');
+
+
+        $rootScope.breadcrumbs = [{
+            title: 'Decisions',
+            link: 'decisions'
+        }, {
+            title: vm.decision.name,
+            link: 'decisions.single'
+        }, {
+            title: 'Discussions',
+            link: null
+        }];
+    }
+})();
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.discussions')
+        .factory('DiscussionsDataService', DiscussionsDataService);
+
+    DiscussionsDataService.$inject = ['$resource', 'Config'];
+
+    function DiscussionsDataService($resource, Config) {
+        var
+            discussionsUrl = Config.endpointUrl + 'discussions',
+
+            discussions = $resource(discussionsUrl, {
+                id: '@id'
+            }),
+
+            searchCommentableDiscussionUrl = $resource(Config.endpointUrl + 'decisions/:discussionId/commentables/:critOrCharId', {
+                discussionId: '@discussionId',
+                critOrCharId: '@critOrCharId',
+            }),
+
+            searchCommentableVotesWeightUrl = $resource(Config.endpointUrl + 'votes/forentity/:discussionId/onentity/:critOrCharId/weighted', {
+                discussionId: '@discussionId',
+                critOrCharId: '@critOrCharId',
+            });
+
+        var service = {
+            searchDiscussions: searchDiscussions,
+            searchCommentableDiscussion: searchCommentableDiscussion,
+            searchCommentableVotesWeight: searchCommentableVotesWeight
+        };
+
+        return service;
+
+        function searchDiscussions(id, data) {
+            return discussions.searchDiscussionsById({
+                id: id
+            }, data).$promise;
+        }
+
+        function searchCommentableDiscussion(discussionId, critOrCharId) {
+            // console.log(discussionId, critOrCharId);
+
+            // if (!discussionId && !critOrCharId) return;
+            return searchCommentableDiscussionUrl.get({
+                discussionId: discussionId,
+                critOrCharId: critOrCharId
+            }).$promise;
+        }
+
+        function searchCommentableVotesWeight(discussionId, critOrCharId) {
+            // if (!discussionId && !critOrCharId) return;
+            return searchCommentableVotesWeightUrl.get({
+                discussionId: discussionId,
+                critOrCharId: critOrCharId
+            }).$promise;
+        }
+    }
+})();
+(function() {
+
+  'user strict';
+
+  angular
+    .module('app.discussions')
+    .controller('DiscussionsController', DiscussionsController);
+
+  DiscussionsController.$inject = ['$rootScope', '$stateParams'];
+
+  function DiscussionsController($rootScope, $stateParams) {
+    var vm = this;
+
+    $rootScope.breadcrumbs = [{
+      title: 'Decisions',
+      link: 'decisions'
+    }, {
+      title: vm.discussion.decision.name,
+      link: 'decisions.matrix({id: ' + $stateParams.id + '})'
+    }, {
+      title: 'Discussions',
+      link: 'decisions.discussions'
+    }];
+
+
+    console.log('Discussions controller');
+
+  }
+})();
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.discussions')
+        .config(configuration);
+
+    configuration.$inject = ['$stateProvider'];
+
+    function configuration($stateProvider) {
+        $stateProvider
+            .state('decisions.single.discussions', {
+                url: '/discussions',
+                views: {
+                    "@": {
+                        templateUrl: 'app/discussions/discussion-decision.html',
+                        controller: 'DiscussionDecisionController',
+                        controllerAs: 'vm',
+                    }
+                },
+            })
+            .state('decisions.single.discussions.child', {
+                url: '/:discussionId',
+                views: {
+                    "@": {
+                        templateUrl: 'app/discussions/discussion-decision-child.html',
+                        controller: 'DiscussionDecisionChildController',
+                        controllerAs: 'vm',
+                    }
+                },
+                resolve: {
+                    // decisionDiscussionInfo: DecisionSingleDiscussionResolver
+                },
+                params: {
+                    discussionSlug: {
+                        value: null,
+                        squash: true
+                    },
+                    critOrCharId: {
+                        value: null,
+                        squash: true
+                    }
+                }
+            })
+            .state('decisions.single.discussions.child.option', {
+                url: '/:critOrCharId',
+                // url: '/:discussionId/{discussionSlug}/:critOrCharId/{critOrCharSlug}',
+                views: {
+                    "@": {
+                        templateUrl: 'app/discussions/discussion-decision-child-option.html',
+                        controller: 'DiscussionDecisionChildOptionController',
+                        controllerAs: 'vm',
+                    }
+                },
+                resolve: {
+                    decisionDiscussionInfo: DecisionSingleDiscussionResolver
+                },
+                params: {
+                    discussionSlug: {
+                        value: null,
+                        squash: true
+                    },
+                    critOrCharId: {
+                        value: null,
+                        squash: true
+                    }
+                }
+            });
+    }
+
+
+    // Decision Data
+    DecisionSingleDiscussionResolver.$inject = ['DiscussionsDataService', '$stateParams', '$state', '$rootScope', '$location'];
+
+    function DecisionSingleDiscussionResolver(DiscussionsDataService, $stateParams, $state, $rootScope, $location) {
+        return DiscussionsDataService.searchCommentableDiscussion($stateParams.discussionId, $stateParams.critOrCharId)
+            .then(function(resp) {
+                // console.log(resp);
+                return resp;
+            })
+            .catch(function(err) {
+                console.log(err);
+            });
+
+    }
+
+})();
+(function() {
+
+    'user strict';
+
+    angular
+        .module('app.home')
+        .controller('HomeController', HomeController);
+
+        HomeController.$inject = [];
+
+        function HomeController() {
+            var vm = this;
+
+            console.log('Home controller');
+
+            vm.search = search;
+
+            function search() {
+                vm.showTrigger = true;
+            }
+        }
+})();
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.home')
+        .config(configuration);
+
+    configuration.$inject = ['$stateProvider'];
+
+    function configuration($stateProvider) {
+        $stateProvider
+            .state('home', {
+                url: '/',
+                templateUrl: 'app/home/home.html',
+                controller: 'HomeController',
+                controllerAs: 'vm',
+                data: {
+                    pageTitle: 'Home'
+                }
+            });
+    }
+
+})();
+(function() {
+	'use strict';
+
+	angular
+		.module('app.login')
+		.controller('AuthController', AuthController);
+
+	AuthController.$inject = ['LoginService', '$stateParams', '$window'];
+
+	function AuthController(LoginService, $stateParams, $window) {
+		var vm = this;
+
+		init();
+
+		function init() {
+			if($stateParams.token) {
+				var token = $window.location.href.split('access_token=')[1];
+				LoginService.saveToken(token);
+				$window.close();
+			}
+		}
+	}
+
+})();
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.login')
+        .controller('LoginController', LoginController)
+        .directive('appLogin', appLogin);
+
+    function appLogin() {
+        var directive = {
+            restrict: 'E',
+            replace: 'true',
+            templateUrl: 'app/login/login.html',
+            controller: 'LoginController',
+            controllerAs: 'vm'
+        };
+
+        return directive;
+    }
+
+    LoginController.$inject = ['$window', 'LoginService', '$scope'];
+
+    function LoginController($window, LoginService, $scope) {
+        var vm = this;
+
+        vm.loginService = LoginService;
+        vm.loginService.checkLogin();
+        vm.user = vm.loginService.getUser();
+
+        vm.logout = logout;
+
+        function logout() {
+            vm.loginService.logout();
+            $('form').submit();
+        }
+
+        $scope.$watch(vm.loginService.getToken, function(newVal, oldVal) {
+            if (newVal && oldVal !== newVal) {
+               vm.loginService.setLoginStatus(true);
+               vm.loginService.setUserFromToken(newVal);
+               vm.user = vm.loginService.getUser();
+            }
+        });
+    }
+
+})();
+
+(function() {
+	'use strict';
+
+	angular
+		.module('app.login')
+		.config(configuration);
+
+	configuration.$inject = ['$stateProvider'];
+
+	function configuration($stateProvider) {
+		$stateProvider
+			.state('login', {
+				url: '/login:token',
+				controller: 'AuthController'
+			});
+	}
+
+})();
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.login')
+        .factory('LoginService', LoginService);
+
+    LoginService.$inject = ['jwtHelper', '$localStorage', '$window', 'Config', '$location', '$sce'];
+
+    function LoginService(jwtHelper, $localStorage, $window, Config, $location, $sce) {
+    	var
+    		user = {},
+    		isLogged = false;
+
+        var service = {
+        	getUser: getUser,
+        	setUserFromToken: setUserFromToken,
+        	getLoginStatus: getLoginStatus,
+        	setLoginStatus: setLoginStatus,
+        	saveToken: saveToken,
+        	logout: logout,
+        	login: login,
+        	getToken: getToken,
+        	checkLogin: checkLogin,
+            getLogoutUrl: getLogoutUrl
+        };
+
+        return service;
+
+        function logout() {
+        	delete $localStorage.token;
+            setUser({});
+            setLoginStatus(false);
+        }
+
+        function login() {
+        	//TODO extract to config or constants
+        	var 
+        		loginUrl = 'oauth/authorize?response_type=token&client_id=decisionwanted_client_id&redirect_uri=',
+        		returnUrl = $location.absUrl().split('#')[0] + '#/login';
+
+            $window.open(Config.authUrl +
+            			 loginUrl + 
+            			 encodeURIComponent(returnUrl), 
+            			 '_blank', 
+            			 'width=600, height=300');
+        }
+
+        function saveToken(token) {
+        	$localStorage.token = token;
+        }
+
+        function getToken() {
+        	return $localStorage.token;
+        }
+
+        function getUser() {
+        	return user;
+        }
+
+        function setUser(info) {
+        	user = info;
+        }
+
+        function setUserFromToken(token) {
+        	user = jwtHelper.decodeToken(token);
+        }
+
+        function getLoginStatus() {
+        	return isLogged;
+        }
+
+        function setLoginStatus(status) {
+        	isLogged = status;
+        }
+
+        function getLogoutUrl() {
+            return $sce.trustAsResourceUrl(Config.authUrl + 'logout');
+        }
+
+        //TODO add check request
+        function checkLogin() {
+        	var token = $localStorage.token;
+        	if(token) {
+        		isLogged = true;
+        		setUserFromToken(token);
+        	}
+        }
+    }
+})();
+
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.components')
+        .component('appFooter', {
+            templateUrl: 'app/components/appFooter/app-footer.html'
+        });
+
+})();
+
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.components')
+        .component('appHeader', {
+            templateUrl: 'app/components/appHeader/app-header.html'
+        });
+
+})();
+
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.components')
+        .controller('AppListController', AppListController)
+        .component('appList', {
+            templateUrl: 'app/components/appList/app-list.html',
+            bindings: {
+                list: '<',
+                template: '@'
+            },
+            controller: 'AppListController',
+            controllerAs: 'vm'
+        });
+
+    AppListController.$inject = ['DecisionNotificationService', 'DecisionSharedService', 'AppListConstant', '$state'];
+
+    function AppListController(DecisionNotificationService, DecisionSharedService, AppListConstant, $state) {
+        var
+            vm = this,
+            currentList = [],
+            currentListWithHeight = [];
+
+
+        //TODO: create hashmap for saving resized items
+        //TODO: refactor later skuzmin
+        vm.showPercentage = false;
+
+        vm.$onChanges = onChanges;
+
+        function onChanges() {
+            currentList = _.map(vm.list, function(item) {
+                return item.decisionId;
+            });
+            // Create obj with id and el height
+            currentListWithHeight = generateList(currentList);
+            reRangeList(currentListWithHeight, 0);
+            vm.showPercentage = DecisionSharedService.filterObject.selectedCriteria.sortCriteriaIds.length > 0;
+        }
+
+        function generateList(arr) {
+            var
+                el, elHeight,
+                arrHeight = [],
+                obj = {};
+
+            _.forEach(arr, function(item) {
+                el = document.getElementById('decision-' + item);
+                if(!el) return;
+                elHeight = el.offsetHeight; //not include bottom margin
+                obj = {
+                    id: item,
+                    height: elHeight
+                };
+                arrHeight.push(obj);
+            });
+
+            return arrHeight;
+        }
+
+        function sumArrayIndex(arr, index) {
+            var sum = 0;
+            for (var i = 0; i < index; i++) {
+                sum += parseInt(arr[i].height);
+            }
+            return sum;
+        }
+
+        // Move elements under resizeble el
+        function reRangeList(currentList, index) {
+            var elStyle, newTop, currentTop, offset;
+
+            for (var i = 0; i < currentList.length; i++) {
+                var el = document.getElementById('decision-' + currentList[i].id);
+
+                if (!el) return;
+
+                offset = i * AppListConstant.OFFSET_Y_BOTTOM;
+                newTop = sumArrayIndex(currentList, i) + offset + 'px';
+                elStyle = window.getComputedStyle(el, null);
+
+                if (elStyle) {
+                    currentTop = elStyle.getPropertyValue('top');
+                    if (newTop !== currentTop) el.style.top = newTop;
+                }
+            }
+        }
+
+        // Resize
+        function updateResizeElement(event) {
+            var
+                target = event.target,
+                y;
+
+            target = event.target;
+            if (event.rect.height <= AppListConstant.ELEMENT_HEIGHT) return;
+
+            y = (parseFloat(target.getAttribute('data-y')) || 0);
+            target.style.height = event.rect.height + 'px';
+
+            // TODO: avoid jQuery and move only index from current index
+            var elIndex = $('#' + target.id).index();
+
+            $('.list-item-sort').addClass('app-stop-animation');
+
+            currentListWithHeight[elIndex].height = event.rect.height;
+            reRangeList(currentListWithHeight, elIndex);
+        }
+
+        interact('.app-resize-h')
+            .resizable({
+                preserveAspectRatio: true,
+                edges: {
+                    left: false,
+                    right: false,
+                    bottom: true,
+                    top: false
+                }
+            })
+            .on('resizemove', updateResizeElement)
+            .on('resizeend', function() {
+                $('.list-item-sort').removeClass('app-stop-animation');
+            });
+
+
+        // TODO: refactor it, maybe make as new component
+        var content = {
+                decision: 'app/components/appList/decision-partial.html'
+            },
+            characteristicGroupNames = [];
+
+        vm.innerTemplate = content.decision; //content[vm.template];
+
+        vm.selectDecision = selectDecision;
+        vm.$onChanges = onChanges;
+        vm.goToDecision = goToDecision;
+        vm.getDetails = getDetails;
+        vm.getGroupNameById = getGroupNameById;
+
+        init();
+
+
+        function getGroupNameById(id) {
+            var group = _.find(characteristicGroupNames, function(group) {
+                return group.characteristicGroupId.toString() === id;
+            });
+            return group ? group.name : 'Group';
+        }
+
+        // TODO: save loaded data push to vm.displayList?!
+        function getDetails(decision) {
+            if (!decision.characteristics && !decision.detailsSpinner) {
+                DecisionNotificationService.notifyGetDetailedCharacteristics(decision);
+            }
+        }
+
+        function goToDecision(event, decisionId) {
+            event.stopPropagation();
+            event.preventDefault();
+            $state.go('decision', {
+                id: decisionId
+            });
+        }
+
+        function selectDecision(currentDecision) {
+            var prevDecision = _.find(vm.list, function(decision) {
+                return decision.isSelected;
+            });
+            if (!prevDecision) {
+                currentDecision.isSelected = true;
+                DecisionSharedService.filterObject.selectedDecision.decisionsIds.push(currentDecision.decisionId);
+            } else if (prevDecision.decisionId === currentDecision.decisionId) {
+                DecisionSharedService.filterObject.selectedDecision.decisionsIds = []; //TODO: use splice
+                currentDecision.isSelected = false;
+            } else {
+                prevDecision.isSelected = false;
+                currentDecision.isSelected = true;
+
+                DecisionSharedService.filterObject.selectedDecision.decisionsIds = []; //TODO: use splice
+                DecisionSharedService.filterObject.selectedDecision.decisionsIds.push(currentDecision.decisionId);
+            }
+
+            DecisionNotificationService.notifySelectDecision(DecisionSharedService.filterObject.selectedDecision.decisionsIds);
+            // console.log(DecisionSharedService.filterObject.selectedDecision.decisionsIds);
+            // console.log(DecisionSharedService.filterObject);
+        }
+
+
+        function init() {
+            DecisionNotificationService.subscribeCharacteristicsGroups(function(event, data) {
+                characteristicGroupNames = data;
+            });
+        }
+
+    }
+
+
+})();
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.components')
+        .constant('AppListConstant', {
+            OFFSET_Y_BOTTOM : 10,
+            ELEMENT_HEIGHT : 80
+        });
+})();
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.components')
+        .controller('PaginatorController', PaginatorController)
+        .component('appPaginator', {
+            templateUrl: 'app/components/appPaginator/app-paginator.html',
+            controller: 'PaginatorController',
+            controllerAs: 'vm'
+        });
+
+    PaginatorController.$inject = ['DecisionSharedService', 'DecisionNotificationService'];
+
+    function PaginatorController(DecisionSharedService, DecisionNotificationService) {
+        var vm = this;
+
+        vm.pagination = DecisionSharedService.filterObject.pagination;
+        vm.itemsPerPage = [5, 10, 20, 50, 100];
+
+        vm.changePage = changePage;
+        vm.changePageSize = changePageSize;
+
+        function changePage() {
+            DecisionNotificationService.notifyPageChanged();
+        }
+
+        function changePageSize() {
+            DecisionSharedService.filterObject.pagination.pageNumber = 1;
+            DecisionNotificationService.notifyPageChanged();
+        }
+    }
+
+})();
+
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.components')
+        .controller('BreadcrumbsController', BreadcrumbsController)
+        .component('breadcrumbs', {
+            templateUrl: 'app/components/breadcrumbs/breadcrumbs.html',
+            bindings: {
+                items: '='
+            },
+            controller: 'BreadcrumbsController',
+            controllerAs: 'vm'
+        });
+
+
+    BreadcrumbsController.$inject = [];
+
+    function BreadcrumbsController() {
+        var vm = this;
+    }
+
+})();
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.components')
+        .controller('CriteriaCoefficientIndicatorController', CriteriaCoefficientIndicatorController)
+        .component('criteriaCoefficientIndicator', {
+            templateUrl: 'app/components/criteriaCoefficientIndicator/criteria-coefficient-indicator.html',
+            bindings: {
+                coefficient: '='
+            },
+            controller: 'CriteriaCoefficientIndicatorController',
+            controllerAs: 'vm'
+        });
+
+
+    CriteriaCoefficientIndicatorController.$inject = ['DecisionCriteriaConstant'];
+
+    function CriteriaCoefficientIndicatorController(DecisionCriteriaConstant) {
+        var vm = this;
+
+        vm.$doCheck = doCheck;
+
+        init();
+
+        function setCoefficientIndicator(coefficient) {
+            if (!coefficient) return;
+            // set color of indicator
+            _.forEach(vm.coefficientList, function(c) {
+                c.class = '';
+                if(c.value <= coefficient.value) {
+                    c.class = coefficient.name.toLowerCase();
+                }
+            });
+        }
+
+        function init() {
+            if(!vm.coefficient) {
+                vm.coefficient = DecisionCriteriaConstant.coefficientDefault;
+            }
+            vm.coefficientList = angular.copy(DecisionCriteriaConstant.coefficientList);
+        }
+
+        function doCheck() {
+            setCoefficientIndicator(vm.coefficient);
+        }
+    }
+})();
+
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.components')
+        .controller('DecisionCharacteristicsController', DecisionCharacteristicsController)
+        .component('decisionCharacteristics', {
+            templateUrl: 'app/components/decisionCharacteristics/decision-characteristics.html',
+            bindings: {
+                decisionId: '='
+            },
+            controller: 'DecisionCharacteristicsController',
+            controllerAs: 'vm'
+        });
+
+    DecisionCharacteristicsController.$inject = ['DecisionDataService', 'DecisionNotificationService'];
+
+    function DecisionCharacteristicsController(DecisionDataService, DecisionNotificationService) {
+        var
+            vm = this,
+            controls = {
+                CHECKBOX: '',
+                SLIDER: '',
+                SELECT: 'app/components/decisionCharacteristics/decision-characteristics-select-partial.html',
+                RADIOGROUP: '',
+                YEARPICKER: 'app/components/decisionCharacteristics/decision-characteristics-yearpicker-partial.html'
+            };
+
+        vm.characteristicGroups = [];
+        vm.sorterList = [];
+
+        vm.getControl = getControl;
+        vm.selectCharacteristic = selectCharacteristic;
+
+        init();
+
+        function selectCharacteristic(characteristic) {
+            DecisionNotificationService.notifySelectCharacteristic(characteristic);
+        }
+
+        function getControl(characteristic) {
+            return controls[characteristic.visualMode];
+        }
+
+        function prepareCharacteristicsToDisplay(data) {
+            vm.characteristicGroups = data;
+            _.forEach(vm.characteristicGroups, function(group) {
+                _.forEachRight(group.characteristics, function(characteristic, index) {
+                    if (characteristic.sortable) {
+                        vm.sorterList.push(characteristic);
+                    }
+                    if (!characteristic.filterable) {
+                        group.characteristics.splice(index, 1);
+                    }
+                });
+            });
+            DecisionNotificationService.notifyInitSorter({
+                list: vm.sorterList,
+                type: 'sortByCharacteristic',
+                mode: 'threeStep'
+            });
+        }
+
+        function init() {
+            vm.characteristicSpinner = true;
+            DecisionDataService.getCharacteristictsGroupsById(vm.decisionId).then(function(result) {
+                var temp;
+                var characteristicGroupNames = _.map(result, function(group) {
+                    return {
+                        characteristicGroupId: group.characteristicGroupId,
+                        name: group.name
+                    };
+                });
+                DecisionNotificationService.notifyCharacteristicsGroups(characteristicGroupNames);
+                prepareCharacteristicsToDisplay(result);
+            }).finally(function() {
+                if (vm.characteristicGroups.length > 0) {
+                    vm.characteristicGroups[0].isOpen = true;
+                }
+                vm.characteristicSpinner = false;
+            });
+        }
+    }
+})();
+
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.components')
+        .controller('CriteriaCoefficientPopupController', CriteriaCoefficientPopupController);
+
+    CriteriaCoefficientPopupController.$inject = ['$uibModalInstance', 'criteria', 'DecisionCriteriaConstant'];
+
+    function CriteriaCoefficientPopupController($uibModalInstance, criteria, DecisionCriteriaConstant) {
+        var vm = this;
+
+        vm.apply = apply;
+        vm.close = close;
+
+        init();
+
+        function apply() {
+            $uibModalInstance.close(vm.criteria);
+        }
+
+        function close() {
+            $uibModalInstance.dismiss();
+        }
+
+        function init() {
+            vm.criteria = angular.copy(criteria);
+            vm.coefficientList = DecisionCriteriaConstant.coefficientList;
+        }
+    }
+})();
+
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.components')
+        .controller('DecisionCriteriaController', DecisionCriteriaController)
+        .component('decisionCriteria', {
+            templateUrl: 'app/components/decisionCriteria/decision-criteria.html',
+            bindings: {
+                decisionId: '='
+            },
+            controller: 'DecisionCriteriaController',
+            controllerAs: 'vm'
+        });
+
+    DecisionCriteriaController.$inject = ['$uibModal', 'DecisionDataService', 'DecisionNotificationService', 'DecisionSharedService', 'DecisionCriteriaConstant'];
+
+    function DecisionCriteriaController($uibModal, DecisionDataService, DecisionNotificationService, DecisionSharedService, DecisionCriteriaConstant) {
+        var
+            vm = this,
+            _fo = DecisionSharedService.filterObject.selectedCriteria;
+
+        vm.criteriaGroups = [];
+
+        vm.showRating = false;
+
+        vm.$onChanges = onChanges;
+
+        vm.editCriteriaCoefficient = editCriteriaCoefficient;
+        vm.selectCriterion = selectCriterion;
+
+        init();
+
+        function onChanges() {
+            vm.showRating = DecisionSharedService.filterObject.selectedDecision.decisionsIds.length > 0;
+        }
+
+        function selectCriterion(criterion, coefCall) {
+            console.log(criterion);
+            if (coefCall && !criterion.isSelected) {
+                return;
+            }
+            if (!coefCall) {
+                criterion.isSelected = !criterion.isSelected;
+            }
+            formDataForSearchRequest(criterion, coefCall);
+            DecisionDataService.searchDecision(vm.decisionId, DecisionSharedService.getFilterObject()).then(function(result) {
+                DecisionNotificationService.notifySelectCriterion(result.decisions);
+            });
+        }
+
+        function formDataForSearchRequest(criterion, coefCall) {
+            var position = _fo.sortCriteriaIds.indexOf(criterion.criterionId);
+            //select criterion
+            if (position === -1) {
+                _fo.sortCriteriaIds.push(criterion.criterionId);
+                //don't add default coefficient
+                if (criterion.coefficient && criterion.coefficient.value !== DecisionCriteriaConstant.coefficientDefault.value) {
+                    _fo.sortCriteriaCoefficients[criterion.criterionId] = criterion.coefficient.value;
+                }
+                //add only coefficient (but not default)
+            } else if (coefCall && criterion.coefficient.value !== DecisionCriteriaConstant.coefficientDefault.value) {
+                _fo.sortCriteriaCoefficients[criterion.criterionId] = criterion.coefficient.value;
+                //unselect criterion
+            } else {
+                _fo.sortCriteriaIds.splice(position, 1);
+                delete _fo.sortCriteriaCoefficients[criterion.criterionId];
+            }
+        }
+
+        function editCriteriaCoefficient(event, criteria) {
+            event.preventDefault();
+            event.stopPropagation();
+            var modalInstance = $uibModal.open({
+                templateUrl: 'app/components/decisionCriteria/criteria-coefficient-popup.html',
+                controller: 'CriteriaCoefficientPopupController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                resolve: {
+                    criteria: function() {
+                        return criteria;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function(result) {
+                var groupIndex = _.findIndex(vm.criteriaGroups, {
+                    criterionGroupId: result.criterionGroupId
+                });
+                var criteriaIndex = _.findIndex(vm.criteriaGroups[groupIndex].criteria, {
+                    criterionId: result.criterionId
+                });
+                vm.criteriaGroups[groupIndex].criteria[criteriaIndex] = result;
+                selectCriterion(result, true);
+            });
+        }
+
+        function init() {
+            var criteriaGroupsCopy = [];
+            vm.criteriaSpinner = true;
+            DecisionDataService.getCriteriaGroupsById(vm.decisionId).then(function(result) {
+                vm.criteriaGroups = result;
+                criteriaGroupsCopy = angular.copy(vm.criteriaGroups);
+            }).finally(function() {
+                vm.criteriaSpinner = false;
+                if (vm.criteriaGroups.length > 0) {
+                    vm.criteriaGroups[0].isOpen = true;
+                }
+            });
+
+
+            // TODO: need to refactor
+            //Subscribe to notification events
+            DecisionNotificationService.subscribeSelectDecision(function(event, data) {
+                var criterionId,
+                    criteriaGroupsRating = [];
+
+                vm.showRating = data.length;
+                criterionId = data[0];
+
+
+                if (!_.isEmpty(data)) {
+                    DecisionDataService.getCriteriaByDecision(criterionId, vm.decisionId).then(function(result) {
+                        criteriaGroupsRating = result;
+                        if(!criteriaGroupsRating || _.isEmpty(result)) return;
+
+                        // TODO: Optimize find deep and replace, make for all criteria groups!
+
+                        // Set null rating
+                        _.map(vm.criteriaGroups[0].criteria, function(criteria, index) {
+                            vm.criteriaGroups[0].criteria[index].weight = null;
+                            vm.criteriaGroups[0].criteria[index].totalVotes = null;
+                        });
+
+                        // Update rating
+                        _.map(criteriaGroupsRating, function(criteriaRating, itemIndex) {
+                            _.map(vm.criteriaGroups[0].criteria, function(criteria, index) { //Include all group
+                                if (criteriaRating.criterionId === criteria.criterionId) {
+                                    vm.criteriaGroups[0].criteria[index].weight = criteriaRating.weight; //Set only rating weight
+                                    vm.criteriaGroups[0].criteria[index].totalVotes = criteriaRating.totalVotes;
+                                }
+                            });
+                        });
+
+
+
+                    }).finally(function() {
+                        if (vm.criteriaGroups.length > 0) {
+                            vm.criteriaGroups[0].isOpen = true;
+                        }
+                    });
+                } else {
+                    // vm.criteriaGroups = criteriaGroupsCopy;
+                }
+
+            });
+        }
+    }
+})();
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.components')
+        .constant('DecisionCriteriaConstant', {
+            coefficientList: [{
+                name: 'Lower',
+                value: 0.1
+            },{
+                name: 'Low',
+                value: 0.5
+            }, {
+                name: 'Normal',
+                value: 1
+            }, {
+                name: 'High',
+                value: 1.5
+            }, {
+                name: 'Important',
+                value: 2.5
+            }, {
+                name: 'Significant',
+                value: 4
+            }, {
+                name: 'Critical',
+                value: 7
+            }],
+            coefficientDefault: {
+                name: 'Normal',
+                value: 1
+            }
+        });
+})();
+
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.components')
+        .directive('decisionSorter', decisionSorter);
+
+    function decisionSorter() {
+        var directive = {
+            restrict: 'E',
+            replace: 'true',
+            templateUrl: 'app/components/decisionSorter/decision-sorter.html',
+            scope: {
+                sortType: '@'
+            },
+            link: link
+        };
+
+        return directive;
+
+        function link(scope, elem, attrs) {
+            //subscribe on init sorter event
+            var
+                sorterListener = scope.$on('initSorter', function(event, data) {
+                    if (scope.sortType === data.type) {
+                        scope.mode = data.mode;
+                        scope.sorters = data.list;
+                    }
+                    scope.$on('$destroy', function() {
+                        sorterListener();
+                    });
+                }),
+                order,
+                sortObj;
+
+            scope.selectSorter = function(sorter) {
+                //clear all sorting orders
+                order = sorter.order;
+                sortObj = {
+                    sort: {id: null, order: null},
+                    mode: ''
+                };
+                _.forEach(scope.sorters, function(s) {
+                    s.order = '';
+                });
+                //set correct sort order for sorter button
+                if (order === 'DESC') {
+                    sorter.order = 'ASC';
+                } else if (order === 'ASC' && scope.mode === 'threeStep') {
+                    sorter.order = null;
+                } else {
+                    sorter.order = 'DESC';
+                }
+                //set sortObj data for sorting request
+                if(sorter.order) {
+                    sortObj.sort.id = sorter.characteristicId || sorter.propertyId;
+                    sortObj.sort.order = sorter.order;
+                }
+                sortObj.mode = scope.sortType;
+
+                scope.$emit('selectSorter', sortObj);
+            };
+
+        }
+    }
+
+})();
+
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.components')
+        .directive('popOver', popOverDirective);
+
+    function popOverDirective($window, $uibPosition) {
+        var directive = {
+            restrict: 'A',
+            scope: {
+                contentId: '='
+            },
+            link: link
+        };
+
+        return directive;
+
+        function link($scope, $el, $attrs) {
+
+            // debugger
+
+            var el = $el,
+                elParent = el.parents('.matrix-table-title-wrapper'),
+                elH = elParent.outerHeight();
+
+            $el.on('click', function(event) {
+                var elContent = $('[data-pop-over-content-id="' + $scope.contentId + '"]');
+
+                $('.matrix-table-group .app-control').toggleClass('selected', false);
+                $('.app-pop-over-content').toggleClass('hide', true);
+
+                console.log(el);
+
+                // console.log($uibPosition.position(el));
+                // console.log($uibPosition.position(elParent));
+                // console.log($uibPosition.viewportOffset(elParent));
+
+                var parentViewportOffset = $uibPosition.viewportOffset(elParent);
+                $(this).toggleClass('selected');
+                elContent.toggleClass('hide').css({
+                    top: parentViewportOffset.top + elH + 'px',
+                    right: parentViewportOffset.right + 'px'
+                        // left: parentViewportOffset.left + 'px'
+                });
+
+                event.preventDefault();
+            });
+
+
+        }
+    }
+
+})();
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.components')
+        .controller('RatingStarController', RatingStarController)
+        .component('ratingStar', {
+            templateUrl: 'app/components/ratingStar/rating-star.html',
+            bindings: {
+                value: '<',
+                totalVotes: '<'
+            },
+            controller: 'RatingStarController',
+            controllerAs: 'vm'
+        });
+
+    RatingStarController.$inject = ['AppRatingStarConstant'];
+
+    function RatingStarController(AppRatingStarConstant) {
+        var
+            vm = this,
+            value;
+
+        vm.$onChanges = onChanges;
+        vm.showRating = true;
+
+        
+        function onChanges() {
+            if (vm.value) value = vm.value.toString();
+            vm.rating = value;
+            if(!vm.totalVotes) vm.totalVotes = 0;
+            // calc default rating widthout %
+            if (value && value.indexOf('%') === -1) {
+                vm.rating = parseFloat(vm.value) / AppRatingStarConstant.MAX_RATING * 100 + '%' || 0;
+                vm.value = vm.value || 0;
+                vm.showRating = parseInt(vm.value) > 0;
+            }
+        }
+
+        init();
+
+        function init() {
+
+        }
+    }
+})();
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.components')
+        .constant('AppRatingStarConstant', {
+            MAX_RATING : 5,
+        });
+})();
+(function() {
+
+    'use strict';
+
+    angular
+        .module('app.components')
+        .directive('resizer', resizer);
+
+    function resizer() {
+        var directive = {
+            restrict: 'A',
+            scope: {
+                resizerMax: '<',
+                resizerMin: '<'
+            },
+            link: link
+        };
+
+        return directive;
+
+        function link($scope, $el, $attrs) {
+
+            // TODO: fix horizontal resize limit
+            function updateResizeElement(event) {
+                var
+                    target = event.target,
+                    x = (parseInt(target.getAttribute('data-x')) || 0),
+                    el, elMax, elMin,
+                    elW, elLeft, elReactWidth,
+                    elNext, elNextW, elNextLeft,
+                    totalWidth;
+
+                el = $(target);
+
+                // Limit
+                elMax = el.attr('resizer-max') || 1900;
+                elMin = el.attr('resizer-min') || 220; //Min width for panel
+
+                if (event.rect.width <= elMin || event.rect.width >= elMax) {
+                    return;
+                }
+
+                elW = el.outerWidth();
+                elReactWidth = parseInt(event.rect.width);
+                elLeft = el.position();
+
+                elNext = $(el.attr('resizer-right'));
+                elNextW = elNext.outerWidth();
+                elNextLeft = elNext.position();
+
+                totalWidth =  elW + elNextW;
+
+                if(totalWidth - event.rect.width - 220 < 0) return;
+
+                // Current element
+                el.css({
+                    left: parseInt(elLeft.left),
+                    width: elReactWidth + 'px'
+                });
+
+                // Next element
+                elNext.css({
+                    left: parseInt(elLeft.left) + elReactWidth + 'px',
+                    width: totalWidth - elReactWidth + 'px'
+                });
+            }
+
+            interact('.app-resizer-horizontal')
+                .resizable({
+                    preserveAspectRatio: true,
+                    edges: {
+                        left: false,
+                        right: true,
+                        bottom: false,
+                        top: true
+                    }
+                })
+                .on('resizemove', updateResizeElement);
+        }
+    }
+
+})();
+angular.module('app.core').run(['$templateCache', function($templateCache) {$templateCache.put('app/core/404.html','<div class=app-container-sm><div class=app-content><div class=header-text><h1>Error 404</h1><h3>Page Not Found!</h3><hr>Pelase visit <a ui-sref=home>Home</a></div></div></div>');
+$templateCache.put('app/decision/decision-single.html','<breadcrumbs items=breadcrumbs></breadcrumbs><div class=app-container-sm><h3 class=app-title>Decission Top 10</h3></div>');
+$templateCache.put('app/decision/decision.html','<breadcrumbs items=breadcrumbs></breadcrumbs><div class=decision><div class="row top-panel"><div class="col-md-3 col-sm-3"><h4 class=app-header-sub-title>{{vm.decision.name}}</h4></div><div class="col-md-5 col-sm-5"><div class=row ng-show=vm.parentDecisions><div class="col-sm-3 col-md-2"><div class=top-panel-label><label for=decision-parent class=control-label>Parents:</label></div></div><div class="col-sm-5 col-md-6"><div class="input-group top-panel-title"><select id=decision-parent ng-model=vm.parentId class="form-control input-sm" ng-options="parent for parent in vm.parentDecisions"><option value selected>Select parentId</option></select><span class=input-group-btn><a href class="btn btn-default btn-sm" ui-sref="decision({id: vm.parentId})" ng-disabled=!vm.parentId>Go</a></span></div></div></div></div><div class="col-sm-4 colm-md-4"><div class=pull-right><div class="btn-group btn-group-sm btns-view"><a ui-sref="decisions.single.list({id: vm.decisionId})" ui-sref-active=btn-primary class="btn btn-default"><span class="glyphicon glyphicon-th-list"></span> List</a> <a ui-sref="decisions.single.matrix({id: vm.decisionId})" ui-sref-active=btn-primary class="btn btn-default"><span class="glyphicon glyphicon-th"></span> Matrix</a></div><a href class="btn btn-primary btn-sm">Ask for Decision</a></div></div></div><div class="app-main-panel main-panel"><div id=panel-left class="app-panel-left app-resizer-horizontal" resizer-right=#panel-center resizer><decision-criteria decision-id=vm.decisionId></decision-criteria><span class=app-resizer></span></div><div id=panel-center class="app-panel-center app-resizer-horizontal" resizer-right=#panel-right resizer><div class="decisions-header scroll-wrapper-header"><div class=col-md-2><h4>Decisions</h4></div><div class="col-md-8 col-sm-padding"><decision-sorter sort-type=sortByCriteria></decision-sorter><decision-sorter sort-type=sortByCharacteristic></decision-sorter><decision-sorter sort-type=sortByDecisionProperty></decision-sorter></div><div class="col-md-2 col-sm-padding"><a href class="btn add-createria-btn"><span class="glyphicon glyphicon-plus" aria-hidden=true></span>Add decision</a></div></div><div class=scroll-wrapper><h1 ng-show=vm.decisionsSpinner class=app-loader-small><span class="glyphicon glyphicon-refresh app-loader-animation"></span>LOADING...</h1><app-paginator></app-paginator><app-list list=vm.decisionsList></app-list></div><span class=app-resizer></span></div><div id=panel-right class=app-panel-right><decision-characteristics decision-id=vm.decisionId></decision-characteristics></div></div></div>');
+$templateCache.put('app/desicionMatrix/decision-matrix.html','<breadcrumbs items=breadcrumbs></breadcrumbs><div class="decision matrix"><div class="row top-panel"><div class=col-sm-6><h4 class=app-header-sub-title>{{vm.decision.name}}</h4></div><div class=col-sm-6><div class=pull-right><div class="btn-group btn-group-sm btns-view"><a ui-sref="decisions.single.list({id: vm.decisionId})" ui-sref-active=btn-primary class="btn btn-default"><span class="glyphicon glyphicon-th-list"></span> List</a> <a ui-sref="decisions.single.matrix({id: vm.decisionId})" ui-sref-active=btn-primary class="btn btn-default"><span class="glyphicon glyphicon-th"></span> Matrix</a></div><a href class="btn btn-primary btn-sm">Ask for Decision</a></div></div></div><div class=matrix-table-wrapper><div ng-show=vm.decisionsSpinner class=app-loader-small><span class="glyphicon glyphicon-refresh app-loader-animation"></span>LOADING...</div><div id=matrix-table class="main-panel matrix-table js-matrix-table"><div id=panel class="app-panel matrix-table-panel"><div class=matrix-table-header><div class=matrix-table-row><div class="matrix-table-col matrix-table-group-name"><div class=matrix-table-group-title></div><div class=matrix-table-row><div class="matrix-table-col matrix-table-group" data-col-id=col-name><div class=matrix-table-title-wrapper><div class="matrix-table-title app-sorter-wrapper matrix-content-name">Name</div><div class=app-sorter><span class="app-sorter-top glyphicon glyphicon-triangle-top" ng-click="vm.orderByDecisionProperty(\'name\', \'ASC\')" ng-class="{\'selected\': vm.fo.sortByDecisionProperty.id === \'name\' && vm.fo.sortByDecisionProperty.order === \'ASC\'}"></span> <span class="app-sorter-bottom glyphicon glyphicon-triangle-bottom" ng-click="vm.orderByDecisionProperty(\'name\', \'DESC\')" ng-class="{\'selected\': vm.fo.sortByDecisionProperty.id === \'name\' && vm.fo.sortByDecisionProperty.order === \'DESC\'}"></span></div></div></div></div></div><div id=matrix-table-scroll-group class=scroll-group><div class="matrix-table-col matrix-table-group matrix-table-group-criteria" ng-repeat="group in vm.criteriaGroups track by $index"><div class=matrix-table-group-title>{{group.name}}</div><div class=matrix-table-row><div class="matrix-table-col criteria-col" ng-repeat="criteria in group.criteria | orderBy:\'criterionId\'" data-col-id=criteria-{{criteria.criterionId}} ng-click=vm.selectCriterion(criteria) ng-class="{\'selected\' : criteria.isSelected}"><div class=matrix-table-title-wrapper><div class="matrix-table-title app-sorter-wrapper">{{criteria.name}}</div><div class="btn matrix-criteria-coefficient" ng-click="vm.editCriteriaCoefficient($event, criteria);"><criteria-coefficient-indicator coefficient=criteria.coefficient></criteria-coefficient-indicator></div><div class=app-sorter><span ng-click="vm.orderByCriteriaProperty(\'ASC\', $event)" class="app-sorter-top glyphicon glyphicon-triangle-top" ng-class="{\'selected\': vm.fo.sortByCriteria.order === \'ASC\'}"></span> <span ng-click="vm.orderByCriteriaProperty(\'DESC\', $event)" class="app-sorter-bottom glyphicon glyphicon-triangle-bottom" ng-class="{\'selected\': vm.fo.sortByCriteria.order === \'DESC\'}"></span></div></div></div></div></div><div class="matrix-table-col matrix-table-group matrix-table-group-characteristics" ng-repeat="group in vm.characteristicGroups track by $index"><div class=matrix-table-group-title>{{group.name}}</div><div class=matrix-table-row><div class=matrix-table-col ng-repeat="characteristic in group.characteristics track by $index" data-col-id=characteristic-{{characteristic.characteristicId}}><div class=matrix-table-title-wrapper><div class="matrix-table-title app-sorter-wrapper">{{characteristic.name}}<div class="app-control app-sm-filter" content-id=characteristic.characteristicId pop-over><i class="glyphicon glyphicon-filter"></i></div></div><div class=app-sorter><span ng-click="vm.orderByCharacteristicProperty(characteristic.characteristicId, \'ASC\')" class="app-sorter-top glyphicon glyphicon-triangle-top" ng-class="{\'selected\': vm.fo.sortByCharacteristic.id === characteristic.characteristicId && vm.fo.sortByCharacteristic.order === \'ASC\'}"></span> <span ng-click="vm.orderByCharacteristicProperty(characteristic.characteristicId, \'DESC\')" class="app-sorter-bottom glyphicon glyphicon-triangle-bottom" ng-class="{\'selected\': vm.fo.sortByCharacteristic.id === characteristic.characteristicId && vm.fo.sortByCharacteristic.order === \'DESC\'}"></span></div></div></div></div></div></div></div></div><div class=matrix-table-body-wrapper><div id=matrix-table-aside class=matrix-table-aside><div id=matrix-table-aside-content class=matrix-table-aside-content><div class=matrix-table-item ng-repeat="item in vm.decisionMatrixList track by item.decision.decisionId"><div class=matrix-table-row id=decision-name-row-{{item.decision.decisionId}}><div class="matrix-table-col matrix-table-col-name" data-col-id=col-name><div class="matrix-table-col-content matrix-content-name">{{item.decision.name}}<div class=text-right ng-if=item.decision.description><a href class="glyphicon glyphicon-question-sign" popover-title={{item.decision.name}} uib-popover-html=item.decision.description popover-placement=right popover-append-to-body=true></a></div><div ng-show="item.decision.criteriaCompliancePercentage >= 0"><small>Criteria compliance: <strong>{{item.decision.criteriaCompliancePercentage | number:0}}</strong>% | <span class="app-icon glyphicon glyphicon-thumbs-up"></span> {{item.decision.totalVotes}}</small></div></div></div></div></div></div></div><div id=matrix-table-body class=matrix-table-body><div id=matrix-table-content class=matrix-table-content ng-style="{\'width\':vm.tableWidth}"><div class="matrix-table-item matrix-table-item-content" ng-repeat="item in vm.decisionMatrixList track by item.decision.decisionId"><div class=matrix-table-row id=decision-row-{{item.decision.decisionId}}><div class="matrix-table-col matrix-criteria-group" ng-repeat="criteria_item in item.criteria | orderBy:\'criterionId\'" ng-click="vm.goToDiscussion(item.decision.decisionId, criteria_item.criterionId)"><div class=matrix-table-col-content><div ng-if=criteria_item.totalVotes><rating-star class=text-left value=criteria_item.weight total-votes=criteria_item.totalVotes ng-show=criteria_item.weight></rating-star></div><div ng-if=!criteria_item.totalVotes><div class=app-rating-votes><span><span class="glyphicon glyphicon-thumbs-up"></span>0</span></div></div><div class=app-item-additional-wrapper><div class=app-item-comments><span class="glyphicon glyphicon-comment"></span>0</div></div></div></div><div class=matrix-table-col ng-repeat="characteristic in item.characteristics track by $index" ng-click="vm.goToDiscussion(item.decision.decisionId, characteristic.characteristicId)"><div class=matrix-table-col-content data-characteristic-id={{characteristic.characteristicId}}>{{characteristic.value}}<div class=app-item-additional-wrapper><div class=app-item-comments><span class="glyphicon glyphicon-comment"></span>0</div></div></div></div></div></div></div></div></div></div></div><div class=martix-footer><app-paginator></app-paginator></div></div></div><div ng-repeat="group in vm.characteristicGroups track by $index"><div ng-repeat="characteristic in group.characteristics track by $index" data-pop-over-content-id={{characteristic.characteristicId}} class="hide app-pop-over-content"><ng-include src=vm.getControl(characteristic)></ng-include></div></div>');
+$templateCache.put('app/decisions/decisions.html','<breadcrumbs items=breadcrumbs></breadcrumbs><div class=app-container-sm><h3 class=app-title>Decisions</h3></div>');
+$templateCache.put('app/discussions/discussion-decision-child-option.html','<breadcrumbs items=breadcrumbs></breadcrumbs><div class="row app-top-panel"><div class=col-sm-6><h4 class=app-header-sub-title>{{vm.title}}</h4></div><div class=col-sm-6><div class=pull-right><div class="btn-group btn-group-sm btns-view"><a ui-sref="decisions.single.list({id: vm.discussion.decision.decisionId})" ui-sref-active=btn-primary class="btn btn-default"><span class="glyphicon glyphicon-th-list"></span> List</a> <a ui-sref="decisions.single.matrix({id: vm.discussion.decision.decisionId})" ui-sref-active=btn-primary class="btn btn-default"><span class="glyphicon glyphicon-th"></span> Matrix</a></div><a href class="btn btn-primary btn-sm">Ask for Decision</a></div></div></div><div class="app-container-sm app-content"><div class=row><div class=col-sm-8><rating-star class=text-left value=vm.discussion.votes.weight total-votes=vm.discussion.votes.totalVotes ng-show=vm.discussion.votes.weight></rating-star><div class=comment-form><textarea name id cols=30 rows=3 class=form-control></textarea> <button class="btn btn-primary pull-right">Send</button></div><div class=comments-list><div class=media><div id=#12 class=comment><div class=clearfix><div class=comment-aside><div class=comment-votes><a href=# class="btn-sm btn btn-default"><i class="glyphicon glyphicon-arrow-up icon"></i></a><div>12</div><a href=# class="btn-sm btn btn-default"><i class="glyphicon glyphicon-arrow-down icon"></i></a></div></div><div class=comment-body><div class=comment-header><span class="label label-info">#12314</span> Author: Xame<div class="comment-time text-muted time">1 minute ago</div></div><div class=comment-content>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas voluptate, nihil culpa accusamus. Ab adipisci, sint magni asperiores deserunt et dicta, facilis, aut rem itaque laborum placeat atque? Dolorem, impedit!</div></div></div><div class=comment-footer><a herf ng-click="isCollapsedHorizontal = !isCollapsedHorizontal">add a comment</a><div class=horizontal-collapse uib-collapse=isCollapsedHorizontal horizontal><div class=comment-form><textarea name id cols=30 rows=3 class=form-control></textarea> <button class="btn btn-primary pull-right">Send</button></div></div></div></div><div class="comment lvl-2"><div class=clearfix><div class=comment-aside><div class=comment-votes><a href=# class="btn-sm btn btn-default"><i class="glyphicon glyphicon-arrow-up icon"></i></a><div>12</div><a href=# class="btn-sm btn btn-default"><i class="glyphicon glyphicon-arrow-down icon"></i></a></div></div><div class=comment-body><div class=comment-header><span class="label label-info">#12314</span> Author: Xame<div class="comment-time text-muted time">1 minute ago</div></div><div class=comment-content>Lorem ipsum dolor sit ametfacilis, aut rem itaque laborum placeat atque? Dolorem, impedit!</div></div></div><div class=comment-footer><a herf>add a comment</a></div></div><div class="comment lvl-3"><div class=clearfix><div class=comment-aside><div class=comment-votes><a href=# class="btn-sm btn btn-default"><i class="glyphicon glyphicon-arrow-up icon"></i></a><div>12</div><a href=# class="btn-sm btn btn-default"><i class="glyphicon glyphicon-arrow-down icon"></i></a></div></div><div class=comment-body><div class=comment-header><span class="label label-info">#12314</span> Author: Xame<div class="comment-time text-muted time">1 minute ago</div></div><div class=comment-content>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas voluptate,</div></div></div><div class=comment-footer><a herf>add a comment</a></div></div><div class="comment lvl-3"><div class=clearfix><div class=comment-aside><div class=comment-votes><a href=# class="btn-sm btn btn-default"><i class="glyphicon glyphicon-arrow-up icon"></i></a><div>12</div><a href=# class="btn-sm btn btn-default"><i class="glyphicon glyphicon-arrow-down icon"></i></a></div></div><div class=comment-body><div class=comment-header><span class="label label-info">#12314</span> Author: Xame<div class="comment-time text-muted time">1 minute ago</div></div><div class=comment-content>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas voluptate, nihil culpa accusamus. Ab adipisci, sint magni asperiores deserunt et dicta, facilis, aut rem itaque laborum placeat atque? Dolorem, impedit!</div></div></div><div class=comment-footer><a herf>add a comment</a></div></div></div></div></div><div class=col-sm-4><strong>You also may be interested in {{vm.discussion.childDecision.name}} discussions:</strong><div class=app-list-panel ng-if=vm.criteriaGroups><h4>Criteria</h4><div class=app-list-group ng-repeat="group in vm.criteriaGroups track by $index"><h5>{{group.name}}</h5><ul class=app-list><li ng-repeat="criteria in group.criteria | orderBy:\'criterionId\'" ng-class="{\'selected\':vm.discussion.childCriterion.criterionId === criteria.criterionId}"><a href ng-click="vm.goToDiscussion(vm.discussion.childDecision.decisionId, criteria.criterionId)">{{criteria.name}}</a></li></ul></div></div><div class=app-list-panel ng-if=vm.characteristicGroups><h4>Characteristics</h4><div class=app-list-group ng-repeat="group in vm.characteristicGroups track by $index"><h5>{{group.name}}</h5><ul class=app-list><li ng-repeat="characteristic in group.characteristics | orderBy:\'characteristicId\'" ng-class="{\'selected\':vm.discussion.childCharacteristic.characteristicId === characteristic.characteristicId}"><a href ng-click="vm.goToDiscussion(vm.discussion.childDecision.decisionId, characteristic.characteristicId)">{{characteristic.name}}</a></li></ul></div></div></div></div></div>');
+$templateCache.put('app/discussions/discussion-decision-child.html','<breadcrumbs items=breadcrumbs></breadcrumbs><div class=app-container-sm><h3 class=app-title>Decision Child</h3></div>');
+$templateCache.put('app/discussions/discussion-decision.html','<breadcrumbs items=breadcrumbs></breadcrumbs><div class=app-container-sm><h3 class=app-title>Discussions for {{vm.decision.name}}</h3><ul class=discussions-list><li><a href=#>Secure Anywhere Internet Security plus and complete</a><ul class="app-list sub-list"><li><a ui-sref=#>Email security</a></li></ul></li><li><a href=#>Link</a></li><li><a href=#>Afsfas</a></li></ul></div>');
+$templateCache.put('app/discussions/discussions.html','<breadcrumbs items=breadcrumbs></breadcrumbs><div class=app-container-sm><div class=row><div class=col-sm-8><div class="panel panel-white post panel-shadow"><div class=post-heading><div class="pull-left image"><img src=http://bootdey.com/img/Content/user_1.jpg class="img-circle avatar" alt="user profile image"></div><div class="pull-left meta"><div class="title h5"><a href=#><b>Ryan Haywood</b></a> made a post.</div><h6 class="text-muted time">1 minute ago</h6></div></div><div class=post-description><p>Bootdey is a gallery of free snippets resources templates and utilities for bootstrap css hmtl js framework. Codes for developers and web designers</p><div class=stats><a href=# class="btn btn-default stat-item"><i class="glyphicon glyphicon-arrow-up icon"></i>2</a> <a href=# class="btn btn-default stat-item"><i class="glyphicon glyphicon-arrow-down icon"></i>12</a></div></div></div></div><div class=col-sm-8><div class="panel panel-white post panel-shadow"><div class=post-heading><div class="pull-left image"><img src=http://bootdey.com/img/Content/user_1.jpg class="img-circle avatar" alt="user profile image"></div><div class="pull-left meta"><div class="title h5"><a href=#><b>Ryan Haywood</b></a> made a post.</div><h6 class="text-muted time">1 minute ago</h6></div></div><div class=post-description><p>Bootdey is a gallery of free snippets resources templates and utilities for bootstrap css hmtl js framework. Codes for developers and web designers</p><div class=stats><a href=# class="btn btn-default stat-item"><i class="glyphicon glyphicon-arrow-up icon"></i>2</a> <a href=# class="btn btn-default stat-item"><i class="glyphicon glyphicon-arrow-down icon"></i>12</a></div></div></div></div></div><div class=comment-form><textarea name id cols=30 rows=10 class=form-control></textarea> <button class="btn btn-primary">Send</button></div></div>');
+$templateCache.put('app/home/home.html','<div class=home><div class=row><div class="col-md-offset-3 col-md-6"><div class=search-box><div class="input-group search-bar"><input class=form-control type=text ng-model=vm.searchText placeholder=Search...> <span class=input-group-btn><a href class="btn btn-default btn-primary" ng-click=vm.search()><span class="glyphicon glyphicon-search"></span></a></span></div><div class="search-results text-left" ng-show=vm.showTrigger><h3>RESULTS for {{vm.searchText}}</h3><ul class="list-group search-results-list"><li class=list-group-item><a href ui-sref="decisions.single.list({id: vm.searchText || 2301})">DECISION</a> | <a href ui-sref="decisions.single.matrix({id: vm.searchText || 2301})">DECISION Matrix</a></li></ul></div></div></div></div></div>');
+$templateCache.put('app/login/login.html','<div class="login-btn clearfix"><div ng-if=vm.loginService.getLoginStatus()><div class="pull-right app-user-info" uib-dropdown><a class="usermame dropdown-menu-btn" uib-dropdown-toggle><span>Username:</span> <span>{{vm.user.user_name}}</span> <span class=caret></span></a><ul class=dropdown-menu uib-dropdown-menu role=menu aria-labelledby=split-button><li><form name=logoutForm action={{vm.loginService.getLogoutUrl()}} method=POST novalidate><a href class=link ng-click=vm.logout()>Logout</a></form></li></ul></div></div><ul class="nav navbar-nav pull-right" ng-if=!vm.loginService.getLoginStatus()><li><a ng-click=vm.loginService.login()>Login</a></li></ul></div>');
+$templateCache.put('app/components/appFooter/app-footer.html','<footer class=app-footer><div class="app-footer-info text-center">&copy; DecisionWanted - 2017</div></footer>');
+$templateCache.put('app/components/appHeader/app-header.html','<header class=app-header><div class=row><div class="col-sm-5 header-menu-btn clearfix"><div class=navbar-brand><a ui-sref=home>Decision<span class=app-light>Wanted</span></a></div><div class=app-panel-search><input class="form-control search-input" type=text> <span class="glyphicon glyphicon-search search-input-icon"></span></div></div><div class="col-sm-2 text-center"></div><div class="col-md-5 header-login"><app-login></app-login></div></div></header>');
+$templateCache.put('app/components/appList/app-list.html','<div class=app-list-wrapper><div class=app-list-container><div id="decision-{{ item.decisionId }}" ng-repeat="item in vm.list track by item.decisionId" class="list-item-sort app-resize-h angular-animate" ng-class="{\'selected\' : item.isSelected, \'item-loading\' : data.detailsSpinner}" ng-mouseover="vm.getDetails(item, $event)"><div class=list-item-sort-content ng-click=vm.selectDecision(item)><strong>{{ item.decisionId }}</strong><div class="pull-right text-right" ng-show=vm.showPercentage><h5>Criteria compliance:<rating-star class=text-left value=item.criteriaCompliancePercentage total-votes=item.totalVotes ng-show=item.criteriaCompliancePercentage></rating-star></h5></div><h4 class=list-item-sort-title><a href ng-click="vm.goToDecision($event, item.decisionId)">{{item.name}}</a></h4><div class=list-item-sort-detail-wrapper><div class=app-loader-small ng-show=item.detailsSpinner><span class="glyphicon glyphicon-refresh app-loader-animation"></span>LOADING...</div><ng-include src=vm.innerTemplate></ng-include></div></div></div></div></div>');
+$templateCache.put('app/components/appList/decision-partial.html','<div class=list-item-sort-details><div class=decision-detailed-chars><div ng-if=item.characteristics><h4>Characteristics</h4><div ng-repeat="(key, value) in item.characteristics track by key"><div class=chars-group-name><label>{{vm.getGroupNameById(key)}}</label></div><div class=app-row-content ng-repeat="characteristic in value track by $index"><div class=app-row-content-label>{{characteristic.name}}:</div><span ng-show=characteristic.value>{{characteristic.value}}</span> <span ng-show=!characteristic.value class=not-set>Not set</span></div></div></div></div></div>');
+$templateCache.put('app/components/appPaginator/app-paginator.html','<div class="row app-pagination clearfix"><div class="col-md-10 col-sm-10 paginator"><div uib-pagination ng-model=vm.pagination.pageNumber boundary-links=true boundary-link-numbers=true total-items=vm.pagination.totalDecisions items-per-page=vm.pagination.pageSize ng-change=vm.changePage() class=pagination-sm previous-text=&lsaquo; next-text=&rsaquo; first-text=&laquo; last-text=&raquo;></div></div><div class="col-md-2 col-sm-2 counter"><select class="pagination form-control input-sm pull-right" ng-model=vm.pagination.pageSize ng-options="item for item in vm.itemsPerPage" ng-change=vm.changePageSize()></select></div></div>');
+$templateCache.put('app/components/breadcrumbs/breadcrumbs.html','<nav class=breadcrumbs><div class=app-container><ul><li ng-repeat="item in vm.items"><a ui-sref={{item.link}} ng-if=item.link>{{item.title}}</a> <span ng-if=!item.link>{{item.title}}</span> <span class=breadcrumb-divider ng-if=!$last><i class="glyphicon glyphicon-menu-right"></i></span></li></ul></div></nav>');
+$templateCache.put('app/components/criteriaCoefficientIndicator/criteria-coefficient-indicator.html','<div class=criteria-coefficient-indicator><div class=criteria-coefficient-item ng-repeat="coefficient in vm.coefficientList | orderBy: \'value\' : true" ng-class=coefficient.class></div></div>');
+$templateCache.put('app/components/decisionCharacteristics/decision-characteristics-select-partial.html','<select class="decision-select form-control" ng-model=characteristic.filterValue ng-options="item as item.name for item in characteristic.options" ng-change=vm.selectCharacteristic(characteristic.filterValue)><option value selected>Select all</option></select>');
+$templateCache.put('app/components/decisionCharacteristics/decision-characteristics-yearpicker-partial.html','<div class="input-group decision-yearpicker"><input type=text class=form-control uib-datepicker-popup=yyyy is-open=characteristic.isOpen ng-model=characteristic.filterValue datepicker-mode=year datepicker-options="{minMode: \'year\'}" placeholder=YEAR ng-change=vm.selectCharacteristic(characteristic.filterValue)> <span class=input-group-btn><button type=button class="btn btn-default" ng-click="characteristic.isOpen = true"><i class="glyphicon glyphicon-calendar"></i></button></span></div>');
+$templateCache.put('app/components/decisionCharacteristics/decision-characteristics.html','<div class=decision-characteristics><div class="char-header scroll-wrapper-header"><div class="col-md-6 col-sm-6"><h4>Characteristics</h4></div><div class="col-md-6 col-sm-6"><a href class="btn add-createria-btn"><span class="glyphicon glyphicon-plus" aria-hidden=true></span>Add characteristic</a></div></div><div class=scroll-wrapper><div class=app-loader-small ng-show=vm.characteristicSpinner>LOADING...</div><uib-accordion close-others=false><div uib-accordion-group class=panel-default ng-repeat="group in vm.characteristicGroups track by $index" is-open=group.isOpen><uib-accordion-heading>{{group.name}} <i class="pull-right glyphicon glyphicon-chevron-right"></i></uib-accordion-heading><div class="row criteria-item" ng-repeat="characteristic in group.characteristics track by $index"><div class=col-md-6>{{characteristic.name}}</div><div class=col-md-6><ng-include src=vm.getControl(characteristic)></ng-include></div></div></div></uib-accordion></div></div>');
+$templateCache.put('app/components/decisionCriteria/criteria-coefficient-popup.html','<div class=criteria-coefficient-popup><div class=modal-header><h4 class=modal-title>Choose Criterion Factor of Importance</h4><button type=button class=close data-dismiss=modal aria-hidden=true ng-click=vm.close()>\xD7</button></div><form class=form-horizontal name=criteriaCoefficientForm ng-submit=vm.apply()><div class=modal-body><div class="row form-group"><div class="col-md-6 col-sm-6"><label class=control-label>Criterion name:</label></div><div class="col-md-6 col-sm-6">{{vm.criteria.name}}</div></div><div class="row form-group"><div class="col-md-6 col-sm-6"><label class=control-label>Factor of Importance:</label></div><div class="col-md-6 col-sm-6"><select class=form-control ng-model=vm.criteria.coefficient ng-options="coefficient as coefficient.name for coefficient in vm.coefficientList track by coefficient.value"></select></div></div></div><div class=modal-footer><button class="btn btn-default btn-primary pull-right" type=submit>Apply</button></div></form></div>');
+$templateCache.put('app/components/decisionCriteria/decision-criteria.html','<div class=decision-criteria><div class="criteria-header scroll-wrapper-header"><div class="col-md-6 col-sm-6"><h4>Criteria</h4></div><div class="col-md-6 col-sm-6"><a href class="btn add-createria-btn"><span class="glyphicon glyphicon-plus" aria-hidden=true></span>Add criterion</a></div></div><div class=scroll-wrapper><div class=app-loader-small ng-show=vm.criteriaSpinner><span class="glyphicon glyphicon-refresh app-loader-animation"></span>LOADING...</div><uib-accordion close-others=false><div uib-accordion-group class="panel-default criteria-panel" ng-repeat="group in vm.criteriaGroups track by $index" is-open=group.isOpen><uib-accordion-heading>{{group.name}} <i class="pull-right glyphicon glyphicon-chevron-right"></i></uib-accordion-heading><div class=criteria-item ng-repeat="criterion in group.criteria track by $index" ng-click=vm.selectCriterion(criterion) ng-class="{\'selected\' : criterion.isSelected}"><div class=criteria-item-left>{{criterion.criterionId}} {{criterion.name}}<rating-star value=criterion.weight total-votes=criterion.totalVotes ng-show=criterion.weight></rating-star></div><div class=criteria-item-right><button class="btn btn-default btn-sm pull-right" ng-click="vm.editCriteriaCoefficient($event, criterion)"><criteria-coefficient-indicator coefficient=criterion.coefficient></criteria-coefficient-indicator></button></div></div></div></uib-accordion></div></div>');
+$templateCache.put('app/components/decisionSorter/decision-sorter.html','<ul class="btn-group btn-group-sm decision-sorter"><li class="btn btn-default" ng-repeat="sorter in sorters track by $index" ng-click=selectSorter(sorter) ng-class="{\'selected btn-primary\': sorter.order}"><span>{{sorter.name}}</span> <span ng-show="sorter.order === \'DESC\'" class="glyphicon glyphicon-sort-by-attributes-alt" aria-hidden=true></span> <span ng-show="sorter.order === \'ASC\'" class="glyphicon glyphicon-sort-by-attributes" aria-hidden=true></span></li></ul>');
+$templateCache.put('app/components/ratingStar/rating-star.html','<div class=app-rating-star-wrapper ng-if=vm.showRating><div class=app-rating-star><span class=bar style="width: {{vm.rating}}"></span></div><div class=app-rating-votes><span class=app-rating-votes-weight>{{vm.value}}</span> <span ng-if=vm.totalVotes><span class="app-icon glyphicon glyphicon-thumbs-up"></span>{{vm.totalVotes}}</span></div><a ng-if=!vm.totalVotes href>Rate it first</a></div>');}]);

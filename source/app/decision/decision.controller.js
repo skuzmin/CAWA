@@ -22,6 +22,14 @@
         vm.decision = decisionBasicInfo || {};
         $rootScope.pageTitle = vm.decision.name + ' | DecisionWanted';
 
+        $rootScope.breadcrumbs = [{
+            title: 'Decisions',
+            link: 'decisions'
+        }, {
+            title: vm.decision.name,
+            link: null
+        }];
+
         init();
 
         function asyncLoading(result) {

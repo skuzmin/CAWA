@@ -1,13 +1,21 @@
+// TODO: include less bootstrap and use only necessary components
+@import "bootstrap/variables";
+@import "bootstrap/mixins";
+
+@import "mixins";
 @import "variables";
 @import "utils";
 @import "controls";
 @import "components/_index";
 @import "home";
 @import "helpers";
+@import "discussions";
 
 .content {
   background-color: @app-bg;
 	min-height: calc(~"100vh - 100px"); //@footer-height + @header-height
+  overflow: hidden;
+  margin-top: @header-height;
 }
 
 .app-row-content-label {
@@ -18,4 +26,29 @@
 
 .app-row-content {
   margin-bottom: 10px;
+}
+
+.app-title {
+  font-size: 21px;
+  margin-bottom: 30px;
+}
+
+.app-container-sm {
+  width: 100%;
+  margin: 0 auto;
+  @media (min-width: @screen-sm-min) {
+    width: auto;
+    margin: 0 215px;
+  }
+}
+.app-top-panel {
+  min-height: 40px;
+  background-color: #fff;
+  border-bottom: 1px solid @gray-light;
+  overflow: hidden;
+  position: relative;
+}
+
+.app-content {
+  padding: 20px 0 30px;
 }
