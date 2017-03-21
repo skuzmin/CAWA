@@ -37,5 +37,11 @@
                 vm.showRating = parseInt(vm.value) > 0;
             }
         }
+
+        init();
+
+        function init() {
+
+        }
     }
 })();

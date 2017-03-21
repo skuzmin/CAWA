@@ -2,9 +2,10 @@
 
 <div class="row app-top-panel">
     <div class="col-sm-6">
-        <h4 class="app-header-sub-title">
-            {{vm.title}}
+        <h4 class="app-header-sub-title pull-left">
+            {{vm.title}}         
         </h4>
+        <rating-star class="text-left pull-left" value="vm.discussion.votes.weight" total-votes="vm.discussion.votes.totalVotes" ng-show="vm.discussion.votes.weight"></rating-star>        
     </div>
     <div class="col-sm-6">
         <div class="pull-right">
@@ -19,9 +20,8 @@
 
 <div class="app-container-sm app-content">
     <div class="row">
-        <div class="col-sm-8">
-            <rating-star class="text-left" value="vm.discussion.votes.weight" total-votes="vm.discussion.votes.totalVotes" ng-show="vm.discussion.votes.weight"></rating-star>
-            <div class="comment-form">
+        <div class="col-sm-12">
+            <div class="comment-form clearfix">
                 <textarea name="" id="" cols="30" rows="3" class="form-control"></textarea>
                 <button class="btn btn-primary pull-right">Send</button>
             </div>
@@ -52,14 +52,7 @@
                             </div>
                         </div>
                         <div class="comment-footer">
-                            <a herf ng-click="isCollapsedHorizontal = !isCollapsedHorizontal">add a comment</a>
-
-                            <div class="horizontal-collapse" uib-collapse="isCollapsedHorizontal" horizontal>
-                                <div class="comment-form">
-                                    <textarea name="" id="" cols="30" rows="3" class="form-control"></textarea>
-                                    <button class="btn btn-primary pull-right">Send</button>
-                                </div>
-                            </div>
+                            <a herf>add a comment</a>
                         </div>
                     </div>
                     <div class="comment lvl-2">
@@ -146,35 +139,6 @@
                 </div>
             </div>
             <!-- End Comments list -->
-        </div>
-        <div class="col-sm-4">
-            <strong>You also may be interested in {{vm.discussion.childDecision.name}} discussions:</strong>
-            <div class="app-list-panel" ng-if="vm.criteriaGroups">
-                <h4>Criteria</h4>
-                <div class="app-list-group" ng-repeat="group in vm.criteriaGroups track by $index">
-                    <h5>{{group.name}}</h5>
-                    <ul class="app-list">
-                        <li ng-repeat="criteria in group.criteria | orderBy:'criterionId'" ng-class="{'selected':vm.discussion.childCriterion.criterionId === criteria.criterionId}">
-                            <a href ng-click="vm.goToDiscussion(vm.discussion.childDecision.decisionId, criteria.criterionId)">
-                             {{criteria.name}}
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="app-list-panel" ng-if="vm.characteristicGroups">
-                <h4>Characteristics</h4>
-                <div class="app-list-group" ng-repeat="group in vm.characteristicGroups track by $index">
-                    <h5>{{group.name}}</h5>
-                    <ul class="app-list">
-                        <li ng-repeat="characteristic in group.characteristics | orderBy:'characteristicId'" ng-class="{'selected':vm.discussion.childCharacteristic.characteristicId === characteristic.characteristicId}">
-                            <a href ng-click="vm.goToDiscussion(vm.discussion.childDecision.decisionId, characteristic.characteristicId)">
-                            {{characteristic.name}}
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
         </div>
     </div>
 </div>

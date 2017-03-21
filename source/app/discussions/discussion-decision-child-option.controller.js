@@ -33,30 +33,7 @@
 
         $rootScope.pageTitle = 'Discussion ' + pageTitle + ' | DecisionWanted';
 
-
-
         init();
-
-        function getCriteriaGroupsById(decisionId) {
-            // Criteria
-            return DecisionDataService.getCriteriaGroupsById(decisionId).then(function(result) {
-                vm.criteriaGroups = result;
-                criteriaIds = _.map(result["0"].criteria, function(el) {
-                    return el.criterionId;
-                });
-            });
-        }
-
-        function getCharacteristictsGroupsById(decisionId) {
-            // Characteristicts
-            return DecisionDataService.getCharacteristictsGroupsById(decisionId).then(function(result) {
-                vm.characteristicGroups = result;
-
-                characteristicsIds = _.map(result["0"].characteristics, function(el) {
-                    return el.characteristicId;
-                });
-            });
-        }
 
         function searchCommentableVotesWeight(discussionId, critOrCharId) {
             if (!discussionId || !critOrCharId) return;
@@ -74,11 +51,19 @@
 
             vm.title = pageTitle;
 
-            getCriteriaGroupsById(vm.discussion.decision.decisionId);
-            getCharacteristictsGroupsById(vm.discussion.decision.decisionId);
+            // getCriteriaGroupsById(vm.discussion.decision.decisionId);
+            // getCharacteristictsGroupsById(vm.discussion.decision.decisionId);
 
             // TODO: avoid $stateParams
             if (vm.discussion.childCriterion) searchCommentableVotesWeight($stateParams.discussionId, $stateParams.critOrCharId);
+
+            // TODO: optimize, in resolver some bugs with state
+            // // Add slug for child decision
+            if (vm.discussion.childCriterion && vm.discussion.childCriterion.nameSlug) {
+                $state.go('decisions.single.discussions.child.option', {critOrCharId: $stateParams.critOrCharId, critOrCharSlug: vm.discussion.childCriterion.nameSlug}, {notify:false, reload:false});
+            } else if (vm.discussion.childCharacteristic && vm.discussion.childCharacteristic.nameSlug) {
+                $state.go('decisions.single.discussions.child.option', {critOrCharId: $stateParams.critOrCharId, critOrCharSlug: vm.discussion.childCharacteristic.nameSlug}, {notify:false, reload:false});
+            }
 
             $rootScope.breadcrumbs = [{
                 title: 'Decisions',

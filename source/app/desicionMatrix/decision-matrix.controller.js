@@ -135,6 +135,7 @@
                 newEl.criteria = _.map(criteriaIds, function(criterionId) {
                     var emptyCriterianDataNew = _.clone(emptyCriterianData);
                     emptyCriterianDataNew.criterionId = criterionId;
+                    if(emptyCriterianDataNew.description) emptyCriterianDataNew.description = $sce.trustAsHtml(emptyCriterianDataNew.description);
                     _.map(el.criteria, function(elCriterionIdObj) {
                         if (elCriterionIdObj.criterionId === criterionId) {
                             emptyCriterianDataNew = elCriterionIdObj;
@@ -148,6 +149,7 @@
                 newEl.characteristics = _.map(characteristicsIds, function(characteristicId) {
                     var emptyCharacteristicDataNew = _.clone(emptyCharacteristicData);
                     emptyCharacteristicDataNew.characteristicId = characteristicId;
+                    if(emptyCharacteristicDataNew.description) emptyCharacteristicDataNew.description = $sce.trustAsHtml(emptyCharacteristicDataNew.description);
                     _.map(el.characteristics, function(elCharacteristicObj) {
                         if (elCharacteristicObj.characteristicId === characteristicId) {
                             emptyCharacteristicDataNew = elCharacteristicObj;
@@ -190,7 +192,7 @@
 
         function findCoefNameByValue(valueSearch) {
             valueSearch = valueSearch;
-            return _.find(DecisionCriteriaConstant.coefficientList, function(record) {
+            return _.find(DecisionCriteriaConstant.COEFFICIENT_LIST, function(record) {
                 return record.value == valueSearch;
             });
         }
@@ -427,11 +429,11 @@
             if (position === -1) {
                 foSelectedCriteria.sortCriteriaIds.push(criterion.criterionId);
                 //don't add default coefficient
-                if (criterion.coefficient && criterion.coefficient.value !== DecisionCriteriaConstant.coefficientDefault.value) {
+                if (criterion.coefficient && criterion.coefficient.value !== DecisionCriteriaConstant.COEFFICIENT_DEFAULT.value) {
                     foSelectedCriteria.sortCriteriaCoefficients[criterion.criterionId] = criterion.coefficient.value;
                 }
                 //add only coefficient (but not default)
-            } else if (coefCall && criterion.coefficient.value !== DecisionCriteriaConstant.coefficientDefault.value) {
+            } else if (coefCall && criterion.coefficient.value !== DecisionCriteriaConstant.COEFFICIENT_DEFAULT.value) {
                 foSelectedCriteria.sortCriteriaCoefficients[criterion.criterionId] = criterion.coefficient.value;
                 //unselect criterion
             } else {
@@ -471,15 +473,11 @@
 
         vm.goToDiscussion = goToDiscussion;
 
-        function goToDiscussion(discussionId, critOrCharId) {
+        function goToDiscussion(decision, critOrCharId) {
             var params = {
-                // 'id': parseInt($stateParams.id),
-                // 'slug': $stateParams.slug,
-                // 'criteria': $stateParams.criteria,
-                'discussionId': discussionId,
-                // 'discussionSlug': null,
-                'critOrCharId': critOrCharId,
-                // 'critOrCharSlug': null
+                'discussionId': decision.decisionId,
+                'discussionSlug': decision.nameSlug,
+                'critOrCharId': critOrCharId
             };
             $state.go('decisions.single.discussions.child.option', params);
         }

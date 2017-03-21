@@ -82,7 +82,7 @@
                 $state.go('404');
             }
 
-
+            // SLUG for Decision page firt time call
             var decisionSlug = result.nameSlug ? result.nameSlug : '';
 
             if ($stateParams.slug === null ||
@@ -90,7 +90,8 @@
                 $stateParams.slug === 'list') {
                 $stateParams.slug = result.nameSlug;
             }
-            // console.log('Resolver decision');
+
+
             var stateListener = $rootScope.$on('$stateChangeSuccess',
                 function(event, toState, toParams, fromState, fromParams) {
                     var
@@ -99,26 +100,18 @@
 
                     currentState = $state.current.name;
 
-                    //SLUG for Decision page
-                    //Always set correct slug from server
-
-                    // TODO: remove
-                    // var decisionStateParams = {
-                    //     'id': toParams.id,
-                    //     'slug': decisionSlug
-                    // };
-                    // console.log(toState.name);
+                    // SLUG for Decision page
+                    // Always set correct slug from server
+                    // Just added new slug
                     if (
                         // toState.name === 'decisions.single.matrix' ||
                         // toState.name === 'decisions.single.list' ||
                         toState.name === 'decisions.single') {
-                        // Just added new slug
-                        // console.log(currentState);
-                        $state.go(currentState);
-                        // event.preventDefault();
 
+                        $state.go(currentState, {notify:false, reload:false});
                     }
 
+                    // TODO: fix it
                     // BreadCrumbs
                     if ($state.current.name === 'decisions.single.matrix' ||
                         $state.current.name === 'decisions.single.matrix.analysis') {
